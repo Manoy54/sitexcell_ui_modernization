@@ -207,6 +207,7 @@ The plugin detects prototype routes using WordPress page checks first and URI su
 | sitexcell-contact-prototype | contact | .scratch/contact-prototype/prototype-ui.html | Contact experience comparison. |
 | sitexcell-transitions-prototype | transitions | .scratch/section-transitions/prototype-ui.html | Section-transition comparison. |
 | sitexcell-portal-requests-prototype | portal-requests | pages/access-portal-page/prototype-ui.html | Co-Siter request-register UI comparison. |
+| sitexcell-laan-request-prototype | laan-request | pages/laan-request/template.php | Two-stage LAAN Request modernization prototype with non-submitting review boundary. |
 
 ### Current routing and integration configuration
 
@@ -218,14 +219,15 @@ The bootstrap file currently defines these constants:
 | `SITEXCELL_UI_URL` | Plugin URL from `plugin_dir_url(__FILE__)`. |
 | `SITEXCELL_UI_PAGE_SLUG` | `sitexcell-about-prototype`. |
 | `SITEXCELL_UI_HOME_SLUG` | `sitexcell-home-prototype`. |
+| `SITEXCELL_UI_LAAN_SLUG` | `sitexcell-laan-request-prototype`. |
 
 Route detection follows this order:
 
-1. `is_page()` checks for the Home and About slugs.
+1. `is_page()` checks for the Home, About, and LAAN Request slugs.
 2. The request URI is read from `$_SERVER['REQUEST_URI']`, stripped of its query string with `strtok()`, and checked for known slug substrings.
 3. If no prototype route matches, the plugin checks whether the current singular post contains `[sitexcell_about]` or `[sitexcell_home]`.
 
-Only the Home and About route keys receive custom standalone templates that explicitly clear the WordPress 404 flag and send HTTP 200. The scratch and portal route keys return their HTML files through `template_include`, but those files are self-contained documents and do not use the shared PHP navbar/footer shell.
+The Home, About, and LAAN Request route keys receive custom standalone templates that explicitly clear the WordPress 404 flag and send HTTP 200. The scratch and portal route keys return their HTML files through `template_include`, but those files are self-contained documents and do not use the shared PHP navbar/footer shell.
 
 The plugin does not register activation hooks, admin pages, custom post types, REST routes, AJAX handlers, database tables, cron jobs, widgets, blocks, or settings pages.
 
@@ -461,25 +463,30 @@ Most scratch files link the generated stylesheet, load Geist Sans from Fontsourc
 | Server rendering | PHP | Plugin bootstrap, templates, page orchestrators, components, escaping, and provider adapter. |
 | Styling source | Tailwind CSS v4 | Utility generation, theme tokens, responsive classes, and shared component layers. |
 | Styling runtime | Generated CSS in assets/css/style.css | Browser-consumed, minified stylesheet. |
-| Browser behavior | Vanilla JavaScript | Small progressive-enhancement behaviors in assets/js/app.js; scratch pages may contain local inline scripts. |
+| Browser behavior | Vanilla JavaScript | Shared behavior in assets/js/app.js plus the LAAN Request state/validation controller in assets/js/laan-request.js; scratch pages may contain local inline scripts. |
 | Typography | Geist Sans via Fontsource CDN | Prototype font with Geist, Inter, Segoe UI, and Arial fallbacks. |
 | Assets | Local PNG/JPG assets | Logo, hero/banner imagery, and leadership portraits. |
 | Optional form provider | Gravity Forms | Future/host-configured production contact form integration. |
-| Package tooling | Node.js/npm | Installs Tailwind CLI dependencies and runs CSS build/watch scripts. |
+| Browser testing | Playwright 1.62.1 | Safe local prototype and WordPress-route tests plus explicitly invoked authenticated live characterization tests. |
+| Package tooling | Node.js/npm | Installs Tailwind and Playwright development dependencies and runs CSS/test commands. |
 
 ### Package scripts
 
     npm install
     npm run build:css
     npm run watch:css
+    npm test
+    npm run test:laan:wordpress
+    npm run test:laan:live
 
 build:css compiles src/css/input.css to assets/css/style.css with minification. watch:css watches source and template usage during development. There is no JavaScript bundler, TypeScript compiler, React runtime, or client application build.
 
 ### Exact package configuration
 
-`package.json` is private, declares version `1.0.0`, uses GPL-2.0-or-later, and describes the package as "Front-end UI modernization prototype for SiteXcell." Its only development dependencies are:
+`package.json` is private, declares version `1.0.0`, uses ESM via `"type": "module"`, and describes the package as "Front-end UI modernization prototype for SiteXcell." Its development dependencies are:
 
 - `@tailwindcss/cli` `^4.3.3`;
+- `@playwright/test` `1.62.1`;
 - `tailwindcss` `^4.3.3`.
 
 `package-lock.json` locks the npm dependency graph. There are no runtime npm dependencies. `skills-lock.json` is local Codex/agent tooling metadata and is not required by the WordPress runtime.
@@ -677,6 +684,7 @@ The current prototype status message is safe only because the form is intentiona
     ├── pages/
     │   ├── home/                           # Structured Home composition
     │   ├── about/                          # Structured About composition
+    │   ├── laan-request/                   # Native two-stage LAAN Request UI
     │   ├── access-portal-page/             # Standalone portal prototype
     │   ├── advisory/                       # Advisory page content stubs
     │   ├── agency/                         # Agency page content stub
@@ -686,7 +694,16 @@ The current prototype status message is safe only because the form is intentiona
     │   ├── PROJECT_STRUCTURE_OPTIMIZATION.md
     │   ├── DESIGN_INTERFACE_HANDOFF.md
     │   ├── 21ST_DEV_DESIGN_REFERENCES.md
-    │   └── agents/                         # Domain and issue-tracking guidance
+    │   ├── agents/                         # Domain and issue-tracking guidance
+    │   └── testing/laan-request/           # LAAN research, test contract, and curated evidence
+    ├── tests/laan-request/
+    │   ├── prototype/                      # Isolated static behavior reference and tests
+    │   ├── wordpress/                      # Parent plugin route tests
+    │   ├── live/core/                      # Authenticated external characterization tests
+    │   ├── live/wave2/                     # Expanded live validation tests
+    │   ├── support/                        # Sessions, runners, helpers, and result server
+    │   ├── configs/                        # Playwright configurations by live tier
+    │   └── fixtures/                       # Synthetic upload fixtures
     └── .scratch/
         ├── cta-variations/
         ├── insights-prototype/
@@ -1117,3 +1134,50 @@ Variants are kept as local experiments until a design direction is selected. Abs
 ## 21. Final project statement
 
 SiteXcell UI Prototype is a WordPress-based, high-fidelity front-end prototype for a telecommunications property advisory website and a related Co-Siter access-management experience. It combines server-rendered PHP page composition, reusable UI primitives, Tailwind-generated styling, local brand assets, and small vanilla-JavaScript enhancements. Its purpose is to validate structure, content, design, accessibility, and interaction direction with real SiteXcell context. Its autonomy ends at the presentation boundary: it can show how the experience should work, but it does not yet own the authenticated data, integrations, workflows, or business decisions required to make the experience operational.
+
+## 22. LAAN Request modernization integration
+
+The LAAN Request surface is now a first-class modernization area inside the parent plugin repository. It is deliberately split into implementation, local verification, live characterization, and evidence so that research code cannot silently become production behavior.
+
+### Native UI allocation
+
+| Path | Function |
+| --- | --- |
+| `pages/laan-request/template.php` | Complete WordPress document template with shared navbar/footer and WordPress lifecycle hooks. |
+| `pages/laan-request/laan-request.php` | Page orchestrator for the two-stage request workflow. |
+| `pages/laan-request/sections/request-context/` | Activity, commencement date, owner, searchable Site, selected Site, terms, validation, and Stage 1 actions. |
+| `pages/laan-request/sections/access-details/` | Page 2 context summary and carrier/tenant/access fields. |
+| `pages/laan-request/sections/evidence/` | Required LAAN upload and optional supporting documents. |
+| `pages/laan-request/sections/confirmations/` | Separate upload, information-accuracy, and activity-specific confirmations. |
+| `pages/laan-request/sections/review/` | Readiness status, draft controls, and disabled final-submission boundary. |
+| `assets/js/laan-request.js` | Browser state model, Site search, date validation, stage navigation, draft-in-session behavior, upload feedback, and readiness state. |
+| `src/css/input.css` | LAAN page layout and component styles within the shared Tailwind pipeline. |
+| `assets/css/style.css` | Generated browser CSS; rebuild with `npm run build:css`. |
+
+### Test allocation
+
+| Path | Function |
+| --- | --- |
+| `tests/laan-request/prototype/` | Static, no-network behavioral reference retained for fast isolated interaction tests. It is not the production UI. |
+| `tests/laan-request/wordpress/` | Playwright tests for the parent plugin route using semantic `data-testid` selectors. |
+| `tests/laan-request/live/core/` | Three authenticated external-form characterization specs. They use existing Gravity Forms IDs through shared helpers. |
+| `tests/laan-request/live/wave2/` | Thirteen expanded live tests covering variants, dates, keyboard flow, reload, responsive behavior, upload recovery, and validation. |
+| `tests/laan-request/support/form-helpers.js` | Live URL, synthetic values, field completion helpers, state readers, and fixture paths. |
+| `tests/laan-request/support/session.js` | Authenticated Edge CDP/storage-state connection and final-submission network guard. |
+| `tests/laan-request/support/run-live-session.ps1` | Explicit live-session runner, session setup, artifact archiving, and optional report serving. |
+| `tests/laan-request/configs/` | Separate core and Wave 2 Playwright configurations. |
+| `tests/laan-request/fixtures/` | Synthetic documents only. No real customer or production files belong here. |
+
+### Selector compatibility contract
+
+New UI code uses semantic `data-testid` selectors such as `activity-select`, `commencement-date`, `site-search`, `request-context-summary`, and `final-submit`. Fields that correspond to the existing Gravity Forms workflow retain `data-original-id` values such as `input_1_11`, `input_1_12`, and `input_1_49`. This allows local modernization tests to avoid brittle provider markup while keeping an explicit mapping for future integration work.
+
+### Safety and rollout contract
+
+The LAAN prototype does not authenticate, persist requests, submit forms, create drafts in a provider, or alter production data. Live tests are opt-in and retain a final-submission guard. Generated Playwright reports, traces, screenshots, videos, authentication state, and run history are ignored under `.test-artifacts/`; only sanitized findings and curated evidence are committed under `docs/testing/laan-request/`.
+
+The accepted rollout order is: preserve the two-stage workflow and safety boundary; reject impossible dates; add a synchronized Page 2 summary; standardize upload feedback; preserve navigation and recoverable errors; investigate draft recovery; measure Site lookup effort; approve authoritative prepopulation sources; then compare local WordPress behavior with live characterization results.
+
+### Parent repository ownership
+
+The parent directory is the only Git root. The former `Sitexcell testcases/` nested repository is a migration source only and is removed after verification. The parent uses the existing `origin` remote, while authentication state and generated test output remain local and ignored.

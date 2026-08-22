@@ -15,6 +15,7 @@ define('SITEXCELL_UI_PATH', plugin_dir_path(__FILE__));
 define('SITEXCELL_UI_URL', plugin_dir_url(__FILE__));
 define('SITEXCELL_UI_PAGE_SLUG', 'sitexcell-about-prototype');
 define('SITEXCELL_UI_HOME_SLUG', 'sitexcell-home-prototype');
+define('SITEXCELL_UI_LAAN_SLUG', 'sitexcell-laan-request-prototype');
 
 /**
  * Helper to check current URI for prototype slugs.
@@ -29,6 +30,10 @@ function sitexcell_ui_get_current_prototype(): string
         return 'about';
     }
 
+    if (is_page(SITEXCELL_UI_LAAN_SLUG)) {
+        return 'laan-request';
+    }
+
     $uri = isset($_SERVER['REQUEST_URI']) ? strtok($_SERVER['REQUEST_URI'], '?') : '';
 
     if (strpos($uri, 'sitexcell-home-prototype') !== false) {
@@ -37,6 +42,10 @@ function sitexcell_ui_get_current_prototype(): string
 
     if (strpos($uri, 'sitexcell-about-prototype') !== false) {
         return 'about';
+    }
+
+    if (strpos($uri, SITEXCELL_UI_LAAN_SLUG) !== false) {
+        return 'laan-request';
     }
 
     if (strpos($uri, 'sitexcell-cta-prototype') !== false) {
@@ -117,6 +126,16 @@ function sitexcell_ui_enqueue_assets(): void
         true
     );
 
+    if (sitexcell_ui_get_current_prototype() === 'laan-request') {
+        wp_enqueue_script(
+            'sitexcell-ui-laan-request',
+            SITEXCELL_UI_URL . 'assets/js/laan-request.js',
+            [],
+            (string) filemtime(SITEXCELL_UI_PATH . 'assets/js/laan-request.js'),
+            true
+        );
+    }
+
     $contact_form_id = sitexcell_ui_contact_form_id();
 
     if ($contact_form_id > 0 && function_exists('gravity_form_enqueue_scripts')) {
@@ -192,6 +211,19 @@ function sitexcell_ui_template_include(string $template): string
 
     if ($prototype === 'about') {
         $custom_template = SITEXCELL_UI_PATH . 'pages/about/template.php';
+
+        if (file_exists($custom_template)) {
+            global $wp_query;
+            if ($wp_query) {
+                $wp_query->is_404 = false;
+                status_header(200);
+            }
+            return $custom_template;
+        }
+    }
+
+    if ($prototype === 'laan-request') {
+        $custom_template = SITEXCELL_UI_PATH . 'pages/laan-request/template.php';
 
         if (file_exists($custom_template)) {
             global $wp_query;

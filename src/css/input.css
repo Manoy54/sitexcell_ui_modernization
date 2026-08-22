@@ -383,3 +383,244 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+@layer components {
+  .sx-laan-page {
+    min-height: 100vh;
+  }
+
+  .sx-laan-hero {
+    @apply border-b border-sx-border bg-sx-charcoal py-14 text-white sm:py-20;
+  }
+
+  .sx-laan-hero h1 {
+    @apply mt-5 text-4xl sm:text-5xl;
+  }
+
+  .sx-laan-hero p:not(.sx-badge) {
+    @apply mt-4 max-w-2xl text-base leading-7 text-white/75 sm:text-lg;
+  }
+
+  .sx-laan-prototype-badge {
+    @apply mt-6 inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/85;
+  }
+
+  .sx-laan-workspace {
+    @apply py-8 sm:py-12;
+  }
+
+  .sx-laan-progress {
+    @apply mb-6 grid gap-3 sm:grid-cols-2;
+  }
+
+  .sx-laan-progress li {
+    @apply flex items-center gap-3 rounded-lg border border-sx-border bg-white px-4 py-3 text-sm text-sx-muted-foreground;
+  }
+
+  .sx-laan-progress li > span {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sx-muted font-semibold text-sx-charcoal;
+  }
+
+  .sx-laan-progress li.is-active {
+    @apply border-sx-red/40 bg-sx-red/5 text-sx-charcoal;
+  }
+
+  .sx-laan-progress li.is-active > span {
+    @apply bg-sx-red text-white;
+  }
+
+  .sx-laan-progress small,
+  .sx-laan-context-summary small {
+    @apply block text-xs font-normal text-sx-muted-foreground;
+  }
+
+  .sx-laan-stage {
+    @apply p-5 sm:p-8;
+  }
+
+  .sx-laan-stage-heading {
+    @apply flex items-start justify-between gap-4 border-b border-sx-border pb-5;
+  }
+
+  .sx-laan-stage-heading h2 {
+    @apply mt-1 text-2xl font-semibold text-sx-charcoal sm:text-3xl;
+  }
+
+  .sx-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.12em] text-sx-red;
+  }
+
+  .sx-laan-stage-heading > strong {
+    @apply text-sm text-sx-red;
+  }
+
+  .sx-laan-stage-intro,
+  .sx-laan-section-title p {
+    @apply mt-4 text-sm leading-6 text-sx-muted-foreground;
+  }
+
+  .sx-laan-field-grid {
+    @apply mt-6 grid gap-5 sm:grid-cols-2;
+  }
+
+  .sx-laan-field-full {
+    @apply sm:col-span-2;
+  }
+
+  .sx-laan-field label,
+  .sx-laan-upload-card label {
+    @apply mb-2 block text-sm font-semibold text-sx-charcoal;
+  }
+
+  .sx-laan-field label span,
+  .sx-laan-checkbox em {
+    @apply not-italic text-sx-red;
+  }
+
+  .sx-laan-field input,
+  .sx-laan-field select,
+  .sx-laan-field textarea {
+    @apply min-h-[3.25rem] w-full rounded-md border border-sx-input bg-white px-3.5 py-2.5 text-sm text-sx-foreground shadow-sm transition-[border-color,box-shadow] placeholder:text-sx-muted-foreground/70 hover:border-sx-muted-foreground focus:border-sx-red focus:ring-4 focus:ring-sx-red/10;
+  }
+
+  .sx-laan-help {
+    @apply mt-2 text-xs leading-5 text-sx-muted-foreground;
+  }
+
+  .sx-laan-field-error {
+    @apply mt-2 text-sm font-medium text-sx-red-dark;
+  }
+
+  .sx-laan-error-summary {
+    @apply mt-6 rounded-md border border-sx-red/30 bg-sx-red/5 px-4 py-3 text-sm text-sx-red-dark;
+  }
+
+  .sx-laan-error-summary ul {
+    @apply mt-2 list-disc pl-5;
+  }
+
+  .sx-laan-info-callout {
+    @apply mt-6 rounded-md border-l-4 border-sx-red bg-sx-red/5 px-4 py-3 text-sm leading-6 text-sx-charcoal;
+  }
+
+  .sx-laan-checkbox {
+    @apply mt-5 flex items-start gap-3 rounded-md border border-sx-border bg-sx-muted/40 p-4;
+  }
+
+  .sx-laan-checkbox input {
+    @apply mt-1 h-4 w-4 shrink-0 accent-sx-red;
+  }
+
+  .sx-laan-checkbox strong,
+  .sx-laan-checkbox small {
+    @apply block;
+  }
+
+  .sx-laan-checkbox strong {
+    @apply text-sm text-sx-charcoal;
+  }
+
+  .sx-laan-checkbox small {
+    @apply mt-1 text-xs leading-5 text-sx-muted-foreground;
+  }
+
+  .sx-laan-stage-actions {
+    @apply mt-8 flex flex-wrap items-center justify-end gap-3 border-t border-sx-border pt-5;
+  }
+
+  .sx-laan-save-status {
+    @apply mr-auto text-sm text-sx-muted-foreground;
+  }
+
+  .sx-laan-section-block {
+    @apply mt-8 border-t border-sx-border pt-8;
+  }
+
+  .sx-laan-section-title h3 {
+    @apply text-lg font-semibold text-sx-charcoal;
+  }
+
+  .sx-laan-context-summary {
+    @apply mt-6 grid gap-3 rounded-md border border-sx-border bg-sx-muted/50 p-4 sm:grid-cols-3;
+  }
+
+  .sx-laan-context-summary strong {
+    @apply mt-1 block text-sm text-sx-charcoal;
+  }
+
+  .sx-laan-text-button {
+    @apply mt-3 text-sm font-semibold text-sx-charcoal underline decoration-sx-border underline-offset-4 hover:text-sx-red;
+  }
+
+  .sx-laan-search-results {
+    @apply mt-2 max-h-64 overflow-auto rounded-md border border-sx-border bg-white shadow-lg;
+  }
+
+  .sx-laan-search-result {
+    @apply block w-full border-b border-sx-border px-4 py-3 text-left last:border-b-0 hover:bg-sx-muted;
+  }
+
+  .sx-laan-search-result strong,
+  .sx-laan-search-result small {
+    @apply block;
+  }
+
+  .sx-laan-search-result strong {
+    @apply text-sm text-sx-charcoal;
+  }
+
+  .sx-laan-search-result small {
+    @apply mt-1 text-xs text-sx-muted-foreground;
+  }
+
+  .sx-laan-selected-site {
+    @apply mt-3 rounded-md border border-sx-red/20 bg-sx-red/5 p-3;
+  }
+
+  .sx-laan-selected-site strong,
+  .sx-laan-selected-site span,
+  .sx-laan-selected-site small {
+    @apply block;
+  }
+
+  .sx-laan-selected-site strong {
+    @apply text-sm text-sx-charcoal;
+  }
+
+  .sx-laan-selected-site span,
+  .sx-laan-selected-site small {
+    @apply mt-1 text-xs text-sx-muted-foreground;
+  }
+
+  .sx-laan-upload-card {
+    @apply mt-4 grid gap-4 rounded-md border border-sx-border p-4 sm:grid-cols-[1fr_auto] sm:items-center;
+  }
+
+  .sx-laan-upload-card .sx-laan-help {
+    @apply mt-1;
+  }
+
+  .sx-laan-upload-status {
+    @apply text-sm text-sx-muted-foreground sm:col-span-2;
+  }
+
+  .sx-laan-upload-status.is-selected {
+    @apply font-medium text-sx-charcoal;
+  }
+
+  .sx-laan-review-block {
+    @apply rounded-md bg-sx-muted/50;
+  }
+
+  .sx-laan-readiness-status {
+    @apply mt-4 rounded-md border border-sx-border bg-white px-4 py-3 text-sm leading-6 text-sx-muted-foreground;
+  }
+
+  .sx-laan-readiness-status.is-ready {
+    @apply border-sx-red/30 bg-sx-red/5 text-sx-charcoal;
+  }
+
+  .sx-laan-danger-button {
+    @apply text-sx-red-dark hover:bg-sx-red/5;
+  }
+}

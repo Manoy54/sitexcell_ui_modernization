@@ -137,3 +137,37 @@ _Avoid_: statistic, marketing number
 **SiteXcell red**:
 The controlled brand accent used for meaningful actions, active states, markers, emphasis, and selected visual details.
 _Avoid_: primary color, alert red
+
+## LAAN Request modernization
+
+**LAAN Request**:
+A request workflow for recording the context, access details, evidence, and confirmations associated with a Land Access Activity Notice.
+_Avoid_: generic form, live submission
+
+**Request context**:
+The first LAAN stage containing activity, proposed commencement date, Site, optional owner narrowing, and terms acceptance.
+_Avoid_: page one, header details
+
+**Access details**:
+The second LAAN stage containing carrier, project, tenant, location, and access-area information.
+_Avoid_: contact form, secondary fields
+
+**Evidence**:
+The documents associated with a request, including the required LAAN document and optional supporting documents.
+_Avoid_: attachments only
+
+**Ready-to-submit state**:
+A review state in which required context, access details, evidence, and confirmations are complete; in this prototype it is informational and does not enable submission.
+_Avoid_: submitted, approved
+
+**Final submission**:
+The provider action that would create or update a real request. It is intentionally disabled in the prototype and guarded in live characterization tests.
+_Avoid_: ready state, draft
+
+**Semantic selector**:
+A stable `data-testid` hook describing the UI behavior under test, used by local modernization tests instead of coupling them to provider-generated field markup.
+_Avoid_: CSS selector, Gravity Forms ID
+
+**Original field mapping**:
+The retained `data-original-id` value that maps a modernized control to its existing Gravity Forms field identity for future integration.
+_Avoid_: implementation selector
