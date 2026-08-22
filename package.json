@@ -3,13 +3,31 @@
   "version": "1.0.0",
   "description": "Front-end UI modernization prototype for SiteXcell.",
   "private": true,
+  "type": "module",
   "scripts": {
+    "test": "npm run test:laan:prototype",
     "build:css": "tailwindcss -i ./src/css/input.css -o ./assets/css/style.css --minify",
-    "watch:css": "tailwindcss -i ./src/css/input.css -o ./assets/css/style.css --watch"
+    "watch:css": "tailwindcss -i ./src/css/input.css -o ./assets/css/style.css --watch",
+    "test:laan:prototype": "playwright test --config=tests/laan-request/prototype/playwright.config.js",
+    "test:laan:wordpress": "playwright test --config=tests/laan-request/wordpress/playwright.config.js",
+    "test:laan:live": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 500",
+    "test:laan:live:refresh": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -RefreshSession -ShowBrowser -SlowMo 500",
+    "test:laan:live:navigation": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 500 -TestFile laan-request-navigation.spec.js",
+    "test:laan:live:wave2": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js",
+    "test:laan:live:variants": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-activity-variants.wave2.spec.js",
+    "test:laan:live:validation": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-validation.wave2.spec.js",
+    "test:laan:live:date-boundaries": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-date-boundaries.wave2.spec.js",
+    "test:laan:live:upload-recovery": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-upload-recovery.wave2.spec.js",
+    "test:laan:live:reload": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-reload.wave2.spec.js",
+    "test:laan:live:keyboard": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 150 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-keyboard.wave2.spec.js",
+    "test:laan:live:responsive": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-responsive.wave2.spec.js",
+    "session:setup": "node tests/laan-request/support/create-storage-state.mjs",
+    "results:serve": "node tests/laan-request/support/results-server.mjs"
   },
   "license": "GPL-2.0-or-later",
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
+    "@playwright/test": "1.62.1",
     "tailwindcss": "^4.3.3"
   }
 }

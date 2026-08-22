@@ -1,0 +1,4 @@
+Synthetic LAAN attachment for automated form testing.
+
+This file contains no real customer, tenant, carrier, or site information.
+It is used only to verify the upload control before final submission.

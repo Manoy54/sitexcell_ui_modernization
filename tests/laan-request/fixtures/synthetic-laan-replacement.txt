@@ -1,0 +1,2 @@
+Synthetic replacement LAAN attachment used only for non-submit Playwright validation.
+

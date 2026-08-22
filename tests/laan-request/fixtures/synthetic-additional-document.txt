@@ -1,0 +1,3 @@
+Synthetic supporting document for Additional Documents upload testing.
+
+This file contains no real customer, tenant, carrier, or site information.

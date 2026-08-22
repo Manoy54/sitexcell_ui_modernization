@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LAAN Request Prototype</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="site-header">
+        <div>
+          <p class="eyebrow">siteXcell · prototype</p>
+          <h1>LAAN Request</h1>
+          <p class="header-copy">Complete the request context, access details, and evidence before review.</p>
+        </div>
+        <span class="prototype-badge">No submission</span>
+      </header>
+
+      <main>
+        <ol class="progress" aria-label="LAAN Request progress">
+          <li id="progress-stage-1" class="active"><span>1</span><div><strong>Request context</strong><small>Activity, date, and Site</small></div></li>
+          <li id="progress-stage-2"><span>2</span><div><strong>Access details and evidence</strong><small>Contacts, documents, and confirmations</small></div></li>
+        </ol>
+
+        <form id="laan-prototype-form" novalidate>
+          <section id="stage-1" class="stage-card" aria-labelledby="stage-1-title">
+            <div class="stage-heading">
+              <div><p class="eyebrow">Step 1 of 2</p><h2 id="stage-1-title">Request context</h2></div>
+              <strong class="progress-percent">50%</strong>
+            </div>
+            <p class="stage-intro">Tell us what the LAAN Request concerns. The original form labels and sequence are retained.</p>
+            <div id="stage-one-errors" class="error-summary" role="alert" hidden></div>
+
+            <div class="field-grid">
+              <div class="field full-width">
+                <label for="input_1_11">What type of activity does this LAAN relate to? <span aria-hidden="true">*</span></label>
+                <select id="input_1_11" data-testid="activity-select" data-original-id="input_1_11" required>
+                  <option value="">Please Select</option>
+                  <option>Inspection</option><option>Installation</option><option>Maintenance</option>
+                </select>
+              </div>
+
+              <div class="field full-width">
+                <label for="input_1_12">Proposed Commencement Date of Activity <span aria-hidden="true">*</span></label>
+                <div class="input-with-hint"><input id="input_1_12" data-testid="commencement-date" data-original-id="input_1_12" inputmode="numeric" placeholder="dd-mm-yyyy" autocomplete="off" required /><button type="button" class="date-button" id="date-help" aria-label="Show date format">?</button></div>
+                <small id="date-help-text" class="field-help">Use DD-MM-YYYY. This date should align with the Proposed Commencement Date of Activity on the LAAN attached.</small>
+                <p id="date-error" class="field-error" hidden></p>
+              </div>
+
+              <div class="field full-width">
+                <label for="input_1_40">Owner Name (Optional)</label>
+                <select id="input_1_40" data-testid="owner-select" data-original-id="input_1_40"><option value="">Choose company name</option></select>
+                <small class="field-help">Use Owner Name to narrow the Site list, or search the Site directly.</small>
+              </div>
+
+              <div class="field full-width">
+                <label for="site-search">Site name <span aria-hidden="true">*</span></label>
+                <input id="site-search" data-testid="site-search" role="combobox" aria-controls="site-results" aria-expanded="false" autocomplete="off" placeholder="Search by Site name, address, owner, or identifier" />
+                <input id="input_1_41" data-testid="site-id" data-original-id="input_1_41" type="hidden" />
+                <ul id="site-results" class="search-results" role="listbox" hidden></ul>
+                <div id="selected-site" class="selected-site" hidden></div>
+                <p id="site-error" class="field-error" hidden></p>
+              </div>
+            </div>
+
+            <div id="activity-notice" class="info-callout" hidden></div>
+            <label class="checkbox-row terms-row" for="choice_1_63_1"><input id="choice_1_63_1" data-original-id="choice_1_63_1" type="checkbox" /><span><strong>Acceptance of Terms and Conditions</strong><small>I accept the Terms and Conditions of the co-siter™ Portal.</small></span><em aria-hidden="true">*</em></label>
+            <p id="terms-error" class="field-error" hidden></p>
+
+            <div class="stage-actions"><span class="save-status" id="save-status" role="status"></span><button type="button" class="secondary-button" id="save-draft">Save draft</button><button type="button" class="primary-button" id="next-stage">Next</button></div>
+          </section>
+
+          <section id="stage-2" class="stage-card" aria-labelledby="stage-2-title" hidden>
+            <div class="stage-heading">
+              <div><p class="eyebrow">Step 2 of 2</p><h2 id="stage-2-title">Access details and evidence</h2></div>
+              <strong class="progress-percent">100%</strong>
+            </div>
+            <div id="request-context-summary" data-testid="request-context-summary" class="context-summary"></div>
+            <button type="button" class="text-button" id="edit-context">Edit request context</button>
+
+            <div class="section-block"><div class="section-title"><h3>Access details</h3><p>Tell us how access will occur.</p></div><div class="field-grid">
+              <div class="field full-width"><label for="input_1_58">Registered Carrier Name <span aria-hidden="true">*</span></label><input id="input_1_58" data-original-id="input_1_58" required /></div>
+              <div class="field"><label for="input_1_18">Carrier Project Reference <span aria-hidden="true">*</span></label><input id="input_1_18" data-original-id="input_1_18" required /></div>
+              <div class="field"><label for="input_1_19">Tenant Company Name <span aria-hidden="true">*</span></label><input id="input_1_19" data-original-id="input_1_19" required /></div>
+              <div class="field"><label for="input_1_83">Tenant Contact Person <span aria-hidden="true">*</span></label><input id="input_1_83" data-original-id="input_1_83" required /></div>
+              <div class="field"><label for="input_1_87">Tenant Contact Number <span aria-hidden="true">*</span></label><input id="input_1_87" data-original-id="input_1_87" inputmode="tel" required /></div>
+              <div class="field"><label for="input_1_22">Tenant Location/Floor <span aria-hidden="true">*</span></label><input id="input_1_22" data-original-id="input_1_22" required /></div>
+              <div class="field full-width"><label for="input_1_64">Areas to be Accessed <span aria-hidden="true">*</span></label><textarea id="input_1_64" data-original-id="input_1_64" rows="3" required></textarea></div>
+            </div></div>
+
+            <div class="section-block"><div class="section-title"><h3>Evidence</h3><p>Upload the LAAN and any additional supporting documents.</p></div><p class="prototype-rule">Prototype requirement: PDF, DOC, DOCX, or TXT; maximum 20 MB.</p>
+              <div class="upload-card"><div><label for="input_1_49">LAAN upload <span aria-hidden="true">*</span></label><p class="field-help">Select the LAAN document that contains the commencement date.</p></div><input id="input_1_49" data-original-id="input_1_49" type="file" accept=".pdf,.doc,.docx,.txt" /><p id="laan-file-status" class="upload-status">No LAAN file selected.</p></div>
+              <div class="upload-card"><div><label for="additional-documents">Additional documents</label><p class="field-help">Optional supporting documents.</p></div><input id="additional-documents" type="file" multiple accept=".pdf,.doc,.docx,.txt" /><p id="additional-file-status" class="upload-status">No additional documents selected.</p></div>
+            </div>
+
+            <div class="section-block"><div class="section-title"><h3>Confirmations</h3><p>These declarations remain separate so each requirement is clear.</p></div>
+              <label class="checkbox-row" for="input_1_29_1"><input id="input_1_29_1" data-original-id="input_1_29_1" type="checkbox" /><span><strong>LAAN uploaded confirmation</strong><small>I confirm the selected LAAN document is the relevant document.</small></span><em aria-hidden="true">*</em></label>
+              <label class="checkbox-row" for="input_1_45_1"><input id="input_1_45_1" data-original-id="input_1_45_1" type="checkbox" /><span><strong>Information accuracy confirmation</strong><small>I confirm that the information provided is accurate to the best of my knowledge.</small></span><em aria-hidden="true">*</em></label>
+              <div id="maintenance-confirmation" hidden><label class="checkbox-row" for="input_1_28_1"><input id="input_1_28_1" data-original-id="input_1_28_1" type="checkbox" /><span><strong>Drawings uploaded confirmation</strong><small>Maintenance requests may require supporting drawings. Confirm only when applicable.</small></span><em aria-hidden="true">*</em></label></div>
+            </div>
+
+            <div class="section-block review-block"><div class="section-title"><h3>Review before ready-to-submit</h3><p>Review the entered information before any authorised submission step.</p></div><div id="readiness-status" class="readiness-status" role="status">Complete required details and confirmations to reach the ready-to-submit state.</div><button type="submit" id="final-submit" class="primary-button" disabled>Ready to submit · Prototype stop</button></div>
+            <div class="stage-actions"><span class="save-status" id="save-status-stage-2" role="status"></span><button type="button" class="secondary-button" id="restore-draft">Restore draft</button><button type="button" class="secondary-button danger-button" id="discard-draft">Discard draft</button></div>
+          </section>
+        </form>
+      </main>
+    </div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
