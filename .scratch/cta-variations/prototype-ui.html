@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTA Wrapper Prototype - SiteXcell</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/index.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'sx-red': '#FF2D37', 'sx-charcoal': '#18181b', 'sx-red-dark': '#D8131D' },
+                    fontFamily: { sans: ['Geist Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Geist Sans', sans-serif; background-color: #ffffff; }
+        .variant { display: none; }
+        .variant.active { display: block; }
+        
+        #prototype-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 999px;
+            display: flex;
+            gap: 12px;
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: white;
+            align-items: center;
+        }
+        #prototype-controls button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #fff;
+        }
+        #prototype-controls button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        #prototype-controls button.active {
+            background: #FF2D37;
+            border-color: #FF2D37;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative selection:bg-sx-red/20 selection:text-sx-red pb-32">
+
+    <!-- Mock Expanding Gallery (Top) -->
+    <div class="h-[250px] w-full bg-sx-charcoal flex flex-col items-center justify-center border-b-[8px] border-sx-red">
+        <span class="text-white/40 text-xl font-light tracking-widest uppercase mb-2">Expanding Image Gallery</span>
+        <div class="flex gap-2 opacity-30">
+            <div class="w-16 h-24 bg-white rounded-md"></div>
+            <div class="w-32 h-24 bg-white rounded-md"></div>
+            <div class="w-16 h-24 bg-white rounded-md"></div>
+            <div class="w-16 h-24 bg-white rounded-md"></div>
+        </div>
+    </div>
+
+    <!-- Variation 1: The Floating Glass Pillar -->
+    <div id="v1" class="variant active w-full">
+        <!-- Massive padding to create separation -->
+        <section class="py-24 lg:py-32 relative overflow-hidden bg-white">
+            <!-- Subtle background abstract rings -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-gray-100 rounded-full opacity-50"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-gray-100 rounded-full opacity-50"></div>
+            
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
+                <div class="bg-gradient-to-br from-sx-red to-sx-red-dark rounded-3xl p-10 md:p-16 shadow-2xl text-center transform hover:scale-[1.02] transition-transform duration-500">
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">Get a better deal on your telco lease</h2>
+                    <p class="text-white/90 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                        Independent advice from Australia's leading experts in property related telecommunications equipment lease negotiations.
+                    </p>
+                    <a href="#" class="inline-flex items-center px-8 py-4 bg-white text-sx-red font-bold rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group text-lg">
+                        Contact us today
+                        <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Variation 2: Asymmetrical Left-Right Split -->
+    <div id="v2" class="variant w-full">
+        <!-- Generous top/bottom margin -->
+        <section class="my-16 lg:my-24 w-full relative">
+            <div class="w-full bg-sx-red overflow-hidden relative">
+                <!-- Decorative geometric shape -->
+                <div class="absolute right-0 top-0 w-1/2 h-full bg-sx-red-dark" style="clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);"></div>
+                
+                <div class="max-w-7xl mx-auto px-6 lg:px-16 py-16 md:py-24 relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+                    <div class="w-full md:w-2/3 text-left">
+                        <div class="w-12 h-1 bg-white mb-6"></div>
+                        <h2 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">Stop leaving money<br/>on the table.</h2>
+                        <p class="text-white/90 text-lg md:text-xl font-light max-w-xl">
+                            Get independent advice from Australia's leading experts in property telecommunications lease negotiations.
+                        </p>
+                    </div>
+                    
+                    <div class="w-full md:w-1/3 flex md:justify-end">
+                        <a href="#" class="inline-flex items-center justify-center px-10 py-5 bg-sx-charcoal text-white font-bold text-lg rounded hover:bg-gray-800 transition-colors shadow-2xl w-full md:w-auto">
+                            Start the conversation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Variation 3: Ultra-Minimalist Void -->
+    <div id="v3" class="variant w-full">
+        <!-- Pure breathing room, no heavy blocks -->
+        <section class="py-32 lg:py-48 bg-white relative">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <p class="text-sx-red font-semibold uppercase tracking-widest text-sm mb-6">Expert Lease Negotiations</p>
+                <h2 class="text-4xl md:text-6xl font-extrabold text-sx-charcoal mb-8 tracking-tight">
+                    Get a better deal on your telco lease today.
+                </h2>
+                <div class="w-24 h-px bg-gray-300 mx-auto mb-8"></div>
+                <p class="text-gray-500 text-xl font-light mb-12 max-w-2xl mx-auto leading-relaxed">
+                    Independent advice from Australia's leading experts in property related telecommunications equipment lease negotiations.
+                </p>
+                
+                <a href="#" class="inline-flex items-center justify-center px-8 py-4 bg-sx-red text-white font-semibold rounded-full hover:bg-red-700 transition-colors text-lg shadow-lg hover:shadow-red-500/30">
+                    Contact our specialists
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Mock About Section (Bottom) -->
+    <section class="flex flex-col lg:flex-row w-full max-w-7xl mx-auto min-h-[450px] shadow-sm overflow-hidden border border-gray-100">
+        <div class="w-full lg:w-1/2 bg-sx-charcoal flex flex-col justify-center p-8 lg:p-16">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-px bg-sx-red"></div>
+                <span class="text-sx-red font-semibold uppercase tracking-widest text-xs">About Us</span>
+            </div>
+            <h2 class="text-4xl font-bold mb-6 text-white tracking-tight">Our <span class="text-gray-400 font-light italic">story</span></h2>
+            <p class="text-gray-300 leading-relaxed font-light mb-8">Since 2005, siteXcell has been supporting property owners...</p>
+            <button class="w-fit px-6 py-3 border border-white text-white">Read full story</button>
+        </div>
+        
+        <div class="w-full lg:w-1/2 bg-white flex flex-col justify-center p-8 lg:p-16">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-px bg-gray-300"></div>
+                <span class="text-gray-500 font-semibold uppercase tracking-widest text-xs">Why Choose Us</span>
+            </div>
+            <h2 class="text-4xl font-bold mb-6 text-sx-charcoal tracking-tight">The <span class="text-sx-red font-light italic">difference</span></h2>
+            <p class="text-gray-600 leading-relaxed font-light mb-8"><strong class="text-sx-charcoal font-semibold">siteXcell is Australia's only fully independent telecommunications consultancy.</strong></p>
+            <button class="w-fit px-6 py-3 bg-sx-red text-white">What our customers say</button>
+        </div>
+    </section>
+
+    <!-- Prototype Controls -->
+    <div id="prototype-controls">
+        <span class="text-sm font-medium mr-2 opacity-70">CTA Aesthetics:</span>
+        <button onclick="setVariant('v1')" id="btn-v1" class="active">1. Floating Pillar</button>
+        <button onclick="setVariant('v2')" id="btn-v2">2. Asymmetrical Split</button>
+        <button onclick="setVariant('v3')" id="btn-v3">3. Minimalist Void</button>
+    </div>
+
+    <script>
+        function setVariant(id) {
+            document.querySelectorAll('.variant').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('#prototype-controls button').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+            
+            const url = new URL(window.location);
+            url.searchParams.set('v', id);
+            window.history.pushState({}, '', url);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const v = urlParams.get('v');
+            if (v && ['v1', 'v2', 'v3'].includes(v)) {
+                setVariant(v);
+            }
+        });
+    </script>
+</body>
+</html>

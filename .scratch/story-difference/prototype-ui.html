@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story & Difference Prototype - SiteXcell</title>
+    <!-- Geist Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/index.css">
+    <!-- Tailwind Compiled CSS -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sx-red': '#FF2D37',
+                        'sx-charcoal': '#18181b',
+                    },
+                    fontFamily: {
+                        sans: ['Geist Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Geist Sans', sans-serif; }
+        .variant { display: none; }
+        .variant.active { display: block; }
+        
+        #prototype-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 999px;
+            display: flex;
+            gap: 12px;
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: white;
+            align-items: center;
+        }
+        #prototype-controls button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #fff;
+        }
+        #prototype-controls button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        #prototype-controls button.active {
+            background: #FF2D37;
+            border-color: #FF2D37;
+        }
+    </style>
+</head>
+<body class="antialiased bg-gray-50 min-h-screen relative selection:bg-sx-red/20 selection:text-sx-red pb-32">
+
+    <!-- Navbar Mockup -->
+    <header class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-20 items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="flex flex-col">
+                    <span class="text-3xl font-bold tracking-tight text-sx-charcoal leading-none">site<span class="text-sx-red">X</span>cell</span>
+                    <span class="text-[0.65rem] font-medium tracking-widest text-gray-500 uppercase mt-1">Telco Property Agents</span>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#" class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">Home</a>
+                <a href="#" class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">About</a>
+                <a href="#" class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">Services</a>
+                <a href="#" class="px-6 py-2.5 bg-sx-red text-white font-semibold rounded-md hover:bg-red-700 transition-colors shadow-sm">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Variation 1: 50/50 Split Screen (Modernized) -->
+    <div id="v1" class="variant active w-full overflow-hidden">
+        <section class="flex flex-col lg:flex-row w-full min-h-[450px]">
+            
+            <!-- Left: Our Story -->
+            <div class="w-full lg:w-1/2 bg-sx-charcoal relative overflow-hidden flex flex-col justify-center p-8 lg:p-16 group">
+                <!-- Abstract Background Elements -->
+                <div class="absolute top-0 right-0 w-96 h-96 bg-sx-red/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4"></div>
+                
+                <div class="relative z-10 max-w-xl mx-auto lg:ml-auto lg:mr-8">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-px bg-sx-red"></div>
+                        <span class="text-sx-red font-semibold uppercase tracking-widest text-xs">About Us</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white tracking-tight leading-tight">Our <span class="text-gray-400 font-light italic">story</span></h2>
+                    
+                    <div class="space-y-4 text-gray-300 text-base leading-relaxed font-light mb-8">
+                        <p class="text-white font-medium text-lg">
+                            Since 2005, siteXcell has been supporting property owners in their dealings with telecommunications carriers.
+                        </p>
+                        <p>
+                            Our clients include property trusts, international property management companies, government entities, utility companies, airport corporations, universities, critical infrastructure owners, investment banks and private landowners.
+                        </p>
+                        <p>
+                            As Australia's only fully independent telecommunications consultancy and services firm we are committed to ensuring all of our actions and recommendations are done with our clients' best interests in mind.
+                        </p>
+                    </div>
+                    
+                    <a href="#" class="group inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white text-white hover:text-sx-charcoal backdrop-blur-md border border-white/20 font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 text-sm">
+                        Read full story
+                        <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right: The siteXcell difference -->
+            <div class="w-full lg:w-1/2 bg-white flex flex-col justify-center p-8 lg:p-16 relative overflow-hidden">
+                <!-- Abstract Background Elements -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gray-100 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+                
+                <div class="relative z-10 max-w-xl mx-auto lg:mr-auto lg:ml-8">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-px bg-gray-300"></div>
+                        <span class="text-gray-500 font-semibold uppercase tracking-widest text-xs">Why Choose Us</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6 text-sx-charcoal tracking-tight leading-tight">The <span class="text-sx-red font-light italic">difference</span></h2>
+                    
+                    <p class="text-gray-600 mb-8 leading-relaxed text-lg font-light">
+                        <strong class="text-sx-charcoal font-semibold">siteXcell is Australia's only fully independent telecommunications consultancy.</strong> We act exclusively for property owners and managers to get the best deal when negotiating with telecommunications carriers.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 mb-10">
+                        <a href="#" class="inline-flex items-center justify-center px-6 py-3 bg-sx-red text-white font-semibold rounded-full hover:bg-red-700 transition-all duration-300 shadow-lg hover:-translate-y-1 hover:shadow-sx-red/30 text-sm">
+                            What our customers say
+                        </a>
+                    </div>
+                    
+                    <!-- Floating Modern Document Card -->
+                    <div class="relative group cursor-pointer w-full max-w-[360px]">
+                        <div class="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-100 rounded-2xl transform translate-x-2 translate-y-2 transition-transform group-hover:translate-x-3 group-hover:translate-y-3"></div>
+                        <div class="relative bg-white border border-gray-100 p-4 rounded-2xl shadow-xl flex items-center gap-5 transform transition-transform group-hover:-translate-y-1">
+                            <div class="w-16 h-24 bg-gray-100 rounded shadow-inner overflow-hidden flex-shrink-0 relative border border-gray-200">
+                                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0" alt="Document" class="w-full h-full object-cover opacity-90">
+                                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-base text-sx-charcoal mb-1">Capability Statement</h3>
+                                <p class="text-xs text-gray-500 mb-2">2.4 MB PDF Document</p>
+                                <span class="text-sx-red font-semibold text-xs group-hover:underline flex items-center gap-1">
+                                    Download Now
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </section>
+    </div>
+
+    <!-- Variation 2: Floating Cards on Light Background -->
+    <div id="v2" class="variant">
+        <section class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-stretch">
+                    
+                    <!-- Card 1: Our Story -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 flex flex-col group hover:shadow-2xl transition-all duration-300">
+                        <div class="h-64 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978" alt="Team" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-sx-charcoal/20"></div>
+                        </div>
+                        <div class="p-10 lg:p-12 flex-grow flex flex-col">
+                            <h2 class="text-3xl font-bold mb-6 text-sx-red">Our story</h2>
+                            <p class="text-gray-600 mb-4 leading-relaxed">
+                                Since 2005, siteXcell has been supporting property owners in their dealings with telecommunications carriers.
+                            </p>
+                            <p class="text-gray-600 mb-4 leading-relaxed">
+                                Our clients include property trusts, international property management companies, government entities, utility companies, airport corporations, universities, critical infrastructure owners, investment banks and private landowners.
+                            </p>
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                As Australia's only fully independent telecommunications consultancy and services firm we are committed to ensuring all of our actions and recommendations are done with our clients' best interests in mind.
+                            </p>
+                            <div class="mt-auto pt-4">
+                                <a href="#" class="inline-block px-6 py-2.5 bg-gray-100 text-sx-charcoal font-semibold rounded hover:bg-gray-200 transition-colors">
+                                    About us
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: The Difference -->
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 flex flex-col group hover:shadow-2xl transition-all duration-300">
+                        <div class="h-64 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0" alt="Capability" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-sx-red/10"></div>
+                        </div>
+                        <div class="p-10 lg:p-12 flex-grow flex flex-col">
+                            <h2 class="text-3xl font-bold mb-6 text-sx-red">The siteXcell difference</h2>
+                            <p class="text-gray-600 mb-8 leading-relaxed text-lg">
+                                siteXcell is Australia's only fully independent telecommunications consultancy. We act exclusively for property owners and managers to get the best deal when negotiating with telecommunications carriers.
+                            </p>
+                            
+                            <div class="mt-auto flex flex-col gap-3">
+                                <a href="#" class="inline-flex items-center justify-center px-6 py-3 bg-sx-charcoal text-white font-semibold rounded hover:bg-gray-800 transition-colors shadow-sm">
+                                    What our customers say
+                                </a>
+                                <a href="#" class="inline-flex items-center justify-center px-6 py-3 bg-transparent text-sx-red font-semibold rounded border-2 border-sx-red hover:bg-red-50 transition-colors shadow-sm">
+                                    Download Capability statement
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Variation 3: Minimal Editorial (Text Columns) -->
+    <div id="v3" class="variant">
+        <section class="py-24 bg-white relative">
+            <!-- Decorative accent line -->
+            <div class="absolute top-0 left-1/2 w-px h-full bg-gray-200 hidden lg:block transform -translate-x-1/2"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 relative">
+                    
+                    <!-- Left Column -->
+                    <div>
+                        <div class="inline-block px-3 py-1 bg-sx-red/10 text-sx-red font-semibold rounded-full text-sm mb-6">About Us</div>
+                        <h2 class="text-4xl md:text-5xl font-bold mb-8 text-sx-charcoal tracking-tight">Our story</h2>
+                        
+                        <div class="prose prose-lg text-gray-600 mb-10">
+                            <p class="font-medium text-gray-900 text-xl leading-relaxed">
+                                Since 2005, siteXcell has been supporting property owners in their dealings with telecommunications carriers.
+                            </p>
+                            <p>
+                                Our clients include property trusts, international property management companies, government entities, utility companies, airport corporations, universities, critical infrastructure owners, investment banks and private landowners.
+                            </p>
+                            <p>
+                                As Australia's only fully independent telecommunications consultancy and services firm we are committed to ensuring all of our actions and recommendations are done with our clients' best interests in mind.
+                            </p>
+                        </div>
+                        
+                        <a href="#" class="group inline-flex items-center text-sx-red font-bold text-lg hover:text-red-700 transition-colors">
+                            Read full story 
+                            <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                        
+                        <div class="mt-12 rounded-xl overflow-hidden shadow-lg border border-gray-100">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978" alt="Team" class="w-full h-48 object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div>
+                        <div class="inline-block px-3 py-1 bg-gray-100 text-gray-600 font-semibold rounded-full text-sm mb-6">Why Choose Us</div>
+                        <h2 class="text-4xl md:text-5xl font-bold mb-8 text-sx-charcoal tracking-tight">The difference</h2>
+                        
+                        <div class="prose prose-lg text-gray-600 mb-10">
+                            <p class="font-medium text-gray-900 text-xl leading-relaxed">
+                                siteXcell is Australia's only fully independent telecommunications consultancy. 
+                            </p>
+                            <p>
+                                We act exclusively for property owners and managers to get the best deal when negotiating with telecommunications carriers.
+                            </p>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                            <a href="#" class="inline-block px-8 py-3 bg-sx-charcoal text-white font-semibold rounded hover:bg-gray-800 transition-colors shadow-md text-center">
+                                Customer Testimonials
+                            </a>
+                        </div>
+                        
+                        <div class="p-8 bg-gray-50 rounded-2xl border border-gray-200 mt-8 flex flex-col sm:flex-row gap-6 items-center">
+                            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0" alt="Capability" class="w-24 h-32 object-cover rounded shadow-md border border-gray-300">
+                            <div>
+                                <h3 class="font-bold text-lg text-sx-charcoal mb-2">Capability Statement</h3>
+                                <p class="text-sm text-gray-600 mb-4">Download our comprehensive guide to our services, experience, and industry leadership.</p>
+                                <a href="#" class="text-sx-red font-semibold hover:underline">Download PDF &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Prototype Controls -->
+    <div id="prototype-controls">
+        <span class="text-sm font-medium mr-2 opacity-70">Variations:</span>
+        <button onclick="setVariant('v1')" id="btn-v1" class="active">Split Screen (50/50)</button>
+        <button onclick="setVariant('v2')" id="btn-v2">Floating Cards</button>
+        <button onclick="setVariant('v3')" id="btn-v3">Minimal Editorial</button>
+    </div>
+
+    <script>
+        function setVariant(id) {
+            document.querySelectorAll('.variant').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('#prototype-controls button').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+            
+            const url = new URL(window.location);
+            url.searchParams.set('v', id);
+            window.history.pushState({}, '', url);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const v = urlParams.get('v');
+            if (v && ['v1', 'v2', 'v3'].includes(v)) {
+                setVariant(v);
+            }
+        });
+    </script>
+</body>
+</html>

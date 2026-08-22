@@ -1,0 +1,26 @@
+# Dependencies and local tooling
+node_modules/
+.pnpm-store/
+
+# Local authentication and session state
+.auth/
+storage-state*.json
+auth-state*.json
+*.auth.json
+
+# Generated browser-test output
+playwright-report/
+test-results/
+.test-artifacts/
+
+# Local environment files and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Operating-system/editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

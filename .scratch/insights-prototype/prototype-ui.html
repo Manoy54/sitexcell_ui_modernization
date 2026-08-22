@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights & Stats Prototype - SiteXcell</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/index.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'sx-red': '#FF2D37', 'sx-charcoal': '#18181b' },
+                    fontFamily: { sans: ['Geist Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Geist Sans', sans-serif; background-color: #fafafa; padding-bottom: 200px; }
+        .stat-variant, .insight-variant { display: none; }
+        .stat-variant.active, .insight-variant.active { display: block; }
+        
+        #prototype-controls {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(24, 24, 27, 0.95); backdrop-filter: blur(8px);
+            padding: 20px; border-radius: 20px; display: flex; flex-direction: column; gap: 16px; z-index: 9999;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); color: white; min-w: 400px;
+        }
+        .control-group {
+            display: flex; gap: 10px; align-items: center; justify-content: center;
+        }
+        #prototype-controls button {
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; color: #fff; flex-grow: 1; text-align: center;
+        }
+        #prototype-controls button:hover { background: rgba(255, 255, 255, 0.2); }
+        #prototype-controls button.active { background: #FF2D37; border-color: #FF2D37; }
+        
+        /* Hide scrollbar for modern carousel */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative selection:bg-sx-red/20 selection:text-sx-red">
+
+    <!-- ============================================== -->
+    <!-- STATISTICS BANNER VARIATIONS                   -->
+    <!-- ============================================== -->
+
+    <!-- Stat Variant 1: Glassmorphism Over Image -->
+    <div id="s1" class="stat-variant active w-full">
+        <div class="relative w-full h-[400px] md:h-[300px] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1541888086225-f674ce882434" class="absolute inset-0 w-full h-full object-cover" alt="Construction site telecom">
+            <div class="absolute inset-0 bg-sx-charcoal/70 backdrop-blur-[2px]"></div>
+            
+            <div class="relative z-10 w-full h-full max-w-7xl mx-auto px-4 lg:px-8 flex flex-col justify-center">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                    <!-- Stat 1 -->
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl text-center transform hover:-translate-y-1 transition-transform duration-300">
+                        <div class="text-3xl md:text-4xl font-bold text-white mb-2">8,000+</div>
+                        <div class="text-white/80 text-xs md:text-sm font-medium uppercase tracking-wider">Access Requests Cleared</div>
+                    </div>
+                    <!-- Stat 2 -->
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl text-center transform hover:-translate-y-1 transition-transform duration-300">
+                        <div class="text-3xl md:text-4xl font-bold text-white mb-2">6,500+</div>
+                        <div class="text-white/80 text-xs md:text-sm font-medium uppercase tracking-wider">LAANs Cleared</div>
+                    </div>
+                    <!-- Stat 3 -->
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl text-center transform hover:-translate-y-1 transition-transform duration-300">
+                        <div class="text-3xl md:text-4xl font-bold text-white mb-2">$9m+</div>
+                        <div class="text-white/80 text-xs md:text-sm font-medium uppercase tracking-wider">Back Rent Claims</div>
+                    </div>
+                    <!-- Stat 4 -->
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl text-center transform hover:-translate-y-1 transition-transform duration-300">
+                        <div class="text-3xl md:text-4xl font-bold text-white mb-2">$3B+</div>
+                        <div class="text-white/80 text-xs md:text-sm font-medium uppercase tracking-wider">Advisory Deals Value</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Variant 2: Minimalist Divider Strip -->
+    <div id="s2" class="stat-variant w-full">
+        <div class="w-full bg-sx-charcoal py-16">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="flex flex-wrap md:flex-nowrap justify-between items-center divide-y md:divide-y-0 md:divide-x divide-white/20">
+                    <div class="w-full md:w-1/4 text-center py-6 md:py-0 px-4 group">
+                        <div class="text-5xl font-black text-white mb-2 group-hover:text-sx-red transition-colors">8,000<span class="text-sx-red">+</span></div>
+                        <div class="text-gray-400 text-sm font-semibold uppercase tracking-widest">Access Requests Cleared</div>
+                    </div>
+                    <div class="w-full md:w-1/4 text-center py-6 md:py-0 px-4 group">
+                        <div class="text-5xl font-black text-white mb-2 group-hover:text-sx-red transition-colors">6,500<span class="text-sx-red">+</span></div>
+                        <div class="text-gray-400 text-sm font-semibold uppercase tracking-widest">LAANs Cleared</div>
+                    </div>
+                    <div class="w-full md:w-1/4 text-center py-6 md:py-0 px-4 group">
+                        <div class="text-5xl font-black text-white mb-2 group-hover:text-sx-red transition-colors">$9m<span class="text-sx-red">+</span></div>
+                        <div class="text-gray-400 text-sm font-semibold uppercase tracking-widest">Back Rent Claims</div>
+                    </div>
+                    <div class="w-full md:w-1/4 text-center py-6 md:py-0 px-4 group">
+                        <div class="text-5xl font-black text-white mb-2 group-hover:text-sx-red transition-colors">$3B<span class="text-sx-red">+</span></div>
+                        <div class="text-gray-400 text-sm font-semibold uppercase tracking-widest">Advisory Deals Value</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Variant 3: Clean White Floating Numbers -->
+    <div id="s3" class="stat-variant w-full">
+        <div class="w-full bg-white py-20 border-b border-gray-100 relative overflow-hidden">
+            <!-- Decorative background pattern -->
+            <div class="absolute right-0 top-0 w-1/3 h-full bg-gray-50/50" style="clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="flex flex-col items-start pl-8 border-l-4 border-sx-red">
+                        <div class="text-4xl md:text-5xl font-bold text-sx-charcoal mb-1">8,000+</div>
+                        <div class="text-gray-500 font-medium">Access Requests Cleared</div>
+                    </div>
+                    <div class="flex flex-col items-start pl-8 border-l-4 border-gray-200 hover:border-sx-red transition-colors">
+                        <div class="text-4xl md:text-5xl font-bold text-sx-charcoal mb-1">6,500+</div>
+                        <div class="text-gray-500 font-medium">LAANs Cleared</div>
+                    </div>
+                    <div class="flex flex-col items-start pl-8 border-l-4 border-gray-200 hover:border-sx-red transition-colors">
+                        <div class="text-4xl md:text-5xl font-bold text-sx-charcoal mb-1">$9m+</div>
+                        <div class="text-gray-500 font-medium">Back Rent Claims</div>
+                    </div>
+                    <div class="flex flex-col items-start pl-8 border-l-4 border-gray-200 hover:border-sx-red transition-colors">
+                        <div class="text-4xl md:text-5xl font-bold text-sx-charcoal mb-1">$3B+</div>
+                        <div class="text-gray-500 font-medium">Advisory Deals Value</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- INSIGHTS HEADER                                -->
+    <!-- ============================================== -->
+    <div class="w-full text-center py-16 bg-[#fafafa]">
+        <h2 class="text-4xl font-bold text-sx-charcoal tracking-tight mb-4">Insights & <span class="text-sx-red font-light italic">Case Studies</span></h2>
+        <p class="text-gray-500 font-light text-lg">Keep up to date with our observations and analysis of the important issues impacting our industry.</p>
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- INSIGHTS BANNER VARIATIONS                     -->
+    <!-- ============================================== -->
+
+    <!-- Insight Variant 1: The Modern Editorial Grid -->
+    <div id="v1" class="insight-variant active w-full">
+        <section class="max-w-7xl mx-auto px-4 lg:px-8 pb-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Featured Massive Post -->
+                <div class="lg:col-span-8 group cursor-pointer relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white border border-gray-100 flex flex-col">
+                    <div class="w-full h-[400px] overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-sx-charcoal px-4 py-2 rounded-lg text-xs font-bold shadow-sm">
+                            <span class="text-sx-red">JUN 25</span> 2024
+                        </div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-3xl font-bold text-sx-charcoal mb-4 group-hover:text-sx-red transition-colors leading-tight">siteXcell announces full-service model for clients</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed flex-grow">siteXcell has launched a new comprehensive service for its Australian clients. The end-to-end offer covers the full spectrum of telco management requirements, from initial negotiations to long-term site optimization...</p>
+                        <span class="text-sm font-semibold uppercase tracking-widest text-sx-red group-hover:underline flex items-center gap-2">
+                            Read Full Story <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Side Posts -->
+                <div class="lg:col-span-4 flex flex-col gap-8">
+                    <div class="group cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col">
+                        <div class="w-full h-48 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-sx-charcoal px-3 py-1.5 rounded-md text-xs font-bold">
+                                <span class="text-sx-red">JUN 24</span> 2024
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow">
+                            <h3 class="text-lg font-bold text-sx-charcoal mb-2 group-hover:text-sx-red transition-colors leading-snug">Substantial lump sum payment for a client with retail portfolio</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">This case study presents a scenario where a client with a retail portfolio successfully converted their annual rental revenue...</p>
+                            <span class="text-xs font-semibold uppercase tracking-widest text-sx-charcoal mt-auto">Read More</span>
+                        </div>
+                    </div>
+
+                    <div class="group cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col">
+                        <div class="w-full h-48 overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-sx-charcoal px-3 py-1.5 rounded-md text-xs font-bold">
+                                <span class="text-sx-red">JUN 24</span> 2024
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow">
+                            <h3 class="text-lg font-bold text-sx-charcoal mb-2 group-hover:text-sx-red transition-colors leading-snug">How financial benefits are achieved by in depth analysis and review</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">This case study illustrates how financial benefits are achieved by in-depth analysis and review of current conditions rather than...</p>
+                            <span class="text-xs font-semibold uppercase tracking-widest text-sx-charcoal mt-auto">Read More</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Insight Variant 2: Sleek Overflow Slider -->
+    <div id="v2" class="insight-variant w-full overflow-hidden">
+        <section class="max-w-[1400px] ml-auto pb-12 pl-4 lg:pl-16 pr-4">
+            <div class="flex gap-6 overflow-x-auto hide-scrollbar pb-10 snap-x snap-mandatory">
+                <!-- Card 1 -->
+                <div class="min-w-[320px] md:min-w-[400px] w-[400px] flex-shrink-0 snap-center group cursor-pointer">
+                    <div class="relative w-full h-[500px] rounded-3xl overflow-hidden shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                        <div class="absolute top-6 left-6 flex flex-col bg-white text-center rounded-xl p-3 shadow-xl">
+                            <span class="text-sx-red text-sm font-bold">JUN</span>
+                            <span class="text-sx-charcoal text-2xl font-black leading-none">25</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 w-full p-8 translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-white mb-3 leading-tight">siteXcell announces full-service model for clients</h3>
+                            <p class="text-white/70 text-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 line-clamp-3">
+                                siteXcell has launched a new comprehensive service for its Australian clients. The end-to-end offer covers the full spectrum of telco management requirements.
+                            </p>
+                            <div class="w-12 h-1 bg-sx-red group-hover:w-full transition-all duration-500"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="min-w-[320px] md:min-w-[400px] w-[400px] flex-shrink-0 snap-center group cursor-pointer">
+                    <div class="relative w-full h-[500px] rounded-3xl overflow-hidden shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                        <div class="absolute top-6 left-6 flex flex-col bg-white text-center rounded-xl p-3 shadow-xl">
+                            <span class="text-sx-red text-sm font-bold">JUN</span>
+                            <span class="text-sx-charcoal text-2xl font-black leading-none">24</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 w-full p-8 translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-white mb-3 leading-tight">Substantial lump sum payment for retail portfolio</h3>
+                            <p class="text-white/70 text-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 line-clamp-3">
+                                This case study presents a scenario where a client with a retail portfolio successfully converted their annual rental revenue from mobile telecommunications...
+                            </p>
+                            <div class="w-12 h-1 bg-sx-red group-hover:w-full transition-all duration-500"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="min-w-[320px] md:min-w-[400px] w-[400px] flex-shrink-0 snap-center group cursor-pointer">
+                    <div class="relative w-full h-[500px] rounded-3xl overflow-hidden shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                        <div class="absolute top-6 left-6 flex flex-col bg-white text-center rounded-xl p-3 shadow-xl">
+                            <span class="text-sx-red text-sm font-bold">JUN</span>
+                            <span class="text-sx-charcoal text-2xl font-black leading-none">24</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 w-full p-8 translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-white mb-3 leading-tight">How financial benefits are achieved by in-depth analysis</h3>
+                            <p class="text-white/70 text-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 line-clamp-3">
+                                This case study illustrates how financial benefits are achieved by in depth analysis and review of the current conditions rather than simply a DAS.
+                            </p>
+                            <div class="w-12 h-1 bg-sx-red group-hover:w-full transition-all duration-500"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Insight Variant 3: The Apple-esque Minimalist List -->
+    <div id="v3" class="insight-variant w-full">
+        <section class="max-w-5xl mx-auto px-4 lg:px-8 pb-12">
+            <div class="flex flex-col border-t border-gray-200">
+                <!-- List Item 1 -->
+                <a href="#" class="group flex flex-col md:flex-row py-8 border-b border-gray-200 gap-8 items-center md:items-start hover:bg-white hover:shadow-xl transition-all duration-300 p-4 -mx-4 rounded-xl">
+                    <div class="w-full md:w-64 h-40 flex-shrink-0 overflow-hidden rounded-xl shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center h-full py-2">
+                        <div class="flex items-center gap-4 mb-3">
+                            <span class="text-sx-red font-bold text-sm tracking-wider uppercase">June 25, 2024</span>
+                            <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                            <span class="text-gray-500 text-sm font-light">Company News</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-sx-charcoal group-hover:text-sx-red transition-colors leading-tight mb-3">siteXcell announces full-service model for clients</h3>
+                        <p class="text-gray-500 font-light line-clamp-2">siteXcell has launched a new comprehensive service for its Australian clients. The end-to-end offer covers the full spectrum of telco management requirements.</p>
+                    </div>
+                </a>
+                <!-- List Item 2 -->
+                <a href="#" class="group flex flex-col md:flex-row py-8 border-b border-gray-200 gap-8 items-center md:items-start hover:bg-white hover:shadow-xl transition-all duration-300 p-4 -mx-4 rounded-xl">
+                    <div class="w-full md:w-64 h-40 flex-shrink-0 overflow-hidden rounded-xl shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center h-full py-2">
+                        <div class="flex items-center gap-4 mb-3">
+                            <span class="text-sx-red font-bold text-sm tracking-wider uppercase">June 24, 2024</span>
+                            <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                            <span class="text-gray-500 text-sm font-light">Case Study</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-sx-charcoal group-hover:text-sx-red transition-colors leading-tight mb-3">Substantial lump sum payment for a client with retail portfolio</h3>
+                        <p class="text-gray-500 font-light line-clamp-2">This case study presents a scenario where a client with a retail portfolio successfully converted their annual rental revenue from mobile telecommunications into a significant upfront lump sum.</p>
+                    </div>
+                </a>
+                <!-- List Item 3 -->
+                <a href="#" class="group flex flex-col md:flex-row py-8 border-b border-gray-200 gap-8 items-center md:items-start hover:bg-white hover:shadow-xl transition-all duration-300 p-4 -mx-4 rounded-xl">
+                    <div class="w-full md:w-64 h-40 flex-shrink-0 overflow-hidden rounded-xl shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center h-full py-2">
+                        <div class="flex items-center gap-4 mb-3">
+                            <span class="text-sx-red font-bold text-sm tracking-wider uppercase">June 24, 2024</span>
+                            <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                            <span class="text-gray-500 text-sm font-light">Insights</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-sx-charcoal group-hover:text-sx-red transition-colors leading-tight mb-3">How financial benefits are achieved by in depth analysis</h3>
+                        <p class="text-gray-500 font-light line-clamp-2">This case study illustrates how financial benefits are achieved by in depth analysis and review of the current conditions rather than just renewing standard agreements blindly.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Prototype Controls -->
+    <div id="prototype-controls">
+        <div class="w-full flex justify-between items-center mb-1">
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Stats Banner</span>
+        </div>
+        <div class="control-group">
+            <button onclick="setStat('s1')" id="btn-s1" class="active">Glassmorphism</button>
+            <button onclick="setStat('s2')" id="btn-s2">Dark Strip</button>
+            <button onclick="setStat('s3')" id="btn-s3">Clean White</button>
+        </div>
+        
+        <div class="w-full h-px bg-white/10 my-1"></div>
+        
+        <div class="w-full flex justify-between items-center mb-1">
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Insights Layout</span>
+        </div>
+        <div class="control-group">
+            <button onclick="setInsight('v1')" id="btn-v1" class="active">Editorial</button>
+            <button onclick="setInsight('v2')" id="btn-v2">Slider</button>
+            <button onclick="setInsight('v3')" id="btn-v3">Minimalist List</button>
+        </div>
+    </div>
+
+    <script>
+        function setStat(id) {
+            document.querySelectorAll('.stat-variant').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('#btn-s1, #btn-s2, #btn-s3').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+            
+            const url = new URL(window.location);
+            url.searchParams.set('s', id);
+            window.history.pushState({}, '', url);
+        }
+
+        function setInsight(id) {
+            document.querySelectorAll('.insight-variant').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('#btn-v1, #btn-v2, #btn-v3').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+            
+            const url = new URL(window.location);
+            url.searchParams.set('v', id);
+            window.history.pushState({}, '', url);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const s = urlParams.get('s');
+            if (s && ['s1', 's2', 's3'].includes(s)) setStat(s);
+            
+            const v = urlParams.get('v');
+            if (v && ['v1', 'v2', 'v3'].includes(v)) setInsight(v);
+        });
+    </script>
+</body>
+</html>

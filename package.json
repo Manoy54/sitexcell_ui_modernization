@@ -1,0 +1,15 @@
+{
+  "name": "sitexcell-ui-prototype",
+  "version": "1.0.0",
+  "description": "Front-end UI modernization prototype for SiteXcell.",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/css/input.css -o ./assets/css/style.css --minify",
+    "watch:css": "tailwindcss -i ./src/css/input.css -o ./assets/css/style.css --watch"
+  },
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

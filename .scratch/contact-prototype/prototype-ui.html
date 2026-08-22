@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form Prototype - SiteXcell</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/index.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'sx-red': '#FF2D37', 'sx-charcoal': '#18181b', 'sx-gray': '#f4f4f5' },
+                    fontFamily: { sans: ['Geist Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Geist Sans', sans-serif; background-color: #fafafa; }
+        .variant { display: none; }
+        .variant.active { display: block; }
+        
+        #prototype-controls {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(24, 24, 27, 0.95); backdrop-filter: blur(8px);
+            padding: 12px 24px; border-radius: 999px; display: flex; gap: 12px; z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); color: white; align-items: center;
+        }
+        #prototype-controls button {
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px; border-radius: 999px; font-size: 14px; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; color: #fff;
+        }
+        #prototype-controls button:hover { background: rgba(255, 255, 255, 0.2); }
+        #prototype-controls button.active { background: #FF2D37; border-color: #FF2D37; }
+        
+        /* Form Inputs Base */
+        .form-input { w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all duration-200 }
+        
+        /* Floating label styles */
+        .floating-input:focus ~ label, .floating-input:not(:placeholder-shown) ~ label {
+            transform: translateY(-50%) scale(0.85); top: 0; left: 10px; background: white; padding: 0 4px; color: #FF2D37;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative selection:bg-sx-red/20 selection:text-sx-red pb-32">
+
+    <!-- Mock Context Header -->
+    <div class="w-full text-center py-12 bg-white border-b border-gray-100">
+        <h2 class="text-4xl font-bold text-sx-charcoal tracking-tight">Contact Us</h2>
+    </div>
+
+    <!-- Variant 1: The Modern Split Panel (Charcoal Right) -->
+    <div id="v1" class="variant active w-full bg-[#fafafa]">
+        <section class="max-w-[1400px] mx-auto min-h-screen flex flex-col lg:flex-row shadow-2xl my-12 rounded-3xl overflow-hidden border border-gray-200 bg-white">
+            
+            <!-- Form Left -->
+            <div class="w-full lg:w-3/5 p-8 lg:p-16 xl:p-20">
+                <h2 class="text-4xl font-bold text-sx-charcoal mb-4">Get in <span class="text-sx-red">touch</span></h2>
+                
+                <div class="bg-gray-50 border-l-4 border-sx-red p-4 mb-8 rounded-r-lg">
+                    <p class="text-sm text-gray-700 font-medium">
+                        <strong class="text-sx-charcoal">Note:</strong> siteXcell can only assist clients with proposed or existing telco leases or licenses. We are not able to assist with marketing your land or building to prospective telco carriers.
+                    </p>
+                </div>
+
+                <form class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" placeholder="Name" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm">
+                        <input type="email" placeholder="Email Address" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm">
+                        
+                        <input type="text" placeholder="Position" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm">
+                        <input type="tel" placeholder="Phone number" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm">
+                        
+                        <input type="text" placeholder="Company" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm">
+                        <input type="text" placeholder="Property/Building Address" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm">
+                        
+                        <select class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm appearance-none text-gray-500">
+                            <option value="">Field Carrier/Infrastructure Co</option>
+                        </select>
+                        <select class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm appearance-none text-gray-500">
+                            <option value="">Enquiry Type</option>
+                        </select>
+                    </div>
+
+                    <textarea placeholder="Message" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-sx-red focus:bg-white focus:ring-1 focus:ring-sx-red transition-all duration-200 text-sm resize-none"></textarea>
+
+                    <div class="flex justify-end pt-2">
+                        <button type="button" class="px-8 py-3.5 bg-sx-charcoal text-white font-semibold rounded-lg hover:bg-black transition-colors duration-300 w-full md:w-auto shadow-lg shadow-gray-200">
+                            Submit Enquiry
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Contact Info Right (Charcoal Panel) -->
+            <div class="w-full lg:w-2/5 bg-sx-charcoal p-8 lg:p-16 xl:p-20 text-white flex flex-col justify-center relative overflow-hidden">
+                <!-- Abstract BG -->
+                <div class="absolute top-0 right-0 w-96 h-96 bg-sx-red/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                
+                <div class="relative z-10 flex flex-col gap-10">
+                    <!-- Logo mock -->
+                    <div>
+                        <h1 class="text-4xl font-black tracking-tighter text-white">site<span class="text-sx-red">X</span>cell</h1>
+                        <p class="text-gray-400 text-xs tracking-[0.2em] mt-1 uppercase font-semibold">Telco Property Agents</p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center gap-4 mb-2">
+                            <div class="w-10 h-10 rounded-full bg-sx-red flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            </div>
+                            <span class="text-3xl font-bold text-white">1300 748 395</span>
+                        </div>
+                        <p class="text-gray-400 pl-14">We're here to help Australia wide.</p>
+                    </div>
+
+                    <div class="w-full h-48 bg-gray-800 rounded-xl overflow-hidden shadow-inner relative border border-gray-700">
+                        <img src="https://maps.googleapis.com/maps/api/staticmap?center=-33.824,151.200&zoom=14&size=600x300&maptype=roadmap&markers=color:red%7C-33.824,151.200&key=NO_KEY" alt="Map" class="w-full h-full object-cover opacity-80 mix-blend-luminosity">
+                        <div class="absolute inset-0 bg-sx-charcoal/30"></div>
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="bg-sx-red w-4 h-4 rounded-full border-4 border-white shadow-lg animate-pulse"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <p class="text-gray-300 font-medium leading-relaxed">
+                            119 Willoughby Rd,<br/>
+                            Crows Nest NSW 2065
+                        </p>
+                        
+                        <a href="#" class="w-10 h-10 rounded bg-[#0077B5] flex items-center justify-center hover:bg-[#005582] transition-colors mt-2">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Variant 2: Floating Card with Floating Labels -->
+    <div id="v2" class="variant w-full bg-sx-charcoal relative">
+        <!-- Abstract BG patterns -->
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 40px 40px;"></div>
+        
+        <section class="max-w-6xl mx-auto px-4 py-20 relative z-10">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 border border-white/20">
+                
+                <!-- Contact Info Top Header -->
+                <div class="flex flex-col md:flex-row justify-between items-center pb-8 mb-8 border-b border-gray-100 gap-8">
+                    <div>
+                        <h1 class="text-3xl font-black tracking-tighter text-sx-charcoal">site<span class="text-sx-red">X</span>cell</h1>
+                        <p class="text-gray-500 text-xs tracking-[0.2em] mt-1 uppercase font-semibold">Telco Property Agents</p>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <p class="text-gray-500 text-sm">We're here to help Australia wide.</p>
+                            <span class="text-2xl font-bold text-sx-red">1300 748 395</span>
+                        </div>
+                        <a href="#" class="w-10 h-10 rounded-full bg-[#0077B5] flex items-center justify-center hover:opacity-80 transition-opacity">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-12">
+                    <!-- Form Left -->
+                    <div class="w-full lg:w-2/3">
+                        <h2 class="text-4xl font-bold text-sx-charcoal mb-4">Get in touch</h2>
+                        <p class="text-sm text-gray-500 mb-8 max-w-2xl leading-relaxed">
+                            <strong class="text-sx-red">Note:</strong> siteXcell can only assist clients with proposed or existing telco leases or licenses. We are not able to assist with marketing your land or building to prospective telco carriers.
+                        </p>
+
+                        <form class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <!-- Floating Label Inputs -->
+                                <div class="relative">
+                                    <input type="text" id="name2" class="floating-input w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 text-sx-charcoal focus:outline-none focus:border-sx-red transition-colors placeholder-transparent" placeholder="Name">
+                                    <label for="name2" class="absolute left-0 top-3 text-gray-400 transition-all duration-200 pointer-events-none">Name</label>
+                                </div>
+                                <div class="relative">
+                                    <input type="email" id="email2" class="floating-input w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 text-sx-charcoal focus:outline-none focus:border-sx-red transition-colors placeholder-transparent" placeholder="Email Address">
+                                    <label for="email2" class="absolute left-0 top-3 text-gray-400 transition-all duration-200 pointer-events-none">Email Address</label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="text" id="pos2" class="floating-input w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 text-sx-charcoal focus:outline-none focus:border-sx-red transition-colors placeholder-transparent" placeholder="Position">
+                                    <label for="pos2" class="absolute left-0 top-3 text-gray-400 transition-all duration-200 pointer-events-none">Position</label>
+                                </div>
+                                <div class="relative">
+                                    <input type="tel" id="phone2" class="floating-input w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 text-sx-charcoal focus:outline-none focus:border-sx-red transition-colors placeholder-transparent" placeholder="Phone number">
+                                    <label for="phone2" class="absolute left-0 top-3 text-gray-400 transition-all duration-200 pointer-events-none">Phone number</label>
+                                </div>
+                                
+                                <div class="relative md:col-span-2">
+                                    <input type="text" id="comp2" class="floating-input w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 text-sx-charcoal focus:outline-none focus:border-sx-red transition-colors placeholder-transparent" placeholder="Company">
+                                    <label for="comp2" class="absolute left-0 top-3 text-gray-400 transition-all duration-200 pointer-events-none">Company</label>
+                                </div>
+                                <div class="relative md:col-span-2">
+                                    <input type="text" id="addr2" class="floating-input w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 text-sx-charcoal focus:outline-none focus:border-sx-red transition-colors placeholder-transparent" placeholder="Property/Building Address">
+                                    <label for="addr2" class="absolute left-0 top-3 text-gray-400 transition-all duration-200 pointer-events-none">Property/Building Address</label>
+                                </div>
+                                
+                                <select class="w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 focus:outline-none focus:border-sx-red transition-all duration-200 text-gray-500">
+                                    <option value="">Field Carrier/Infrastructure Co</option>
+                                </select>
+                                <select class="w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 focus:outline-none focus:border-sx-red transition-all duration-200 text-gray-500">
+                                    <option value="">Enquiry Type</option>
+                                </select>
+                            </div>
+
+                            <div class="relative mt-8">
+                                <textarea id="msg2" class="floating-input w-full bg-transparent border-b-2 border-gray-200 px-0 py-1.5 text-sx-charcoal focus:outline-none focus:border-sx-red transition-colors placeholder-transparent resize-none h-16" placeholder="Message"></textarea>
+                                <label for="msg2" class="absolute left-0 top-3 text-gray-400 transition-all duration-200 pointer-events-none">Message</label>
+                            </div>
+
+                            <div class="flex justify-start pt-4">
+                                <button type="button" class="px-10 py-3 bg-sx-red text-white font-semibold rounded hover:bg-red-700 transition-colors duration-300">
+                                    Submit Form
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Map Right -->
+                    <div class="w-full lg:w-1/3 flex flex-col gap-3">
+                        <div class="w-full h-64 lg:h-full bg-gray-100 rounded-2xl overflow-hidden shadow-inner relative min-h-[300px]">
+                            <!-- Real Map Mock -->
+                            <img src="https://maps.googleapis.com/maps/api/staticmap?center=-33.824,151.200&zoom=15&size=400x600&maptype=roadmap&markers=color:red%7C-33.824,151.200&key=NO_KEY" alt="Map" class="w-full h-full object-cover">
+                            
+                            <!-- Map Overlay Details -->
+                            <div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur p-4 rounded-xl shadow-lg border border-gray-100">
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-sx-red flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    <p class="text-sx-charcoal text-sm font-semibold leading-snug">
+                                        119 Willoughby Rd,<br/>
+                                        Crows Nest NSW 2065
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Variant 3: Clean & Professional (Minimalist 21st.dev style) -->
+    <div id="v3" class="variant w-full bg-white">
+        <section class="max-w-7xl mx-auto px-4 lg:px-8 py-20 flex flex-col lg:flex-row gap-16 lg:gap-24">
+            
+            <!-- Left Info & Map -->
+            <div class="w-full lg:w-1/3 flex flex-col gap-10">
+                <div>
+                    <h2 class="text-4xl font-bold text-sx-charcoal mb-4">Contact Us</h2>
+                    <p class="text-gray-500 font-light leading-relaxed">
+                        We're here to help Australia wide. Get in touch with our experts to discuss your property related telecommunications equipment lease negotiations.
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded bg-red-50 text-sx-red flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Phone</p>
+                            <p class="text-lg font-bold text-sx-charcoal">1300 748 395</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded bg-red-50 text-sx-red flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Address</p>
+                            <p class="text-base text-sx-charcoal font-medium leading-relaxed">
+                                119 Willoughby Rd,<br/>
+                                Crows Nest NSW 2065
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full h-48 bg-gray-100 rounded-lg overflow-hidden mt-4 border border-gray-200">
+                    <img src="https://maps.googleapis.com/maps/api/staticmap?center=-33.824,151.200&zoom=15&size=400x200&maptype=roadmap&markers=color:red%7C-33.824,151.200&key=NO_KEY" alt="Map" class="w-full h-full object-cover">
+                </div>
+                
+                <a href="#" class="inline-flex items-center gap-2 text-sx-charcoal font-semibold hover:text-sx-red transition-colors">
+                    <svg class="w-5 h-5 text-[#0077B5]" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    Follow us on LinkedIn
+                </a>
+            </div>
+
+            <!-- Form Right -->
+            <div class="w-full lg:w-2/3">
+                <div class="bg-red-50 border border-red-100 p-5 mb-10 rounded-lg">
+                    <p class="text-sm text-sx-red font-medium flex gap-3">
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>siteXcell can only assist clients with proposed or existing telco leases or licenses. We are not able to assist with marketing your land or building to prospective telco carriers.</span>
+                    </p>
+                </div>
+
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-sx-charcoal mb-2">Name</label>
+                            <input type="text" class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-sx-charcoal mb-2">Email Address</label>
+                            <input type="email" class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-sx-charcoal mb-2">Position</label>
+                            <input type="text" class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-sx-charcoal mb-2">Phone number</label>
+                            <input type="tel" class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-sx-charcoal mb-2">Company</label>
+                            <input type="text" class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-sx-charcoal mb-2">Property/Building Address</label>
+                            <input type="text" class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-sx-charcoal mb-2">Field Carrier/Infrastructure Co</label>
+                            <select class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm">
+                                <option value="">Please select...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-sx-charcoal mb-2">Enquiry Type</label>
+                            <select class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm">
+                                <option value="">Please select...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-sx-charcoal mb-2">Message</label>
+                        <textarea rows="5" class="w-full bg-white border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-sx-red focus:ring-1 focus:ring-sx-red transition-all text-sm shadow-sm resize-y"></textarea>
+                    </div>
+
+                    <div class="flex justify-end pt-4">
+                        <button type="button" class="px-8 py-4 bg-sx-charcoal text-white font-bold rounded hover:bg-black transition-colors duration-300">
+                            Submit Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Prototype Controls -->
+    <div id="prototype-controls">
+        <span class="text-sm font-medium mr-2 opacity-70">Contact Layout:</span>
+        <button onclick="setVariant('v1')" id="btn-v1" class="active">1. Modern Split Panel</button>
+        <button onclick="setVariant('v2')" id="btn-v2">2. The Floating Card</button>
+        <button onclick="setVariant('v3')" id="btn-v3">3. Minimalist Side-by-Side</button>
+    </div>
+
+    <script>
+        function setVariant(id) {
+            document.querySelectorAll('.variant').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('#prototype-controls button').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+            
+            const url = new URL(window.location);
+            url.searchParams.set('v', id);
+            window.history.pushState({}, '', url);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const v = urlParams.get('v');
+            if (v && ['v1', 'v2', 'v3'].includes(v)) {
+                setVariant(v);
+            }
+        });
+    </script>
+</body>
+</html>

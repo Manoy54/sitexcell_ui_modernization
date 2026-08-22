@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section Transition Prototype - SiteXcell</title>
+    <!-- Geist Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/index.css">
+    <!-- Tailwind Compiled CSS -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sx-red': '#FF2D37',
+                        'sx-charcoal': '#18181b',
+                    },
+                    fontFamily: {
+                        sans: ['Geist Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Geist Sans', sans-serif; background-color: #f4f4f5; }
+        .variant { display: none; }
+        .variant.active { display: block; }
+        
+        #prototype-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 999px;
+            display: flex;
+            gap: 12px;
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: white;
+            align-items: center;
+        }
+        #prototype-controls button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #fff;
+        }
+        #prototype-controls button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        #prototype-controls button.active {
+            background: #FF2D37;
+            border-color: #FF2D37;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative selection:bg-sx-red/20 selection:text-sx-red pb-32">
+
+    <!-- Mock Content Above -->
+    <div class="h-[300px] w-full bg-sx-charcoal flex items-center justify-center">
+        <span class="text-white/30 text-2xl font-light tracking-widest uppercase">Expanding Image Gallery Above</span>
+    </div>
+
+    <!-- Variation 1: Overlap (Broken Grid) -->
+    <div id="v1" class="variant active w-full">
+        <!-- Red CTA -->
+        <section class="pt-16 pb-32 bg-sx-red text-center relative z-0">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Get a better deal on your telco lease today</h2>
+                <p class="text-white/90 text-lg mb-8">Independent advice from Australia's leading experts in property related telecommunications equipment lease negotiations.</p>
+                <a href="#" class="inline-block px-8 py-3 bg-white text-sx-charcoal font-bold rounded-full shadow-lg hover:bg-gray-100 transition-colors">
+                    Contact us now
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section (Pulled up to overlap) -->
+        <section class="flex flex-col lg:flex-row w-full max-w-7xl mx-auto min-h-[450px] -mt-20 relative z-10 shadow-2xl rounded-2xl overflow-hidden border border-white/10">
+            <!-- Left: Our Story -->
+            <div class="w-full lg:w-1/2 bg-sx-charcoal relative overflow-hidden flex flex-col justify-center p-8 lg:p-16 group">
+                <div class="relative z-10">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-px bg-sx-red"></div>
+                        <span class="text-sx-red font-semibold uppercase tracking-widest text-xs">About Us</span>
+                    </div>
+                    <h2 class="text-4xl font-bold mb-6 text-white tracking-tight leading-tight">Our <span class="text-gray-400 font-light italic">story</span></h2>
+                    <p class="text-gray-300 text-base leading-relaxed font-light mb-8">
+                        Since 2005, siteXcell has been supporting property owners in their dealings with telecommunications carriers.
+                    </p>
+                    <a href="#" class="inline-block px-6 py-3 border border-white text-white hover:bg-white hover:text-sx-charcoal font-semibold transition-all duration-300 text-sm">
+                        Read full story
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right: The difference -->
+            <div class="w-full lg:w-1/2 bg-white flex flex-col justify-center p-8 lg:p-16 relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-px bg-gray-300"></div>
+                        <span class="text-gray-500 font-semibold uppercase tracking-widest text-xs">Why Choose Us</span>
+                    </div>
+                    <h2 class="text-4xl font-bold mb-6 text-sx-charcoal tracking-tight leading-tight">The <span class="text-sx-red font-light italic">difference</span></h2>
+                    <p class="text-gray-600 mb-8 leading-relaxed font-light">
+                        <strong class="text-sx-charcoal font-semibold">siteXcell is Australia's only fully independent telecommunications consultancy.</strong>
+                    </p>
+                    <a href="#" class="inline-block px-6 py-3 bg-sx-red text-white font-semibold transition-all duration-300 text-sm">
+                        What our customers say
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Variation 2: Angled SVG Divider -->
+    <div id="v2" class="variant w-full">
+        <!-- Red CTA -->
+        <section class="pt-16 pb-12 bg-sx-red text-center relative z-10">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Get a better deal on your telco lease today</h2>
+                <p class="text-white/90 text-lg mb-8">Independent advice from Australia's leading experts in property related telecommunications equipment lease negotiations.</p>
+                <a href="#" class="inline-block px-8 py-3 bg-white text-sx-charcoal font-bold rounded shadow-lg hover:bg-gray-100 transition-colors">
+                    Contact us now
+                </a>
+            </div>
+        </section>
+        
+        <!-- Angled SVG dividing line -->
+        <div class="w-full overflow-hidden leading-none relative z-10 -mt-[1px]">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-[60px] md:h-[100px] block">
+                <!-- The SVG path splits perfectly down the middle to match the 50/50 split below -->
+                <path d="M0 0 L600 120 L600 120 L0 120 Z" fill="#18181b"></path>
+                <path d="M600 120 L1200 0 L1200 120 L600 120 Z" fill="#ffffff"></path>
+                <!-- Red triangle filler -->
+                <path d="M0 0 L600 120 L1200 0 Z" fill="#FF2D37"></path>
+            </svg>
+        </div>
+
+        <!-- About Section -->
+        <section class="flex flex-col lg:flex-row w-full min-h-[450px]">
+            <!-- Left: Our Story -->
+            <div class="w-full lg:w-1/2 bg-sx-charcoal relative overflow-hidden flex flex-col justify-center p-8 lg:p-16 pt-0 lg:pt-8 group">
+                <div class="relative z-10 max-w-xl mx-auto lg:ml-auto lg:mr-8">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-px bg-sx-red"></div>
+                        <span class="text-sx-red font-semibold uppercase tracking-widest text-xs">About Us</span>
+                    </div>
+                    <h2 class="text-4xl font-bold mb-6 text-white tracking-tight leading-tight">Our <span class="text-gray-400 font-light italic">story</span></h2>
+                    <p class="text-gray-300 text-base leading-relaxed font-light mb-8">
+                        Since 2005, siteXcell has been supporting property owners in their dealings with telecommunications carriers.
+                    </p>
+                    <a href="#" class="inline-block px-6 py-3 border border-white text-white hover:bg-white hover:text-sx-charcoal font-semibold transition-all duration-300 text-sm">
+                        Read full story
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right: The difference -->
+            <div class="w-full lg:w-1/2 bg-white flex flex-col justify-center p-8 lg:p-16 pt-0 lg:pt-8 relative overflow-hidden">
+                <div class="relative z-10 max-w-xl mx-auto lg:mr-auto lg:ml-8">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-px bg-gray-300"></div>
+                        <span class="text-gray-500 font-semibold uppercase tracking-widest text-xs">Why Choose Us</span>
+                    </div>
+                    <h2 class="text-4xl font-bold mb-6 text-sx-charcoal tracking-tight leading-tight">The <span class="text-sx-red font-light italic">difference</span></h2>
+                    <p class="text-gray-600 mb-8 leading-relaxed font-light">
+                        <strong class="text-sx-charcoal font-semibold">siteXcell is Australia's only fully independent telecommunications consultancy.</strong>
+                    </p>
+                    <a href="#" class="inline-block px-6 py-3 bg-sx-red text-white font-semibold transition-all duration-300 text-sm">
+                        What our customers say
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Variation 3: Soft Gradient Blend -->
+    <div id="v3" class="variant w-full">
+        <!-- Red CTA -->
+        <section class="pt-24 pb-32 text-center relative">
+            <!-- Massive soft radial gradient background connecting both sections -->
+            <div class="absolute inset-0 bg-gradient-to-b from-sx-red to-transparent opacity-10 pointer-events-none"></div>
+            
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-sx-charcoal mb-4">Get a better deal on your telco lease today</h2>
+                <p class="text-gray-600 text-lg mb-8">Independent advice from Australia's leading experts in property related telecommunications equipment lease negotiations.</p>
+                <a href="#" class="inline-block px-8 py-3 bg-sx-red text-white font-bold rounded shadow-lg hover:bg-red-700 transition-colors">
+                    Contact us now
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section (Padded nicely inside a container instead of bleeding full edge) -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+            <div class="flex flex-col lg:flex-row w-full min-h-[450px] shadow-2xl rounded-2xl overflow-hidden bg-white">
+                <!-- Left: Our Story -->
+                <div class="w-full lg:w-1/2 bg-sx-charcoal relative overflow-hidden flex flex-col justify-center p-8 lg:p-12 group">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-px bg-sx-red"></div>
+                            <span class="text-sx-red font-semibold uppercase tracking-widest text-xs">About Us</span>
+                        </div>
+                        <h2 class="text-4xl font-bold mb-6 text-white tracking-tight leading-tight">Our <span class="text-gray-400 font-light italic">story</span></h2>
+                        <p class="text-gray-300 text-base leading-relaxed font-light mb-8">
+                            Since 2005, siteXcell has been supporting property owners in their dealings with telecommunications carriers.
+                        </p>
+                        <a href="#" class="inline-block px-6 py-3 border border-white text-white hover:bg-white hover:text-sx-charcoal font-semibold transition-all duration-300 text-sm">
+                            Read full story
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Right: The difference -->
+                <div class="w-full lg:w-1/2 bg-white flex flex-col justify-center p-8 lg:p-12 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-px bg-gray-300"></div>
+                            <span class="text-gray-500 font-semibold uppercase tracking-widest text-xs">Why Choose Us</span>
+                        </div>
+                        <h2 class="text-4xl font-bold mb-6 text-sx-charcoal tracking-tight leading-tight">The <span class="text-sx-red font-light italic">difference</span></h2>
+                        <p class="text-gray-600 mb-8 leading-relaxed font-light">
+                            <strong class="text-sx-charcoal font-semibold">siteXcell is Australia's only fully independent telecommunications consultancy.</strong>
+                        </p>
+                        <a href="#" class="inline-block px-6 py-3 bg-sx-red text-white font-semibold transition-all duration-300 text-sm">
+                            What our customers say
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Prototype Controls -->
+    <div id="prototype-controls">
+        <span class="text-sm font-medium mr-2 opacity-70">Separation Styles:</span>
+        <button onclick="setVariant('v1')" id="btn-v1" class="active">1. The Overlap</button>
+        <button onclick="setVariant('v2')" id="btn-v2">2. SVG Angled Divider</button>
+        <button onclick="setVariant('v3')" id="btn-v3">3. Soft Gradient Space</button>
+    </div>
+
+    <script>
+        function setVariant(id) {
+            document.querySelectorAll('.variant').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('#prototype-controls button').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+            
+            const url = new URL(window.location);
+            url.searchParams.set('v', id);
+            window.history.pushState({}, '', url);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const v = urlParams.get('v');
+            if (v && ['v1', 'v2', 'v3'].includes(v)) {
+                setVariant(v);
+            }
+        });
+    </script>
+</body>
+</html>

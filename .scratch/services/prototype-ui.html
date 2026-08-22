@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Prototype - SiteXcell</title>
+    <!-- Geist Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/index.css">
+    <!-- Tailwind Compiled CSS -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>
+        .variant { display: none; }
+        .variant.active { display: block; }
+        
+        #prototype-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 999px;
+            display: flex;
+            gap: 12px;
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: white;
+            align-items: center;
+        }
+        #prototype-controls button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #fff;
+        }
+        #prototype-controls button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        #prototype-controls button.active {
+            background: #FF2D37; /* sx-red */
+            border-color: #FF2D37;
+        }
+    </style>
+</head>
+<body class="sitexcell-ui-prototype antialiased bg-white min-h-screen relative selection:bg-sx-red/20 selection:text-sx-red pb-32">
+
+    <!-- Navbar Mockup -->
+    <header class="sticky top-0 z-50 w-full border-b border-sx-border bg-white/90 backdrop-blur-md">
+        <div class="sx-container flex h-20 items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="flex flex-col">
+                    <span class="text-3xl font-bold tracking-tight text-sx-charcoal leading-none">site<span class="text-sx-red">X</span>cell</span>
+                    <span class="text-[0.65rem] font-medium tracking-widest text-sx-muted-foreground uppercase mt-1">Telco Property Agents</span>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#" class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">Home</a>
+                <a href="#" class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">About</a>
+                <a href="#" class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">Services</a>
+                <a href="#" class="sx-button bg-sx-red text-white hover:bg-sx-red-dark border-transparent shadow-md hover:shadow-lg rounded-md px-6 ml-2">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <?php
+    // We are simulating the PHP includes for the SVGs to keep the design clean.
+    ?>
+
+    <!-- Variation 1: Clean Cellular Grid (Reference Image Style) -->
+    <div id="v1" class="variant active">
+        <section class="py-24 bg-[#f8f9fa]">
+            <div class="sx-container max-w-7xl">
+                
+                <div class="text-center mb-16">
+                    <h2 class="sx-display text-4xl lg:text-5xl text-sx-charcoal tracking-tight mb-4">Services Snapshot</h2>
+                    <p class="text-lg text-sx-muted-foreground max-w-2xl mx-auto">Expert telecommunications property advice tailored to protect your commercial interests.</p>
+                </div>
+
+                <!-- Grid Container (Acts as the table with borders) -->
+                <div class="bg-gray-200/60 rounded-3xl overflow-hidden shadow-sm border border-gray-200/60">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px]">
+                        
+                        <!-- Cell 1 -->
+                        <div class="bg-white p-6 lg:p-8 hover:bg-gray-50/50 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-sx-red rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-sx-charcoal mb-3">Telco lease negotiations</h3>
+                            <p class="text-sx-muted-foreground leading-relaxed text-sm">Our expert team work on your behalf to protect your commercial interests and secure optimised outcomes.</p>
+                        </div>
+
+                        <!-- Cell 2 -->
+                        <div class="bg-white p-6 lg:p-8 hover:bg-gray-50/50 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-sx-red rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-sx-charcoal mb-3">Property access management</h3>
+                            <p class="text-sx-muted-foreground leading-relaxed text-sm">We provide owners with confidence by ensuring subcontractors adhere to access protocols and procedures.</p>
+                        </div>
+
+                        <!-- Cell 3 -->
+                        <div class="bg-white p-6 lg:p-8 hover:bg-gray-50/50 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-sx-red rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-sx-charcoal mb-3">Land Access Activity Notices</h3>
+                            <p class="text-sx-muted-foreground leading-relaxed text-sm">We manage and handle LAAN requests and can advise if you have any grounds for objection.</p>
+                        </div>
+
+                        <!-- Cell 4 -->
+                        <div class="bg-white p-6 lg:p-8 hover:bg-gray-50/50 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-sx-red rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-sx-charcoal mb-3">Identifying unauthorised equipment</h3>
+                            <p class="text-sx-muted-foreground leading-relaxed text-sm">Our team specialise in facilities audits and can quickly identify unauthorised installations.</p>
+                        </div>
+
+                        <!-- Cell 5 -->
+                        <div class="bg-white p-6 lg:p-8 hover:bg-gray-50/50 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-sx-red rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-sx-charcoal mb-3">Strategy and advice</h3>
+                            <p class="text-sx-muted-foreground leading-relaxed text-sm">Our professionals can advise you on the best approach for protecting your assets and maximising your returns.</p>
+                        </div>
+
+                        <!-- Cell 6 -->
+                        <div class="bg-white p-6 lg:p-8 hover:bg-gray-50/50 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-sx-red rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-sx-charcoal mb-3">Co siter Access Management</h3>
+                            <p class="text-sx-muted-foreground leading-relaxed text-sm">Our secure online access management portal provides real-time status updates to all parties.</p>
+                        </div>
+
+                        <!-- Cell 7 -->
+                        <div class="bg-white p-6 lg:p-8 hover:bg-gray-50/50 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-sx-red rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-sx-charcoal mb-3">Telco Site Evaluation Audits</h3>
+                            <p class="text-sx-muted-foreground leading-relaxed text-sm">Get the full picture of all the telco equipment located on your premises.</p>
+                        </div>
+
+                        <!-- Cell 8 -->
+                        <div class="bg-white p-6 lg:p-8 hover:bg-gray-50/50 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-sx-red rounded-xl flex items-center justify-center mb-4 border border-gray-100">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-sx-charcoal mb-3">Full Telco Management Agency</h3>
+                            <p class="text-sx-muted-foreground leading-relaxed text-sm">We act as your managing agent, taking care of all your telco needs.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Bottom Banner -->
+                <div class="relative w-full rounded-3xl overflow-hidden shadow-sm mt-12 group min-h-[300px] flex items-center border border-sx-border">
+                    <img src="banner.png" alt="Telecommunications Tower" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-95">
+                    <div class="absolute inset-0 bg-gradient-to-r from-sx-charcoal via-sx-charcoal/90 to-transparent"></div>
+                    
+                    <div class="relative z-10 p-10 md:p-16 max-w-2xl">
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">Now taking care of everything</h2>
+                        <p class="text-lg text-white/90 mb-8 leading-relaxed">
+                            From collecting carrier rents to handling mobile tower lease negotiations, siteXcell is now your go-to provider for comprehensive management of your telco needs.
+                        </p>
+                        <a href="#" class="sx-button bg-white text-sx-charcoal hover:bg-sx-muted border-transparent shadow-lg h-12 px-8 inline-flex">
+                            Learn more
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Variation 2: Dark Mode Cellular Grid -->
+    <div id="v2" class="variant">
+        <section class="py-24 bg-sx-charcoal">
+            <div class="sx-container max-w-7xl">
+                
+                <div class="text-center mb-16">
+                    <h2 class="sx-display text-4xl lg:text-5xl text-white tracking-tight mb-4">Services Snapshot</h2>
+                    <p class="text-lg text-white/60 max-w-2xl mx-auto">Expert telecommunications property advice tailored to protect your commercial interests.</p>
+                </div>
+
+                <!-- Grid Container (Acts as the table with borders) -->
+                <div class="bg-white/10 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px]">
+                        
+                        <!-- Cell 1 -->
+                        <div class="bg-[#1a1a1f] p-6 lg:p-8 hover:bg-[#202026] transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white/5 text-sx-red rounded-xl flex items-center justify-center mb-4 border border-white/5">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Telco lease negotiations</h3>
+                            <p class="text-white/50 leading-relaxed text-sm">Our expert team work on your behalf to protect your commercial interests and secure optimised outcomes.</p>
+                        </div>
+
+                        <!-- Cell 2 -->
+                        <div class="bg-[#1a1a1f] p-6 lg:p-8 hover:bg-[#202026] transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white/5 text-sx-red rounded-xl flex items-center justify-center mb-4 border border-white/5">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Property access management</h3>
+                            <p class="text-white/50 leading-relaxed text-sm">We provide owners with confidence by ensuring subcontractors adhere to access protocols and procedures.</p>
+                        </div>
+
+                        <!-- Cell 3 -->
+                        <div class="bg-[#1a1a1f] p-6 lg:p-8 hover:bg-[#202026] transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white/5 text-sx-red rounded-xl flex items-center justify-center mb-4 border border-white/5">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Land Access Activity Notices</h3>
+                            <p class="text-white/50 leading-relaxed text-sm">We manage and handle LAAN requests and can advise if you have any grounds for objection.</p>
+                        </div>
+
+                        <!-- Cell 4 -->
+                        <div class="bg-[#1a1a1f] p-6 lg:p-8 hover:bg-[#202026] transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white/5 text-sx-red rounded-xl flex items-center justify-center mb-4 border border-white/5">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Identifying unauthorised equipment</h3>
+                            <p class="text-white/50 leading-relaxed text-sm">Our team specialise in facilities audits and can quickly identify unauthorised installations.</p>
+                        </div>
+
+                        <!-- Cell 5 -->
+                        <div class="bg-[#1a1a1f] p-6 lg:p-8 hover:bg-[#202026] transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white/5 text-sx-red rounded-xl flex items-center justify-center mb-4 border border-white/5">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Strategy and advice</h3>
+                            <p class="text-white/50 leading-relaxed text-sm">Our professionals can advise you on the best approach for protecting your assets and maximising your returns.</p>
+                        </div>
+
+                        <!-- Cell 6 -->
+                        <div class="bg-[#1a1a1f] p-6 lg:p-8 hover:bg-[#202026] transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white/5 text-sx-red rounded-xl flex items-center justify-center mb-4 border border-white/5">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Co siter Access Management</h3>
+                            <p class="text-white/50 leading-relaxed text-sm">Our secure online access management portal provides real-time status updates to all parties.</p>
+                        </div>
+
+                        <!-- Cell 7 -->
+                        <div class="bg-[#1a1a1f] p-6 lg:p-8 hover:bg-[#202026] transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white/5 text-sx-red rounded-xl flex items-center justify-center mb-4 border border-white/5">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Telco Site Evaluation Audits</h3>
+                            <p class="text-white/50 leading-relaxed text-sm">Get the full picture of all the telco equipment located on your premises.</p>
+                        </div>
+
+                        <!-- Cell 8 -->
+                        <div class="bg-[#1a1a1f] p-6 lg:p-8 hover:bg-[#202026] transition-colors duration-300">
+                            <div class="w-12 h-12 bg-white/5 text-sx-red rounded-xl flex items-center justify-center mb-4 border border-white/5">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Full Telco Management Agency</h3>
+                            <p class="text-white/50 leading-relaxed text-sm">We act as your managing agent, taking care of all your telco needs.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Bottom Banner -->
+                <div class="relative w-full rounded-3xl overflow-hidden shadow-2xl mt-12 group min-h-[300px] flex items-center border border-white/10">
+                    <img src="banner.png" alt="Telecommunications Tower" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-60 mix-blend-luminosity">
+                    <div class="absolute inset-0 bg-gradient-to-r from-sx-charcoal via-sx-charcoal/90 to-transparent"></div>
+                    
+                    <div class="relative z-10 p-10 md:p-16 max-w-2xl">
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">Now taking care of everything</h2>
+                        <p class="text-lg text-white/70 mb-8 leading-relaxed">
+                            From collecting carrier rents to handling mobile tower lease negotiations, siteXcell is now your go-to provider for comprehensive management of your telco needs.
+                        </p>
+                        <a href="#" class="sx-button bg-white text-sx-charcoal hover:bg-sx-muted border-transparent shadow-lg h-12 px-8 inline-flex">
+                            Learn more
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Prototype Controls -->
+    <div id="prototype-controls">
+        <span class="text-sm font-medium mr-2 opacity-70">Variations:</span>
+        <button onclick="setVariant('v1')" id="btn-v1" class="active">Light Table</button>
+        <button onclick="setVariant('v2')" id="btn-v2">Dark Table</button>
+    </div>
+
+    <script>
+        function setVariant(id) {
+            document.querySelectorAll('.variant').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('#prototype-controls button').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+            
+            // Update URL search param for shareability
+            const url = new URL(window.location);
+            url.searchParams.set('v', id);
+            window.history.pushState({}, '', url);
+        }
+
+        // Initialize from URL if present
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const v = urlParams.get('v');
+            if (v && ['v1', 'v2'].includes(v)) {
+                setVariant(v);
+            }
+        });
+    </script>
+</body>
+</html>

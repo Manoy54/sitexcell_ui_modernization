@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients Prototype - SiteXcell</title>
+    <!-- Geist Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.0.1/index.css">
+    <!-- Tailwind Compiled CSS -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>
+        .variant {
+            display: none;
+        }
+
+        .variant.active {
+            display: block;
+        }
+
+        #prototype-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 999px;
+            display: flex;
+            gap: 12px;
+            z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            color: white;
+            align-items: center;
+        }
+
+        #prototype-controls button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #fff;
+        }
+
+        #prototype-controls button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #prototype-controls button.active {
+            background: #FF2D37;
+            /* sx-red */
+            border-color: #FF2D37;
+        }
+
+        /* Marquee Animation */
+        @keyframes scroll-x {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-marquee {
+            animation: scroll-x 40s linear infinite;
+        }
+
+        .marquee-container:hover .animate-marquee {
+            animation-play-state: paused;
+        }
+
+        /* Generic Logo SVGs */
+        .logo-placeholder {
+            height: 40px;
+            width: auto;
+            max-width: 150px;
+            fill: currentColor;
+            transition: all 0.3s ease;
+        }
+
+        /* Removed grayscale styling so they retain their original colors */
+        .client-logo-wrapper {
+            transition: transform 0.3s ease;
+        }
+
+        .marquee-container .client-logo-wrapper:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body
+    class="sitexcell-ui-prototype antialiased bg-white min-h-screen relative selection:bg-sx-red/20 selection:text-sx-red pb-32">
+
+    <!-- Navbar Mockup -->
+    <header class="sticky top-0 z-50 w-full border-b border-sx-border bg-white/90 backdrop-blur-md">
+        <div class="sx-container flex h-20 items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="flex flex-col">
+                    <span class="text-3xl font-bold tracking-tight text-sx-charcoal leading-none">site<span
+                            class="text-sx-red">X</span>cell</span>
+                    <span
+                        class="text-[0.65rem] font-medium tracking-widest text-sx-muted-foreground uppercase mt-1">Telco
+                        Property Agents</span>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#" class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">Home</a>
+                <a href="#" class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">About</a>
+                <a href="#"
+                    class="text-sm font-semibold text-sx-charcoal hover:text-sx-red transition-colors">Services</a>
+                <a href="#"
+                    class="sx-button bg-sx-red text-white hover:bg-sx-red-dark border-transparent shadow-md hover:shadow-lg rounded-md px-6 ml-2">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Common Header for all variations -->
+    <div class="pt-24 pb-12 bg-white text-center">
+        <h2 class="text-4xl md:text-5xl font-bold text-sx-red mb-4">Who we help</h2>
+        <p class="text-lg text-sx-charcoal">We help property owners of all sizes and from all sectors of the economy.
+        </p>
+    </div>
+
+    <!-- Variation 1: Infinite Animated Marquee -->
+    <div id="v1" class="variant active">
+        <section class="pb-24 bg-white overflow-hidden">
+            <!-- Masking gradients for smooth fade in/out on edges -->
+            <div class="relative w-full max-w-[1600px] mx-auto marquee-container py-12">
+                <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10"></div>
+                <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10"></div>
+
+                <!-- Marquee Track (Double the items to ensure seamless loop) -->
+                <div class="flex w-[200%] animate-marquee">
+                    <!-- Set 1 -->
+                    <div class="flex w-1/2 justify-around items-center px-8">
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #009CDF;"><svg
+                                class="logo-placeholder" viewBox="0 0 120 40">
+                                <circle cx="20" cy="20" r="12" fill="currentColor" opacity="0.8" /><text x="40" y="26"
+                                    font-family="Arial" font-weight="bold" font-size="20">Jemena</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #333333;"><svg
+                                class="logo-placeholder" viewBox="0 0 100 40"><text x="5" y="26" font-family="Arial"
+                                    font-weight="bold" font-size="24">dexus</text></svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #00A651;"><svg
+                                class="logo-placeholder" viewBox="0 0 120 40">
+                                <rect x="10" y="10" width="20" height="20" fill="currentColor"
+                                    transform="rotate(45 20 20)" opacity="0.8" /><text x="45" y="26" font-family="Arial"
+                                    font-weight="bold" font-size="20">AusNet</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #000000;"><svg
+                                class="logo-placeholder" viewBox="0 0 150 40">
+                                <path d="M10 30 V10 L20 20 L30 10 V30" stroke="currentColor" stroke-width="3"
+                                    fill="none" /><text x="40" y="26" font-family="Arial" font-weight="bold"
+                                    font-size="18">MONASH</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #002664;"><svg
+                                class="logo-placeholder" viewBox="0 0 150 40">
+                                <rect x="5" y="5" width="30" height="30" fill="currentColor" opacity="0.2" /><text
+                                    x="45" y="26" font-family="Arial" font-weight="bold" font-size="16">NSW
+                                    Transport</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #00A3E0;"><svg
+                                class="logo-placeholder" viewBox="0 0 160 40">
+                                <path d="M10 25 Q 20 15 30 25 T 50 25" stroke="currentColor" stroke-width="4"
+                                    fill="none" /><text x="60" y="26" font-family="Arial" font-weight="bold"
+                                    font-size="16">Sydney WATER</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #00B5E2;"><svg
+                                class="logo-placeholder" viewBox="0 0 100 40">
+                                <circle cx="20" cy="20" r="14" fill="currentColor" opacity="0.5" /><text x="40" y="26"
+                                    font-family="Arial" font-weight="bold" font-size="22">ISPT</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #7BB13E;"><svg
+                                class="logo-placeholder" viewBox="0 0 110 40">
+                                <path d="M10 30 V15 A 5 5 0 0 1 20 15 V30 M20 30 V15 A 5 5 0 0 1 30 15 V30"
+                                    stroke="currentColor" stroke-width="4" fill="none" /><text x="40" y="26"
+                                    font-family="Arial" font-weight="bold" font-size="20">mirvac</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #000000;"><svg
+                                class="logo-placeholder" viewBox="0 0 160 40">
+                                <circle cx="140" cy="20" r="10" fill="currentColor" /><text x="5" y="26"
+                                    font-family="Arial" font-weight="bold" font-size="16">CITY OF SYDNEY</text>
+                            </svg></div>
+                    </div>
+                    <!-- Set 2 (Duplicate for loop) -->
+                    <div class="flex w-1/2 justify-around items-center px-8">
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #009CDF;"><svg
+                                class="logo-placeholder" viewBox="0 0 120 40">
+                                <circle cx="20" cy="20" r="12" fill="currentColor" opacity="0.8" /><text x="40" y="26"
+                                    font-family="Arial" font-weight="bold" font-size="20">Jemena</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #333333;"><svg
+                                class="logo-placeholder" viewBox="0 0 100 40"><text x="5" y="26" font-family="Arial"
+                                    font-weight="bold" font-size="24">dexus</text></svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #00A651;"><svg
+                                class="logo-placeholder" viewBox="0 0 120 40">
+                                <rect x="10" y="10" width="20" height="20" fill="currentColor"
+                                    transform="rotate(45 20 20)" opacity="0.8" /><text x="45" y="26" font-family="Arial"
+                                    font-weight="bold" font-size="20">AusNet</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #000000;"><svg
+                                class="logo-placeholder" viewBox="0 0 150 40">
+                                <path d="M10 30 V10 L20 20 L30 10 V30" stroke="currentColor" stroke-width="3"
+                                    fill="none" /><text x="40" y="26" font-family="Arial" font-weight="bold"
+                                    font-size="18">MONASH</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #002664;"><svg
+                                class="logo-placeholder" viewBox="0 0 150 40">
+                                <rect x="5" y="5" width="30" height="30" fill="currentColor" opacity="0.2" /><text
+                                    x="45" y="26" font-family="Arial" font-weight="bold" font-size="16">NSW
+                                    Transport</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #00A3E0;"><svg
+                                class="logo-placeholder" viewBox="0 0 160 40">
+                                <path d="M10 25 Q 20 15 30 25 T 50 25" stroke="currentColor" stroke-width="4"
+                                    fill="none" /><text x="60" y="26" font-family="Arial" font-weight="bold"
+                                    font-size="16">Sydney WATER</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #00B5E2;"><svg
+                                class="logo-placeholder" viewBox="0 0 100 40">
+                                <circle cx="20" cy="20" r="14" fill="currentColor" opacity="0.5" /><text x="40" y="26"
+                                    font-family="Arial" font-weight="bold" font-size="22">ISPT</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #7BB13E;"><svg
+                                class="logo-placeholder" viewBox="0 0 110 40">
+                                <path d="M10 30 V15 A 5 5 0 0 1 20 15 V30 M20 30 V15 A 5 5 0 0 1 30 15 V30"
+                                    stroke="currentColor" stroke-width="4" fill="none" /><text x="40" y="26"
+                                    font-family="Arial" font-weight="bold" font-size="20">mirvac</text>
+                            </svg></div>
+                        <div class="client-logo-wrapper mx-8 cursor-pointer shrink-0" style="color: #000000;"><svg
+                                class="logo-placeholder" viewBox="0 0 160 40">
+                                <circle cx="140" cy="20" r="10" fill="currentColor" /><text x="5" y="26"
+                                    font-family="Arial" font-weight="bold" font-size="16">CITY OF SYDNEY</text>
+                            </svg></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Variation 2: Minimalist Bordered Grid -->
+    <div id="v2" class="variant">
+        <section class="pb-24 bg-white">
+            <div class="sx-container max-w-5xl">
+                <div
+                    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[1px] bg-gray-200 border border-gray-200 rounded-2xl overflow-hidden">
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #009CDF;"><svg class="logo-placeholder" viewBox="0 0 120 40">
+                            <circle cx="20" cy="20" r="12" fill="currentColor" opacity="0.8" /><text x="40" y="26"
+                                font-family="Arial" font-weight="bold" font-size="20">Jemena</text>
+                        </svg></div>
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #333333;"><svg class="logo-placeholder" viewBox="0 0 100 40"><text x="5" y="26"
+                                font-family="Arial" font-weight="bold" font-size="24">dexus</text></svg></div>
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #00A651;"><svg class="logo-placeholder" viewBox="0 0 120 40">
+                            <rect x="10" y="10" width="20" height="20" fill="currentColor" transform="rotate(45 20 20)"
+                                opacity="0.8" /><text x="45" y="26" font-family="Arial" font-weight="bold"
+                                font-size="20">AusNet</text>
+                        </svg></div>
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #000000;"><svg class="logo-placeholder" viewBox="0 0 150 40">
+                            <path d="M10 30 V10 L20 20 L30 10 V30" stroke="currentColor" stroke-width="3" fill="none" />
+                            <text x="40" y="26" font-family="Arial" font-weight="bold" font-size="18">MONASH</text>
+                        </svg></div>
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #002664;"><svg class="logo-placeholder" viewBox="0 0 150 40">
+                            <rect x="5" y="5" width="30" height="30" fill="currentColor" opacity="0.2" /><text x="45"
+                                y="26" font-family="Arial" font-weight="bold" font-size="16">NSW Transport</text>
+                        </svg></div>
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #00A3E0;"><svg class="logo-placeholder" viewBox="0 0 160 40">
+                            <path d="M10 25 Q 20 15 30 25 T 50 25" stroke="currentColor" stroke-width="4" fill="none" />
+                            <text x="60" y="26" font-family="Arial" font-weight="bold" font-size="16">Sydney
+                                WATER</text>
+                        </svg></div>
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #00B5E2;"><svg class="logo-placeholder" viewBox="0 0 100 40">
+                            <circle cx="20" cy="20" r="14" fill="currentColor" opacity="0.5" /><text x="40" y="26"
+                                font-family="Arial" font-weight="bold" font-size="22">ISPT</text>
+                        </svg></div>
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #7BB13E;"><svg class="logo-placeholder" viewBox="0 0 110 40">
+                            <path d="M10 30 V15 A 5 5 0 0 1 20 15 V30 M20 30 V15 A 5 5 0 0 1 30 15 V30"
+                                stroke="currentColor" stroke-width="4" fill="none" /><text x="40" y="26"
+                                font-family="Arial" font-weight="bold" font-size="20">mirvac</text>
+                        </svg></div>
+                    <div class="bg-white p-8 flex items-center justify-center hover:bg-gray-50 transition-colors h-32"
+                        style="color: #000000;"><svg class="logo-placeholder" viewBox="0 0 160 40">
+                            <circle cx="140" cy="20" r="10" fill="currentColor" /><text x="5" y="26" font-family="Arial"
+                                font-weight="bold" font-size="16">CITY OF SYDNEY</text>
+                        </svg></div>
+                    <!-- Fill empty grid spot -->
+                    <div class="bg-white p-8 flex items-center justify-center h-32 hidden lg:flex"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Variation 3: Soft Floating Badges -->
+    <div id="v3" class="variant">
+        <section class="pb-24 bg-white">
+            <div class="sx-container max-w-5xl">
+                <div class="flex flex-wrap justify-center gap-6">
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #009CDF;"><svg class="logo-placeholder" viewBox="0 0 120 40">
+                            <circle cx="20" cy="20" r="12" fill="currentColor" opacity="0.8" /><text x="40" y="26"
+                                font-family="Arial" font-weight="bold" font-size="20">Jemena</text>
+                        </svg></div>
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #333333;"><svg class="logo-placeholder" viewBox="0 0 100 40"><text x="5" y="26"
+                                font-family="Arial" font-weight="bold" font-size="24">dexus</text></svg></div>
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #00A651;"><svg class="logo-placeholder" viewBox="0 0 120 40">
+                            <rect x="10" y="10" width="20" height="20" fill="currentColor" transform="rotate(45 20 20)"
+                                opacity="0.8" /><text x="45" y="26" font-family="Arial" font-weight="bold"
+                                font-size="20">AusNet</text>
+                        </svg></div>
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #000000;"><svg class="logo-placeholder" viewBox="0 0 150 40">
+                            <path d="M10 30 V10 L20 20 L30 10 V30" stroke="currentColor" stroke-width="3" fill="none" />
+                            <text x="40" y="26" font-family="Arial" font-weight="bold" font-size="18">MONASH</text>
+                        </svg></div>
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #002664;"><svg class="logo-placeholder" viewBox="0 0 150 40">
+                            <rect x="5" y="5" width="30" height="30" fill="currentColor" opacity="0.2" /><text x="45"
+                                y="26" font-family="Arial" font-weight="bold" font-size="16">NSW Transport</text>
+                        </svg></div>
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #00A3E0;"><svg class="logo-placeholder" viewBox="0 0 160 40">
+                            <path d="M10 25 Q 20 15 30 25 T 50 25" stroke="currentColor" stroke-width="4" fill="none" />
+                            <text x="60" y="26" font-family="Arial" font-weight="bold" font-size="16">Sydney
+                                WATER</text>
+                        </svg></div>
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #00B5E2;"><svg class="logo-placeholder" viewBox="0 0 100 40">
+                            <circle cx="20" cy="20" r="14" fill="currentColor" opacity="0.5" /><text x="40" y="26"
+                                font-family="Arial" font-weight="bold" font-size="22">ISPT</text>
+                        </svg></div>
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #7BB13E;"><svg class="logo-placeholder" viewBox="0 0 110 40">
+                            <path d="M10 30 V15 A 5 5 0 0 1 20 15 V30 M20 30 V15 A 5 5 0 0 1 30 15 V30"
+                                stroke="currentColor" stroke-width="4" fill="none" /><text x="40" y="26"
+                                font-family="Arial" font-weight="bold" font-size="20">mirvac</text>
+                        </svg></div>
+                    <div class="bg-white px-8 py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-pointer"
+                        style="color: #000000;"><svg class="logo-placeholder" viewBox="0 0 160 40">
+                            <circle cx="140" cy="20" r="10" fill="currentColor" /><text x="5" y="26" font-family="Arial"
+                                font-weight="bold" font-size="16">CITY OF SYDNEY</text>
+                        </svg></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Prototype Controls -->
+    <div id="prototype-controls">
+        <span class="text-sm font-medium mr-2 opacity-70">Variations:</span>
+        <button onclick="setVariant('v1')" id="btn-v1" class="active">Infinite Marquee</button>
+        <button onclick="setVariant('v2')" id="btn-v2">Minimal Grid</button>
+        <button onclick="setVariant('v3')" id="btn-v3">Floating Badges</button>
+    </div>
+
+    <script>
+        function setVariant(id) {
+            document.querySelectorAll('.variant').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            document.querySelectorAll('#prototype-controls button').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + id).classList.add('active');
+
+            // Update URL search param for shareability
+            const url = new URL(window.location);
+            url.searchParams.set('v', id);
+            window.history.pushState({}, '', url);
+        }
+
+        // Initialize from URL if present
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const v = urlParams.get('v');
+            if (v && ['v1', 'v2', 'v3'].includes(v)) {
+                setVariant(v);
+            }
+        });
+    </script>
+</body>
+
+</html>
