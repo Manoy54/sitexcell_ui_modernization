@@ -19,7 +19,7 @@
 | Activity type | `input_1_11` / `input_11` | Select | Yes | Options: Inspection, Installation, Maintenance | Each activity type; invalid/unselected |
 | Proposed commencement date | `input_1_12` / `input_12` | Text date | Yes | Placeholder `dd-mm-yyyy`; must align with the date on the attached LAAN | Valid, missing, invalid format, past/edge date |
 | Owner name | `input_1_40` / `input_40` | Select | No | Optional owner filter; 53 observed options | No owner vs selected owner; filter usefulness |
-| Site name | `input_1_41` / `input_41` | Select | Yes | 298 observed options; includes synthetic fixture `The CRM Carpenters Test` with value `4127303000264672008` | No site, owner-filtered site, direct site selection, similar names |
+| Site name | `input_1_41` / `input_41` | Select | Yes | Historically exposed 298 options. The current public selector is empty, while backing field `input_1_85` exposes the approved non-submitting `siteXcell Pty Ltd` test context (`4127303000002387166`); live helpers mirror only that configured option. | No site, owner-filtered site, direct site selection, similar names |
 | Building address | Rendered output | Derived display | N/A | Blank before site selection; expected to resolve from the selected site | Verify authoritative site relationship and persistence |
 | Drawing requirements | Rendered link | External reference | N/A | Owner requirements checklist/example drawing link is visible | Discoverability; external navigation burden |
 | Site notes to carriers | Rendered output | Derived display | N/A | Blank before site selection | Verify site-specific notes and reviewability |

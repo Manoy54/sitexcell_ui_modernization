@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 import {
   REQUIRED_UPLOAD,
-  SYNTHETIC_SITE,
-  SYNTHETIC_SITE_ID,
+  TEST_SITE,
+  TEST_SITE_ID,
   completePageOne,
   fillPageTwoCore,
   openLaanForm,
@@ -33,7 +33,7 @@ test('completes the canonical synthetic LAAN path to Page 2 without submitting',
     });
     await expect(page.locator('#input_1_11')).toHaveValue(SYNTHETIC_VALUES.activity);
     await expect(page.locator('#input_1_12')).toHaveValue(SYNTHETIC_VALUES.commencementDate);
-    await expect(page.locator('#input_1_41')).toHaveValue(SYNTHETIC_SITE_ID);
+    await expect(page.locator('#input_1_41')).toHaveValue(TEST_SITE_ID);
     await expect(page.locator('#choice_1_63_1')).toBeChecked();
 
     await page.locator('#gform_next_button_1_36').click();
@@ -81,7 +81,8 @@ test('completes the canonical synthetic LAAN path to Page 2 without submitting',
       body: JSON.stringify({
         url: page.url(),
         formId: 'gform_1',
-        syntheticSite: SYNTHETIC_SITE,
+        testSite: TEST_SITE,
+        testSiteId: TEST_SITE_ID,
         syntheticValues: SYNTHETIC_VALUES,
         pageTwoValues,
         capturedAt: new Date().toISOString(),

@@ -62,7 +62,9 @@ if (-not [string]::IsNullOrWhiteSpace($TestFile)) {
 $testExitCode = $LASTEXITCODE
 
 $runFinishedAt = [DateTimeOffset]::Now
-$reportPath = Join-Path $projectRoot '.test-artifacts\playwright\live-results.json'
+$configName = [System.IO.Path]::GetFileName($ConfigFile)
+$reportFileName = if ($configName -match 'wave2') { 'wave2-results.json' } else { 'live-results.json' }
+$reportPath = Join-Path $projectRoot ".test-artifacts\playwright\$reportFileName"
 $historyDirectory = Join-Path $projectRoot '.test-artifacts\playwright\history'
 
 if (Test-Path -LiteralPath $reportPath) {
@@ -87,7 +89,7 @@ if (-not $NoReport) {
     }
 
     Write-Host ''
-    Write-Host 'Results dashboard: http://127.0.0.1:4173/'
+    Write-Host "Results dashboard: http://127.0.0.1:4173/$reportFileName"
 }
 
 exit $testExitCode

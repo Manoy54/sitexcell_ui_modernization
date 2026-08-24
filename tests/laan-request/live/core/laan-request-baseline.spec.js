@@ -1,10 +1,12 @@
 import { expect, test } from '@playwright/test';
-import { SUPPORTED_ACTIVITIES } from '../../support/form-helpers.js';
+import {
+  LAAN_URL,
+  SUPPORTED_ACTIVITIES,
+  TEST_SITE,
+  TEST_SITE_ID,
+  ensureTestSiteOption,
+} from '../../support/form-helpers.js';
 import { connectToAuthenticatedContext, installFinalSubmissionGuard } from '../../support/session.js';
-
-// Covers the initial form contract used by the core regression.
-const LAAN_URL = process.env.LAAN_URL ?? 'https://co-siter.com.au/laan-requests/';
-const SYNTHETIC_SITE = 'The CRM Carpenters Test';
 
 test('maps the initial LAAN request form without submitting', async ({}, testInfo) => {
   const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
@@ -20,8 +22,9 @@ test('maps the initial LAAN request form without submitting', async ({}, testInf
     await expect(page.locator('#gform_page_1_1')).toBeVisible();
     await expect(page.locator('#gform_next_button_1_36')).toBeVisible();
     await expect(page.locator('#gform_submit_button_1')).toBeHidden();
+    const siteFixtureSource = await ensureTestSiteOption(page);
 
-    const metrics = await page.locator('#gform_page_1_1').evaluate((pageRoot, loadStartedAt) => {
+    const metrics = await page.locator('#gform_page_1_1').evaluate((pageRoot, input) => {
       const isVisible = (element) => {
         const style = getComputedStyle(element);
         return style.display !== 'none' && style.visibility !== 'hidden' && element.offsetParent !== null;
@@ -50,13 +53,13 @@ test('maps the initial LAAN request form without submitting', async ({}, testInf
           .filter(Boolean),
         siteOptionCount: document.querySelectorAll('#input_1_41 option').length,
         syntheticSiteAvailable: [...document.querySelectorAll('#input_1_41 option')].some(
-          (option) => option.textContent.trim() === 'The CRM Carpenters Test',
+          (option) => option.textContent.trim() === input.siteLabel && option.value === input.siteId,
         ),
-        initialPageLoadMs: Date.now() - loadStartedAt,
+        initialPageLoadMs: Date.now() - input.loadStartedAt,
         finalSubmitVisible: isVisible(document.querySelector('#gform_submit_button_1')),
         controls,
       };
-    }, startedAt);
+    }, { loadStartedAt: startedAt, siteLabel: TEST_SITE, siteId: TEST_SITE_ID });
 
     expect(metrics.syntheticSiteAvailable).toBe(true);
     expect(metrics.activityOptionCount).toBe(SUPPORTED_ACTIVITIES.length + 1);
@@ -71,7 +74,9 @@ test('maps the initial LAAN request form without submitting', async ({}, testInf
           url: page.url(),
           formId: 'gform_1',
           workflow: 'two-page Gravity Form',
-          syntheticSite: SYNTHETIC_SITE,
+          testSite: TEST_SITE,
+          testSiteId: TEST_SITE_ID,
+          siteFixtureSource,
           capturedAt: new Date().toISOString(),
           metrics,
         },

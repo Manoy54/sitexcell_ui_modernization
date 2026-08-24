@@ -6,10 +6,13 @@ Wave 2 tests the LAAN questions that remained unresolved after the five-test fun
 
 ## Current status
 
+- Latest repaired Core run: **3 / 3 passed** in `LAN-20260824-115125-612` after adapting the approved test Site to the live form's backing-field contract.
+- Latest repaired Wave 2 run: **6 / 7 passed** in `LAN-20260824-115207-405`; all Site-dependent paths now reach their intended assertions, and only the malformed-date application defect remains.
 - Core regression: **3 tests**, **3 / 3 passed** in the final authenticated run `LAN-20260822-104333-974`.
-- Wave 2: **13 tests across 7 files**, implemented and successfully discovered by Playwright.
-- Final consolidated Wave 2 result: **12 / 13 passed** in `LAN-20260822-104424-613`.
-- Final combined result: **15 / 16 passed**; the only failure is the malformed-date acceptance test.
+- Wave 2: **11 test declarations across 8 files**: the original 7 consolidated tests plus 4 strict improvement goal gates.
+- The suite now preserves the original 13 scenario checks and adds acceptance gates for upload replacement/removal confirmation drift and Stage 1/Stage 2 reload data loss.
+- Historical pre-consolidation Wave 2 result: **12 / 13 passed** in `LAN-20260822-104424-613`.
+- Historical pre-consolidation combined result: **15 / 16 passed**; the only failure was the malformed-date acceptance test.
 - Date-boundary and responsive checks passed in the final headless run; earlier visible-browser timeouts were not reproduced.
 - Keyboard rerun: **2 / 2 passed** in `LAN-20260817-234416-180` after targeting the public Browse interaction.
 - Remaining failure: the malformed-date acceptance test. The original run advanced to Stage 2; reruns `LAN-20260817-234509-287` and `LAN-20260817-235644-162` displayed a WordPress critical-error page instead of inline rejection.
@@ -37,7 +40,7 @@ Wave 2 has its own Playwright configuration. This keeps the proven three-test co
 Command:
 
 ```powershell
-npm run test:lan:variants
+npm run test:laan:live:variants
 ```
 
 Tests:
@@ -55,7 +58,7 @@ Expected evidence:
 Command:
 
 ```powershell
-npm run test:lan:validation
+npm run test:laan:live:validation
 ```
 
 Tests:
@@ -76,7 +79,7 @@ Expected evidence:
 Command:
 
 ```powershell
-npm run test:lan:date-boundaries
+npm run test:laan:live:date-boundaries
 ```
 
 Tests:
@@ -90,7 +93,7 @@ These checks cover valid day-of-year boundaries without attempting final submiss
 Command:
 
 ```powershell
-npm run test:lan:upload-recovery
+npm run test:laan:live:upload-recovery
 ```
 
 Tests:
@@ -114,7 +117,7 @@ File-type, file-size, malware/security, and server-retry behavior are not inferr
 Command:
 
 ```powershell
-npm run test:lan:reload
+npm run test:laan:live:reload
 ```
 
 Tests:
@@ -129,7 +132,7 @@ These are characterization tests. A passing Playwright result means the probe co
 Command:
 
 ```powershell
-npm run test:lan:keyboard
+npm run test:laan:live:keyboard
 ```
 
 Tests:
@@ -148,7 +151,7 @@ Expected evidence:
 Command:
 
 ```powershell
-npm run test:lan:responsive
+npm run test:laan:live:responsive
 ```
 
 Viewports:
@@ -158,15 +161,32 @@ Viewports:
 
 The matrix test completes the synthetic path through Stage 2 at both viewports, fills the seven core access-detail values, selects the required LAAN file, verifies both upload areas and the final action are visible, and checks for horizontal document overflow.
 
-## Complete Wave 2 run
+### 8. Improvement goal gates — 4 acceptance tests
 
-After the focused groups have been understood, run all 13 tests together:
+Command:
 
 ```powershell
-npm run test:lan:wave2
+npm run test:laan:live:gates
 ```
 
-Final observed ending before the malformed-date behavior is corrected:
+These tests are intentionally strict. They must fail while the known defects remain:
+
+- removing a confirmed required LAAN file must invalidate its confirmation;
+- replacing a confirmed required LAAN file must require confirmation again;
+- reloading Stage 1 must preserve the completed activity, date, Site, and terms state;
+- reloading Stage 2 must preserve the active stage and completed access details.
+
+The goal-gate tests are acceptance tests, not characterization tests. A browser process that completes while losing values is a failed product result. They remain non-submitting and retain the final-action guard.
+
+## Complete Wave 2 run
+
+After the focused groups have been understood, run all 11 test declarations together:
+
+```powershell
+npm run test:laan:live:wave2
+```
+
+The consolidated suite retains 13 scenario checks inside the original 7 test declarations and adds 4 goal-gate declarations. The historical pre-consolidation run ended as follows:
 
 ```text
 Running 13 tests using 1 worker
@@ -175,14 +195,14 @@ Running 13 tests using 1 worker
 Run status: FAILED
 ```
 
-After the date validation is corrected, the acceptance target becomes `13 passed`. Do not add retries or mark the date test as expected-to-fail merely to turn the suite green. The run wrapper archives the JSON report under `test case result/history/` and refreshes the dashboard source at `test case result/playwright-results.json`.
+After the date, upload-state, and reload behaviors are corrected, all 17 scenario checks should pass within the 11 test declarations. Do not add retries or mark a goal gate as expected-to-fail merely to turn the suite green. The run wrapper archives the JSON report under `.test-artifacts/playwright/history/` and refreshes the current Wave 2 report at `.test-artifacts/playwright/wave2-results.json`.
 
 ## Focused reruns after diagnosis
 
 The keyboard test was corrected to assert the public Browse interaction rather than the uploader's native file-input implementation:
 
 ```powershell
-npm run test:lan:keyboard
+npm run test:laan:live:keyboard
 ```
 
 Confirmed result: `2 passed` in `LAN-20260817-234416-180`.
@@ -190,7 +210,7 @@ Confirmed result: `2 passed` in `LAN-20260817-234416-180`.
 The validation test now classifies and attaches the visible outcome before preserving the malformed-date failure: inline rejection, Stage 2 advancement, WordPress critical error, or unknown state.
 
 ```powershell
-npm run test:lan:validation
+npm run test:laan:live:validation
 ```
 
 Confirmed final result in `LAN-20260822-104424-613`: `2 passed, 1 failed` within the validation file. The failure explicitly recorded a WordPress critical error instead of inline rejection. This test should become green only after the form rejects impossible dates inline at the Stage 1 gate while preserving valid context.
@@ -202,7 +222,7 @@ The two critical-error outcomes should be correlated with WordPress/PHP logs aro
 After interpreting or correcting Wave 2 issues, rerun the current three-test Core regression:
 
 ```powershell
-npm run test:lan
+npm run test:laan:live
 ```
 
 Final observed result:
@@ -217,7 +237,7 @@ Run status: PASSED
 If authentication has expired, run the relevant command through a refreshed session:
 
 ```powershell
-.\run-lan-session.ps1 -RefreshSession -ShowBrowser -SlowMo 300 -ConfigFile test_scripts/lan-request/playwright.wave2.config.js
+.\tests\laan-request\support\run-live-session.ps1 -RefreshSession -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js
 ```
 
 ## Non-automation task 1 — authoritative data workshop

@@ -32,60 +32,55 @@ function expectIdsInOrder(sequence, expectedIds) {
   }
 }
 
-test('Stage 1 critical controls are reachable in a logical keyboard order', async ({}, testInfo) => {
+test('Stage 1 and Stage 2 critical controls are keyboard reachable', async ({}, testInfo) => {
   const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
   const page = await context.newPage();
   const wasFinalSubmissionAttempted = await installFinalSubmissionGuard(page);
 
   try {
-    await openLaanForm(page);
-    const sequence = await captureTabSequence(page, '#input_1_11');
+    await test.step('Stage 1 follows a logical keyboard order', async () => {
+      await openLaanForm(page);
+      const sequence = await captureTabSequence(page, '#input_1_11');
 
-    expectIdsInOrder(sequence, [
-      'input_1_11',
-      'input_1_12',
-      'input_1_40',
-      'input_1_41',
-      'choice_1_63_1',
-      'gform_next_button_1_36',
-    ]);
-    expect(wasFinalSubmissionAttempted()).toBe(false);
-    await attachJson(testInfo, 'laan-stage-one-keyboard-order.json', { sequence });
-  } finally {
-    await page.close();
-    if (ownsBrowser) await browser.close();
-  }
-});
+      expectIdsInOrder(sequence, [
+        'input_1_11',
+        'input_1_12',
+        'input_1_40',
+        'input_1_41',
+        'choice_1_63_1',
+        'gform_next_button_1_36',
+      ]);
+      await attachJson(testInfo, 'laan-stage-one-keyboard-order.json', { sequence });
+      expect(wasFinalSubmissionAttempted()).toBe(false);
+    });
 
-test('Stage 2 critical controls and actions are keyboard reachable', async ({}, testInfo) => {
-  const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
-  const page = await context.newPage();
-  const wasFinalSubmissionAttempted = await installFinalSubmissionGuard(page);
+    await test.step('Stage 2 controls and actions are keyboard reachable', async () => {
+      await openPageTwo(page);
+      const sequence = await captureTabSequence(page, '#input_1_58');
 
-  try {
-    await openPageTwo(page);
-    const sequence = await captureTabSequence(page, '#input_1_58');
+      await attachJson(testInfo, 'laan-stage-two-keyboard-order.json', { sequence });
 
-    await attachJson(testInfo, 'laan-stage-two-keyboard-order.json', { sequence });
+      expectIdsInOrder(sequence, [
+        'input_1_58',
+        'input_1_18',
+        'input_1_19',
+        'input_1_83',
+        'input_1_87',
+        'input_1_22',
+        'input_1_64',
+        'input_1_49',
+        'input_1_29_1',
+        'input_1_45_1',
+        'gform_submit_button_1',
+      ]);
+      expect(
+        sequence.some((entry) =>
+          entry.id === 'gform_browse_button_1_59' || entry.fieldId === 'field_1_59',
+        ),
+      ).toBe(true);
+      expect(wasFinalSubmissionAttempted()).toBe(false);
+    });
 
-    expectIdsInOrder(sequence, [
-      'input_1_58',
-      'input_1_18',
-      'input_1_19',
-      'input_1_83',
-      'input_1_87',
-      'input_1_22',
-      'input_1_64',
-      'input_1_49',
-      'input_1_29_1',
-      'input_1_45_1',
-      'gform_submit_button_1',
-    ]);
-    expect(
-      sequence.some((entry) =>
-        entry.id === 'gform_browse_button_1_59' || entry.fieldId === 'field_1_59',
-      ),
-    ).toBe(true);
     expect(wasFinalSubmissionAttempted()).toBe(false);
   } finally {
     await page.close();

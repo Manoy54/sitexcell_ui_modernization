@@ -16,108 +16,92 @@ async function assertPageTwoCoreValues(page, valuesBySelector) {
   }
 }
 
-test('required LAAN file can be replaced without clearing access details', async ({}, testInfo) => {
+test('preserves access details and confirmation state across upload recovery cases', async ({}, testInfo) => {
   const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
   const page = await context.newPage();
   const wasFinalSubmissionAttempted = await installFinalSubmissionGuard(page);
 
   try {
-    await openPageTwo(page);
-    const valuesBySelector = await fillPageTwoCore(page, 'UPLOAD-REPLACE');
-    const requiredUpload = page.locator('#input_1_49');
-    const uploadConfirmation = page.locator('#input_1_29_1');
+    await test.step('replaces the required LAAN file without clearing access details', async () => {
+      await openPageTwo(page);
+      const valuesBySelector = await fillPageTwoCore(page, 'UPLOAD-REPLACE');
+      const requiredUpload = page.locator('#input_1_49');
+      const uploadConfirmation = page.locator('#input_1_29_1');
 
-    await requiredUpload.setInputFiles(REQUIRED_UPLOAD);
-    await expect.poll(() => selectedFileNames(requiredUpload)).toEqual(['synthetic-laan-attachment.txt']);
-    await expect(uploadConfirmation).not.toBeChecked();
+      await requiredUpload.setInputFiles(REQUIRED_UPLOAD);
+      await expect.poll(() => selectedFileNames(requiredUpload)).toEqual(['synthetic-laan-attachment.txt']);
+      await expect(uploadConfirmation).not.toBeChecked();
 
-    await requiredUpload.setInputFiles(REPLACEMENT_UPLOAD);
-    await expect.poll(() => selectedFileNames(requiredUpload)).toEqual(['synthetic-laan-replacement.txt']);
-    await assertPageTwoCoreValues(page, valuesBySelector);
+      await requiredUpload.setInputFiles(REPLACEMENT_UPLOAD);
+      await expect.poll(() => selectedFileNames(requiredUpload)).toEqual(['synthetic-laan-replacement.txt']);
+      await assertPageTwoCoreValues(page, valuesBySelector);
 
-    await uploadConfirmation.check();
-    await expect(uploadConfirmation).toBeChecked();
-    await expect.poll(() => selectedFileNames(requiredUpload)).toEqual(['synthetic-laan-replacement.txt']);
-    expect(wasFinalSubmissionAttempted()).toBe(false);
+      await uploadConfirmation.check();
+      await expect(uploadConfirmation).toBeChecked();
+      await expect.poll(() => selectedFileNames(requiredUpload)).toEqual(['synthetic-laan-replacement.txt']);
 
-    await attachJson(testInfo, 'laan-required-upload-replacement.json', {
-      originalFile: 'synthetic-laan-attachment.txt',
-      replacementFile: 'synthetic-laan-replacement.txt',
-      accessDetailsPreserved: true,
-      confirmationRequiredSeparately: true,
-      capturedAt: new Date().toISOString(),
+      await attachJson(testInfo, 'laan-required-upload-replacement.json', {
+        originalFile: 'synthetic-laan-attachment.txt',
+        replacementFile: 'synthetic-laan-replacement.txt',
+        accessDetailsPreserved: true,
+        confirmationRequiredSeparately: true,
+        capturedAt: new Date().toISOString(),
+      });
+      expect(wasFinalSubmissionAttempted()).toBe(false);
     });
-  } finally {
-    await page.close();
-    if (ownsBrowser) await browser.close();
-  }
-});
+    await test.step('clears the required LAAN file without clearing access details', async () => {
+      await openPageTwo(page);
+      const valuesBySelector = await fillPageTwoCore(page, 'UPLOAD-CLEAR');
+      const requiredUpload = page.locator('#input_1_49');
+      const uploadConfirmation = page.locator('#input_1_29_1');
 
-test('clearing the required LAAN file preserves access details and records confirmation state', async ({}, testInfo) => {
-  const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
-  const page = await context.newPage();
-  const wasFinalSubmissionAttempted = await installFinalSubmissionGuard(page);
+      await requiredUpload.setInputFiles(REQUIRED_UPLOAD);
+      await uploadConfirmation.check();
+      await requiredUpload.setInputFiles([]);
 
-  try {
-    await openPageTwo(page);
-    const valuesBySelector = await fillPageTwoCore(page, 'UPLOAD-CLEAR');
-    const requiredUpload = page.locator('#input_1_49');
-    const uploadConfirmation = page.locator('#input_1_29_1');
+      await expect.poll(() => selectedFileNames(requiredUpload)).toEqual([]);
+      await assertPageTwoCoreValues(page, valuesBySelector);
+      const confirmationCheckedAfterRemoval = await uploadConfirmation.isChecked();
 
-    await requiredUpload.setInputFiles(REQUIRED_UPLOAD);
-    await uploadConfirmation.check();
-    await requiredUpload.setInputFiles([]);
-
-    await expect.poll(() => selectedFileNames(requiredUpload)).toEqual([]);
-    await assertPageTwoCoreValues(page, valuesBySelector);
-    const confirmationCheckedAfterRemoval = await uploadConfirmation.isChecked();
-    expect(wasFinalSubmissionAttempted()).toBe(false);
-
-    await attachJson(testInfo, 'laan-required-upload-clear.json', {
-      fileCleared: true,
-      accessDetailsPreserved: true,
-      confirmationCheckedAfterRemoval,
-      interpretation: confirmationCheckedAfterRemoval
-        ? 'The file control and declaration can become inconsistent before final validation.'
-        : 'The declaration follows the cleared file state.',
-      capturedAt: new Date().toISOString(),
+      await attachJson(testInfo, 'laan-required-upload-clear.json', {
+        fileCleared: true,
+        accessDetailsPreserved: true,
+        confirmationCheckedAfterRemoval,
+        interpretation: confirmationCheckedAfterRemoval
+          ? 'The file control and declaration can become inconsistent before final validation.'
+          : 'The declaration follows the cleared file state.',
+        capturedAt: new Date().toISOString(),
+      });
+      expect(wasFinalSubmissionAttempted()).toBe(false);
     });
-  } finally {
-    await page.close();
-    if (ownsBrowser) await browser.close();
-  }
-});
+    await test.step('accepts multiple supporting documents without submitting', async () => {
+      await openPageTwo(page);
+      const additionalField = page.locator('#field_1_59');
+      const additionalInput = additionalField.locator('input[type="file"]');
 
-test('additional documents accepts multiple synthetic supporting files without submitting', async ({}, testInfo) => {
-  const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
-  const page = await context.newPage();
-  const wasFinalSubmissionAttempted = await installFinalSubmissionGuard(page);
+      expect(await additionalInput.evaluate((input) => input.multiple)).toBe(true);
+      await additionalInput.setInputFiles([ADDITIONAL_UPLOAD, REPLACEMENT_UPLOAD]);
+      await expect.poll(
+        () => additionalField.locator('.gfield_fileupload_filename').allTextContents(),
+        { timeout: 30_000 },
+      ).toEqual(expect.arrayContaining([
+        'synthetic-additional-document.txt',
+        'synthetic-laan-replacement.txt',
+      ]));
 
-  try {
-    await openPageTwo(page);
-    const additionalField = page.locator('#field_1_59');
-    const additionalInput = additionalField.locator('input[type="file"]');
+      const visibleFileNames = await additionalField.locator('.gfield_fileupload_filename').allTextContents();
+      await expect(page.locator('#gform_submit_button_1')).toBeVisible();
 
-    expect(await additionalInput.evaluate((input) => input.multiple)).toBe(true);
-    await additionalInput.setInputFiles([ADDITIONAL_UPLOAD, REPLACEMENT_UPLOAD]);
-    await expect.poll(
-      () => additionalField.locator('.gfield_fileupload_filename').allTextContents(),
-      { timeout: 30_000 },
-    ).toEqual(expect.arrayContaining([
-      'synthetic-additional-document.txt',
-      'synthetic-laan-replacement.txt',
-    ]));
-
-    const visibleFileNames = await additionalField.locator('.gfield_fileupload_filename').allTextContents();
-    await expect(page.locator('#gform_submit_button_1')).toBeVisible();
-    expect(wasFinalSubmissionAttempted()).toBe(false);
-
-    await attachJson(testInfo, 'laan-additional-documents-multiple.json', {
-      selectedFiles: ['synthetic-additional-document.txt', 'synthetic-laan-replacement.txt'],
-      visibleFileNames,
-      capturedAt: new Date().toISOString(),
-      stoppingPoint: 'Stage 2 before final submission',
+      await attachJson(testInfo, 'laan-additional-documents-multiple.json', {
+        selectedFiles: ['synthetic-additional-document.txt', 'synthetic-laan-replacement.txt'],
+        visibleFileNames,
+        capturedAt: new Date().toISOString(),
+        stoppingPoint: 'Stage 2 before final submission',
+      });
+      expect(wasFinalSubmissionAttempted()).toBe(false);
     });
+
+    expect(wasFinalSubmissionAttempted()).toBe(false);
   } finally {
     await page.close();
     if (ownsBrowser) await browser.close();
