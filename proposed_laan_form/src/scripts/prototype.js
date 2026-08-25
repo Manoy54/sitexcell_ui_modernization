@@ -38,7 +38,10 @@ const defaultState = {
         accuracyAccepted: false,
     },
     errors: {},
+    openDropdown: '',
     siteMenuOpen: false,
+    calendarOpen: false,
+    calendarMenu: '',
     completionShown: false,
     draftMessage: '',
 };
@@ -77,22 +80,41 @@ const icon = (name, className = 'icon') => `<svg class="${className}" aria-hidde
 
 const selectedSite = () => sites.find(({ id }) => id === state.fields.siteId) ?? null;
 
-const dateIsValid = (value) => {
+const parseDateValue = (value) => {
     const match = /^(\d{2})-(\d{2})-(\d{4})$/.exec(value.trim());
 
-    if (!match) {
+    return match
+        ? { day: Number(match[1]), month: Number(match[2]) - 1, year: Number(match[3]) }
+        : null;
+};
+
+const shortMonthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const weekdayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const today = new Date();
+const selectedDate = parseDateValue(state.fields.commencementDate);
+let calendarView = selectedDate
+    ? { year: selectedDate.year, month: selectedDate.month }
+    : { year: today.getFullYear(), month: today.getMonth() };
+
+const calendarDateKey = (year, month, day) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+const calendarDateFromKey = (key) => {
+    const [year, month, day] = key.split('-').map(Number);
+    return { year, month: month - 1, day };
+};
+
+const dateIsValid = (value) => {
+    const parsed = parseDateValue(value);
+
+    if (!parsed) {
         return false;
     }
 
-    const [, dayText, monthText, yearText] = match;
-    const day = Number(dayText);
-    const month = Number(monthText);
-    const year = Number(yearText);
-    const date = new Date(Date.UTC(year, month - 1, day));
+    const date = new Date(Date.UTC(parsed.year, parsed.month, parsed.day));
 
-    return date.getUTCFullYear() === year
-        && date.getUTCMonth() === month - 1
-        && date.getUTCDate() === day;
+    return date.getUTCFullYear() === parsed.year
+        && date.getUTCMonth() === parsed.month
+        && date.getUTCDate() === parsed.day;
 };
 
 const stageOneChecks = () => ({
@@ -201,12 +223,99 @@ const renderErrorSummary = () => {
     return `<div class="error-summary" role="alert" tabindex="-1" data-error-summary><strong>Please review ${count === 1 ? 'this item' : `these ${count} items`}.</strong><span>Your valid information has been preserved.</span></div>`;
 };
 
-const renderActivityOptions = () => [
-    '<option value="">Please select</option>',
-    ...activities.map(({ value, label }) => `<option value="${escapeHtml(value)}"${state.fields.activity === value ? ' selected' : ''}>${escapeHtml(label)}</option>`),
-].join('');
+const renderDropdown = ({ name, id, label, placeholder, options }) => {
+    const open = state.openDropdown === name;
+    const selectedValue = state.fields[name];
+    const selectedLabel = options.find(({ value }) => value === selectedValue)?.label ?? placeholder;
+    const menuId = `${name}-options`;
 
-const renderOwnerOptions = () => owners.map(({ value, label }) => `<option value="${escapeHtml(value)}"${state.fields.owner === value ? ' selected' : ''}>${escapeHtml(label)}</option>`).join('');
+    return `<div class="control-shell dropdown-shell">
+        <button class="control dropdown-trigger" id="${id}" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="${open}" aria-controls="${menuId}" data-action="toggle-dropdown" data-dropdown="${name}">
+            <span class="dropdown-value">${escapeHtml(selectedLabel)}</span>
+            ${icon('chevron', `icon-small dropdown-chevron${open ? ' is-open' : ''}`)}
+        </button>
+        ${open ? `<div class="dropdown-menu" id="${menuId}" role="listbox" aria-label="${escapeHtml(label)}">
+            ${options.map(({ value, label: optionLabel }) => `<button class="dropdown-option${selectedValue === value ? ' is-selected' : ''}" type="button" role="option" aria-selected="${selectedValue === value}" data-action="select-dropdown-option" data-dropdown="${name}" data-dropdown-value="${escapeHtml(value)}">${escapeHtml(optionLabel)}</button>`).join('')}
+        </div>` : ''}
+    </div>`;
+};
+
+const renderActivityDropdown = () => renderDropdown({
+    name: 'activity',
+    id: 'input_1_11',
+    label: 'Activity',
+    placeholder: 'Please Select',
+    options: [{ value: '', label: 'Please Select' }, ...activities],
+});
+
+const renderOwnerDropdown = () => renderDropdown({
+    name: 'owner',
+    id: 'input_1_40',
+    label: 'Owner Name',
+    placeholder: 'Choose company name',
+    options: owners,
+});
+
+const renderCalendarMenu = () => {
+    if (state.calendarMenu === 'month') {
+        return `<div class="calendar-menu calendar-month-menu" role="listbox" aria-label="Choose month">
+            ${shortMonthNames.map((label, month) => `<button class="calendar-menu-option${calendarView.month === month ? ' is-selected' : ''}" type="button" data-action="select-calendar-month" data-calendar-month="${month}">${label}</button>`).join('')}
+        </div>`;
+    }
+
+    if (state.calendarMenu === 'year') {
+        const years = Array.from({ length: 11 }, (_, index) => calendarView.year - 5 + index);
+
+        return `<div class="calendar-menu calendar-year-menu" role="listbox" aria-label="Choose year">
+            ${years.map((year) => `<button class="calendar-menu-option${calendarView.year === year ? ' is-selected' : ''}" type="button" data-action="select-calendar-year" data-calendar-year="${year}">${year}</button>`).join('')}
+        </div>`;
+    }
+
+    return '';
+};
+
+const renderCalendar = () => {
+    if (!state.calendarOpen) {
+        return '';
+    }
+
+    const firstDay = new Date(Date.UTC(calendarView.year, calendarView.month, 1)).getUTCDay();
+    const viewStart = new Date(Date.UTC(calendarView.year, calendarView.month, 1 - firstDay));
+    const selected = parseDateValue(state.fields.commencementDate);
+    const selectedKey = selected ? calendarDateKey(selected.year, selected.month, selected.day) : '';
+    const todayKey = calendarDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+    const days = Array.from({ length: 42 }, (_, index) => {
+        const date = new Date(viewStart);
+        date.setUTCDate(viewStart.getUTCDate() + index);
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth();
+        const day = date.getUTCDate();
+        const key = calendarDateKey(year, month, day);
+        const isOutside = month !== calendarView.month;
+        const classes = [
+            'calendar-day',
+            isOutside ? 'is-outside' : '',
+            key === selectedKey ? 'is-selected' : '',
+            key === todayKey ? 'is-today' : '',
+        ].filter(Boolean).join(' ');
+
+        return `<button class="${classes}" type="button" data-action="select-calendar-date" data-calendar-date="${key}" aria-label="${key}"${key === selectedKey ? ' aria-pressed="true"' : ''}>${day}</button>`;
+    }).join('');
+
+    return `<div class="calendar-popover" role="dialog" aria-label="Choose commencement date">
+        <div class="calendar-header">
+            <button class="calendar-nav" type="button" data-action="calendar-previous" aria-label="Previous month">${icon('chevron-left', 'icon-small')}</button>
+            <div class="calendar-caption">
+                <button class="calendar-caption-button" type="button" data-action="toggle-calendar-month" aria-label="Choose month">${shortMonthNames[calendarView.month]}${icon('chevron', 'calendar-caption-chevron')}</button>
+                <button class="calendar-caption-button" type="button" data-action="toggle-calendar-year" aria-label="Choose year">${calendarView.year}${icon('chevron', 'calendar-caption-chevron')}</button>
+            </div>
+            <button class="calendar-nav" type="button" data-action="calendar-next" aria-label="Next month">${icon('chevron-right', 'icon-small')}</button>
+        </div>
+        ${renderCalendarMenu()}
+        <div class="calendar-weekdays" aria-hidden="true">${weekdayNames.map((name) => `<span>${name}</span>`).join('')}</div>
+        <div class="calendar-days" role="grid">${days}</div>
+    </div>`;
+};
 
 const filteredSites = () => {
     const query = state.fields.siteQuery.trim().toLowerCase();
@@ -216,8 +325,10 @@ const filteredSites = () => {
     }
 
     return sites.filter((site) => [site.name, site.address, site.id, site.owner]
-        .some((value) => value.toLowerCase().includes(query)));
+        .some((value) => (value ?? '').toLowerCase().includes(query)));
 };
+
+const siteMeta = (site) => [site.address, site.id].filter(Boolean).join(' · ');
 
 const renderSiteResults = () => {
     if (!state.siteMenuOpen) {
@@ -226,10 +337,10 @@ const renderSiteResults = () => {
 
     const matches = filteredSites();
 
-    return `<div class="site-results" role="listbox" aria-label="Synthetic Site results">
+    return `<div class="site-results" role="listbox" aria-label="Site results">
         ${matches.length
-            ? matches.map((site, index) => `<button class="site-result${index === 0 ? ' is-highlighted' : ''}" type="button" role="option" data-action="select-site" data-site-id="${escapeHtml(site.id)}"><strong>${escapeHtml(site.name)}</strong><span>${escapeHtml(site.address)} · ${escapeHtml(site.id)}</span></button>`).join('')
-            : '<p class="site-no-results">No synthetic Sites match this search.</p>'}
+            ? matches.map((site, index) => `<button class="site-result${index === 0 ? ' is-highlighted' : ''}" type="button" role="option" data-action="select-site" data-site-id="${escapeHtml(site.id)}"><strong>${escapeHtml(site.name)}</strong><span>${escapeHtml(siteMeta(site))}</span></button>`).join('')
+            : '<p class="site-no-results">No Sites match this search.</p>'}
     </div>`;
 };
 
@@ -241,9 +352,9 @@ const renderSelectedSite = () => {
     }
 
     return `<div class="selected-site" aria-live="polite">
-        <div><strong>${escapeHtml(site.name)}</strong><span>${escapeHtml(site.address)} · ${escapeHtml(site.id)}</span></div>
+        <div><strong>${escapeHtml(site.name)}</strong><span>${escapeHtml(siteMeta(site))}</span></div>
         <button type="button" data-action="change-site">Change Site</button>
-        <p class="site-note"><strong>Site notes:</strong> ${escapeHtml(site.notes)}</p>
+        ${site.notes ? `<p class="site-note"><strong>Site notes:</strong> ${escapeHtml(site.notes)}</p>` : ''}
     </div>`;
 };
 
@@ -252,19 +363,63 @@ const renderTerms = () => `
         <span class="field-label">Acceptance of Terms and Conditions <span class="required">*</span></span>
         <label class="check-row terms-check">
             <input id="choice_1_63_1" name="termsAccepted" type="checkbox"${state.fields.termsAccepted ? ' checked' : ''}${describedBy('termsAccepted')}>
-            <span>I accept the Terms and Conditions of the co-siter Portal</span>
+            <span>I accept the Terms and Conditions of the co-siter™ Portal</span>
         </label>
         ${errorFor('termsAccepted')}
         <div class="terms-copy" tabindex="0" aria-label="Terms and Conditions">
             <h3>Terms &amp; Conditions</h3>
-            <strong>WELCOME TO CO-SITER</strong>
+            <p class="terms-heading"><strong>WELCOME TO CO-SITER</strong></p>
             <p>If you continue to browse and use this Portal you are agreeing to comply with and be bound by the following Disclaimer and our Terms and Conditions of Use.</p>
-            <p>You are given permission, in the form of a non-transferable, non-exclusive, revocable licence, to use Co-Siter so long as you provide full and complete details (including contact details) and comply with the Terms and Conditions of Use.</p>
-            <p>By accessing, using, registering or submitting applications via this Portal where you submit Land Access and Activity Notices (LAANs) or Access Requests, you confirm that you have read, understood and agree to these Terms of Use in their entirety.</p>
-            <p>You must ensure the request identifies the correct Site, activity, proposed date, responsible contacts and supporting evidence before it is submitted.</p>
-            <p>You are responsible for keeping your account details secure and for reviewing any Site-specific access instructions made available through the Portal.</p>
-            <p>Access to a Site remains subject to the applicable approval process and does not begin merely because information has been entered into this form.</p>
-            <p>This prototype contains synthetic information only. No request, document, acknowledgement, or notification is sent to SiteXcell or another party.</p>
+            <p>You are given permission (in the form of a non-transferable, non-exclusive, revocable licence) to use Co-Siter so long as you provide full and complete details (including contact details) and comply with the Terms and Conditions of Use.</p>
+            <p>By accessing, using, registering or submitting applications via this Website and any other area of our Website where you can submit Land Access and Activity Notices (LAANs) or Access Requests, you confirm that you have read, understood and agree to these Terms of Use in its entirety. If you do not agree to these Terms of Use in its entirety, you must not use or access this Website.</p>
+            <p>If you are found to have failed to comply with the Terms and Conditions of Use, your access to Co-Siter may be restricted, suspended, or revoked. &nbsp;All rights are reserved by siteXcell in respect of any unauthorised or inappropriate use of Co-Siter.</p>
+            <p>An end to your Co-Siter access does not release you from any liability or penalty you may have incurred arising from or in connection with your access or use of Co-Siter.</p>
+            <p class="terms-heading"><strong>DISCLAIMER</strong></p>
+            <p>While siteXcell endeavours to keep all information up to date and correct, no representations or warranties of any kind, express or implied, are made about the completeness, accuracy, reliability or suitability of the information.&nbsp;</p>
+            <p>You are responsible for your use of Co-Siter.&nbsp; siteXcell takes no responsibility and makes no representations or gives any warranty as to the accuracy or reliability of the content of Co-Siter.</p>
+            <p>You are responsible for maintaining the confidentiality of your password and account and no liability will be taken for any loss or damage which may arise as a result of any failure by you to protect your password or account.</p>
+            <p>In no event will liability for any loss or damage, including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of or in connection with the use of Co-Siter, be accepted.</p>
+            <p>Every effort is made to keep Co-Siter up and running smoothly.&nbsp; However, no responsibility is taken for and no liability will be accepted for Co-Siter being unavailable, including but not limited to, on account of technical issues beyond siteXcell’s control.</p>
+            <p>Your use of Co-Siter is at your own risk.</p>
+            <p class="terms-heading"><strong>TERMS AND CONDITIONS</strong></p>
+            <p>siteXcell may monitor your use of Co-Siter and reserves the right to restrict your access and use of Co-Siter, to the extent permitted by law.&nbsp; You agree at all times to use Co-Siter only in accordance with siteXcell’s policies, guidelines and terms and conditions. &nbsp;All rights are reserved by siteXcell in respect of any unauthorised or inappropriate use of Co-Siter.</p>
+            <p>&nbsp;</p>
+            <p class="terms-heading"><strong><u>PLEASE READ THESE TERMS AND CONDITIONS CAREFULLY BEFORE CONTINUING TO USE CO-SITER</u></strong></p>
+            <p>If you continue to browse and use Co-Siter you agree to comply with and be bound by the following Terms and Conditions of Use, together with our privacy policy and disclaimer.</p>
+            <p>As a user of Co-Siter, you <strong>must</strong>:</p>
+            <ul>
+                <li>- provide full and complete contact details;</li>
+                <li>- use Co-Siter securely and for a proper and lawful purpose and you must not use it in any way that infringes the rights of anyone else;</li>
+                <li>- only use or access information for a lawful and proper purpose;</li>
+                <li>- keep information that you obtain through Co-Siter secure and/or confidential;</li>
+                <li>- keep your passwords and access details secure and confidential at all times;</li>
+                <li>- comply with all laws and policies; and</li>
+                <li>- to the extent permitted by any applicable law, you must ensure that all information provided is accurate and up to date and does not infringe the rights of any other party.</li>
+            </ul>
+            <p>&nbsp;</p>
+            <p>As a user of Co-Siter, you <strong>must</strong><strong> not</strong>:</p>
+            <ul>
+                <li>- make any false or misleading statements or provide any information or documentation which you know to be inaccurate, incomplete or misleading;</li>
+                <li>- copy, reproduce, use or otherwise deal with any content on Co-Siter;</li>
+                <li>- modify, distribute or re-post any content on Co-Siter for any purpose;</li>
+                <li>- use the content of Co-Siter for any commercial exploitation whatsoever; or</li>
+                <li>- copy, extract, keep, publish, or share information you obtain through Co-Siter outside the course of your employment.</li>
+            </ul>
+            <p>&nbsp;</p>
+            <p class="terms-heading"><strong>COPYRIGHT TRADEMARKS</strong></p>
+            <p>The appearance of the Website including (without limitation) all graphical elements, visual features, colour combinations and layout is owned by siteXcell Pty Ltd. Except where necessary for viewing the material on this Website on your browser, or as permitted under the Copyright Act 1968 or other applicable laws or these Terms of Use, nothing on this Website may be reproduced, adapted, uploaded to a third party, linked to, framed, performed in public, distributed or transmitted in any form by any process without the prior written consent of siteXcell Pty Ltd.</p>
+            <p>Various trademarks or other intellectual property displayed on this Website may be owned by siteXcell. Other information and company data mentioned on this Website may be the trademarks or intellectual property of other people or entities reproduced on this Website by permission of the owners to siteXcell.</p>
+            <p>These trademarks should not be used or reproduced by you or another party without the permission of the relevant owners. If you believe you own the copyright in any work and that work is displayed on this Website without your permission, please contact us and the matter will be investigated.</p>
+            <p>&nbsp;</p>
+            <p class="terms-heading"><strong>EMAIL SECURITY&nbsp;</strong></p>
+            <p>The transmission of information over the internet is not completely secure or error-free. In particular, emails to or from siteXcell may not be secure. You should use discretion in deciding what information you send to us using these means.</p>
+            <p>Emails to/from siteXcell may undergo email filtering and virus scanning, including by third-party contractors. siteXcell does not warrant that such filters and scans will be effective in removing viruses or other potentially harmful code.</p>
+            <p class="terms-heading"><strong>VIRUS WARNING</strong></p>
+            <p>All care is taken to ensure that this Website is free from viruses. siteXcell cannot guarantee that any file available for download and/or execution from or via this Website is free from viruses or other conditions which could damage or interfere with data, hardware or software with which it might be used. It is your responsibility to scan any such data for viruses. You assume all risk of use of all programs and files on this Website, and you release siteXcell entirely of all responsibility for any consequences of its use.</p>
+            <p class="terms-heading"><strong>THIRD-PARTY SITES</strong></p>
+            <p>This Website may contain links to third-party sites. siteXcell is not responsible for the condition or content of those sites as they are not under our control. You access those sites and services solely at your own risk. The links are provided solely for your convenience and do not indicate, expressly or impliedly, an endorsement by siteXcell of the other sites or services provided on the site. siteXcell does not permit any linkages to this Website without prior permission.</p>
+            <p>No rights, including copyright and other intellectual proprietary rights, in and to Co-Siter are transferred through the use of Co-Siter.</p>
+            <p>&nbsp;</p>
         </div>
     </div>`;
 
@@ -279,32 +434,27 @@ const renderDraftActions = () => `
 const renderStageOne = () => `
     ${renderErrorSummary()}
     <h2 class="form-title">LAAN request context</h2>
-    <p class="form-intro">Enter the request details and select the Site requiring access.</p>
+
     <div class="form-grid">
         <div class="field${errorClass('activity')}">
             <label for="input_1_11">What type of activity does this LAAN relate to? <span class="required">*</span></label>
-            <div class="control-shell">
-                <select class="control-select" id="input_1_11" name="activity"${describedBy('activity')}>${renderActivityOptions()}</select>
-                <span class="control-icon no-divider">${icon('chevron', 'icon-small')}</span>
-            </div>
+            ${renderActivityDropdown()}
             ${errorFor('activity')}
         </div>
-        <div class="field${errorClass('commencementDate')}">
+        <div class="field stage-one-date${errorClass('commencementDate')}">
             <label for="input_1_12">Proposed Commencement Date <span class="required">*</span></label>
             <div class="control-shell">
                 <input class="control" id="input_1_12" name="commencementDate" type="text" inputmode="numeric" placeholder="dd-mm-yyyy" value="${escapeHtml(state.fields.commencementDate)}"${describedBy('commencementDate', 'date-help')}>
-                <button class="control-icon no-divider" type="button" aria-label="Use the date format DD-MM-YYYY">${icon('calendar', 'icon-small')}</button>
+                <button class="control-icon no-divider" type="button" data-action="toggle-calendar" aria-label="${state.calendarOpen ? 'Close' : 'Open'} commencement date calendar" aria-expanded="${state.calendarOpen}">${icon('calendar', 'icon-small')}</button>
+                ${renderCalendar()}
             </div>
-            <span class="field-help" id="date-help">Use DD-MM-YYYY. Impossible dates are rejected before Stage 2.</span>
+            <span class="field-help" id="date-help">Match the activity commencement date on the attached LAAN.</span>
             ${errorFor('commencementDate')}
         </div>
     </div>
     <div class="field stage-one-owner">
         <label for="input_1_40">Owner Name <span class="field-optional">(optional filter)</span></label>
-        <div class="control-shell">
-            <select class="control-select" id="input_1_40" name="owner">${renderOwnerOptions()}</select>
-            <span class="control-icon">${icon('chevron', 'icon-small')}</span>
-        </div>
+        ${renderOwnerDropdown()}
         <span class="field-help">Search by owner name or open the complete list.</span>
     </div>
     <h3 class="section-title">Find and confirm the canonical Site</h3>
@@ -312,7 +462,7 @@ const renderStageOne = () => `
         <label for="input_1_41">Site name <span class="required">*</span></label>
         <div class="control-shell">
             <input class="control" id="input_1_41" name="siteQuery" type="search" autocomplete="off" placeholder="Type or open Site list" value="${escapeHtml(state.fields.siteQuery)}" role="combobox" aria-expanded="${state.siteMenuOpen}" aria-controls="site-results"${describedBy('siteId', 'site-help')}>
-            <button class="control-icon" type="button" data-action="toggle-site-menu" aria-label="Open complete Site list">${icon('chevron', 'icon-small')}</button>
+            <button class="control-icon${state.siteMenuOpen ? ' is-open' : ''}" type="button" data-action="toggle-site-menu" aria-label="${state.siteMenuOpen ? 'Close' : 'Open'} complete Site list" aria-expanded="${state.siteMenuOpen}">${icon('chevron', `icon-small dropdown-chevron${state.siteMenuOpen ? ' is-open' : ''}`)}</button>
             ${renderSiteResults()}
         </div>
         <span class="field-help" id="site-help">Search by Site name, address or identifier, or open the complete list.</span>
@@ -712,22 +862,6 @@ root.addEventListener('change', (event) => {
         return;
     }
 
-    if (target instanceof HTMLSelectElement && Object.hasOwn(state.fields, target.name)) {
-        const previousActivity = state.fields.activity;
-        state.fields[target.name] = target.value;
-        state.draftMessage = '';
-        state.completionShown = false;
-        delete state.errors[target.name];
-
-        if (target.name === 'activity' && previousActivity && previousActivity !== target.value) {
-            state.confirmations.workDetailsReviewed = false;
-        }
-
-        persistSession();
-        render();
-        return;
-    }
-
     if (target instanceof HTMLInputElement && target.type === 'checkbox') {
         if (Object.hasOwn(state.fields, target.name)) {
             state.fields[target.name] = target.checked;
@@ -751,6 +885,16 @@ root.addEventListener('focusin', (event) => {
 });
 
 root.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && (state.openDropdown || state.siteMenuOpen || state.calendarOpen)) {
+        event.preventDefault();
+        state.openDropdown = '';
+        state.siteMenuOpen = false;
+        state.calendarOpen = false;
+        state.calendarMenu = '';
+        render();
+        return;
+    }
+
     if (!(event.target instanceof HTMLInputElement) || event.target.name !== 'siteQuery' || event.key !== 'Enter' || !state.siteMenuOpen) {
         return;
     }
@@ -771,13 +915,47 @@ root.addEventListener('click', (event) => {
     const control = event.target.closest('[data-action]');
 
     if (!control) {
+        if (state.openDropdown || state.siteMenuOpen || state.calendarOpen) {
+            state.openDropdown = '';
+            state.siteMenuOpen = false;
+            state.calendarOpen = false;
+            state.calendarMenu = '';
+            render();
+        }
         return;
     }
 
     const action = control.dataset.action;
 
+    if (action === 'toggle-dropdown') {
+        state.openDropdown = state.openDropdown === control.dataset.dropdown ? '' : control.dataset.dropdown;
+        state.siteMenuOpen = false;
+        state.calendarOpen = false;
+        state.calendarMenu = '';
+        render();
+    }
+
+    if (action === 'select-dropdown-option') {
+        const name = control.dataset.dropdown;
+        const previousActivity = state.fields.activity;
+        state.fields[name] = control.dataset.dropdownValue;
+        state.openDropdown = '';
+        state.draftMessage = '';
+        state.completionShown = false;
+        delete state.errors[name];
+
+        if (name === 'activity' && previousActivity && previousActivity !== state.fields.activity) {
+            state.confirmations.workDetailsReviewed = false;
+        }
+
+        persistSession();
+        render();
+    }
+
     if (action === 'toggle-site-menu') {
+        state.openDropdown = '';
         state.siteMenuOpen = !state.siteMenuOpen;
+        state.calendarOpen = false;
         render({ focusSite: state.siteMenuOpen });
     }
 
@@ -786,6 +964,7 @@ root.addEventListener('click', (event) => {
         if (site) {
             state.fields.siteId = site.id;
             state.fields.siteQuery = site.name;
+            state.openDropdown = '';
             state.siteMenuOpen = false;
             state.confirmations.siteDetailsReviewed = false;
             state.completionShown = false;
@@ -798,6 +977,7 @@ root.addEventListener('click', (event) => {
     if (action === 'change-site') {
         state.fields.siteId = '';
         state.fields.siteQuery = '';
+        state.openDropdown = '';
         state.siteMenuOpen = true;
         state.confirmations.siteDetailsReviewed = false;
         state.completionShown = false;
@@ -806,7 +986,60 @@ root.addEventListener('click', (event) => {
     }
 
     if (action === 'go-stage-one') {
-        setState({ step: 1, errors: {}, completionShown: false, siteMenuOpen: false }, { scrollTop: true });
+        setState({ step: 1, errors: {}, completionShown: false, openDropdown: '', siteMenuOpen: false }, { scrollTop: true });
+    }
+
+    if (action === 'toggle-calendar') {
+        state.calendarOpen = !state.calendarOpen;
+        state.openDropdown = '';
+        state.calendarMenu = '';
+        state.siteMenuOpen = false;
+
+        if (state.calendarOpen) {
+            const selected = parseDateValue(state.fields.commencementDate);
+            calendarView = selected
+                ? { year: selected.year, month: selected.month }
+                : { year: today.getFullYear(), month: today.getMonth() };
+        }
+
+        render();
+    }
+
+    if (action === 'calendar-previous' || action === 'calendar-next') {
+        const direction = action === 'calendar-previous' ? -1 : 1;
+        const nextMonth = new Date(Date.UTC(calendarView.year, calendarView.month + direction, 1));
+        calendarView = { year: nextMonth.getUTCFullYear(), month: nextMonth.getUTCMonth() };
+        state.calendarMenu = '';
+        render();
+    }
+
+    if (action === 'toggle-calendar-month' || action === 'toggle-calendar-year') {
+        const menu = action === 'toggle-calendar-month' ? 'month' : 'year';
+        state.calendarMenu = state.calendarMenu === menu ? '' : menu;
+        render();
+    }
+
+    if (action === 'select-calendar-month') {
+        calendarView.month = Number(control.dataset.calendarMonth);
+        state.calendarMenu = '';
+        render();
+    }
+
+    if (action === 'select-calendar-year') {
+        calendarView.year = Number(control.dataset.calendarYear);
+        state.calendarMenu = '';
+        render();
+    }
+
+    if (action === 'select-calendar-date') {
+        const selected = calendarDateFromKey(control.dataset.calendarDate);
+        state.fields.commencementDate = `${String(selected.day).padStart(2, '0')}-${String(selected.month + 1).padStart(2, '0')}-${selected.year}`;
+        state.calendarOpen = false;
+        state.calendarMenu = '';
+        state.completionShown = false;
+        delete state.errors.commencementDate;
+        persistSession();
+        render();
     }
 
     if (action === 'choose-file') {
