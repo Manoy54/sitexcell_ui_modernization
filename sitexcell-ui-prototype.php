@@ -15,12 +15,19 @@ define('SITEXCELL_UI_PATH', plugin_dir_path(__FILE__));
 define('SITEXCELL_UI_URL', plugin_dir_url(__FILE__));
 define('SITEXCELL_UI_PAGE_SLUG', 'sitexcell-about-prototype');
 define('SITEXCELL_UI_HOME_SLUG', 'sitexcell-home-prototype');
+define('SITEXCELL_UI_LAAN_SLUG', 'laan-request');
+
+require_once SITEXCELL_UI_PATH . 'includes/laan-request.php';
 
 /**
  * Helper to check current URI for prototype slugs.
  */
 function sitexcell_ui_get_current_prototype(): string
 {
+    if (is_page(SITEXCELL_UI_LAAN_SLUG)) {
+        return 'laan-request';
+    }
+
     if (is_page(SITEXCELL_UI_HOME_SLUG)) {
         return 'home';
     }
@@ -59,6 +66,10 @@ function sitexcell_ui_get_current_prototype(): string
         return 'portal-requests';
     }
 
+    if (strpos($uri, 'laan-request') !== false) {
+        return 'laan-request';
+    }
+
     return '';
 }
 
@@ -73,7 +84,11 @@ function sitexcell_ui_is_prototype_request(): bool
 
     $post = is_singular() ? get_queried_object() : null;
 
-    return $post instanceof WP_Post && (has_shortcode($post->post_content, 'sitexcell_about') || has_shortcode($post->post_content, 'sitexcell_home'));
+    return $post instanceof WP_Post && (
+        has_shortcode($post->post_content, 'sitexcell_about')
+        || has_shortcode($post->post_content, 'sitexcell_home')
+        || has_shortcode($post->post_content, 'sitexcell_laan_request')
+    );
 }
 
 /**
@@ -102,6 +117,31 @@ function sitexcell_ui_enqueue_assets(): void
         null
     );
 
+    if (function_exists('sitexcell_ui_is_laan_request') && sitexcell_ui_is_laan_request()) {
+        wp_enqueue_style(
+            'sitexcell-ui-laan-style',
+            SITEXCELL_UI_URL . 'assets/css/laan-request.css',
+            ['sitexcell-ui-fonts'],
+            (string) filemtime(SITEXCELL_UI_PATH . 'assets/css/laan-request.css')
+        );
+
+        wp_enqueue_script(
+            'sitexcell-ui-laan-request',
+            SITEXCELL_UI_URL . 'assets/js/laan-request.js',
+            [],
+            (string) filemtime(SITEXCELL_UI_PATH . 'assets/js/laan-request.js'),
+            true
+        );
+
+        wp_add_inline_script(
+            'sitexcell-ui-laan-request',
+            'window.SitexcellLaanConfig = ' . wp_json_encode(sitexcell_ui_laan_frontend_config()) . ';',
+            'before'
+        );
+
+        return;
+    }
+
     wp_enqueue_style(
         'sitexcell-ui-style',
         SITEXCELL_UI_URL . 'assets/css/style.css',
@@ -125,6 +165,20 @@ function sitexcell_ui_enqueue_assets(): void
 }
 
 add_action('wp_enqueue_scripts', 'sitexcell_ui_enqueue_assets');
+
+/**
+ * Mark the LAAN browser module as an ES module without changing other scripts.
+ */
+function sitexcell_ui_laan_module_script(string $tag, string $handle, string $src): string
+{
+    if ($handle !== 'sitexcell-ui-laan-request') {
+        return $tag;
+    }
+
+    return '<script type="module" src="' . esc_url($src) . '"></script>';
+}
+
+add_filter('script_loader_tag', 'sitexcell_ui_laan_module_script', 10, 3);
 
 /**
  * Render the modernized SiteXcell About page prototype.
@@ -171,11 +225,46 @@ function sitexcell_ui_home_shortcode(): string
 add_shortcode('sitexcell_home', 'sitexcell_ui_home_shortcode');
 
 /**
+ * Render the native WordPress LAAN request form.
+ *
+ * Usage:
+ * [sitexcell_laan_request]
+ */
+function sitexcell_ui_laan_request_shortcode(): string
+{
+    $page_path = SITEXCELL_UI_PATH . 'pages/laan-request/laan-request.php';
+
+    if (!file_exists($page_path)) {
+        return '<p>SiteXcell LAAN request page not found.</p>';
+    }
+
+    ob_start();
+    include $page_path;
+
+    return (string) ob_get_clean();
+}
+
+add_shortcode('sitexcell_laan_request', 'sitexcell_ui_laan_request_shortcode');
+
+/**
  * Use a standalone template for the SiteXcell prototype pages.
  */
 function sitexcell_ui_template_include(string $template): string
 {
     $prototype = sitexcell_ui_get_current_prototype();
+
+    if ($prototype === 'laan-request') {
+        $custom_template = SITEXCELL_UI_PATH . 'pages/laan-request/template.php';
+
+        if (file_exists($custom_template)) {
+            global $wp_query;
+            if ($wp_query) {
+                $wp_query->is_404 = false;
+                status_header(200);
+            }
+            return $custom_template;
+        }
+    }
 
     if ($prototype === 'home') {
         $custom_template = SITEXCELL_UI_PATH . 'pages/home/template.php';

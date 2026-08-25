@@ -1,7 +1,4 @@
-import { activities, owners, sites, uploadRules as prototypeUploadRules } from '../../fixtures/laan-fixtures.js';
-import { siteContextById } from '../../fixtures/site-context.js';
-
-// Selected Page 2 direction: live vertical form flow with the persistent Request workspace.
+import { activities, owners, uploadRules as productionUploadRules } from './laan-data.js';
 
 const root = document.querySelector('#prototype-root');
 const nativeConfig = window.SitexcellLaanConfig ?? {};
@@ -12,10 +9,9 @@ const draftKey = 'proposed-laan-form-explicit-draft-v1';
 const drawingRequirementsUrl = 'https://drive.google.com/file/d/1IrbzzKeussLKHe75Ef0k3-wiiokR2JW5/view?usp=sharing';
 const siteRecords = Array.isArray(nativeConfig.sites) && nativeConfig.sites.length
     ? nativeConfig.sites
-    : sites.map((site) => ({ ...site, ...siteContextById[site.id] }));
-const uploadRules = nativeConfig.uploadRules ?? prototypeUploadRules;
-const pendingFiles = { required: null, additional: [] };
-const prototypeSearchParams = new URLSearchParams(window.location.search);
+    : [];
+const uploadRules = nativeConfig.uploadRules ?? productionUploadRules;
+const pendingFiles = { required: null, additional: null };
 
 const defaultState = {
     step: 1,
@@ -41,7 +37,7 @@ const defaultState = {
     },
     files: {
         required: null,
-        additional: [],
+        additional: null,
     },
     confirmations: {
         uploadReviewed: false,
@@ -69,18 +65,11 @@ const restoreSessionState = () => {
 
     const restored = JSON.parse(saved);
 
-    const restoredAdditionalFiles = restored.files?.additional;
-    const additionalFiles = Array.isArray(restoredAdditionalFiles)
-        ? restoredAdditionalFiles
-        : restoredAdditionalFiles
-            ? [restoredAdditionalFiles]
-            : [];
-
     const restoredState = {
         ...structuredClone(defaultState),
         ...restored,
         fields: { ...defaultState.fields, ...restored.fields },
-        files: { ...defaultState.files, ...restored.files, additional: additionalFiles },
+        files: { ...defaultState.files, ...restored.files },
         confirmations: { ...defaultState.confirmations, ...restored.confirmations },
         errors: {},
         siteMenuOpen: false,
@@ -106,22 +95,6 @@ const escapeHtml = (value = '') => String(value)
 const icon = (name, className = 'icon') => `<svg class="${className}" aria-hidden="true"><use href="#icon-${name}"></use></svg>`;
 
 const selectedSite = () => siteRecords.find(({ id }) => id === state.fields.siteId) ?? null;
-
-if (!isNativeWordPress && prototypeSearchParams.get('step') === '2') {
-    const previewSite = selectedSite() ?? siteRecords[0] ?? null;
-    state = {
-        ...state,
-        step: 2,
-        fields: {
-            ...state.fields,
-            activity: state.fields.activity || 'Installation',
-            commencementDate: state.fields.commencementDate || '30-09-2026',
-            siteId: state.fields.siteId || previewSite?.id || '',
-            siteQuery: state.fields.siteQuery || previewSite?.name || '',
-            termsAccepted: true,
-        },
-    };
-}
 
 const parseDateValue = (value) => {
     const match = /^(\d{2})-(\d{2})-(\d{4})$/.exec(value.trim());
@@ -251,7 +224,7 @@ const renderTopbar = () => `
     </header>`;
 
 const renderProgress = () => `
-    <div class="step-heading"><span>Step ${state.step} of 2</span><strong>${state.step === 1 ? 'Request context' : '100%'}</strong></div>
+    <div class="step-heading"><span>Step ${state.step} of 2</span><strong>${state.step === 1 ? 'Request context' : 'Access details'}</strong></div>
     <div class="progress-track" role="progressbar" aria-label="LAAN request progress" aria-valuemin="1" aria-valuemax="2" aria-valuenow="${state.step}">
         <span class="progress-value" data-step="${state.step}"></span>
     </div>`;
@@ -516,7 +489,7 @@ const renderStageOne = () => `
     ${renderSiteRequirements()}
     ${renderTerms()}
     <div class="form-actions">
-        <button class="button-primary" type="submit">Next</button>
+        <button class="button-primary" type="submit">Continue to access details</button>
         ${renderDraftActions()}
     </div>`;
 
@@ -533,11 +506,10 @@ const renderContextStrip = () => {
     </div>`;
 };
 
-const renderTextField = ({ name, id, label, placeholder = '', type = 'text', span = false, help = '', count = false }) => `
+const renderTextField = ({ name, id, label, placeholder = '', type = 'text', span = false }) => `
     <div class="field${span ? ' field-span' : ''}${errorClass(name)}">
         <label for="${id}">${label} <span class="required">*</span></label>
         <input class="control" id="${id}" name="${name}" type="${type}" placeholder="${escapeHtml(placeholder)}" value="${escapeHtml(state.fields[name])}"${describedBy(name)}>
-        ${help || count ? `<span class="field-help field-meta">${help ? `<span>${escapeHtml(help)}</span>` : '<span></span>'}${count ? `<span data-character-count="${name}">${state.fields[name].length} of 255 max characters</span>` : ''}</span>` : ''}
         ${errorFor(name)}
     </div>`;
 
@@ -549,53 +521,25 @@ const formatBytes = (bytes) => {
     return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 };
 
-const uploadFilesFor = (kind) => {
-    const value = state.files[kind];
-
-    if (kind === 'additional') {
-        return Array.isArray(value) ? value : value ? [value] : [];
-    }
-
-    return value ? [value] : [];
-};
-
-const renderUploadFileStatus = (file) => {
-    if (file.status === 'uploading') {
-        return 'Uploading…';
-    }
-
-    if (file.status === 'error') {
-        return file.error;
-    }
-
-    return `${formatBytes(file.size)} · Uploaded`;
-};
-
 const renderUploadCard = (kind, label, required) => {
-    const files = uploadFilesFor(kind);
-    const file = files[0] ?? null;
+    const file = state.files[kind];
     const inputId = `${kind}-file-input`;
-    const hasError = files.some((item) => item.status === 'error');
-    const statusCopy = !files.length
-        ? `${required ? 'Required' : 'Optional'} · PDF, JPG or PNG · maximum ${uploadRules.maximumLabel}${required ? '' : ' each'}`
-        : kind === 'additional'
-            ? `${files.length} document${files.length === 1 ? '' : 's'} selected`
-            : file.status === 'uploading'
-                ? `Uploading ${escapeHtml(file.name)}…`
-                : file.status === 'error'
-                    ? escapeHtml(file.error)
-                    : `${escapeHtml(file.name)} · ${formatBytes(file.size)} · Uploaded`;
-    const additionalFileList = kind === 'additional' && files.length
-        ? `<ul class="upload-file-list">${files.map((item, index) => `<li><span class="upload-file-name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</span><span class="upload-file-status">${escapeHtml(renderUploadFileStatus(item))}</span><button class="icon-button" type="button" data-action="remove-file" data-upload-kind="${kind}" data-upload-index="${index}" aria-label="Remove ${escapeHtml(item.name)}">${icon('close', 'icon-small')}</button></li>`).join('')}</ul>`
-        : '';
+    const hasError = file?.status === 'error';
+    const statusCopy = !file
+        ? `${required ? 'Required' : 'Optional'} · PDF, JPG or PNG · maximum ${uploadRules.maximumLabel}`
+        : file.status === 'uploading'
+            ? `Uploading ${escapeHtml(file.name)}…`
+            : file.status === 'error'
+                ? escapeHtml(file.error)
+                : `${escapeHtml(file.name)} · ${formatBytes(file.size)} · Uploaded`;
 
-    return `<div class="upload-card upload-card-${kind}${hasError ? ' has-error' : ''}">
+    return `<div class="upload-card${hasError ? ' has-error' : ''}">
         <span class="upload-icon">${icon(file ? 'file' : 'upload')}</span>
-        <div class="upload-copy"><strong>${label}${required ? ' *' : ''}</strong><span>${statusCopy}</span>${additionalFileList}</div>
+        <div class="upload-copy"><strong>${label}${required ? ' *' : ''}</strong><span>${statusCopy}</span></div>
         <div class="upload-buttons">
-            <input class="sr-only" id="${inputId}" data-upload-kind="${kind}" type="file" accept=".pdf,.jpg,.jpeg,.png"${kind === 'additional' ? ' multiple' : ''}>
-            <button class="upload-button" type="button" data-action="choose-file" data-upload-kind="${kind}">${kind === 'additional' ? 'Add files' : (file ? 'Replace' : 'Choose file')}</button>
-            ${kind === 'required' && file ? `<button class="icon-button" type="button" data-action="remove-file" data-upload-kind="${kind}" aria-label="Remove ${escapeHtml(file.name)}">${icon('close', 'icon-small')}</button>` : ''}
+            <input class="sr-only" id="${inputId}" data-upload-kind="${kind}" type="file" accept=".pdf,.jpg,.jpeg,.png">
+            <button class="upload-button" type="button" data-action="choose-file" data-upload-kind="${kind}">${file ? 'Replace' : 'Choose file'}</button>
+            ${file ? `<button class="icon-button" type="button" data-action="remove-file" data-upload-kind="${kind}" aria-label="Remove ${escapeHtml(file.name)}">${icon('close', 'icon-small')}</button>` : ''}
         </div>
     </div>`;
 };
@@ -604,22 +548,31 @@ const renderConfirmations = () => {
     const uploadDisabled = !requiredUploadComplete();
 
     return `<div class="confirmations">
-        <label class="confirmation-card check-row">
-            <input name="siteDetailsReviewed" type="checkbox"${state.confirmations.siteDetailsReviewed ? ' checked' : ''}>
-            <span>Drawings have been uploaded? <span class="required">*</span></span>
-        </label>
         <label class="confirmation-card check-row${uploadDisabled ? ' is-disabled' : ''}">
             <input name="uploadReviewed" type="checkbox"${state.confirmations.uploadReviewed ? ' checked' : ''}${uploadDisabled ? ' disabled' : ''}>
-            <span>LAAN has been uploaded <span class="required">*</span></span>
+            <span>I have reviewed the currently attached LAAN document and confirm it is the required version.</span>
+        </label>
+        <label class="confirmation-card check-row">
+            <input name="siteDetailsReviewed" type="checkbox"${state.confirmations.siteDetailsReviewed ? ' checked' : ''}>
+            <span>I confirm the selected Site and Site access context are correct for this request.</span>
         </label>
         <label class="confirmation-card check-row">
             <input name="workDetailsReviewed" type="checkbox"${state.confirmations.workDetailsReviewed ? ' checked' : ''}>
-            <span>Additional supporting documents have been provided as required? <span class="required">*</span></span>
+            <span>I confirm the proposed work details and affected areas are complete.</span>
         </label>
         <label class="confirmation-card check-row">
             <input name="accuracyAccepted" type="checkbox"${state.confirmations.accuracyAccepted ? ' checked' : ''}>
-            <span>I confirm that the information provided is true and accurate. <span class="required">*</span></span>
+            <span>I declare that the information provided in this request is accurate.</span>
         </label>
+    </div>`;
+};
+
+const renderReadiness = () => {
+    const ready = formIsReady();
+
+    return `<div class="readiness-panel${ready ? ' is-ready' : ''}" role="status">
+        <div><strong>${ready ? 'Request details are ready for review' : 'Request details are incomplete'}</strong><span>${ready ? 'All required fields, evidence and confirmations are complete.' : 'The Request workspace lists the outstanding requirements.'}</span></div>
+        ${icon(ready ? 'check' : 'info')}
     </div>`;
 };
 
@@ -627,46 +580,65 @@ const renderCompletion = () => state.completionShown
     ? `<div class="completion-banner" role="status">${icon('check')}<div><strong>${isNativeWordPress ? 'LAAN request submitted' : 'Prototype ready for submission'}</strong><span>${isNativeWordPress ? `Request ID #${escapeHtml(state.submittedRequestId)}` : 'No record was created and no information was sent.'}</span></div></div>`
     : '';
 
-const renderPageTwoFields = () => `<div class="page-two-grid original-field-grid">
-    ${renderTextField({ name: 'carrier', id: 'input_1_58', label: 'Registered Carrier Name', count: true })}
-    ${renderTextField({ name: 'projectReference', id: 'input_1_18', label: 'Carrier Project Reference', count: true })}
-    ${renderTextField({ name: 'tenantCompany', id: 'input_1_19', label: 'Tenant Company Name', help: 'Tenant/Lessee Name', count: true })}
-    ${renderTextField({ name: 'contactName', id: 'input_1_83', label: 'Tenant Contact Person', help: 'Tenant Contact Person' })}
-    ${renderTextField({ name: 'contactPhone', id: 'input_1_87', label: 'Tenant Contact Number', type: 'tel' })}
-    ${renderTextField({ name: 'workLocation', id: 'input_1_22', label: 'Tenant Location/Floor', help: 'EG L14, Rooftop, Tower', count: true })}
-    ${renderTextField({ name: 'affectedAreas', id: 'input_1_64', label: 'Areas to be Accessed', help: 'EG: MDF L6, L14. Plant Roof and rooftop.', count: true })}
-</div>`;
-
-const renderPageTwoEvidence = () => `<div class="page-two-evidence">
-    <section aria-labelledby="documents-heading">
-        <h3 class="sr-only" id="documents-heading">Documents</h3>
-        <div class="upload-stack">
-            ${renderUploadCard('required', 'Upload a Copy of the LAAN', true)}
-            ${renderUploadCard('additional', 'Additional Documents', false)}
+const renderStageTwo = () => `
+    ${renderErrorSummary()}
+    ${renderCompletion()}
+    <h2 class="form-title">Access details</h2>
+    <p class="form-intro">Complete the existing LAAN access details and review the required evidence.</p>
+    ${renderContextStrip()}
+    <section class="form-section" aria-labelledby="project-heading">
+        <h3 class="form-section-heading" id="project-heading">Project and carrier details</h3>
+        <div class="page-two-grid">
+            ${renderTextField({ name: 'carrier', id: 'input_1_58', label: 'Carrier', placeholder: 'Enter carrier name' })}
+            ${renderTextField({ name: 'projectReference', id: 'input_1_18', label: 'Carrier Project Reference No.', placeholder: 'Enter project reference' })}
+            ${renderTextField({ name: 'tenantCompany', id: 'input_1_19', label: 'Tenant Company Name', placeholder: 'Enter tenant company' })}
+            ${renderTextField({ name: 'contactName', id: 'input_1_83', label: 'Contact Name', placeholder: 'Enter contact name' })}
+            ${renderTextField({ name: 'contactPhone', id: 'input_1_87', label: 'Contact Phone', placeholder: 'Enter phone number', type: 'tel' })}
         </div>
     </section>
-    <section class="submission-confirmation" aria-labelledby="declarations-heading">
-        <h3 class="form-section-heading" id="declarations-heading">Please confirm your submission</h3>
-        ${renderConfirmations()}
+    <section class="form-section" aria-labelledby="work-heading">
+        <h3 class="form-section-heading" id="work-heading">Work location and affected areas</h3>
+        <div class="page-two-grid">
+            ${renderTextField({ name: 'workLocation', id: 'input_1_22', label: 'Location of Works', placeholder: 'Describe the work location', span: true })}
+            ${renderTextField({ name: 'affectedAreas', id: 'input_1_64', label: 'Areas Affected', placeholder: 'Describe the affected areas', span: true })}
+        </div>
     </section>
-</div>`;
-
-const renderStageTwoActions = () => `<div class="form-actions stage-two-actions">
-    <div class="form-actions-group">
-        <button class="button-secondary" type="button" data-action="go-stage-one">Previous</button>
-        <button class="button-primary" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting&hellip;' : (state.submittedRequestId ? 'Request submitted' : 'Submit')}</button>
-    </div>
-</div>`;
-
-const renderStageTwo = () => `${renderErrorSummary()}${renderCompletion()}<div class="page-two-prototype page-two-original">
-    <h2 class="sr-only">Access details and evidence</h2>
-    ${renderPageTwoFields()}
-    ${renderPageTwoEvidence()}
-    ${renderStageTwoActions()}
-</div>`;
+    <section class="form-section" aria-labelledby="technical-heading">
+        <h3 class="form-section-heading" id="technical-heading">Technical details</h3>
+        <div class="error-summary" role="note"><strong>Conditional rules pending approval.</strong><span>These existing fields remain visible and disabled so the prototype does not invent activity-specific business rules.</span></div>
+        <div class="page-two-grid">
+            <div class="field"><label for="input_1_69">Cable start</label><input class="control" id="input_1_69" type="text" disabled placeholder="Pending applicability rule"></div>
+            <div class="field"><label for="input_1_70">Cable end</label><input class="control" id="input_1_70" type="text" disabled placeholder="Pending applicability rule"></div>
+            <div class="field"><label for="input_1_71">Riser details</label><input class="control" id="input_1_71" type="text" disabled placeholder="Pending applicability rule"></div>
+            <div class="field"><label for="input_1_73">Fibre details</label><input class="control" id="input_1_73" type="text" disabled placeholder="Pending applicability rule"></div>
+        </div>
+    </section>
+    <section class="form-section" aria-labelledby="documents-heading">
+        <h3 class="form-section-heading" id="documents-heading">Documents</h3>
+        <div class="upload-stack">
+            ${renderUploadCard('required', 'Required LAAN document', true)}
+            ${renderUploadCard('additional', 'Additional supporting document', false)}
+        </div>
+    </section>
+    <section class="form-section" aria-labelledby="declarations-heading">
+        <h3 class="form-section-heading" id="declarations-heading">Confirmations and declarations</h3>
+        ${renderConfirmations()}
+        <div class="field" style="margin-top: 12px">
+            <label for="contractor-response">Contractor response <span class="field-optional">(optional)</span></label>
+            <textarea class="control-textarea" id="contractor-response" name="contractorResponse" placeholder="Add an optional response">${escapeHtml(state.fields.contractorResponse)}</textarea>
+        </div>
+        ${renderReadiness()}
+    </section>
+    <div class="form-actions">
+        <div class="form-actions-group">
+            <button class="button-secondary" type="button" data-action="go-stage-one">Back</button>
+            <button class="button-primary" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting…' : (isNativeWordPress ? (state.submittedRequestId ? 'Request submitted' : 'Submit LAAN request') : 'Review ready request')}</button>
+        </div>
+        ${renderDraftActions()}
+    </div>`;
 
 const renderForm = () => `
-    <form class="form-wrap${state.step === 2 ? ' is-stage-two' : ''}" id="laan-prototype-form" novalidate>
+    <form class="form-wrap" id="laan-prototype-form" novalidate>
         ${renderProgress()}
         ${state.step === 1 ? renderStageOne() : renderStageTwo()}
     </form>`;
@@ -701,13 +673,23 @@ const renderWorkspace = () => {
         </dl>
         <p class="workspace-kicker">Required items</p>
         <ul class="workspace-checklist">${items.map(([complete, label]) => checklistItem(complete, label)).join('')}</ul>
+        <details class="state-inspector">
+            <summary>Prototype state and edge controls</summary>
+            ${state.step === 2 ? `<div class="draft-actions"><button class="button-link" type="button" data-action="fixture-valid-upload">Valid file</button><button class="button-link" type="button" data-action="fixture-upload-failure">Failed upload</button><button class="button-link" type="button" data-action="fixture-oversize-upload">Over 20 MB</button></div>` : ''}
+            <pre data-state-json></pre>
+        </details>
     </aside>`;
 };
 
-const renderApplication = () => `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout${state.step === 2 ? ' is-stage-two' : ''}"><div class="form-surface">${renderForm()}</div>${renderWorkspace()}</div></section></main>`;
+const renderApplication = () => `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout"><div class="form-surface">${renderForm()}</div>${renderWorkspace()}</div></section></main>`;
 
 const render = ({ focusSite = false, focusError = false, scrollTop = false } = {}) => {
     root.innerHTML = renderApplication();
+    const inspector = root.querySelector('[data-state-json]');
+
+    if (inspector) {
+        inspector.textContent = JSON.stringify(serializableState(), null, 2);
+    }
 
     document.title = isNativeWordPress ? 'LAAN Request' : 'Reference dashboard · LAAN Request Prototype';
 
@@ -822,9 +804,9 @@ const submitNativeRequest = async () => {
         formData.append('required', pendingFiles.required, pendingFiles.required.name);
     }
 
-    pendingFiles.additional.forEach(({ file }) => {
-        formData.append('additional[]', file, file.name);
-    });
+    if (pendingFiles.additional) {
+        formData.append('additional', pendingFiles.additional, pendingFiles.additional.name);
+    }
 
     try {
         const response = await fetch(nativeConfig.ajaxUrl, { method: 'POST', body: formData, credentials: 'same-origin' });
@@ -842,7 +824,7 @@ const submitNativeRequest = async () => {
         state.completionShown = true;
         state.submittedRequestId = result.data?.requestId ?? 0;
         pendingFiles.required = null;
-        pendingFiles.additional = [];
+        pendingFiles.additional = null;
         sessionStorage.removeItem(sessionKey);
         render({ scrollTop: true });
     } catch (error) {
@@ -860,9 +842,9 @@ const updateFieldWithoutRender = (name, value) => {
     delete state.errors[name];
     persistSession();
 
-    const characterCount = root.querySelector(`[data-character-count="${name}"]`);
-    if (characterCount) {
-        characterCount.textContent = `${value.length} of 255 max characters`;
+    const inspector = root.querySelector('[data-state-json]');
+    if (inspector) {
+        inspector.textContent = JSON.stringify(serializableState(), null, 2);
     }
 };
 
@@ -902,58 +884,6 @@ const applyFile = (kind, file) => {
         persistSession();
         render();
     }, 420);
-};
-
-const applyAdditionalFiles = (files) => {
-    if (!files.length) {
-        return;
-    }
-
-    state.completionShown = false;
-    const existingFiles = uploadFilesFor('additional');
-    const nextFiles = files.map((file, index) => {
-        const extension = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
-        const acceptedType = uploadRules.acceptedTypes.includes(file.type) || uploadRules.acceptedExtensions.includes(extension);
-        const withinLimit = file.size <= uploadRules.maximumBytes;
-        const id = `${Date.now()}-${index}-${Math.random().toString(36).slice(2)}`;
-
-        return {
-            id,
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            status: acceptedType && withinLimit ? 'uploading' : 'error',
-            ...(acceptedType && withinLimit
-                ? {}
-                : { error: !acceptedType ? 'Unsupported file type. Use PDF, JPG or PNG.' : `File is larger than ${uploadRules.maximumLabel}.` }),
-        };
-    });
-
-    state.files.additional = [...existingFiles, ...nextFiles];
-    pendingFiles.additional.push(...nextFiles
-        .map((entry, index) => entry.status === 'uploading' ? { id: entry.id, file: files[index] } : null)
-        .filter(Boolean));
-    persistSession();
-    render();
-
-    nextFiles.forEach((entry) => {
-        if (entry.status !== 'uploading') {
-            return;
-        }
-
-        window.setTimeout(() => {
-            const currentFiles = uploadFilesFor('additional');
-            const currentFile = currentFiles.find((item) => item.id === entry.id);
-
-            if (!currentFile || currentFile.status !== 'uploading') {
-                return;
-            }
-
-            state.files.additional = currentFiles.map((item) => item.id === entry.id ? { ...item, status: 'uploaded' } : item);
-            persistSession();
-            render();
-        }, 420);
-    });
 };
 
 const applyUploadFixture = (fixture) => {
@@ -1003,12 +933,8 @@ root.addEventListener('input', (event) => {
 root.addEventListener('change', (event) => {
     const target = event.target;
 
-    if (target instanceof HTMLInputElement && target.dataset.uploadKind && target.files?.length) {
-        if (target.dataset.uploadKind === 'additional') {
-            applyAdditionalFiles([...target.files]);
-        } else {
-            applyFile(target.dataset.uploadKind, target.files[0]);
-        }
+    if (target instanceof HTMLInputElement && target.dataset.uploadKind && target.files?.[0]) {
+        applyFile(target.dataset.uploadKind, target.files[0]);
         return;
     }
 
@@ -1198,16 +1124,8 @@ root.addEventListener('click', (event) => {
 
     if (action === 'remove-file') {
         const kind = control.dataset.uploadKind;
-        if (kind === 'additional') {
-            const index = Number(control.dataset.uploadIndex);
-            const files = uploadFilesFor(kind);
-            const [removedFile] = files.splice(index, 1);
-            state.files.additional = files;
-            pendingFiles.additional = pendingFiles.additional.filter(({ id }) => id !== removedFile?.id);
-        } else {
-            state.files[kind] = null;
-            pendingFiles[kind] = null;
-        }
+        state.files[kind] = null;
+        pendingFiles[kind] = null;
         if (kind === 'required') {
             state.confirmations.uploadReviewed = false;
         }
@@ -1258,9 +1176,7 @@ root.addEventListener('click', (event) => {
 });
 
 window.addEventListener('beforeunload', (event) => {
-    const hasUnsavedInput = Object.values(state.fields).some(Boolean)
-        || state.files.required
-        || uploadFilesFor('additional').length > 0;
+    const hasUnsavedInput = Object.values(state.fields).some(Boolean) || state.files.required || state.files.additional;
     const explicitDraft = sessionStorage.getItem(draftKey);
 
     if (hasUnsavedInput && !explicitDraft) {

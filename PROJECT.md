@@ -1127,7 +1127,7 @@ Variants are kept as local experiments until a design direction is selected. Abs
 
 ## 21. Final project statement
 
-SiteXcell UI Prototype is a WordPress-based, high-fidelity front-end prototype for a telecommunications property advisory website and a related Co-Siter access-management experience. It combines server-rendered PHP page composition, reusable UI primitives, Tailwind-generated styling, local brand assets, and small vanilla-JavaScript enhancements. Its purpose is to validate structure, content, design, accessibility, and interaction direction with real SiteXcell context. Its autonomy ends at the presentation boundary: it can show how the experience should work, but it does not yet own the authenticated data, integrations, workflows, or business decisions required to make the experience operational.
+SiteXcell UI Prototype is a WordPress-based, high-fidelity modernization project for a telecommunications property advisory website and a related Co-Siter access-management experience. It combines server-rendered PHP page composition, reusable UI primitives, Tailwind-generated styling, local brand assets, vanilla-JavaScript enhancements, and a native WordPress LAAN implementation. The LAAN implementation now owns the local WordPress page, site registry, validation, protected upload, submission, and administration boundaries; production deployment still requires environment, mail, privacy, and security review.
 
 ## 22. LAAN Request modernization integration
 
@@ -1151,7 +1151,9 @@ The live test helpers retain explicit mappings to the external Gravity Forms ide
 
 ### Safety and rollout contract
 
-The LAAN implementation surface is intentionally unowned while the workflow is being redesigned. Live tests are opt-in and retain a final-submission guard. Generated Playwright reports, traces, screenshots, videos, authentication state, and run history are ignored under `.test-artifacts/`; only sanitized findings and curated evidence are committed under `docs/testing/laan-request/`.
+The native LAAN implementation is owned by `includes/laan-request.php`, `pages/laan-request/`, and the production assets under `assets/`. The standalone `proposed_laan_form/` server remains isolated and non-submitting. Live tests are opt-in and retain a final-submission guard. Generated Playwright reports, traces, screenshots, videos, authentication state, and run history are ignored under `.test-artifacts/`; only sanitized findings and curated evidence are committed under `docs/testing/laan-request/`.
+
+The permanent WordPress compatibility contract is [`docs/LAAN_WORDPRESS_READINESS.md`](docs/LAAN_WORDPRESS_READINESS.md). Future LAAN changes must satisfy that contract before they are considered implementation-ready.
 
 The accepted rollout order is: preserve the two-stage workflow and safety boundary; reject impossible dates; add a synchronized Page 2 summary; standardize upload feedback; preserve navigation and recoverable errors; investigate draft recovery; measure Site lookup effort; approve authoritative prepopulation sources; then validate a future UI implementation against the live characterization results.
 

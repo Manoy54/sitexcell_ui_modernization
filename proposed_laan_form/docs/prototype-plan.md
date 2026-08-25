@@ -2,7 +2,7 @@
 
 ## Status
 
-The isolated prototype is implemented. The reference dashboard formerly identified as Variant A was selected and promoted as the sole active direction. Its form canvas and Request workspace now scale beyond the original reference-study dimensions.
+The isolated prototype is implemented. The selected reference dashboard remains the shell. Page 2 now follows the live form's vertical flow and preserves the Request workspace rail.
 
 ## Goal
 
@@ -13,6 +13,8 @@ Improve the current LAAN request flow so users can complete it with approximatel
 This is a throwaway, isolated, non-submitting prototype. It must not add a WordPress route, call the production form handler, create records, send notifications, or use real personal, company, site, or document data.
 
 The target location is the repository-local `proposed_laan_form/` directory.
+
+`?step=2` opens the selected Page 2 direction with synthetic request context.
 
 ## Compatibility requirements
 

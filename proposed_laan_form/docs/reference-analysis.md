@@ -2,6 +2,8 @@
 
 ## Sources
 
+The Page 2 source of truth is an authenticated live-form inspection completed on 2026-08-25 at a 1361 x 636 viewport with a final-submission guard. See `page-two-live-map.md` for the measured map.
+
 - `docs/laanreq_prototype_ref/step1.png` — 821 × 626 cropped Page 1 form panel
 - `docs/laanreq_prototype_ref/step2, with the whole dashboard design reference.png` — 1361 × 636 dashboard shell and workspace reference
 
@@ -32,6 +34,6 @@
 
 ## Interpretation
 
-The cropped image defines Page 1's internal hierarchy, Terms and Conditions treatment, and primary action. The full-width image defines the application shell, navigation, header, form workspace, and live request-summary rail. Page 2 extends that same shell because no separate Page 2 form reference was supplied.
+The cropped image defines Page 1's internal hierarchy, Terms and Conditions treatment, and primary action. The full-width image defines the application shell, navigation, header, form workspace, and live request-summary rail. The authenticated live inspection now defines Page 2; the earlier Page 2 implementation was only an extrapolation because no Page 2 image had been supplied.
 
-The reference dashboard was selected. Its shell remains faithful to the reference while content dimensions now expand deliberately: the two leading fields share the row equally, Owner and Site align to that same first-column width, and the Request workspace scales from 280 to 360 px according to viewport width. The desktop frame is fixed to the viewport, with overflow contained inside the form and workspace panels.
+The reference dashboard remains selected. Both pages keep the responsive form canvas and Request workspace. Page 2 preserves the live form's vertical sequence in the main column while the helper rail stays visible on the right. At the reference viewport the form column scrolls internally; this is the necessary tradeoff for retaining the original orientation and all required content without shrinking the workspace.

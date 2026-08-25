@@ -2,9 +2,11 @@
 
 This directory is the isolated planning and prototype boundary for the improved LAAN request form.
 
+The native WordPress implementation contract is maintained in [`docs/LAAN_WORDPRESS_READINESS.md`](../docs/LAAN_WORDPRESS_READINESS.md). Any future UI or rule change must be checked against that document before it is promoted into the WordPress page.
+
 ## Current status
 
-Runnable throwaway UI prototype. It remains isolated from production: no production route, backend submission, record creation, notification, or WordPress hook is connected.
+Runnable throwaway UI prototype. Its local server remains isolated from production: it has no production route, backend submission, record creation, or notification. The approved interaction code is copied into the WordPress-owned `assets/js/laan-request.js` implementation during promotion.
 
 Run it from the repository root:
 
@@ -13,6 +15,8 @@ npm run prototype:laan
 ```
 
 Then open `http://127.0.0.1:4177/`.
+
+Open Page 2 directly at `http://127.0.0.1:4177/?step=2`. The selected layout uses the original vertical form flow and preserves the Request workspace on the right.
 
 ## Compatibility promise
 
@@ -39,4 +43,4 @@ The existing live LAAN tests under `tests/laan-request/live/` remain the externa
 
 ## Selected direction
 
-The reference dashboard formerly identified as Variant A is the selected interface. Comparison variants and the floating switcher have been removed from the active artifact. The selected layout keeps the reference dashboard identity while allowing the form and Request workspace to scale for larger screens.
+The reference dashboard remains the selected shell. Page 2 is informed by a direct live-form inspection and uses the original vertical field sequence with the persistent Request workspace rail. See `docs/page-two-live-map.md` for the measured source map and tradeoff analysis.

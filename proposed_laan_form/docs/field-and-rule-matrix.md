@@ -10,7 +10,7 @@ This matrix preserves the observed LAAN field contract while separating confirme
 | Commencement date (`input_1_12`) | LAAN commencement date | Yes | Accept strict `DD-MM-YYYY`; reject impossible dates inline; preserve correction value | Format confirmed; past/future policy pending |
 | Owner (`input_1_40`) | Optional owner selection | No | Preserve current selector and optional status | Confirmed |
 | Site (`input_1_41`) | Selected approved Site | Yes | Search by name, address, or identifier; support keyboard selection; show selected-site context | Lookup improvement approved; authoritative source pending |
-| Derived Site context | Address and Site notes | Derived | Show after Site selection; update when Site changes | Confirmed presentation; source mapping pending |
+| Derived Site context | Address and Site notes | Derived | Show after Site selection; update when Site changes | Presentation and drawing-requirements link added; real Site ID, address, and notes snapshot integrated for all 297 Sites |
 | Terms (`choice_1_63_1`) | Terms acknowledgement | Yes | Preserve declaration and block progression until accepted | Confirmed |
 
 ## Stage 2
@@ -39,4 +39,3 @@ This matrix preserves the observed LAAN field contract while separating confirme
 - Invalidated conditional values cannot silently contribute to readiness.
 - Validation errors preserve unaffected values.
 - Ready state is simulated and never submits externally.
-
