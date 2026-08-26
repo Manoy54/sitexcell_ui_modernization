@@ -1,5 +1,6 @@
 param(
     [switch]$RefreshSession,
+    [switch]$NoReport,
     [switch]$ShowBrowser,
     [int]$SlowMo = 250,
     [string]$TestFile
@@ -33,6 +34,7 @@ if (-not $useCdpSession) {
 }
 $env:ACCESS_HEADED = if ($ShowBrowser) { 'true' } else { 'false' }
 $env:ACCESS_SLOW_MO = if ($ShowBrowser) { [string]$SlowMo } else { '0' }
+New-Item -ItemType Directory -Path (Join-Path $projectRoot '.test-artifacts\playwright\history') -Force | Out-Null
 
 $arguments = @(
     'playwright',
@@ -42,4 +44,24 @@ $arguments = @(
 if (-not [string]::IsNullOrWhiteSpace($TestFile)) { $arguments += $TestFile }
 
 & npx.cmd @arguments
-exit $LASTEXITCODE
+$testExitCode = $LASTEXITCODE
+
+$reportPath = Join-Path $projectRoot '.test-artifacts\playwright\access-request-core-results.json'
+$historyDirectory = Join-Path $projectRoot '.test-artifacts\playwright\history'
+if (Test-Path -LiteralPath $reportPath) {
+    Copy-Item -LiteralPath $reportPath -Destination (Join-Path $historyDirectory "$($runContext.identifier).json") -Force
+    Write-Host "Archived report: .test-artifacts/playwright/history/$($runContext.identifier).json"
+}
+
+if (-not $NoReport) {
+    $reportScript = Join-Path $projectRoot 'tests\laan-request\support\results-server.mjs'
+    $reportPort = Get-NetTCPConnection -LocalPort 4173 -State Listen -ErrorAction SilentlyContinue
+    if (-not $reportPort) {
+        $quotedReportScript = '"' + $reportScript + '"'
+        Start-Process -FilePath 'node.exe' -ArgumentList @($quotedReportScript) -WorkingDirectory $projectRoot -WindowStyle Hidden | Out-Null
+    }
+    Write-Host ''
+    Write-Host 'Results dashboard: http://127.0.0.1:4173/?suite=access&section=results'
+}
+
+exit $testExitCode

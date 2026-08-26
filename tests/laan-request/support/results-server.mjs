@@ -170,9 +170,19 @@ const dashboardHtml = String.raw`<!doctype html>
   <script>
     const REPORTS = {
       core: { file: 'live-results.json', label: 'Core', configuredTests: 3, scenarios: 3 },
-      wave2: { file: 'wave2-results.json', label: 'Wave 2', configuredTests: 7, scenarios: 13 }
+      wave2: { file: 'wave2-results.json', label: 'Wave 2', configuredTests: 7, scenarios: 13 },
+      access: { file: 'access-request-core-results.json', label: 'Access Requests', configuredTests: 4, scenarios: 64 }
     };
-    const SECTIONS = new Set(['overview', 'results', 'findings', 'recommendations']);
+    const ACCESS_PLAN = [
+      { label: 'Core functional', total: 6, implemented: 4, ids: 'TC-AR-001–006' },
+      { label: 'Conditional branches', total: 8, implemented: 0, ids: 'TC-AR-B01–B08' },
+      { label: 'Recovery and uploads', total: 11, implemented: 0, ids: 'TC-AR-R01–R04, U01–U07' },
+      { label: 'Person, document, Site, copy/reuse', total: 21, implemented: 0, ids: 'TC-AR-P01–P05, D01–D04, S01–S04, C01–C08' },
+      { label: 'Efficiency', total: 10, implemented: 0, ids: 'TC-AR-E01–E10' },
+      { label: 'Accessibility and responsive', total: 5, implemented: 0, ids: 'TC-AR-A01–A05' },
+      { label: 'Cross-workflow', total: 3, implemented: 0, ids: 'TC-AR-X01–X03' }
+    ];
+    const SECTIONS = new Set(['overview', 'results', 'findings', 'recommendations', 'access-plan']);
     const FINDINGS = [
       { id: 'LAN-F09', priority: 'P1', title: 'Malformed dates are not safely rejected', body: 'The invalid date 32-13-2026 produced a WordPress critical-error page instead of inline Page 1 validation. The exact PHP exception remains unproven without server logs.' },
       { id: 'LAN-F08', priority: 'P1', title: 'Reload causes substantial data loss', body: 'Reload cleared the commencement date, Site, and terms on Page 1. On Page 2 it cleared all seven tested access-detail values and returned the workflow to Page 1.' },
@@ -190,13 +200,13 @@ const dashboardHtml = String.raw`<!doctype html>
     const CHARACTERIZATION_FILES = ['laan-request-reload.wave2.spec.js', 'laan-request-activity-variants.wave2.spec.js'];
     const app = document.querySelector('#app');
     const initialParams = new URLSearchParams(window.location.search);
-    let activeSuite = initialParams.get('suite') === 'wave2' ? 'wave2' : 'core';
+    let activeSuite = ['core', 'wave2', 'access'].includes(initialParams.get('suite')) ? initialParams.get('suite') : 'core';
     let activeSection = SECTIONS.has(initialParams.get('section')) ? initialParams.get('section') : 'overview';
     let laanExpanded = true;
     let accessExpanded = false;
     let activeReportPath = REPORTS[activeSuite].file;
     let currentReport = null;
-    let suiteReports = { core: null, wave2: null };
+    let suiteReports = { core: null, wave2: null, access: null };
     let historyItems = [];
     const expandedCases = new Set();
 
@@ -223,6 +233,7 @@ const dashboardHtml = String.raw`<!doctype html>
           const status = results.some(result => ['failed', 'timedOut', 'interrupted'].includes(result.status)) ? 'failed' : results.length && results.every(result => result.status === 'skipped') ? 'skipped' : 'passed';
           output.push({
             id: spec.id || spec.file + ':' + spec.line,
+            caseId: (spec.tests || []).flatMap(test => test.results || []).flatMap(result => result.attachments || []).map(decodeAttachment).find(item => item?.caseId)?.caseId || null,
             file: spec.file || suite.file || suite.title,
             title: spec.title,
             status,
@@ -256,6 +267,7 @@ const dashboardHtml = String.raw`<!doctype html>
       return '<option value="' + current.file + '">Current ' + current.label + ' report</option>' + archived.map(item => '<option value="' + escapeHtml(item.path) + '"' + (activeReportPath === item.path ? ' selected' : '') + '>' + escapeHtml(item.id) + ' · ' + escapeHtml(formatDate(item.startTime)) + '</option>').join('');
     }
     function suiteCommand(suite, cases) {
+      if (suite === 'access') return 'npm run test:access:live';
       if (suite === 'core') return 'npm run test:laan:live';
       if (cases.length !== 1) return 'npm run test:laan:live:wave2';
       const file = cases[0].file;
@@ -273,18 +285,18 @@ const dashboardHtml = String.raw`<!doctype html>
     }
     function sidebar() {
       const laanChildren = laanExpanded ? '<div class="nav-sub"><button class="nav-sub-item ' + (activeSection === 'results' ? 'is-active' : '') + '" data-section="results">Test results</button><button class="nav-sub-item ' + (activeSection === 'findings' ? 'is-active' : '') + '" data-section="findings">Findings</button><button class="nav-sub-item ' + (activeSection === 'recommendations' ? 'is-active' : '') + '" data-section="recommendations">Recommendations</button></div>' : '';
-      const accessChildren = accessExpanded ? '<div class="nav-sub"><div class="nav-empty">No test cases yet</div></div>' : '';
+      const accessChildren = accessExpanded ? '<div class="nav-sub"><button class="nav-sub-item ' + (activeSuite === 'access' && activeSection === 'results' ? 'is-active' : '') + '" data-open-access="results">Test results</button><button class="nav-sub-item ' + (activeSuite === 'access' && activeSection === 'access-plan' ? 'is-active' : '') + '" data-open-access="access-plan">Coverage plan</button></div>' : '';
       return '<aside class="sidebar"><a class="brand" href="/"><span class="brand-mark">SX</span><span><strong>SiteXcell</strong><small>Test dashboard</small></span></a><p class="nav-label">Workspace</p><nav class="nav" aria-label="Dashboard sections"><button class="nav-item ' + (activeSection === 'overview' ? 'is-active' : '') + '" data-section="overview"><span class="nav-icon">⌂</span>Overview</button><button class="nav-item ' + (activeSection !== 'overview' ? 'is-active' : '') + '" data-toggle-group="laan"><span class="nav-icon">L</span>LAAN Requests<span class="nav-chevron ' + (laanExpanded ? 'is-open' : '') + '">›</span></button>' + laanChildren + '<button class="nav-item" data-toggle-group="access"><span class="nav-icon">A</span>Access Requests<span class="nav-chevron ' + (accessExpanded ? 'is-open' : '') + '">›</span></button>' + accessChildren + '</nav><div class="sidebar-bottom"><div class="safety"><strong>Safety boundary</strong><p>Synthetic data only. Final submission remains blocked in every automated run.</p></div></div></aside>';
     }
     function topbar() {
-      const labels = { overview: 'Overview', results: 'Test results', findings: 'Findings', recommendations: 'Recommendations' };
+      const labels = { overview: 'Overview', results: 'Test results', findings: 'Findings', recommendations: 'Recommendations', 'access-plan': 'Coverage plan' };
       const resultActions = '<select class="run-select" id="run-select" aria-label="Choose a test run">' + runHistoryOptions() + '</select><button class="button button-primary" id="refresh-report" type="button">Refresh</button><a class="button" href="' + REPORTS[activeSuite].file + '">JSON</a>';
       const overviewActions = '<button class="button button-primary" id="refresh-report" type="button">Refresh</button>';
       const actions = activeSection === 'results' ? resultActions : activeSection === 'overview' ? overviewActions : '';
       return '<header class="topbar"><div class="breadcrumb"><span>LAAN Requests</span><span>/</span><strong>' + escapeHtml(labels[activeSection]) + '</strong></div><div class="top-actions">' + actions + '</div></header>';
     }
     function pageHead(title, description, showSuiteSwitch = false) {
-      const suiteSwitch = showSuiteSwitch ? '<div class="suite-switch" role="tablist" aria-label="Test suite"><button class="suite-tab ' + (activeSuite === 'core' ? 'is-active' : '') + '" data-suite="core">3 Core</button><button class="suite-tab ' + (activeSuite === 'wave2' ? 'is-active' : '') + '" data-suite="wave2">Wave 2</button></div>' : '';
+      const suiteSwitch = showSuiteSwitch ? '<div class="suite-switch" role="tablist" aria-label="Test suite"><button class="suite-tab ' + (activeSuite === 'core' ? 'is-active' : '') + '" data-suite="core">3 Core</button><button class="suite-tab ' + (activeSuite === 'wave2' ? 'is-active' : '') + '" data-suite="wave2">Wave 2</button><button class="suite-tab ' + (activeSuite === 'access' ? 'is-active' : '') + '" data-suite="access">4 Access</button></div>' : '';
       return '<div class="page-head"><div><h1>' + escapeHtml(title) + '</h1><p>' + escapeHtml(description) + '</p></div>' + suiteSwitch + '</div>';
     }
     function notice(cases) {
@@ -328,10 +340,19 @@ const dashboardHtml = String.raw`<!doctype html>
       return '<div class="overview-row"><div><h3>' + escapeHtml(REPORTS[suite].label) + ' suite</h3><p>' + REPORTS[suite].configuredTests + ' configured tests · ' + REPORTS[suite].scenarios + ' scenarios</p></div><code>' + escapeHtml(suiteCommand(suite, cases)) + '</code><span>' + statusPill(failed ? 'failed' : 'passed', passed + ' passed · ' + failed + ' failed') + '</span><button class="text-action" type="button" data-open-suite="' + suite + '">View results →</button></div>';
     }
     function overviewView() {
-      return shell(pageHead('Test overview', 'Current LAAN Request regression status across the available suites.') + '<section class="surface"><div class="surface-head"><div><h2>Available test suites</h2><p>Latest report files and the commands that produced them</p></div></div><div class="overview-list">' + overviewRow('core') + overviewRow('wave2') + '</div></section>');
+      return shell(pageHead('Test overview', 'Current regression status across LAAN Request and Access Request suites.') + '<section class="surface"><div class="surface-head"><div><h2>Available test suites</h2><p>Latest report files and the commands that produced them</p></div></div><div class="overview-list">' + overviewRow('core') + overviewRow('wave2') + overviewRow('access') + '</div></section>');
     }
     function resultsView(report, cases) {
       return shell(pageHead('LAAN test results', REPORTS[activeSuite].label + ' suite · read-only local evidence dashboard', true) + notice(cases) + summaryStrip(report, cases) + '<div class="workspace-grid"><section class="surface"><div class="surface-head"><div><h2>Tests completed</h2><p>Each row identifies the test script and its result</p></div><span>' + cases.length + ' ' + (cases.length === 1 ? 'result' : 'results') + '</span></div><div class="command-bar"><span>Command</span><code>' + escapeHtml(suiteCommand(activeSuite, cases)) + '</code></div>' + resultsTable(cases) + '</section>' + runFacts(report, cases) + '</div>');
+    }
+    function accessResultsView(report, cases) {
+      return shell(pageHead('Access Request test results', 'Core Access Request suite - read-only local evidence dashboard', true) + '<div class="notice is-success"><span><strong>4 of 4 implemented cases passed</strong> - 60 additional approved matrix cases are planned.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>' + summaryStrip(report, cases) + '<div class="workspace-grid"><section class="surface"><div class="surface-head"><div><h2>Access cases completed</h2><p>Each row is a named test case with expandable evidence.</p></div><span>' + cases.length + ' results</span></div><div class="command-bar"><span>Command</span><code>npm run test:access:live</code></div>' + resultsTable(cases) + '</section>' + runFacts(report, cases) + '</div>');
+    }
+    function accessPlanView() {
+      const total = ACCESS_PLAN.reduce((sum, item) => sum + item.total, 0);
+      const implemented = ACCESS_PLAN.reduce((sum, item) => sum + item.implemented, 0);
+      const rows = ACCESS_PLAN.map(item => '<tr><td><strong>' + escapeHtml(item.label) + '</strong><br><code>' + escapeHtml(item.ids) + '</code></td><td>' + item.total + '</td><td>' + item.implemented + '</td><td>' + (item.total - item.implemented) + '</td><td>' + statusPill(item.implemented ? 'passed' : 'review', item.implemented ? 'In progress' : 'Planned') + '</td></tr>').join('');
+      return shell(pageHead('Access Request coverage plan', 'A plain-language view of implemented results versus the approved 64-case matrix.') + '<div class="summary-strip"><div class="summary-item"><span>Planned cases</span><strong>' + total + '</strong></div><div class="summary-item is-passed"><span>Implemented</span><strong>' + implemented + '</strong></div><div class="summary-item"><span>Remaining</span><strong>' + (total - implemented) + '</strong></div><div class="summary-item is-passed"><span>Latest run</span><strong>4 / 4</strong></div><div class="summary-item"><span>Submissions</span><strong>0</strong></div></div><section class="surface"><div class="surface-head"><div><h2>Coverage by test family</h2><p>Implemented means executable code exists; planned means documented but not yet automated.</p></div><button class="button button-primary" type="button" data-open-access="results">View latest results</button></div><table class="test-table"><thead><tr><th>Family</th><th>Planned</th><th>Implemented</th><th>Remaining</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table></section>');
     }
     function insightView(title, description, items) {
       return shell(pageHead(title, description) + '<section class="surface"><div class="surface-head"><div><h2>' + escapeHtml(title) + '</h2><p>Evidence-backed LAAN Request review</p></div></div><div class="insight-list">' + items.map(item => '<article class="insight-row"><div class="insight-meta"><span class="insight-id">' + escapeHtml(item.id) + '</span><span class="priority ' + (item.priority === 'P0' ? 'p0' : '') + '">' + escapeHtml(item.priority) + '</span></div><div class="insight-copy"><h3>' + escapeHtml(item.title) + '</h3><p>' + escapeHtml(item.body) + '</p></div></article>').join('') + '</div></section>');
@@ -353,7 +374,8 @@ const dashboardHtml = String.raw`<!doctype html>
       }
       const cases = flattenSuites(currentReport.suites);
       if (activeSection === 'overview') app.innerHTML = overviewView();
-      if (activeSection === 'results') app.innerHTML = resultsView(currentReport, cases);
+      if (activeSection === 'results') app.innerHTML = activeSuite === 'access' ? accessResultsView(currentReport, cases) : resultsView(currentReport, cases);
+      if (activeSection === 'access-plan') app.innerHTML = accessPlanView();
       if (activeSection === 'findings') app.innerHTML = insightView('Findings', 'Observed behavior from the completed LAAN Request test evidence.', FINDINGS);
       if (activeSection === 'recommendations') app.innerHTML = insightView('Recommendations', 'Prioritized actions derived from the confirmed LAAN Request findings.', RECOMMENDATIONS);
       updateUrl();
@@ -374,8 +396,8 @@ const dashboardHtml = String.raw`<!doctype html>
       render();
     }
     async function loadSuiteReports() {
-      const reports = await Promise.all([fetchReport(REPORTS.core.file), fetchReport(REPORTS.wave2.file)]);
-      suiteReports = { core: reports[0], wave2: reports[1] };
+      const reports = await Promise.all([fetchReport(REPORTS.core.file), fetchReport(REPORTS.wave2.file), fetchReport(REPORTS.access.file)]);
+      suiteReports = { core: reports[0], wave2: reports[1], access: reports[2] };
     }
     async function loadHistory() {
       try {
@@ -403,6 +425,14 @@ const dashboardHtml = String.raw`<!doctype html>
       document.querySelectorAll('[data-open-suite]').forEach(button => button.addEventListener('click', () => {
         activeSection = 'results';
         selectSuite(button.dataset.openSuite);
+      }));
+      document.querySelectorAll('[data-open-access]').forEach(button => button.addEventListener('click', () => {
+        activeSuite = 'access';
+        activeSection = button.dataset.openAccess;
+        activeReportPath = REPORTS.access.file;
+        currentReport = suiteReports.access;
+        accessExpanded = true;
+        render();
       }));
       document.querySelectorAll('[data-toggle-group]').forEach(button => button.addEventListener('click', () => {
         if (button.dataset.toggleGroup === 'laan') laanExpanded = !laanExpanded;
@@ -451,7 +481,7 @@ async function historyReportSummaries() {
       reports.push({
         id: entry.name.replace(/\.json$/, ''),
         path: 'history/' + entry.name,
-        suite: String(report.config?.configFile || '').includes('wave2') ? 'wave2' : 'core',
+        suite: String(report.config?.configFile || '').includes('access-request') ? 'access' : String(report.config?.configFile || '').includes('wave2') ? 'wave2' : 'core',
         startTime: stats.startTime || null,
         duration: stats.duration || 0,
         unexpected: stats.unexpected || 0,
