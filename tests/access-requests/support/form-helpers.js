@@ -16,7 +16,16 @@ export class AccessRequestBlockedError extends Error {
 }
 
 export async function inspectAccessRequestAvailability(page) {
-  await page.goto(ACCESS_REQUEST_URL, { waitUntil: 'load' });
+  try {
+    await page.goto(ACCESS_REQUEST_URL, { waitUntil: 'domcontentloaded' });
+  } catch (error) {
+    // Cloudflare can abort the first navigation while its challenge script
+    // replaces the document. A retry is safe; any other navigation error must
+    // remain visible to the test as a genuine execution failure.
+    if (!String(error?.message ?? error).includes('net::ERR_ABORTED')) throw error;
+    await page.waitForTimeout(1_000);
+    await page.goto(ACCESS_REQUEST_URL, { waitUntil: 'domcontentloaded' });
+  }
   const landedUrl = page.url();
   const expectedPath = new URL(ACCESS_REQUEST_URL).pathname;
   const landedPath = new URL(landedUrl).pathname;
