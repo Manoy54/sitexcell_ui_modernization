@@ -139,8 +139,8 @@ The refreshed authenticated run supersedes the earlier authentication-block
 snapshot for the implemented core slice:
 
 - `TC-AR-001`, `TC-AR-002`, `TC-AR-003`, and `TC-AR-004` passed.
-- `TC-AR-002` now covers synthetic traversal through Steps 1–4 and stops before
-  the required Step 4 qualification upload.
+- `TC-AR-002` now covers synthetic traversal through Steps 1–4, visible contractor
+  details, and the approved qualification upload; it does not click Step 4 Next.
 - `TC-AR-005`, `TC-AR-006`, and all branch, recovery, upload, reuse,
   accessibility, efficiency, and cross-workflow cases remain unimplemented or
   awaiting their approved execution wave.

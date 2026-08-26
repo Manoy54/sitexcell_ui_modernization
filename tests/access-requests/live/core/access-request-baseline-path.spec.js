@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import path from 'node:path';
 import {
   AccessRequestBlockedError,
   attachCaseResult,
@@ -76,9 +77,16 @@ test('TC-AR-002 completes the synthetic baseline path through Step 4', async ({}
 
       await page.locator('#input_3_536').selectOption({ label: 'Up to ten contractors' });
       await page.locator('#input_3_158').selectOption('1');
-      const requiredQualificationUpload = page.locator('#gform_page_3_4 input[type="file"]').first();
+      const requiredQualificationUpload = page.locator('#field_3_445 input[type="file"]').first();
       await expect(requiredQualificationUpload).toBeVisible();
-      await expect.poll(() => requiredQualificationUpload.evaluate((input) => input.files.length)).toBe(0);
+      await page.locator('#input_3_130').fill('Contractor One');
+      await page.locator('#input_3_139').fill('Synthetic Contractor Company');
+      await page.locator('#input_3_180').fill('0400000010');
+      await page.locator('#input_3_202').fill('SYN-CARD-001');
+      await page.locator('#choice_3_182_0').check();
+      await page.locator('#input_3_192').fill(futureAccessDate(30));
+      await requiredQualificationUpload.setInputFiles(path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf'));
+      await expect(page.locator('#field_3_445')).toContainText('synthetic-access-document.pdf');
       await expect(page.locator(FINAL_SUBMIT)).toBeHidden();
       const finalSubmissionAttempted = await wasFinalSubmissionAttempted();
       expect(finalSubmissionAttempted).toBe(false);
@@ -88,14 +96,21 @@ test('TC-AR-002 completes the synthetic baseline path through Step 4', async ({}
         resultType: 'Characterization',
         status: 'PASS',
         startedAt,
-        expected: 'Synthetic required values reach Step 4 and expose the required qualification upload without submitting.',
-        observed: 'Steps 1–4 accepted the baseline values; Step 4 showed the required qualification upload and no file was transmitted.',
-        stoppingPoint: 'Step 4 before required upload',
+        expected: 'Synthetic required values and contractor details populate Step 4, including the approved qualification upload, without submitting.',
+        observed: 'Step 4 displayed the contractor details and accepted the synthetic qualification document; Next and final Submit were not clicked.',
+        stoppingPoint: 'Step 4 after contractor details and qualification upload',
         finalSubmissionAttempted,
         extra: {
           site: TEST_SITE,
           buildingAddress: TEST_BUILDING,
           requiredUploadField: await requiredQualificationUpload.getAttribute('id'),
+          qualificationFile: 'synthetic-access-document.pdf',
+          contractor: {
+            name: 'Contractor One',
+            company: 'Synthetic Contractor Company',
+            inductionNumber: 'SYN-CARD-001',
+            siteInducted: 'Yes',
+          },
         },
       });
     } catch (error) {

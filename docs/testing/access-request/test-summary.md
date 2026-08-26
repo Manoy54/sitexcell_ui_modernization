@@ -10,7 +10,7 @@ Status: Core authenticated slice executed successfully; approved expansion cases
 - Browser and viewport: Microsoft Edge, Playwright headless default viewport
 - Test account classification: approved authenticated session
 - Test Site: `The CRM Carpenters Test`
-- Safety boundary: Step 2 for the current core slice; final Submit blocked in DOM and network layers
+- Safety boundary: Step 4 after synthetic contractor details and qualification upload; final Submit blocked in DOM and network layers
 
 ## Results
 
@@ -27,6 +27,10 @@ Status: Core authenticated slice executed successfully; approved expansion cases
 The documented building-context expectation was corrected after observation: the
 Site selection populates hidden field `input_3_9` during the Step 1 to Step 2
 transition; it does not render the address as visible text on Step 1.
+
+`TC-AR-002` now populates the visible Step 4 contractor details and the approved
+synthetic qualification document. The custom uploader displays the selected file
+in its UI; the Step 4 Next button is not clicked.
 
 ## Approved recommendations
 

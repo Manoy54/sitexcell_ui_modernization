@@ -20,7 +20,7 @@ The current analysis identifies:
 - Final control: `#gform_submit_button_3`, present on Step 8
 - Dedicated test Site: `The CRM Carpenters Test`
 - Dedicated test building: `The CRM Carpenters Test Building, Redbank, QLD, 4301`
-- Current safe boundary: stop at Step 4 while verifying mandatory upload validation
+- Current safe boundary: stop at Step 4 after synthetic contractor details and qualification upload validation
 - Final submission: prohibited in all automated runs
 
 Current execution note (2026-08-26): the available authenticated states redirect
@@ -138,7 +138,7 @@ speculative selectors are not treated as implementation progress.
 ### Wave 1 — Core workflow
 
 - `TC-AR-001` — Open Access Request.
-- `TC-AR-002` — Complete required fields on the approved baseline path.
+- `TC-AR-002` — Complete required fields and visible contractor details through the Step 4 upload boundary.
 - `TC-AR-003` — Validate conditional sections. The initial automated slice
   covers Site-derived building context; full branch coverage remains partial.
 - `TC-AR-004` — Validate required-field behavior.
