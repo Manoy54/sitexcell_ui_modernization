@@ -280,9 +280,9 @@ function sitexcell_ui_laan_render_settings_admin(): void
         <hr>
         <h2>LAAN Sites</h2>
         <p><strong><?php echo esc_html((string) $site_count); ?></strong> published Site records are currently available to the form.</p>
-        <p>Use the one-time importer to seed the local registry from the approved prototype snapshot, then manage the records under <strong>LAAN Sites</strong>.</p>
-        <p><a class="button" href="<?php echo esc_url($import_url); ?>">Import prototype Site snapshot</a></p>
-        <p class="description">Review and approve the imported notes before using this data in a production environment.</p>
+        <p>Use the one-time importer to seed the local registry from the safe example snapshot, then manage the records under <strong>LAAN Sites</strong>.</p>
+        <p><a class="button" href="<?php echo esc_url($import_url); ?>">Import example Site snapshot</a></p>
+        <p class="description">Replace example values with approved Site data and review formatted notes before using this data in a production environment.</p>
     </div>
     <?php
 }
@@ -363,7 +363,7 @@ function sitexcell_ui_laan_import_snapshot(): void
 
     $fixtures = SITEXCELL_UI_PATH . 'proposed_laan_form/fixtures/';
     $sites = sitexcell_ui_laan_extract_fixture_json($fixtures . 'laan-fixtures.js', 'sites');
-    $contexts = sitexcell_ui_laan_extract_fixture_json($fixtures . 'site-context.js', 'siteContextById');
+    $contexts = sitexcell_ui_laan_extract_fixture_json($fixtures . 'site-context.example.js', 'siteContextById');
     $imported = 0;
 
     foreach ($sites as $site) {

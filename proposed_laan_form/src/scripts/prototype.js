@@ -1,5 +1,5 @@
 import { activities, owners, sites, uploadRules as prototypeUploadRules } from '../../fixtures/laan-fixtures.js';
-import { siteContextById } from '../../fixtures/site-context.js';
+import { siteContextById } from '../../fixtures/site-context.example.js';
 
 // Selected Page 2 direction: live vertical form flow with the persistent Request workspace.
 
@@ -10,9 +10,10 @@ const isNativeWordPress = Boolean(nativeConfig.native);
 const sessionKey = isNativeWordPress ? 'sitexcell-laan-form-session-v1' : 'proposed-laan-form-session-v1';
 const draftKey = 'proposed-laan-form-explicit-draft-v1';
 const drawingRequirementsUrl = 'https://drive.google.com/file/d/1IrbzzKeussLKHe75Ef0k3-wiiokR2JW5/view?usp=sharing';
+const exampleSiteContext = siteContextById['4127303000013010623'] ?? {};
 const siteRecords = Array.isArray(nativeConfig.sites) && nativeConfig.sites.length
     ? nativeConfig.sites
-    : sites.map((site) => ({ ...site, ...siteContextById[site.id] }));
+    : sites.map((site) => ({ ...site, ...(siteContextById[site.id] ?? (site.id === sites[0]?.id ? exampleSiteContext : {})) }));
 const uploadRules = nativeConfig.uploadRules ?? prototypeUploadRules;
 const pendingFiles = { required: null, additional: [] };
 const prototypeSearchParams = new URLSearchParams(window.location.search);

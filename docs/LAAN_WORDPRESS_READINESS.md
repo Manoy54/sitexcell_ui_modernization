@@ -40,7 +40,7 @@ The `proposed_laan_form/` directory remains a visual and interaction reference. 
 
 1. Activate or reactivate the plugin so the native request table and `LAAN Sites` post type are registered.
 2. On activation, the plugin creates a draft WordPress Page titled `LAAN Request` with the slug `laan-request` and the content `[sitexcell_laan_request]` if one does not already exist. Review it and publish it when ready.
-3. Open `LAAN Sites → Settings` and run `Import prototype Site snapshot` for local development only.
+3. Open `LAAN Sites → Settings` and run `Import example Site snapshot` for local development only.
 4. Review imported records and edit any notes, links, Site IDs, addresses, or owner filters under `LAAN Sites`.
 5. Configure notification recipients under `LAAN Sites → Settings`.
 6. Verify the page while signed in as an approved portal user.
@@ -117,7 +117,7 @@ The importer is intentionally explicit. It must not silently turn a production-d
 
 ## Current limitations
 
-- The prototype Site snapshot is imported manually from `proposed_laan_form/fixtures/` through LAAN Settings.
+- The safe example Site snapshot is imported manually from `proposed_laan_form/fixtures/` through LAAN Settings. Real Site Notes to Carriers belong in WordPress-managed Site records and must not be committed as a production-derived fixture.
 - Business-specific conditional fields remain intentionally conservative until the field/rule matrix is approved.
 - The native handler is the current local implementation; Gravity Forms compatibility is an adapter goal, not an active dependency.
 - Production deployment still requires a WordPress environment review, mail configuration, private-directory web-server verification, and security review.

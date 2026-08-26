@@ -19,6 +19,9 @@ test-results/
 !.env.example
 *.log
 
+# Production-derived LAAN snapshots
+proposed_laan_form/fixtures/site-context.js
+
 # Operating-system/editor noise
 .DS_Store
 Thumbs.db
