@@ -332,7 +332,7 @@ All scenarios stop before final submission and use synthetic data.
 7. **Business decision required — Authoritative-data mapping:** document which Site, company, person, and request records can supply values before approving reuse.
 8. **Human study required — Comparable effort baseline:** record manual fields, interactions, lookup effort, backtracking, scrolling, corrections, and user task time.
 
-The execution order, expected evidence, and interpretation rules are documented in `docs/LAN_VALIDATION_WAVE_2.md`.
+The execution order, expected evidence, and interpretation rules are documented in `wave-2-validation.md`.
 
 ## Evidence gaps and limitations
 
@@ -369,3 +369,14 @@ This is a target to validate through before/after measurement, not a current res
 2. Findings and recommendation actions accepted - complete.
 3. Validate any approved form changes against the established baseline and quality guardrails - pending.
 4. Resolve server, business-rule, authoritative-data, retention, and human-measurement gates before production approval - pending.
+
+## Test-contract refinement
+
+The acceptance contract is now separated from characterization evidence in `docs/testing/laan-request/test-case-matrix.md`. Four strict non-submitting goal gates were added to Wave 2 for:
+
+- invalidating the LAAN confirmation when its required file is removed;
+- requiring confirmation again when a confirmed LAAN file is replaced;
+- preserving completed Stage 1 context after reload;
+- preserving completed Stage 2 values and active stage after reload.
+
+These cases are expected to remain red until the known defects are fixed. A completed browser probe is not counted as an acceptable result when it loses request data or leaves required upload state inconsistent.

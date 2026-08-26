@@ -1,0 +1,57 @@
+SiteXcell UI Prototype commands
+
+Run these commands from the repository root:
+
+    cd "C:\Users\armen\Local Sites\sitexcell\app\public\wp-content\plugins\sitexcell-ui-prototype"
+
+Install dependencies (first run only):
+
+    npm install
+
+Live LAAN test cases:
+
+    npm run test:laan:live
+    npm run test:laan:live:wave2
+
+Run a focused test case:
+
+    npm run test:laan:live:navigation
+    npm run test:laan:live:validation
+    npm run test:laan:live:date-boundaries
+    npm run test:laan:live:upload-recovery
+    npm run test:laan:live:reload
+    npm run test:laan:live:keyboard
+    npm run test:laan:live:responsive
+    npm run test:laan:live:variants
+    npm run test:laan:live:gates
+
+Refresh the authenticated test session before running the core suite:
+
+    npm run test:laan:live:refresh
+
+Test result dashboard:
+
+    npm run results:serve
+
+Open:
+
+    http://127.0.0.1:4173/
+
+LAAN Requests form prototype:
+
+    npm run prototype:laan
+
+Open:
+
+,
+
+Standalone Requests page prototype:
+
+    start .\pages\access-portal-page\prototype-ui.html
+
+Optional local WordPress test settings:
+
+    $env:WP_BASE_URL = 'http://sitexcell.local'
+    $env:WP_LAAN_PATH = '/laan-requests/'
+
+Stop any running local server with Ctrl+C in its terminal.

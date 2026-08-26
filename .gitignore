@@ -24,7 +24,7 @@ test-results/
 proposed_laan_form/fixtures/site-context.js
 
 # Operating-system/editor noise
-.DS_Store
+w.DS_Store
 Thumbs.db
 .idea/
 .vscode/

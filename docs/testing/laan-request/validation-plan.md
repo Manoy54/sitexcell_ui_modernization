@@ -18,8 +18,9 @@ Playwright is the measurement and verification mechanism. The primary deliverabl
 - The three-test core regression passed 3/3 without final submission.
 - The latest pre-consolidation Wave 2 result is 15/16; after consolidation the target is 12/13, with the remaining intentional acceptance failure proving unsafe malformed-date handling and a reproducible WordPress critical-error outcome.
 - Navigation, document upload, upload recovery, activity variants, reload characterization, keyboard flow, phone, and tablet evidence have been captured.
-- Findings and accepted recommendations are documented in `docs/LAN_FINDINGS_SUMMARY.md`.
-- Current findings and retest priorities are documented in `docs/LAN_FINDINGS_SUMMARY.md` and `docs/LAN_VALIDATION_WAVE_2.md`.
+- Findings and accepted recommendations are documented in `findings.md`.
+- Current findings and retest priorities are documented in `findings.md` and `wave-2-validation.md`.
+- The refined acceptance inventory is documented in `docs/testing/laan-request/test-case-matrix.md`; strict goal-gate tests cover upload replacement/removal confirmation drift and reload data loss.
 - Access Requests, authoritative-data sources, confirmation ownership, draft retention, and human before/after effort remain separate evidence or decision gates.
 - The environment's staging/production classification must be confirmed before any destructive or production-state test; all current automated coverage remains non-submitting.
 
@@ -160,6 +161,36 @@ Measure the same logical workflow before and after any proposed improvement.
 | Preservation | Valid data retained after navigation or recoverable errors |
 
 Use the median of at least three comparable runs where practical. Keep application/network wait time separate from user-equivalent work. Do not silently remove outliers.
+
+## Goal-defined acceptance gates
+
+The test inventory is maintained in [`test-case-matrix.md`](test-case-matrix.md). The inventory separates acceptance, efficiency, characterization, and business-decision cases so that an observed defect cannot be mistaken for a successful test run.
+
+An improvement is accepted only when:
+
+1. all P0 functional, validation, recovery, conditional, upload-state, and pre-submit cases pass;
+2. no required information, confirmation, validation rule, source trace, or review control is removed or weakened;
+3. the same approved fixture reaches a valid ready-to-submit state across all P0 variants;
+4. the targeted primary metric improves by at least 20%—completion time and manual effort where both are relevant;
+5. corrections, lookup mistakes, backtracking, and data loss do not materially increase;
+6. responsive and keyboard paths preserve the same quality gates.
+
+Known red outcomes remain red until fixed: the malformed-date critical error, advancement with an impossible date, required-upload/confirmation inconsistency, and reload data loss. Characterization tests may continue to capture these outcomes, but they must not be counted as acceptance passes.
+
+### Refined edge-case sequence
+
+Run the following sequence after each approved form change:
+
+1. valid Installation, Inspection, and Maintenance paths;
+2. missing required values and missing terms with correction;
+3. impossible, malformed, and valid-boundary dates;
+4. conditional activity changes after data entry;
+5. upload replacement, removal, invalid type, size boundary, and retry;
+6. back/forward, validation recovery, reload, and authorised draft recovery;
+7. Site lookup, duplicate/inactive candidate, and wrong-selection protection;
+8. keyboard, phone, tablet, and ready-to-submit checks;
+9. before/after efficiency measurement using the same fixture;
+10. cross-workflow source, conflict, and reuse checks before enabling prepopulation.
 
 ## Improvement areas to evaluate
 

@@ -478,40 +478,47 @@ Copied values remain visible and editable before final submission.
 This pattern should be considered an important form-efficiency optimization for LAN / SAR-LAN Request where duplicate information is common.
 
 
-## LAN / SAR-LAN Recommended Playwright Test Areas
+## LAN / SAR-LAN Goal-Defined Test Contract
 
-### Functional
+The test goal is not simply “the form reaches Page 2.” The goal is:
 
-```text
-TC-LAN-001 — Open LAN/SAR-LAN Request
-TC-LAN-002 — Complete required fields
-TC-LAN-003 — Validate required-field behavior
-TC-LAN-004 — Validate conditional sections
-TC-LAN-005 — Preserve entered values while navigating
-TC-LAN-006 — Reach valid pre-submit state
-```
+> Reduce human completion time and manual effort by approximately 20–30% while preserving all required information, validation, traceability, reviewability, and a valid ready-to-submit state.
 
-### Efficiency
+The detailed matrix is maintained in [`test-case-matrix.md`](test-case-matrix.md).
 
-```text
-TC-LAN-E01 — Measure manual field count
-TC-LAN-E02 — Measure clicks/interactions
-TC-LAN-E03 — Measure navigation/screens
-TC-LAN-E04 — Detect redundant/derivable fields
-TC-LAN-E05 — Detect repeated values
-TC-LAN-E06 — Measure validation corrections
-TC-LAN-E07 — Measure desktop vs mobile effort
-TC-LAN-E08 — Test keyboard flow
-TC-LAN-E09 — Test data preservation after error
-```
+### Acceptance gates
 
-### Cross-workflow
+An improvement is green only when:
 
-```text
-TC-LAN-X01 — Identify LAN values repeated in Access Request
-TC-LAN-X02 — Identify LAN values reused by Site Owner Approval
-TC-LAN-X03 — Verify shared Site context remains consistent
-```
+- every P0 acceptance case passes;
+- impossible or unsupported dates are rejected inline before Stage 2;
+- required upload and confirmation state cannot become inconsistent;
+- changing a conditional activity cannot submit stale hidden values;
+- navigation and recoverable validation preserve valid context;
+- the same fixture reaches a valid pre-submit state on every approved P0 path;
+- the targeted primary efficiency metric improves by at least 20%;
+- no material regression occurs in corrections, lookup mistakes, backtracking, or data preservation.
+
+Characterization tests may document current data loss, server errors, or unresolved business rules, but their completion is not evidence that the experience is acceptable.
+
+### Required edge coverage
+
+The first refinement wave must cover:
+
+- impossible dates (`32-13-2026`, `31-04-2027`, and non-leap `29-02-2027`);
+- format variants, whitespace, and approved valid date boundaries;
+- missing terms, missing required Page 2 data, and recoverable correction;
+- activity changes after values have been entered;
+- upload replacement/removal after confirmation;
+- invalid, at-limit, and over-limit upload cases where staging validation is authorised;
+- back/forward navigation, reload, and draft recovery as separate behaviors;
+- Site lookup with and without filtering, including duplicate or inactive candidates;
+- keyboard, phone, and tablet critical paths;
+- legitimate same-information reuse and source/target conflict behavior.
+
+### Result discipline
+
+Every test result must state whether it is an acceptance, efficiency, characterization, or business-decision test. A passing Playwright process is not automatically a passing product result: server critical errors, lost values, stale confirmations, invalid progression, or silent conflict resolution are failures against this goal.
 
 ---
 
