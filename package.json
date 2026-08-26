@@ -20,6 +20,9 @@
     "test:laan:live:keyboard": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 150 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-keyboard.wave2.spec.js",
     "test:laan:live:responsive": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-responsive.wave2.spec.js",
     "test:laan:live:gates": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\laan-request\\support\\run-live-session.ps1 -ShowBrowser -SlowMo 300 -ConfigFile tests/laan-request/configs/playwright.wave2.config.js -TestFile laan-request-improvement-gates.wave2.spec.js",
+    "test:access:unit": "node --test tests/access-requests/unit/*.test.js",
+    "test:access:live": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\access-requests\\support\\run-live-session.ps1",
+    "test:access:live:refresh": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\access-requests\\support\\run-live-session.ps1 -RefreshSession -ShowBrowser -SlowMo 500",
     "session:setup": "node tests/laan-request/support/create-storage-state.mjs",
     "results:serve": "node tests/laan-request/support/results-server.mjs"
   },

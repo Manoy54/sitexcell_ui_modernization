@@ -12,6 +12,7 @@ auth-state*.json
 playwright-report/
 test-results/
 .test-artifacts/
+.test-run-sequence
 
 # Local environment files and logs
 .env

@@ -46,3 +46,34 @@ contact names, and non-deliverable `example.invalid` email addresses.
 - The test stops on Step 4 by intentionally verifying the mandatory upload
   validation message.
 - No file is uploaded and Save and Continue Later is not clicked.
+
+## Revalidation on 2026-08-26
+
+The available Playwright storage state and the connected Edge session were both
+checked against the documented URL. In both cases, requesting
+`/access-requests/` redirected to `/`, where `#gform_3` was not rendered. The
+core execution therefore stopped at the authentication/authorization preflight.
+No form values were entered and no submission was attempted.
+
+This is classified as `BLOCKED`, not as a product defect or a passing test. The
+current evidence does not distinguish an expired/invalid test session from a
+role or route-access change. A refreshed approved test-account session is
+required before live behavior can be characterized again.
+
+## Plan reconciliation
+
+- The approved automated boundary is Step 4, while `TC-AR-006` asks for the
+  Step 8 ready-to-submit state. `TC-AR-006` is blocked until a later boundary is
+  explicitly approved; the network guard is not approval to traverse Steps 5-8.
+- The original case matrix omitted the one-click copy cases (`TC-AR-C*` and
+  `TC-AR-E10`) already required by `access-request.md`, and did not assign IDs
+  to branch, recovery, upload-state, accessibility, or responsive coverage.
+- Person reuse, saved-document reuse, and cross-workflow prefill are not known
+  capabilities of the current Gravity Forms workflow. Those cases must begin as
+  characterization or decision cases, not acceptance tests for an assumed UI.
+- The LAAN suite and Access Request suite currently use different dedicated
+  Sites. Cross-workflow Site consistency cannot be asserted until a shared
+  synthetic fixture or an approved mapping between the fixtures exists.
+- Automated browser duration is useful for regression comparison but is not a
+  defensible human-effort baseline by itself. Efficiency claims require at
+  least three comparable human sessions or an approved equivalent protocol.
