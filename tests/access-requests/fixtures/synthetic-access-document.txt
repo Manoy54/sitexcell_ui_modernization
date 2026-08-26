@@ -1,0 +1,2 @@
+Synthetic Access Request test document.
+This file contains no production data and is used only for approved test automation.
