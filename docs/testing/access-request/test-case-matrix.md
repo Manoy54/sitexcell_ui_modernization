@@ -132,3 +132,15 @@ URL, commit, synthetic run ID, expected/observed state, stopping point, first
 failure, retry outcome if any, sanitized evidence, finding/recommendation links,
 and final-submission-guard state. Raw authentication state, traces, and entered
 form values remain local and ignored.
+
+## Revalidation update (2026-08-26)
+
+The refreshed authenticated run supersedes the earlier authentication-block
+snapshot for the implemented core slice:
+
+- `TC-AR-001`, `TC-AR-002`, `TC-AR-003`, and `TC-AR-004` passed.
+- `TC-AR-002` now covers synthetic traversal through Steps 1–4 and stops before
+  the required Step 4 qualification upload.
+- `TC-AR-005`, `TC-AR-006`, and all branch, recovery, upload, reuse,
+  accessibility, efficiency, and cross-workflow cases remain unimplemented or
+  awaiting their approved execution wave.

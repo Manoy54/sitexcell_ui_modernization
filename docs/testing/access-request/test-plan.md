@@ -123,7 +123,8 @@ Generic browser setup, artifact handling, safe guards, and measurement primitive
 Implemented initial slice:
 
 - core Playwright configuration and authenticated-session runner;
-- `TC-AR-001`, `TC-AR-003`, and `TC-AR-004`;
+- `TC-AR-001`, `TC-AR-002`, `TC-AR-003`, and `TC-AR-004`;
+- synthetic baseline traversal through the Step 4 required-upload boundary;
 - Step 8 locator and network submission guards;
 - deterministic synthetic run identifiers;
 - local unit coverage for the guard and identifier contract.
