@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "status": "blocked",
+  "capturedAt": "2026-08-29T10:58:11.631Z",
+  "targetUrl": "https://co-siter.com.au/access-requests/",
+  "landedUrl": "https://co-siter.com.au/",
+  "accountClassification": "approved authenticated session",
+  "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
+  "safety": {
+    "approvedBoundary": "Step 8 review; final submission prohibited",
+    "locatorGuardInstalled": true,
+    "networkGuardInstalled": true,
+    "finalSubmissionAttempted": false
+  },
+  "blocker": {
+    "id": "AUTH-AR-01",
+    "reason": "Expected /access-requests/ but landed on /."
+  },
+  "steps": [
+    {
+      "step": 5,
+      "fields": []
+    },
+    {
+      "step": 6,
+      "fields": []
+    },
+    {
+      "step": 7,
+      "fields": []
+    },
+    {
+      "step": 8,
+      "fields": []
+    }
+  ]
+}

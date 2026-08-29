@@ -38,3 +38,10 @@ Recommendations become prototype requirements only after evidence and business a
 ## Prioritization rules
 
 Prioritize correctness and safety first, then user/operational impact, evidence confidence, effort, and dependency readiness. Do not approve a recommendation that silently changes a business rule or data owner.
+
+## Current execution note — 2026-08-29
+
+No Step 5–8 product recommendation is approved from the current run. The live
+suite was blocked by `AUTH-AR-01` before dependent behavior executed. Restore an
+approved authenticated session, capture the real field map, and obtain
+reproducible case evidence before creating recommendation entries.

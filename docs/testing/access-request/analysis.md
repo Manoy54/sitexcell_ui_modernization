@@ -4,9 +4,11 @@ Analyzed URL: `https://co-siter.com.au/access-requests/`
 
 The page contains Gravity Form `gform_3`, an eight-step POST form. The final
 submission control is `#gform_submit_button_3` and is present only on Step 8.
-The automated test never navigates beyond Step 4. Gravity Forms uses POST for
-normal transitions between steps, so the network guard allows those transitions
-but blocks any final submission originating from Step 8.
+The core baseline stops on Step 4. The implemented Steps 5–8 suite may navigate
+through the Step 8 review state after the authenticated field map is captured.
+Gravity Forms uses POST for normal transitions between steps, so the network
+guard allows those transitions but blocks any final submission originating from
+Step 8.
 
 ## Observed workflow
 
@@ -43,17 +45,19 @@ contact names, and non-deliverable `example.invalid` email addresses.
 
 - No Submit click is implemented.
 - Any final POST originating from Step 8 is aborted in the browser.
-- The test stops on Step 4 by intentionally verifying the mandatory upload
-  validation message.
-- No file is uploaded and Save and Continue Later is not clicked.
+- The core diagnostic baseline stops on Step 4.
+- The Steps 5–8 suite may use approved synthetic uploads and stop on Step 8 with
+  final Submit visible but untouched.
+- Save and Continue Later is not clicked.
 
-## Revalidation on 2026-08-26
+## Revalidation on 2026-08-29
 
-The available Playwright storage state and the connected Edge session were both
-checked against the documented URL. In both cases, requesting
-`/access-requests/` redirected to `/`, where `#gform_3` was not rendered. The
-core execution therefore stopped at the authentication/authorization preflight.
-No form values were entered and no submission was attempted.
+The 37-declaration Steps 5–8 configuration used the saved Playwright state and
+requested `/access-requests/`. It redirected to `/`, where `#gform_3` was not
+rendered. A visible refresh attempt also timed out before the form appeared. The
+run therefore stopped at the authentication/authorization preflight; 36
+dependent declarations did not run. No form values were entered and no
+submission was attempted.
 
 This is classified as `BLOCKED`, not as a product defect or a passing test. The
 current evidence does not distinguish an expired/invalid test session from a
@@ -62,9 +66,9 @@ required before live behavior can be characterized again.
 
 ## Plan reconciliation
 
-- The approved automated boundary is Step 4, while `TC-AR-006` asks for the
-  Step 8 ready-to-submit state. `TC-AR-006` is blocked until a later boundary is
-  explicitly approved; the network guard is not approval to traverse Steps 5-8.
+- The approved automated boundary is now the Step 8 review state. `TC-AR-006`
+  is implemented but remains blocked by authentication and the uncaptured field
+  map. The network guard remains a fail-safe and never authorizes submission.
 - The original case matrix omitted the one-click copy cases (`TC-AR-C*` and
   `TC-AR-E10`) already required by `access-request.md`, and did not assign IDs
   to branch, recovery, upload-state, accessibility, or responsive coverage.

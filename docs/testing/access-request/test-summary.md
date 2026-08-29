@@ -1,62 +1,112 @@
 # Access Requests Test Summary
 
-Status: Core authenticated slice executed successfully; approved expansion cases remain to be implemented.
+Status: Steps 5–8 automation is implemented; live execution is blocked by the current authenticated session.
 
-## Run metadata
+## Current implementation
 
-- Test period: 2026-08-26
-- Repository commit: `9ab6421` plus the current Site-derived assertion correction
-- Target URL: `https://co-siter.com.au/access-requests/`
-- Browser and viewport: Microsoft Edge, Playwright headless default viewport
-- Test account classification: approved authenticated session
-- Test Site: `The CRM Carpenters Test`
-- Safety boundary: Step 4 after synthetic contractor details and qualification upload; final Submit blocked in DOM and network layers
+- Approved matrix: 64 cases.
+- Executable cases: 40.
+- Remaining planned cases without executable declarations: 24.
+- Core implementation: `TC-AR-001`–`TC-AR-006`.
+- Steps 5–8 implementation: 36 cases across conditional branches, recovery,
+  uploads, document context, efficiency, accessibility, and responsive behavior.
+- Steps 5–8 Playwright run size: 37 declarations including the authentication
+  preflight dependency.
+- Unit coverage: 17 tests for run IDs, final-submission guards, result
+  consolidation/sanitization, case catalog integrity, field-map rendering, and
+  deterministic synthetic field values.
 
-## Results
+## Latest live run
 
-| Suite/wave | Passed | Failed | Blocked | Inconclusive | Not applicable |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Core | 3 | 0 | 0 | 0 | 0 |
-| Conditional and validation | 0 | 0 | 0 | 0 | 0 |
-| Recovery and documents | 0 | 0 | 0 | 0 | 0 |
-| Accessibility and responsive | 0 | 0 | 0 | 0 | 0 |
-| Efficiency and cross-workflow | 0 | 0 | 0 | 0 | 0 |
+- Run ID: `test-The-CRM-Carpenters-000041-20260829T111406111Z`.
+- Date: 2026-08-29.
+- Target: `https://co-siter.com.au/access-requests/`.
+- Result: `BLOCKED` by `AUTH-AR-01`.
+- Observed route: `https://co-siter.com.au/`.
+- Executed: 1 authentication preflight.
+- Dependent cases not run: 36.
+- Product failures: 0 established.
+- Final submission attempts: 0.
+- Consolidated result counts: 37 declared/implemented, 1 executed, 37
+  classified `BLOCKED`, 0 passed, 0 failed.
 
-## Highest-priority findings
+The target redirected to `/` and did not render `#gform_3`. This is an
+authentication/authorization prerequisite failure, not an Access Request product
+defect. A visible refresh attempt also timed out before the authenticated form
+became available.
 
-The documented building-context expectation was corrected after observation: the
-Site selection populates hidden field `input_3_9` during the Step 1 to Step 2
-transition; it does not render the address as visible text on Step 1.
+## Previous successful evidence
 
-`TC-AR-002` now populates the visible Step 4 contractor details and the approved
-synthetic qualification document. The custom uploader displays the selected file
-in its UI; the Step 4 Next button is not clicked.
+The refreshed authenticated run on 2026-08-26 remains the latest successful core
+behavior evidence:
 
-## Approved recommendations
+- `TC-AR-001` passed the authenticated Step 1 preflight.
+- `TC-AR-002` reached Step 4 with synthetic contractor details and qualification
+  upload.
+- `TC-AR-003` confirmed the Site-derived hidden building context.
+- `TC-AR-004` confirmed empty Step 1 validation.
+- No final submission was attempted.
 
-Link to `recommendations.md` entries after business review.
+That historical 4/4 result does not override the current `AUTH-AR-01` blocker.
+
+## Steps 5–8 coverage implemented
+
+| Family | Executable cases | Current live status |
+| --- | ---: | --- |
+| Core navigation and pre-submit | 2 | Blocked by authentication/field-map prerequisite |
+| Conditional branches | 4 | Blocked by authentication/field-map prerequisite |
+| Recovery | 4 | Implemented; current run blocked by authentication; draft lifecycle remains explicitly blocked |
+| Uploads | 7 | Live cases blocked; size/failure cases retain explicit rule/staging gates |
+| Document context | 4 | Live cases blocked; saved-document authority decisions remain explicit |
+| Efficiency | 10 | Live evidence blocked; copy/human protocol remains explicitly blocked |
+| Accessibility and responsive | 5 | Blocked by authentication/field-map prerequisite |
+
+## Evidence and reporting
+
+- Raw Playwright report:
+  `.test-artifacts/playwright/access-request-steps-5-8-results.json`.
+- Archived raw report:
+  `.test-artifacts/playwright/history/test-The-CRM-Carpenters-000041-20260829T111406111Z-steps-5-8.json`.
+- Local consolidated report:
+  `.test-artifacts/playwright/access-request-results.json`.
+- Sanitized committed report: [`access-request-results.json`](./access-request-results.json).
+- Field-map JSON: [`steps-5-8-field-map.json`](./steps-5-8-field-map.json).
+- Field-map summary: [`steps-5-8-field-map.md`](./steps-5-8-field-map.md).
+
+The field-map capture is currently `BLOCKED` and contains no guessed Step 5–8
+selectors. Once authentication is restored, `npm run
+test:access:capture:steps-5-8` captures the real fields before live behavior
+assertions execute.
+
+## Findings and recommendations
+
+No Step 5–8 product finding or recommendation is approved from the blocked run.
+The result contract supports linked findings and recommendations, but those
+collections remain empty until reproducible live evidence exists.
 
 ## Prototype gate
 
-- Core coverage complete: No — `TC-AR-001` blocked by `AUTH-AR-01`; dependent
-  `TC-AR-003` and `TC-AR-004` did not run
-- Relevant branch coverage complete: No
-- Validation/recovery/upload evidence complete: No
-- Accessibility/responsive evidence complete: No
-- Efficiency evidence complete: No
-- Business approvals complete: Yes (recorded in the execution thread)
-- Prototype approved: No
+- Core implementation complete: Yes.
+- Latest core execution available: No — `AUTH-AR-01`.
+- Steps 5–8 implementation complete: Yes for the approved 36-case scope.
+- Steps 5–8 live evidence complete: No.
+- Field/branch map complete: No — `AUTH-AR-01`.
+- Upload restrictions verified: No.
+- Accessibility/responsive evidence complete: No.
+- Efficiency evidence complete: No.
+- Prototype implementation authorized: No.
+- Prototype approved: No.
 
-## Open risks and decisions
+## Required next action
 
-- `AUTH-AR-01`: refreshed session is valid for the current run; refresh again if
-  the form redirects to the home page.
-- `BOUNDARY-AR-01`: Steps 5–8 and synthetic uploads are approved, but the
-  corresponding expansion cases are not yet implemented.
-- Confirm the exact field/option/branch map after authentication is restored.
-- Upload types, limits, synthetic fixtures, and traversal boundary are approved;
-  confirm the live field-level restrictions while implementing the upload wave.
-- Person/document ownership, validity, editability, and provenance rules are
-  approved; implement reuse cases against synthetic records only.
-- The shared Site mapping is approved; cross-workflow assertions still need their
-  fixture adapter.
+Refresh an approved account/session that can render
+`https://co-siter.com.au/access-requests/`, then run:
+
+```powershell
+npm run test:access:capture:steps-5-8
+npm run test:access:live:steps-5-8
+```
+
+Review focused failures before claiming a full pass. The suite must not bypass the
+field-map gate, weaken final-submission guards, or classify skipped dependent
+cases as passed.

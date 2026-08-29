@@ -29,6 +29,8 @@ test('TC-AR-001 opens the authenticated Access Request without submitting', asyn
         observed: availability.reason,
         stoppingPoint: 'Authentication/authorization preflight',
         finalSubmissionAttempted: await wasFinalSubmissionAttempted(),
+        blockerId: 'AUTH-AR-01',
+        blockerReason: availability.reason,
         extra: { testSite: TEST_SITE },
       });
       throw new AccessRequestBlockedError(

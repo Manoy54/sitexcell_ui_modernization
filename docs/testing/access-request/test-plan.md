@@ -20,12 +20,15 @@ The current analysis identifies:
 - Final control: `#gform_submit_button_3`, present on Step 8
 - Dedicated test Site: `The CRM Carpenters Test`
 - Dedicated test building: `The CRM Carpenters Test Building, Redbank, QLD, 4301`
-- Current safe boundary: stop at Step 4 after synthetic contractor details and qualification upload validation
+- Current safe boundary: Step 8 review with final Submit visible but untouched;
+  locator and network guards prohibit final submission
 - Final submission: prohibited in all automated runs
 
-Current execution note (2026-08-26): the available authenticated states redirect
-the target URL to the Co-Siter home page without rendering `#gform_3`. Live
-cases are blocked by `AUTH-AR-01` until the approved test session is refreshed.
+Current execution note (2026-08-29): the 37-declaration Steps 5–8 suite is
+implemented, but the latest guarded run redirected the target URL to the Co-Siter
+home page without rendering `#gform_3`. `AUTH-AR-01` blocked the preflight and 36
+dependent declarations did not run. The 2026-08-26 4/4 core pass remains the
+latest successful behavior evidence, not the current session state.
 
 The eight observed areas are:
 
@@ -54,9 +57,9 @@ Every live run MUST:
 
 The test suite is a characterization tool, not a production submission client. No test may click the final Submit control or allow a final Step 8 POST to complete.
 
-The network guard is a fail-safe, not permission to traverse beyond the approved
-boundary. The current approved boundary remains Step 4 required-upload
-validation. Step 5–8 and file-upload cases require separate boundary approval.
+The network guard is a fail-safe, not permission to submit. The approved boundary
+now permits traversal through the Step 8 review state and synthetic uploads, but
+final Submit must remain untouched and the final Step 8 POST must be blocked.
 
 ## 4. Scope boundaries
 
@@ -90,15 +93,24 @@ Access Requests remain separate from LAAN tests while sharing only generic utili
 tests/access-requests/
 ├── configs/
 │   ├── playwright.live.config.js
-│   └── playwright.wave2.config.js
+│   └── playwright.steps-5-8.config.js
 ├── fixtures/
-│   ├── synthetic-access-document.txt
-│   └── synthetic-invalid-document.txt
+│   ├── access-request-baseline.js
+│   ├── synthetic-access-document.pdf
+│   ├── synthetic-access-document-replacement.pdf
+│   └── synthetic-access-document.txt
 ├── live/
 │   ├── core/
-│   └── wave2/
+│   └── steps-5-8/
 └── support/
+    ├── access-request-path.js
+    ├── case-catalog.js
+    ├── consolidate-results.mjs
+    ├── field-map.js
     ├── form-helpers.js
+    ├── live-case.js
+    ├── required-controls.js
+    ├── results.js
     ├── selectors.js
     ├── session.js
     ├── safety-guards.js
@@ -109,8 +121,12 @@ Documentation is separated by evidence stage:
 
 ```text
 docs/testing/access-request/
+├── access-request-results.json
 ├── analysis.md
 ├── access-request.md
+├── steps-5-8-field-map.json
+├── steps-5-8-field-map.md
+├── steps-5-8-test-implementation-plan.md
 ├── test-plan.md
 ├── test-case-matrix.md
 ├── findings.md
@@ -129,9 +145,22 @@ Implemented initial slice:
 - deterministic synthetic run identifiers;
 - local unit coverage for the guard and identifier contract.
 
-The Wave 2 configuration and live cases are intentionally deferred until the
-authenticated field/branch map and later boundary are approved. Empty files or
-speculative selectors are not treated as implementation progress.
+Implemented Steps 5–8 slice:
+
+- a dedicated guarded Playwright configuration with 36 stable case declarations
+  plus the authentication preflight;
+- deterministic shared traversal and synthetic fixture helpers;
+- conditional, navigation, recovery, upload, document, efficiency,
+  accessibility, responsive, and Step 8 pre-submit coverage;
+- authenticated field-map capture with an explicit no-guess gate;
+- a versioned consolidated result contract with blocker, finding,
+  recommendation, and safety records;
+- sanitization and committed machine-readable results; and
+- unit coverage for result aggregation, sanitization, catalog integrity,
+  field-map rendering, and synthetic values.
+
+The current field map is intentionally `BLOCKED` by `AUTH-AR-01`; its Step 5–8
+field arrays remain empty rather than containing speculative selectors.
 
 ## 6. Test waves
 
@@ -145,9 +174,9 @@ speculative selectors are not treated as implementation progress.
 - `TC-AR-005` — Preserve entered values while navigating.
 - `TC-AR-006` — Reach a valid pre-submit state without submitting.
 
-`TC-AR-006` is currently blocked because the valid pre-submit state is Step 8,
-outside the approved Step 4 boundary. It must not be enabled merely because a
-network guard exists.
+`TC-AR-005` and `TC-AR-006` are implemented. Their latest execution is blocked
+because the approved authenticated form is unavailable, not because Step 8 is
+outside the approved boundary.
 
 ### Wave 2 — Conditional logic and validation
 

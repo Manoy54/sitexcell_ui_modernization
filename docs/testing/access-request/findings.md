@@ -43,3 +43,11 @@ This is the canonical evidence-backed findings register. Do not add a recommenda
 - Preserve every affected test-case reference.
 - Keep raw reports and authenticated artifacts out of this file.
 - Sanitize screenshots, copied values, and notes before committing.
+
+## Current execution note — 2026-08-29
+
+The 37-declaration Steps 5–8 run was blocked at `TC-AR-001` because the target
+redirected to `/` and did not render `#gform_3`. This is recorded as
+`AUTH-AR-01`, not as a product finding. The 36 dependent declarations did not
+run, so no Step 5–8 defect or friction finding is supported by the current
+evidence. Final submission attempts remained zero.

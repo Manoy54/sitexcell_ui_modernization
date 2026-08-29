@@ -9,9 +9,14 @@ export const TEST_BUILDING = process.env.ACCESS_TEST_BUILDING
   ?? 'The CRM Carpenters Test Building, Redbank, QLD, 4301';
 
 export class AccessRequestBlockedError extends Error {
-  constructor(message) {
+  constructor(message, {
+    blockerId = 'AUTH-AR-01',
+    blockerReason = message,
+  } = {}) {
     super(message);
     this.name = 'AccessRequestBlockedError';
+    this.blockerId = blockerId;
+    this.blockerReason = blockerReason;
   }
 }
 
@@ -62,7 +67,8 @@ export async function testEnvironment(page) {
     url: page.url(),
     commit: process.env.ACCESS_COMMIT
       ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
-    configuration: 'tests/access-requests/configs/playwright.live.config.js',
+    configuration: process.env.ACCESS_CONFIG_FILE
+      ?? 'tests/access-requests/configs/playwright.live.config.js',
   };
 }
 
@@ -112,26 +118,50 @@ export async function attachCaseResult(testInfo, page, {
   stoppingPoint,
   finalSubmissionAttempted,
   firstFailure = null,
+  suiteWave = 'Core',
+  step = null,
+  branch = null,
+  blockerId = null,
+  blockerReason = null,
+  retryOutcome = null,
+  findingIds = [],
+  recommendationIds = [],
   extra = {},
 }) {
   const evidenceName = `${caseId}.json`;
   await attachJson(testInfo, evidenceName, {
     caseId,
-    suiteWave: 'Core',
+    suiteWave,
     resultType,
     status,
+    step,
+    branch,
     durationMs: Date.now() - startedAt,
     environment: await testEnvironment(page),
+    ...extra,
     expected,
     observed,
+    startingPoint: 'Authenticated Access Request Step 1',
     firstFailure,
+    retryOutcome,
     evidence: [evidenceName],
-    findingIds: [],
-    recommendationIds: [],
+    findingIds,
+    recommendationIds,
+    blockerId,
+    blockerReason,
     runId: process.env.ACCESS_RUN_ID ?? null,
     stoppingPoint,
+    locatorGuardInstalled: true,
+    networkGuardInstalled: true,
+    finalSubmitClicked: false,
     finalSubmissionAttempted,
+    finalSubmissionCompleted: false,
+    syntheticDataPolicySatisfied: true,
+    fixture: {
+      version: 1,
+      profile: 'synthetic-access-request',
+      runId: process.env.ACCESS_RUN_ID ?? null,
+    },
     capturedAt: new Date().toISOString(),
-    ...extra,
   });
 }

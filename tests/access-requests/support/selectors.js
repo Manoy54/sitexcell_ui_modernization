@@ -24,3 +24,7 @@ export const STEP = Object.freeze({
 export function nextButton(page, stepNumber) {
   return page.locator(`${STEP[stepNumber]} .gform_next_button`).first();
 }
+
+export function previousButton(page, stepNumber) {
+  return page.locator(`${STEP[stepNumber]} .gform_previous_button`).first();
+}

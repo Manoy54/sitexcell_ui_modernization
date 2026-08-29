@@ -3,7 +3,11 @@ param(
     [switch]$NoReport,
     [switch]$ShowBrowser,
     [int]$SlowMo = 250,
-    [string]$TestFile
+    [string]$TestFile,
+    [string]$ConfigFile = 'tests/access-requests/configs/playwright.live.config.js',
+    [string]$ReportFile = 'access-request-core-results.json',
+    [string]$SuiteLabel = 'core',
+    [int]$PlannedCaseCount = 4
 )
 
 $ErrorActionPreference = 'Stop'
@@ -15,6 +19,7 @@ $runContext = & node.exe 'tests/access-requests/support/create-run-context.mjs' 
 $env:ACCESS_RUN_ID = $runContext.identifier
 $env:ACCESS_RUN_STARTED_AT = [DateTimeOffset]::Now.ToString('o')
 $env:ACCESS_COMMIT = (& git.exe rev-parse HEAD).Trim()
+$env:ACCESS_CONFIG_FILE = $ConfigFile
 Write-Host "Run ID: $($env:ACCESS_RUN_ID)"
 
 $storageStatePath = Join-Path $projectRoot '.auth\access-request-storage-state.json'
@@ -35,22 +40,41 @@ if (-not $useCdpSession) {
 $env:ACCESS_HEADED = if ($ShowBrowser) { 'true' } else { 'false' }
 $env:ACCESS_SLOW_MO = if ($ShowBrowser) { [string]$SlowMo } else { '0' }
 New-Item -ItemType Directory -Path (Join-Path $projectRoot '.test-artifacts\playwright\history') -Force | Out-Null
+$reportDirectory = Join-Path $projectRoot '.test-artifacts\playwright'
+if (-not [string]::IsNullOrWhiteSpace($TestFile)) {
+    $ReportFile = "access-request-$SuiteLabel-focused-results.json"
+}
+$reportPath = Join-Path $reportDirectory $ReportFile
+$env:ACCESS_REPORT_PATH = $reportPath
 
 $arguments = @(
     'playwright',
     'test',
-    '--config=tests/access-requests/configs/playwright.live.config.js'
+    "--config=$ConfigFile"
 )
 if (-not [string]::IsNullOrWhiteSpace($TestFile)) { $arguments += $TestFile }
 
 & npx.cmd @arguments
 $testExitCode = $LASTEXITCODE
 
-$reportPath = Join-Path $projectRoot '.test-artifacts\playwright\access-request-core-results.json'
 $historyDirectory = Join-Path $projectRoot '.test-artifacts\playwright\history'
 if (Test-Path -LiteralPath $reportPath) {
-    Copy-Item -LiteralPath $reportPath -Destination (Join-Path $historyDirectory "$($runContext.identifier).json") -Force
-    Write-Host "Archived report: .test-artifacts/playwright/history/$($runContext.identifier).json"
+    $historyName = "$($runContext.identifier)-$SuiteLabel.json"
+    Copy-Item -LiteralPath $reportPath -Destination (Join-Path $historyDirectory $historyName) -Force
+    Write-Host "Archived report: .test-artifacts/playwright/history/$historyName"
+
+    $consolidateArguments = @(
+        'tests/access-requests/support/consolidate-results.mjs',
+        "--report=$reportPath",
+        "--planned-cases=$PlannedCaseCount"
+    )
+    if (-not [string]::IsNullOrWhiteSpace($TestFile)) {
+        $focusedOutput = Join-Path $reportDirectory "access-request-$SuiteLabel-focused-consolidated.json"
+        $consolidateArguments += "--local-output=$focusedOutput"
+        $consolidateArguments += "--committed-output=$focusedOutput"
+    }
+    & node.exe @consolidateArguments
+    if ($LASTEXITCODE -ne 0 -and $testExitCode -eq 0) { $testExitCode = $LASTEXITCODE }
 }
 
 if (-not $NoReport) {
