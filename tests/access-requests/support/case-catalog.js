@@ -58,6 +58,88 @@ export const STEPS_5_TO_8_CASE_IDS = Object.freeze([
   'TC-AR-A05',
 ]);
 
+export const IMPLEMENTED_ACCESS_CASE_IDS = Object.freeze([
+  'TC-AR-001',
+  'TC-AR-002',
+  'TC-AR-003',
+  'TC-AR-004',
+  ...STEPS_5_TO_8_CASE_IDS,
+]);
+
+const LIVE_CASE_FILE_GROUPS = Object.freeze({
+  'live/access-request/00-authentication-preflight.setup.js': Object.freeze(['TC-AR-001']),
+  'live/access-request/behaviors/entry-validation-and-context.spec.js': Object.freeze([
+    'TC-AR-002', 'TC-AR-003', 'TC-AR-004',
+  ]),
+  'live/access-request/journeys/navigation-persistence.spec.js': Object.freeze(['TC-AR-005']),
+  'live/access-request/journeys/complete-review-path.spec.js': Object.freeze(['TC-AR-006']),
+  'live/access-request/behaviors/conditional-branches.spec.js': Object.freeze([
+    'TC-AR-B03', 'TC-AR-B05', 'TC-AR-B06', 'TC-AR-B08',
+  ]),
+  'live/access-request/behaviors/navigation-and-recovery.spec.js': Object.freeze([
+    'TC-AR-R01', 'TC-AR-R02', 'TC-AR-R03',
+  ]),
+  'live/access-request/behaviors/decision-gates.spec.js': Object.freeze([
+    'TC-AR-D01', 'TC-AR-D02', 'TC-AR-U07', 'TC-AR-E10', 'TC-AR-R04',
+  ]),
+  'live/access-request/behaviors/documents-and-uploads.spec.js': Object.freeze([
+    'TC-AR-D03', 'TC-AR-D04', 'TC-AR-U01', 'TC-AR-U02', 'TC-AR-U03', 'TC-AR-U04',
+    'TC-AR-U05', 'TC-AR-U06',
+  ]),
+  'live/access-request/quality/efficiency.spec.js': Object.freeze([
+    'TC-AR-E01', 'TC-AR-E02', 'TC-AR-E03', 'TC-AR-E04', 'TC-AR-E05', 'TC-AR-E06',
+    'TC-AR-E07', 'TC-AR-E08', 'TC-AR-E09',
+  ]),
+  'live/access-request/quality/accessibility-and-responsive.spec.js': Object.freeze([
+    'TC-AR-A01', 'TC-AR-A02', 'TC-AR-A03', 'TC-AR-A04', 'TC-AR-A05',
+  ]),
+});
+
+export const ACCESS_LIVE_CASE_FILE_MAP = Object.freeze(
+  Object.fromEntries(
+    Object.entries(LIVE_CASE_FILE_GROUPS).flatMap(([file, caseIds]) => caseIds.map((caseId) => [caseId, file])),
+  ),
+);
+
+function metadataForGroup(caseIds, metadata) {
+  return caseIds.map((caseId) => [caseId, Object.freeze({ ...metadata })]);
+}
+
+const ACCESS_CASE_METADATA = Object.fromEntries([
+  ...metadataForGroup(['TC-AR-001'], {
+    capability: 'functional', executionMode: 'smoke', risk: 'medium', prerequisites: ['authenticated-session'],
+  }),
+  ...metadataForGroup(['TC-AR-002', 'TC-AR-003', 'TC-AR-004'], {
+    capability: 'functional', executionMode: 'focused', risk: 'medium', prerequisites: ['authenticated-session'],
+  }),
+  ...metadataForGroup(['TC-AR-005', 'TC-AR-006'], {
+    capability: 'journey', executionMode: 'e2e', risk: 'high', prerequisites: ['authenticated-session', 'captured-field-map'],
+  }),
+  ...metadataForGroup(['TC-AR-B03', 'TC-AR-B05', 'TC-AR-B06', 'TC-AR-B08'], {
+    capability: 'conditional', executionMode: 'focused', risk: 'high', prerequisites: ['authenticated-session', 'captured-field-map'],
+  }),
+  ...metadataForGroup(['TC-AR-D03', 'TC-AR-D04', 'TC-AR-U01', 'TC-AR-U02', 'TC-AR-U03', 'TC-AR-U04', 'TC-AR-U05', 'TC-AR-U06'], {
+    capability: 'documents', executionMode: 'focused', risk: 'high', prerequisites: ['authenticated-session', 'captured-field-map', 'synthetic-fixtures'],
+  }),
+  ...metadataForGroup(['TC-AR-R01', 'TC-AR-R02', 'TC-AR-R03'], {
+    capability: 'recovery', executionMode: 'focused', risk: 'high', prerequisites: ['authenticated-session', 'captured-field-map'],
+  }),
+  ...metadataForGroup(['TC-AR-E01', 'TC-AR-E02', 'TC-AR-E03', 'TC-AR-E04', 'TC-AR-E05', 'TC-AR-E06', 'TC-AR-E07', 'TC-AR-E08', 'TC-AR-E09'], {
+    capability: 'efficiency', executionMode: 'focused', risk: 'medium', prerequisites: ['authenticated-session', 'captured-field-map', 'measurement-fixture'],
+  }),
+  ...metadataForGroup(['TC-AR-A01', 'TC-AR-A02', 'TC-AR-A03', 'TC-AR-A04', 'TC-AR-A05'], {
+    capability: 'quality', executionMode: 'focused', risk: 'medium', prerequisites: ['authenticated-session', 'captured-field-map'],
+  }),
+  ...metadataForGroup(['TC-AR-D01', 'TC-AR-D02', 'TC-AR-U07', 'TC-AR-E10', 'TC-AR-R04'], {
+    capability: 'decision-gate', executionMode: 'gated', risk: 'high', prerequisites: ['authenticated-session', 'approved-prerequisite'],
+  }),
+]);
+
+export function caseMetadataForCase(caseId) {
+  const metadata = ACCESS_CASE_METADATA[caseId];
+  return metadata ? { ...metadata, testFile: ACCESS_LIVE_CASE_FILE_MAP[caseId] ?? null } : null;
+}
+
 export const ACCESS_CASE_STEP_COVERAGE = Object.freeze({
   'TC-AR-001': Object.freeze([1]),
   'TC-AR-002': Object.freeze([1, 2, 3, 4]),

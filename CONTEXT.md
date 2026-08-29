@@ -171,3 +171,29 @@ _Avoid_: CSS selector, Gravity Forms ID
 **Original field mapping**:
 The retained `data-original-id` value that maps a modernized control to its existing Gravity Forms field identity for future integration.
 _Avoid_: implementation selector
+
+## Access Request test domain
+
+**Access Request test case**:
+A named, independently evidenced check of one Access Request behavior identified by a stable case ID.
+_Avoid_: test file, step test
+
+**Test journey**:
+A reusable path through the Access Request workflow that prepares a controlled state for one or more test cases.
+_Avoid_: test case, fixture
+
+**Test capability**:
+A coherent behavior family under evaluation, such as documents, recovery, conditional behavior, or accessibility.
+_Avoid_: step group, test folder
+
+**Coverage boundary**:
+The declared workflow entry point, covered steps, and stopping point for a test case.
+_Avoid_: current page, last step
+
+**Prerequisite blocker**:
+A missing authorization, field map, decision, fixture, control, or protocol that prevents a test case from being honestly executed.
+_Avoid_: test failure, skipped pass
+
+**Decision-gated case**:
+A test case whose execution depends on an approved product, governance, staging, or human-measurement decision.
+_Avoid_: incomplete test, optional test

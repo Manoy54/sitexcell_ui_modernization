@@ -2,32 +2,24 @@ import assert from 'node:assert/strict';
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 
-import { accessCaseTitle } from '../../support/case-catalog.js';
-import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
+import { accessCaseTitle } from '../../../support/case-catalog.js';
 import {
   AccessRequestBlockedError,
   openAccessRequestForm,
   visibleValidationMessages,
-} from '../../support/form-helpers.js';
-import { requireCapturedStepsFieldMap } from '../../support/field-map-gate.js';
-import { runLiveAccessCase } from '../../support/live-case.js';
+} from '../../../support/form-helpers.js';
+import { requireCapturedStepsFieldMap } from '../../../support/field-map-gate.js';
+import { runLiveAccessCase } from '../../../support/live-case.js';
 import {
   clearOneCompletedRequiredControl,
   completeStepAndAdvance,
   completeVisibleRequiredControls,
-} from '../../support/required-controls.js';
-import { previousButton, STEP, nextButton } from '../../support/selectors.js';
-import { snapshotStepState } from '../../support/step-state.js';
+} from '../../../support/required-controls.js';
+import { previousButton, STEP, nextButton } from '../../../support/selectors.js';
+import { snapshotStepState } from '../../../support/step-state.js';
+import { reachStep } from '../../../support/journeys/access-request-journeys.js';
 
 const uploadPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
-
-async function reachStep(page, targetStep) {
-  await completeBaselineThroughStep4(page);
-  await advanceFromStep(page, 4);
-  for (let step = 5; step < targetStep; step += 1) {
-    await completeStepAndAdvance(page, step, { uploadPath });
-  }
-}
 
 test(accessCaseTitle('TC-AR-R01', 'preserves Step 5–7 values through Back and Next'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
@@ -140,23 +132,5 @@ test(accessCaseTitle('TC-AR-R03', 'preserves unrelated state while correcting la
       stoppingPoint: 'Step 8 after validation correction',
       extra: { corrections },
     };
-  });
-});
-
-test(accessCaseTitle('TC-AR-R04', 'remains blocked until the draft lifecycle is approved'), async ({}, testInfo) => {
-  await runLiveAccessCase(testInfo, {
-    caseId: 'TC-AR-R04',
-    resultType: 'Decision',
-    expected: 'Save and Continue Later has approved ownership, expiry, privacy, restore, and discard rules before execution.',
-    step: 8,
-    branch: 'save-and-continue-later',
-  }, async () => {
-    throw new AccessRequestBlockedError(
-      'Save and Continue Later execution requires an approved draft data lifecycle.',
-      {
-        blockerId: 'DECISION-AR-DRAFT',
-        blockerReason: 'Draft ownership, expiry, privacy, restore, and discard rules are not approved.',
-      },
-    );
   });
 });

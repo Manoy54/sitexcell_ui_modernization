@@ -227,11 +227,19 @@ test('consolidates Playwright evidence without treating a partial run as complet
   assert.equal(result.run.runId, caseWithEnvironment.runId);
   assert.equal(
     result.run.configuration,
-    'tests/access-requests/configs/playwright.steps-1-8.config.js',
+    'tests/access-requests/configs/playwright.access-request.config.js',
   );
   assert.equal(
     result.cases[0].environment.configuration,
-    'tests/access-requests/configs/playwright.steps-1-8.config.js',
+    'tests/access-requests/configs/playwright.access-request.config.js',
+  );
+  assert.equal(result.cases[0].capability, 'journey');
+  assert.equal(result.cases[0].executionMode, 'e2e');
+  assert.equal(result.cases[0].risk, 'high');
+  assert.deepEqual(result.cases[0].prerequisites, ['authenticated-session', 'captured-field-map']);
+  assert.equal(
+    result.cases[0].testFile,
+    'live/access-request/journeys/complete-review-path.spec.js',
   );
   assert.deepEqual(result.cases[0].coveredSteps, [1, 2, 3, 4, 5, 6, 7, 8]);
   assert.equal(result.run.completedAt, '2026-08-29T00:01:00.000Z');

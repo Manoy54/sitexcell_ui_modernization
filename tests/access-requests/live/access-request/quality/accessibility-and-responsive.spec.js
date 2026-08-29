@@ -1,31 +1,26 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 
-import { accessCaseTitle } from '../../support/case-catalog.js';
-import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
+import { accessCaseTitle } from '../../../support/case-catalog.js';
 import {
   documentOverflow,
   keyboardReachability,
   reducedMotionViolations,
   unlabeledVisibleControls,
-} from '../../support/accessibility.js';
-import { requireCapturedStepsFieldMap } from '../../support/field-map-gate.js';
-import { runLiveAccessCase } from '../../support/live-case.js';
+} from '../../../support/accessibility.js';
+import { requireCapturedStepsFieldMap } from '../../../support/field-map-gate.js';
+import { runLiveAccessCase } from '../../../support/live-case.js';
 import {
   completeStepAndAdvance,
   completeVisibleRequiredControls,
-} from '../../support/required-controls.js';
-import { STEP } from '../../support/selectors.js';
+} from '../../../support/required-controls.js';
+import { STEP } from '../../../support/selectors.js';
+import { startAtStep5 } from '../../../support/journeys/access-request-journeys.js';
 
 const uploadPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 
-async function reachStep5(page) {
-  await completeBaselineThroughStep4(page);
-  await advanceFromStep(page, 4);
-}
-
 async function reachStep8(page, checkpoint = async () => {}) {
-  await reachStep5(page);
+  await startAtStep5(page, { uploadPath });
   for (const step of [5, 6, 7]) {
     await checkpoint(step);
     await completeStepAndAdvance(page, step, { uploadPath });

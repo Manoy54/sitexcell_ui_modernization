@@ -92,20 +92,28 @@ Access Requests remain separate from LAAN tests while sharing only generic utili
 ```text
 tests/access-requests/
 ├── configs/
-│   ├── playwright.live.config.js
-│   └── playwright.steps-1-8.config.js
+│   ├── playwright.access-request.config.js
+│   ├── playwright.live.config.js                 # compatibility alias
+│   └── playwright.steps-1-8.config.js            # compatibility alias
 ├── fixtures/
 │   ├── access-request-baseline.js
 │   ├── synthetic-access-document.pdf
 │   ├── synthetic-access-document-replacement.pdf
 │   └── synthetic-access-document.txt
 ├── live/
-│   └── steps-1-8/
+│   └── access-request/
+│       ├── 00-authentication-preflight.setup.js
+│       ├── journeys/
+│       ├── behaviors/
+│       └── quality/
 └── support/
     ├── access-request-path.js
+    ├── accessibility.js
     ├── case-catalog.js
+    ├── conditional-controls.js
     ├── consolidate-results.mjs
     ├── field-map.js
+    ├── field-map-gate.js
     ├── form-helpers.js
     ├── live-case.js
     ├── required-controls.js
@@ -113,7 +121,10 @@ tests/access-requests/
     ├── selectors.js
     ├── session.js
     ├── safety-guards.js
-    └── measurements.js
+    ├── step-state.js
+    ├── upload-controls.js
+    ├── measurements.js
+    └── journeys/access-request-journeys.js
 ```
 
 Documentation is separated by evidence stage:

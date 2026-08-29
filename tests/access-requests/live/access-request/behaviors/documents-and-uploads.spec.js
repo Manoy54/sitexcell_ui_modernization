@@ -1,21 +1,21 @@
 import { expect, test } from '@playwright/test';
+import { accessCaseTitle } from '../../../support/case-catalog.js';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { accessCaseTitle } from '../../support/case-catalog.js';
-import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
-import { AccessRequestBlockedError, visibleValidationMessages } from '../../support/form-helpers.js';
-import { requireCapturedStepsFieldMap } from '../../support/field-map-gate.js';
-import { runLiveAccessCase } from '../../support/live-case.js';
-import { completeStepAndAdvance, completeVisibleRequiredControls } from '../../support/required-controls.js';
-import { previousButton, STEP, nextButton } from '../../support/selectors.js';
-import { snapshotStepState } from '../../support/step-state.js';
+import { AccessRequestBlockedError, visibleValidationMessages } from '../../../support/form-helpers.js';
+import { requireCapturedStepsFieldMap } from '../../../support/field-map-gate.js';
+import { runLiveAccessCase } from '../../../support/live-case.js';
+import { completeVisibleRequiredControls } from '../../../support/required-controls.js';
+import { previousButton, STEP, nextButton } from '../../../support/selectors.js';
+import { snapshotStepState } from '../../../support/step-state.js';
+import { reachStep7 } from '../../../support/journeys/access-request-journeys.js';
 import {
   declaredMaximumBytes,
   relevantConfirmations,
   uploadSyntheticFile,
   visibleUploadFields,
-} from '../../support/upload-controls.js';
+} from '../../../support/upload-controls.js';
 
 const validFile = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 const replacementFile = path.resolve('tests/access-requests/fixtures/synthetic-access-document-replacement.pdf');
@@ -28,14 +28,6 @@ function paddedPdfBuffer(size) {
   const buffer = Buffer.alloc(size, 0x20);
   baseline.copy(buffer);
   return buffer;
-}
-
-async function reachStep7(page) {
-  await completeBaselineThroughStep4(page);
-  await advanceFromStep(page, 4);
-  await completeStepAndAdvance(page, 5, { uploadPath: validFile });
-  await completeStepAndAdvance(page, 6, { uploadPath: validFile });
-  await expect(page.locator(STEP[7])).toBeVisible();
 }
 
 async function requiredUploads(page) {
@@ -52,6 +44,35 @@ async function requiredUploads(page) {
   }
   return { uploads, required };
 }
+
+test(accessCaseTitle('TC-AR-D03', 'replaces a request document with explicit file identity evidence'), async ({}, testInfo) => {
+  await runLiveAccessCase(testInfo, {
+    caseId: 'TC-AR-D03',
+    resultType: 'Acceptance',
+    expected: 'Replacing a request document removes the previous file identity.',
+    step: 7,
+    branch: 'document-replacement',
+  }, async ({ page }) => {
+    requireCapturedStepsFieldMap();
+    await reachStep7(page);
+    const uploads = await visibleUploadFields(page, 7);
+    if (!uploads.length) {
+      throw new AccessRequestBlockedError('No visible Step 7 document input was available.', {
+        blockerId: 'UPLOAD-FIELD-AR-01',
+        blockerReason: 'No visible Step 7 document input was available.',
+      });
+    }
+    await uploadSyntheticFile(uploads[0], validFile);
+    const replacement = await uploadSyntheticFile(uploads[0], replacementFile);
+    expect(replacement).toHaveLength(1);
+    expect(replacement[0].name).toBe(path.basename(replacementFile));
+    return {
+      observed: 'The replacement document became the sole selected file.',
+      stoppingPoint: 'Step 7 after document replacement',
+      extra: { uploadId: uploads[0].inputId, replacement },
+    };
+  });
+});
 
 test(accessCaseTitle('TC-AR-U01', 'rejects a missing required Step 7 upload'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
@@ -298,21 +319,33 @@ test(accessCaseTitle('TC-AR-U06', 'removes a reviewed file and invalidates relat
     };
   });
 });
-
-test(accessCaseTitle('TC-AR-U07', 'records controlled upload failure as blocked until staging controls exist'), async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-D04', 'characterizes request-specific supporting documents'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
-    caseId: 'TC-AR-U07',
-    resultType: 'Acceptance',
-    expected: 'A controlled upload failure can be retried without losing unrelated state.',
+    caseId: 'TC-AR-D04',
+    resultType: 'Characterization',
+    expected: 'Request-specific supporting document fields are identified separately from saved-document sources.',
     step: 7,
-    branch: 'controlled-upload-failure',
-  }, async () => {
-    throw new AccessRequestBlockedError(
-      'Controlled upload failure execution requires approved staging or fault-injection controls.',
-      {
-        blockerId: 'UPLOAD-STAGING-AR-01',
-        blockerReason: 'Approved staging or upload fault-injection controls are unavailable.',
+    branch: 'request-specific-document',
+  }, async ({ page }) => {
+    requireCapturedStepsFieldMap();
+    await reachStep7(page);
+    const uploads = await visibleUploadFields(page, 7);
+    const requestSpecific = uploads.filter((upload) => /additional|request|support|other/i.test(upload.label ?? ''));
+    if (!requestSpecific.length) {
+      throw new AccessRequestBlockedError('No request-specific document field was identified in the captured branch.', {
+        blockerId: 'DOCUMENT-UI-AR-01',
+        blockerReason: 'The request-specific document UI is absent or not identified in the captured branch.',
+      });
+    }
+    const evidence = [];
+    for (const upload of requestSpecific) evidence.push(...await uploadSyntheticFile(upload, validFile));
+    return {
+      observed: `${requestSpecific.length} request-specific document fields were identified and populated with synthetic evidence.`,
+      stoppingPoint: 'Step 7 request-specific document characterization',
+      extra: {
+        fields: requestSpecific.map(({ inputId, label, required, accept }) => ({ inputId, label, required, accept })),
+        evidence,
       },
-    );
+    };
   });
 });

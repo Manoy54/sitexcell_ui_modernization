@@ -1,4 +1,4 @@
-import { coveredStepsForCase } from './case-catalog.js';
+import { caseMetadataForCase, coveredStepsForCase } from './case-catalog.js';
 
 const RESULT_STATUSES = Object.freeze([
   'PASS',
@@ -56,7 +56,10 @@ export function extractDeclaredCases(report) {
   const seen = new Set();
   visitSpecs(report?.suites, (spec) => {
     const match = String(spec.title ?? '').match(/^(TC-AR-[A-Z0-9-]+)/i);
-    if (!match || seen.has(match[1])) return;
+    if (!match) return;
+    if (seen.has(match[1])) {
+      throw new Error(`Duplicate Access Request case declaration: ${match[1]}`);
+    }
     seen.add(match[1]);
     cases.push({ caseId: match[1], title: spec.title });
   });
@@ -152,8 +155,16 @@ function normalizeConfigurationPath(value) {
   const repositoryPath = repositoryPathStart >= 0 ? normalized.slice(repositoryPathStart) : normalized;
   return repositoryPath.replace(
     'tests/access-requests/configs/playwright.steps-5-8.config.js',
-    'tests/access-requests/configs/playwright.steps-1-8.config.js',
-  );
+    'tests/access-requests/configs/playwright.access-request.config.js',
+  )
+    .replace(
+      'tests/access-requests/configs/playwright.steps-1-8.config.js',
+      'tests/access-requests/configs/playwright.access-request.config.js',
+    )
+    .replace(
+      'tests/access-requests/configs/playwright.live.config.js',
+      'tests/access-requests/configs/playwright.access-request.config.js',
+    );
 }
 
 export function buildConsolidatedResult({
@@ -202,20 +213,29 @@ export function consolidatePlaywrightReport(report, {
     : null;
   const configuration = normalizeConfigurationPath(report?.config?.configFile)
     ?? normalizeConfigurationPath(environment.configuration);
-  const normalizedCases = extractedCases.map((item) => ({
-    ...item,
-    suiteWave: 'Steps 1-8',
-    coveredSteps: item.coveredSteps ?? coveredStepsForCase(item.caseId),
-    startingPoint: item.startingPoint ?? 'Authenticated Access Request Step 1',
-    fixture: item.fixture ?? {
-      version: fixtureVersion ?? 1,
-      profile: 'synthetic-access-request',
-      runId: item.runId ?? null,
-    },
-    environment: item.environment
-      ? { ...item.environment, configuration }
-      : item.environment,
-  }));
+  const normalizedCases = extractedCases.map((item) => {
+    const metadata = caseMetadataForCase(item.caseId) ?? {};
+    return {
+      ...item,
+      capability: item.capability ?? metadata.capability ?? null,
+      executionMode: item.executionMode ?? metadata.executionMode ?? null,
+      risk: item.risk ?? metadata.risk ?? null,
+      prerequisites: item.prerequisites ?? metadata.prerequisites ?? [],
+      testFile: item.testFile ?? metadata.testFile ?? null,
+      suiteWave: 'Steps 1-8',
+      coveredSteps: item.coveredSteps ?? coveredStepsForCase(item.caseId),
+      startingPoint: item.startingPoint ?? 'Authenticated Access Request Step 1',
+      entryPoint: item.entryPoint ?? 'Authenticated Access Request Step 1',
+      fixture: item.fixture ?? {
+        version: fixtureVersion ?? 1,
+        profile: 'synthetic-access-request',
+        runId: item.runId ?? null,
+      },
+      environment: item.environment
+        ? { ...item.environment, configuration }
+        : item.environment,
+    };
+  });
   const declaredCaseIds = new Set(declaredCases.map((item) => item.caseId));
   const extractedCaseIds = new Set(normalizedCases.map((item) => item.caseId));
   const preflightBlocker = normalizedCases.find((item) => item.status === 'BLOCKED'
@@ -223,8 +243,14 @@ export function consolidatePlaywrightReport(report, {
   if (preflightBlocker) {
     for (const declared of declaredCases) {
       if (extractedCaseIds.has(declared.caseId)) continue;
+      const metadata = caseMetadataForCase(declared.caseId) ?? {};
       normalizedCases.push({
         caseId: declared.caseId,
+        capability: metadata.capability ?? null,
+        executionMode: metadata.executionMode ?? null,
+        risk: metadata.risk ?? null,
+        prerequisites: metadata.prerequisites ?? [],
+        testFile: metadata.testFile ?? null,
         suiteWave: 'Steps 1-8',
         coveredSteps: coveredStepsForCase(declared.caseId),
         resultType: 'Dependency preflight',

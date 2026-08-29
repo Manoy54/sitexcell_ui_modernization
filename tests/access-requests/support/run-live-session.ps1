@@ -4,9 +4,10 @@ param(
     [switch]$ShowBrowser,
     [int]$SlowMo = 250,
     [string]$TestFile,
-    [string]$ConfigFile = 'tests/access-requests/configs/playwright.steps-1-8.config.js',
-    [string]$ReportFile = 'access-request-steps-1-8-results.json',
-    [string]$SuiteLabel = 'steps-1-8',
+    [string]$Grep,
+    [string]$ConfigFile = 'tests/access-requests/configs/playwright.access-request.config.js',
+    [string]$ReportFile = 'access-request-results.json',
+    [string]$SuiteLabel = 'access-request',
     [int]$PlannedCaseCount = 40
 )
 
@@ -41,7 +42,8 @@ $env:ACCESS_HEADED = if ($ShowBrowser) { 'true' } else { 'false' }
 $env:ACCESS_SLOW_MO = if ($ShowBrowser) { [string]$SlowMo } else { '0' }
 New-Item -ItemType Directory -Path (Join-Path $projectRoot '.test-artifacts\playwright\history') -Force | Out-Null
 $reportDirectory = Join-Path $projectRoot '.test-artifacts\playwright'
-if (-not [string]::IsNullOrWhiteSpace($TestFile)) {
+$isFocusedRun = (-not [string]::IsNullOrWhiteSpace($TestFile)) -or (-not [string]::IsNullOrWhiteSpace($Grep))
+if ($isFocusedRun) {
     $ReportFile = "access-request-$SuiteLabel-focused-results.json"
 }
 $reportPath = Join-Path $reportDirectory $ReportFile
@@ -53,6 +55,7 @@ $arguments = @(
     "--config=$ConfigFile"
 )
 if (-not [string]::IsNullOrWhiteSpace($TestFile)) { $arguments += $TestFile }
+if (-not [string]::IsNullOrWhiteSpace($Grep)) { $arguments += "--grep=$Grep" }
 
 & npx.cmd @arguments
 $testExitCode = $LASTEXITCODE
@@ -68,7 +71,7 @@ if (Test-Path -LiteralPath $reportPath) {
         "--report=$reportPath",
         "--planned-cases=$PlannedCaseCount"
     )
-    if (-not [string]::IsNullOrWhiteSpace($TestFile)) {
+    if ($isFocusedRun) {
         $focusedOutput = Join-Path $reportDirectory "access-request-$SuiteLabel-focused-consolidated.json"
         $consolidateArguments += "--local-output=$focusedOutput"
         $consolidateArguments += "--committed-output=$focusedOutput"

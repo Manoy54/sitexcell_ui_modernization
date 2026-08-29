@@ -1,6 +1,6 @@
 # Access Requests Steps 5–8 Test Implementation Plan
 
-Status: Test implementation completed; live evidence blocked by `AUTH-AR-01`<br>
+Status: Unified test implementation completed; live evidence blocked by `AUTH-AR-01`<br>
 Decision date: 2026-08-29<br>
 Scope owner: SiteXcell Access Requests testing<br>
 Implementation boundary: Automated test cases, evidence, findings, and recommendations only
@@ -10,7 +10,7 @@ Implementation boundary: Automated test cases, evidence, findings, and recommend
 This document defines the implementation plan for automated characterization and
 acceptance coverage of Access Request Steps 5–8. It records the decisions reached
 during the planning grill and converts the existing test plan and case matrix into
-an implementation-ready sequence.
+the unified implementation.
 
 Implementation was explicitly authorized on 2026-08-29. The authorization covers
 test code, configuration, guarded field-map capture, result infrastructure, and
@@ -238,39 +238,58 @@ an unnecessary Cartesian product. Each row records:
 
 ## 8. Target test architecture
 
-The planned structure is:
+The implemented structure is:
 
 ```text
 tests/access-requests/
 ├── configs/
-│   ├── playwright.live.config.js
-│   └── playwright.steps-1-8.config.js
+│   ├── playwright.access-request.config.js
+│   ├── playwright.live.config.js                 # compatibility alias
+│   └── playwright.steps-1-8.config.js            # compatibility alias
 ├── fixtures/
 │   ├── access-request-baseline.js
-│   ├── access-request-branches.js
-│   └── uploads/
+│   ├── synthetic-access-document.pdf
+│   ├── synthetic-access-document-replacement.pdf
+│   └── synthetic-access-document.txt
 ├── live/
-│   └── steps-1-8/
-│       ├── access-request-pre-submit.spec.js
-│       ├── access-request-step-5-branches.spec.js
-│       ├── access-request-step-6-branches.spec.js
-│       ├── access-request-step-7-uploads.spec.js
-│       ├── access-request-step-8-review.spec.js
-│       ├── access-request-recovery.spec.js
-│       ├── access-request-accessibility.spec.js
-│       └── access-request-responsive.spec.js
+│   └── access-request/
+│       ├── 00-authentication-preflight.setup.js
+│       ├── journeys/
+│       │   ├── complete-review-path.spec.js
+│       │   └── navigation-persistence.spec.js
+│       ├── behaviors/
+│       │   ├── entry-validation-and-context.spec.js
+│       │   ├── conditional-branches.spec.js
+│       │   ├── documents-and-uploads.spec.js
+│       │   ├── navigation-and-recovery.spec.js
+│       │   └── decision-gates.spec.js
+│       └── quality/
+│           ├── accessibility-and-responsive.spec.js
+│           └── efficiency.spec.js
 └── support/
     ├── access-request-path.js
-    ├── access-request-results.js
+    ├── accessibility.js
+    ├── case-catalog.js
+    ├── conditional-controls.js
+    ├── field-map.js
+    ├── field-map-gate.js
     ├── form-helpers.js
+    ├── live-case.js
+    ├── required-controls.js
+    ├── results.js
+    ├── selectors.js
+    ├── session.js
+    ├── step-state.js
+    ├── upload-controls.js
     ├── measurements.js
     ├── safety-guards.js
-    └── selectors.js
+    └── journeys/access-request-journeys.js
 ```
 
-Names are planned and may be adjusted to match implementation conventions, but
-the separation of baseline, branches, uploads, review, recovery, and presentation
-coverage is required.
+The source tree is organized by test intent: journeys prove end-to-end paths,
+behaviors isolate capability assertions, and quality cases measure cross-cutting
+interaction concerns. Step coverage is recorded in the case catalog and result
+metadata rather than encoded as separate source directories.
 
 ### 8.1 Test independence
 
@@ -530,9 +549,8 @@ Validation tests otherwise assert:
 Raw local result files:
 
 ```text
-.test-artifacts/playwright/access-request-core-results.json
-.test-artifacts/playwright/access-request-steps-1-8-results.json
 .test-artifacts/playwright/access-request-results.json
+.test-artifacts/playwright/access-request-<suite>-focused-results.json
 .test-artifacts/playwright/history/<run-id>.json
 ```
 
@@ -783,7 +801,10 @@ are also available for their respective suites:
 ```text
 npm run test:access:unit
 npm run test:access:live
-npm run test:access:live:steps-1-8
+npm run test:access:live:journeys
+npm run test:access:live:functional
+npm run test:access:live:behaviors
+npm run test:access:live:quality
 npm run test:access:live:branches
 npm run test:access:live:uploads
 npm run test:access:live:recovery

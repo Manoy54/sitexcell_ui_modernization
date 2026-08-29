@@ -1,25 +1,17 @@
 import { expect, test } from '@playwright/test';
-import { accessCaseTitle } from '../../support/case-catalog.js';
+import { accessCaseTitle } from '../../../support/case-catalog.js';
 import path from 'node:path';
 
-import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
-import { characterizeConditionalControls } from '../../support/conditional-controls.js';
-import { requireCapturedStepsFieldMap } from '../../support/field-map-gate.js';
-import { runLiveAccessCase } from '../../support/live-case.js';
+import { characterizeConditionalControls } from '../../../support/conditional-controls.js';
+import { requireCapturedStepsFieldMap } from '../../../support/field-map-gate.js';
+import { runLiveAccessCase } from '../../../support/live-case.js';
 import {
   completeStepAndAdvance,
   completeVisibleRequiredControls,
-} from '../../support/required-controls.js';
+} from '../../../support/required-controls.js';
+import { reachStep } from '../../../support/journeys/access-request-journeys.js';
 
 const uploadPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
-
-async function reachStep(page, targetStep) {
-  await completeBaselineThroughStep4(page);
-  await advanceFromStep(page, 4);
-  for (let step = 5; step < targetStep; step += 1) {
-    await completeStepAndAdvance(page, step, { uploadPath });
-  }
-}
 
 const branchCases = [
   {

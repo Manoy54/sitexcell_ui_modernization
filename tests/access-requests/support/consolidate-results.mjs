@@ -14,7 +14,7 @@ function argument(name, fallback = null) {
 
 const reportPath = resolve(argument(
   'report',
-  '.test-artifacts/playwright/access-request-steps-1-8-results.json',
+  '.test-artifacts/playwright/access-request-results.json',
 ));
 const localOutputPath = resolve(argument(
   'local-output',

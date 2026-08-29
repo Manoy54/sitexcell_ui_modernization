@@ -1,6 +1,6 @@
 # Access Requests Test Summary
 
-Status: Steps 5–8 automation is implemented; live execution is blocked by the current authenticated session.
+Status: Unified Access Request automation is implemented; live execution is blocked by the current authenticated session.
 
 ## Current implementation
 
@@ -10,9 +10,9 @@ Status: Steps 5–8 automation is implemented; live execution is blocked by the 
 - Core implementation: `TC-AR-001`–`TC-AR-006`.
 - Steps 5–8 implementation: 36 cases across conditional branches, recovery,
   uploads, document context, efficiency, accessibility, and responsive behavior.
-- Formal Steps 1–8 Playwright run size: 40 declarations including the
+- Formal unified Access Request Playwright run size: 40 declarations including the
   authentication preflight dependency.
-- Unit coverage: 19 tests for run IDs, final-submission guards, result
+- Unit coverage: 21 tests for run IDs, final-submission guards, result
   consolidation/sanitization, case catalog integrity, field-map rendering, and
   deterministic synthetic field values.
 
@@ -65,7 +65,7 @@ That historical 4/4 result does not override the current `AUTH-AR-01` blocker.
 ## Evidence and reporting
 
 - Raw Playwright report:
-  `.test-artifacts/playwright/access-request-steps-1-8-results.json`.
+  `.test-artifacts/playwright/access-request-results.json`.
 - Archived raw report:
   `.test-artifacts/playwright/history/test-The-CRM-Carpenters-000041-20260829T111406111Z-steps-5-8.json`.
 - Local consolidated report:
@@ -105,7 +105,7 @@ Refresh an approved account/session that can render
 
 ```powershell
 npm run test:access:capture:steps-5-8
-npm run test:access:live:steps-1-8
+npm run test:access:live
 ```
 
 Review focused failures before claiming a full pass. The suite must not bypass the

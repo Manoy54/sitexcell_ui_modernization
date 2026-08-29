@@ -1,30 +1,25 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 
-import { accessCaseTitle } from '../../support/case-catalog.js';
-import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
-import { keyboardReachability } from '../../support/accessibility.js';
-import { AccessRequestBlockedError, openAccessRequestForm, visibleValidationMessages } from '../../support/form-helpers.js';
-import { requireCapturedStepsFieldMap } from '../../support/field-map-gate.js';
-import { runLiveAccessCase } from '../../support/live-case.js';
-import { collectStepMetrics } from '../../support/measurements.js';
+import { accessCaseTitle } from '../../../support/case-catalog.js';
+import { keyboardReachability } from '../../../support/accessibility.js';
+import { openAccessRequestForm, visibleValidationMessages } from '../../../support/form-helpers.js';
+import { requireCapturedStepsFieldMap } from '../../../support/field-map-gate.js';
+import { runLiveAccessCase } from '../../../support/live-case.js';
+import { collectStepMetrics } from '../../../support/measurements.js';
 import {
   completeStepAndAdvance,
   completeVisibleRequiredControls,
-} from '../../support/required-controls.js';
-import { STEP, nextButton } from '../../support/selectors.js';
-import { snapshotStepState } from '../../support/step-state.js';
-import { visibleUploadFields } from '../../support/upload-controls.js';
+} from '../../../support/required-controls.js';
+import { STEP, nextButton } from '../../../support/selectors.js';
+import { snapshotStepState } from '../../../support/step-state.js';
+import { visibleUploadFields } from '../../../support/upload-controls.js';
+import { startAtStep5 } from '../../../support/journeys/access-request-journeys.js';
 
 const uploadPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 
-async function reachStep5(page) {
-  await completeBaselineThroughStep4(page);
-  await advanceFromStep(page, 4);
-}
-
 async function completeLaterSteps(page) {
-  await reachStep5(page);
+  await startAtStep5(page, { uploadPath });
   const transitions = [];
   for (const step of [5, 6, 7]) {
     const actions = await completeStepAndAdvance(page, step, { uploadPath });
@@ -43,7 +38,7 @@ test(accessCaseTitle('TC-AR-E01', 'records Steps 5–8 manual-field candidates')
     branch: 'manual-field-count',
   }, async ({ page }) => {
     requireCapturedStepsFieldMap();
-    await reachStep5(page);
+    await startAtStep5(page, { uploadPath });
     const metrics = [];
     for (const step of [5, 6, 7]) {
       metrics.push({ step, ...await collectStepMetrics(page.locator(STEP[step])) });
@@ -117,7 +112,7 @@ test(accessCaseTitle('TC-AR-E04', 'records required and optional document handli
     branch: 'document-handling-effort',
   }, async ({ page }) => {
     requireCapturedStepsFieldMap();
-    await reachStep5(page);
+    await startAtStep5(page, { uploadPath });
     await completeStepAndAdvance(page, 5, { uploadPath });
     await completeStepAndAdvance(page, 6, { uploadPath });
     const uploads = await visibleUploadFields(page, 7);
@@ -156,7 +151,7 @@ test(accessCaseTitle('TC-AR-E06', 'records validation-correction effort separate
     branch: 'validation-correction-effort',
   }, async ({ page }) => {
     requireCapturedStepsFieldMap();
-    await reachStep5(page);
+    await startAtStep5(page, { uploadPath });
     const corrections = [];
     for (const step of [5, 6, 7]) {
       await nextButton(page, step).click();
@@ -214,7 +209,7 @@ test(accessCaseTitle('TC-AR-E08', 'records keyboard focus effort through Steps 5
     branch: 'keyboard-effort',
   }, async ({ page }) => {
     requireCapturedStepsFieldMap();
-    await reachStep5(page);
+    await startAtStep5(page, { uploadPath });
     const focusCounts = [];
     for (const step of [5, 6, 7]) {
       const sequence = await keyboardReachability(page, step);
@@ -250,7 +245,7 @@ test(accessCaseTitle('TC-AR-E09', 'measures data preservation after a recoverabl
     branch: 'error-preservation-effort',
   }, async ({ page }) => {
     requireCapturedStepsFieldMap();
-    await reachStep5(page);
+    await startAtStep5(page, { uploadPath });
     const before = await snapshotStepState(page, 5);
     await nextButton(page, 5).click();
     await expect(page.locator(STEP[5])).toBeVisible({ timeout: 30_000 });
@@ -263,23 +258,5 @@ test(accessCaseTitle('TC-AR-E09', 'measures data preservation after a recoverabl
       stoppingPoint: 'Step 6 after Step 5 recovery',
       extra: { before, afterError, messages, correctionInteractions: actions.length + 1 },
     };
-  });
-});
-
-test(accessCaseTitle('TC-AR-E10', 'remains blocked until copy behavior and a human protocol are approved'), async ({}, testInfo) => {
-  await runLiveAccessCase(testInfo, {
-    caseId: 'TC-AR-E10',
-    resultType: 'Efficiency',
-    expected: 'Manual repeat entry and one-click copy are compared using an approved source/target pair and human protocol.',
-    step: 8,
-    branch: 'manual-versus-copy',
-  }, async () => {
-    throw new AccessRequestBlockedError(
-      'Manual-versus-copy measurement requires approved copy behavior and at least three comparable human sessions.',
-      {
-        blockerId: 'COPY-PROTOCOL-AR-01',
-        blockerReason: 'Approved copy behavior and the human measurement protocol are unavailable.',
-      },
-    );
   });
 });

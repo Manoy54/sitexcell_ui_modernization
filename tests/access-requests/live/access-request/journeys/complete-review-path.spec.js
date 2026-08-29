@@ -1,16 +1,12 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 
-import { accessCaseTitle } from '../../support/case-catalog.js';
-import { completeBaselineThroughStep4, advanceFromStep } from '../../support/access-request-path.js';
-import { requireCapturedStepsFieldMap } from '../../support/field-map-gate.js';
-import { runLiveAccessCase } from '../../support/live-case.js';
-import { collectStepMetrics } from '../../support/measurements.js';
-import {
-  completeStepAndAdvance,
-  completeVisibleRequiredControls,
-} from '../../support/required-controls.js';
-import { FINAL_SUBMIT, STEP } from '../../support/selectors.js';
+import { accessCaseTitle } from '../../../support/case-catalog.js';
+import { requireCapturedStepsFieldMap } from '../../../support/field-map-gate.js';
+import { runLiveAccessCase } from '../../../support/live-case.js';
+import { collectStepMetrics } from '../../../support/measurements.js';
+import { FINAL_SUBMIT, STEP } from '../../../support/selectors.js';
+import { reachStep8Review } from '../../../support/journeys/access-request-journeys.js';
 
 const qualificationPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 
@@ -23,25 +19,7 @@ test(accessCaseTitle('TC-AR-006', 'reaches the valid Step 8 review state without
     branch: 'valid-pre-submit',
   }, async ({ page }) => {
     const fieldMap = requireCapturedStepsFieldMap();
-    const baseline = await completeBaselineThroughStep4(page);
-    await advanceFromStep(page, 4);
-
-    const actions = [];
-    for (const stepNumber of [5, 6, 7]) {
-      actions.push({
-        step: stepNumber,
-        actions: await completeStepAndAdvance(page, stepNumber, {
-          uploadPath: qualificationPath,
-        }),
-      });
-    }
-    actions.push({
-      step: 8,
-      actions: await completeVisibleRequiredControls(page, 8, {
-        uploadPath: qualificationPath,
-      }),
-    });
-
+    const { baseline, actions } = await reachStep8Review(page, { uploadPath: qualificationPath });
     await expect(page.locator(STEP[8])).toBeVisible();
     await expect(page.locator(FINAL_SUBMIT)).toBeVisible();
     const reviewText = await page.locator(STEP[8]).innerText();

@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 
-import { coveredStepsForCase } from './case-catalog.js';
+import { caseMetadataForCase, coveredStepsForCase } from './case-catalog.js';
 import { ACCESS_FORM, FINAL_SUBMIT, STEP } from './selectors.js';
 
 export const ACCESS_REQUEST_URL = process.env.ACCESS_REQUEST_URL
@@ -70,7 +70,7 @@ export async function testEnvironment(page) {
     commit: process.env.ACCESS_COMMIT
       ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
     configuration: process.env.ACCESS_CONFIG_FILE
-      ?? 'tests/access-requests/configs/playwright.live.config.js',
+      ?? 'tests/access-requests/configs/playwright.access-request.config.js',
   };
 }
 
@@ -131,9 +131,14 @@ export async function attachCaseResult(testInfo, page, {
   coveredSteps = coveredStepsForCase(caseId),
   extra = {},
 }) {
+  const caseMetadata = caseMetadataForCase(caseId) ?? {};
   const evidenceName = `${caseId}.json`;
   await attachJson(testInfo, evidenceName, {
     caseId,
+    capability: caseMetadata.capability ?? null,
+    executionMode: caseMetadata.executionMode ?? null,
+    risk: caseMetadata.risk ?? null,
+    prerequisites: caseMetadata.prerequisites ?? [],
     suiteWave,
     resultType,
     status,
@@ -143,9 +148,10 @@ export async function attachCaseResult(testInfo, page, {
     durationMs: Date.now() - startedAt,
     environment: await testEnvironment(page),
     ...extra,
+    entryPoint: caseMetadata.entryPoint ?? 'Authenticated Access Request Step 1',
     expected,
     observed,
-    startingPoint: 'Authenticated Access Request Step 1',
+    startingPoint: caseMetadata.entryPoint ?? 'Authenticated Access Request Step 1',
     firstFailure,
     retryOutcome,
     evidence: [evidenceName],

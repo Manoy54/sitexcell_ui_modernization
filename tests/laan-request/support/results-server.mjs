@@ -171,7 +171,7 @@ const dashboardHtml = String.raw`<!doctype html>
     const REPORTS = {
       core: { file: 'live-results.json', label: 'Core', configuredTests: 3, scenarios: 3 },
       wave2: { file: 'wave2-results.json', label: 'Wave 2', configuredTests: 7, scenarios: 13 },
-      access: { file: 'access-request-steps-1-8-results.json', label: 'Access Requests Steps 1–8', configuredTests: 40, scenarios: 40 }
+      access: { file: 'access-request-results.json', label: 'Access Requests', configuredTests: 40, scenarios: 40 }
     };
     const ACCESS_PLAN = [
       { label: 'Core functional', total: 6, implemented: 6, ids: 'TC-AR-001–006' },
@@ -290,7 +290,7 @@ const dashboardHtml = String.raw`<!doctype html>
       return '<option value="' + current.file + '">Current ' + current.label + ' report</option>' + archived.map(item => '<option value="' + escapeHtml(item.path) + '"' + (activeReportPath === item.path ? ' selected' : '') + '>' + escapeHtml(item.id) + ' · ' + escapeHtml(formatDate(item.startTime)) + '</option>').join('');
     }
     function suiteCommand(suite, cases) {
-      if (suite === 'access') return 'npm run test:access:live:steps-1-8';
+      if (suite === 'access') return 'npm run test:access:live';
       if (suite === 'core') return 'npm run test:laan:live';
       if (cases.length !== 1) return 'npm run test:laan:live:wave2';
       const file = cases[0].file;
@@ -380,13 +380,13 @@ const dashboardHtml = String.raw`<!doctype html>
       const failed = cases.filter(item => item.status === 'failed').length;
       const reportUnavailable = report?.unavailable === true;
       const accessNotice = reportUnavailable
-        ? '<div class="notice"><span><strong>No formal Steps 1–8 report is available</strong> · run the unified Access Request suite to create current evidence.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
+        ? '<div class="notice"><span><strong>No formal Access Request report is available</strong> · run the unified Access Request suite to create current evidence.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
         : blocked
-        ? '<div class="notice"><span><strong>' + blocked + ' blocked case</strong> · authentication must be refreshed before dependent Step 1–8 cases can execute.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
+        ? '<div class="notice"><span><strong>' + blocked + ' blocked case</strong> · authentication must be refreshed before dependent Access Request cases can execute.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
         : failed
           ? '<div class="notice"><span><strong>' + failed + ' failed case' + (failed === 1 ? '' : 's') + '</strong> · inspect evidence before rerunning.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
           : '<div class="notice is-success"><span><strong>Current implemented scope passed</strong> · final submission remained blocked.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>';
-      return shell(pageHead('Access Request Steps 1–8 results', 'Guarded live characterization and acceptance evidence', true) + accessNotice + summaryStrip(report, cases) + '<div class="workspace-grid"><section class="surface"><div class="surface-head"><div><h2>Access cases completed</h2><p>Each row is a named test case with expandable evidence.</p></div><span>' + cases.length + ' results</span></div><div class="command-bar"><span>Command</span><code>npm run test:access:live:steps-1-8</code></div>' + resultsTable(cases) + '</section>' + runFacts(report, cases) + '</div>');
+      return shell(pageHead('Access Request results', 'Guarded live characterization and acceptance evidence', true) + accessNotice + summaryStrip(report, cases) + '<div class="workspace-grid"><section class="surface"><div class="surface-head"><div><h2>Access cases completed</h2><p>Each row is a named test case with expandable evidence.</p></div><span>' + cases.length + ' results</span></div><div class="command-bar"><span>Command</span><code>npm run test:access:live</code></div>' + resultsTable(cases) + '</section>' + runFacts(report, cases) + '</div>');
     }
     function accessPlanView() {
       const total = ACCESS_PLAN.reduce((sum, item) => sum + item.total, 0);
