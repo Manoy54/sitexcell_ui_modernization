@@ -24,7 +24,7 @@ The current analysis identifies:
   locator and network guards prohibit final submission
 - Final submission: prohibited in all automated runs
 
-Current execution note (2026-08-29): the 37-declaration Steps 5–8 suite is
+Current execution note (2026-08-29): the earlier 37-declaration later-step suite is
 implemented, but the latest guarded run redirected the target URL to the Co-Siter
 home page without rendering `#gform_3`. `AUTH-AR-01` blocked the preflight and 36
 dependent declarations did not run. The 2026-08-26 4/4 core pass remains the
@@ -93,15 +93,14 @@ Access Requests remain separate from LAAN tests while sharing only generic utili
 tests/access-requests/
 ├── configs/
 │   ├── playwright.live.config.js
-│   └── playwright.steps-5-8.config.js
+│   └── playwright.steps-1-8.config.js
 ├── fixtures/
 │   ├── access-request-baseline.js
 │   ├── synthetic-access-document.pdf
 │   ├── synthetic-access-document-replacement.pdf
 │   └── synthetic-access-document.txt
 ├── live/
-│   ├── core/
-│   └── steps-5-8/
+│   └── steps-1-8/
 └── support/
     ├── access-request-path.js
     ├── case-catalog.js

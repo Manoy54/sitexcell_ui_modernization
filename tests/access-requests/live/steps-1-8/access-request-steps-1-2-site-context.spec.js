@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import {
   AccessRequestBlockedError,
   TEST_BUILDING,
@@ -10,7 +11,7 @@ import {
 import { connectToAuthenticatedContext } from '../../support/session.js';
 import { installFinalSubmissionGuard } from '../../support/safety-guards.js';
 
-test('TC-AR-003 partially validates Site-derived conditional context', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-003', 'partially validates Site-derived conditional context'), async ({}, testInfo) => {
   const startedAt = Date.now();
   const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
   const page = await context.newPage();

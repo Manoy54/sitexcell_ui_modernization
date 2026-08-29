@@ -4,10 +4,10 @@ param(
     [switch]$ShowBrowser,
     [int]$SlowMo = 250,
     [string]$TestFile,
-    [string]$ConfigFile = 'tests/access-requests/configs/playwright.live.config.js',
-    [string]$ReportFile = 'access-request-core-results.json',
-    [string]$SuiteLabel = 'core',
-    [int]$PlannedCaseCount = 4
+    [string]$ConfigFile = 'tests/access-requests/configs/playwright.steps-1-8.config.js',
+    [string]$ReportFile = 'access-request-steps-1-8-results.json',
+    [string]$SuiteLabel = 'steps-1-8',
+    [int]$PlannedCaseCount = 40
 )
 
 $ErrorActionPreference = 'Stop'

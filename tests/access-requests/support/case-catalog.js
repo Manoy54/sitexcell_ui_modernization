@@ -1,12 +1,12 @@
-function numberedCases(prefix, start, end, family) {
+function numberedCases(prefix, start, end, family, padding = 2) {
   return Array.from({ length: end - start + 1 }, (_, index) => ({
-    id: `${prefix}${String(start + index).padStart(2, '0')}`,
+    id: `${prefix}${String(start + index).padStart(padding, '0')}`,
     family,
   }));
 }
 
 export const ACCESS_CASE_CATALOG = Object.freeze([
-  ...numberedCases('TC-AR-', 1, 6, 'Core functional'),
+  ...numberedCases('TC-AR-', 1, 6, 'Core functional', 3),
   ...numberedCases('TC-AR-B', 1, 8, 'Conditional branches'),
   ...numberedCases('TC-AR-R', 1, 4, 'Recovery'),
   ...numberedCases('TC-AR-U', 1, 7, 'Uploads'),
@@ -57,3 +57,85 @@ export const STEPS_5_TO_8_CASE_IDS = Object.freeze([
   'TC-AR-A04',
   'TC-AR-A05',
 ]);
+
+export const ACCESS_CASE_STEP_COVERAGE = Object.freeze({
+  'TC-AR-001': Object.freeze([1]),
+  'TC-AR-002': Object.freeze([1, 2, 3, 4]),
+  'TC-AR-003': Object.freeze([1, 2]),
+  'TC-AR-004': Object.freeze([1]),
+  'TC-AR-005': Object.freeze([1, 2, 3, 4, 5, 6, 7, 8]),
+  'TC-AR-006': Object.freeze([1, 2, 3, 4, 5, 6, 7, 8]),
+  'TC-AR-B01': Object.freeze([1]),
+  'TC-AR-B02': Object.freeze([1]),
+  'TC-AR-B03': Object.freeze([5]),
+  'TC-AR-B04': Object.freeze([4]),
+  'TC-AR-B05': Object.freeze([6]),
+  'TC-AR-B06': Object.freeze([6]),
+  'TC-AR-B07': Object.freeze([2]),
+  'TC-AR-B08': Object.freeze([5, 6, 7]),
+  'TC-AR-R01': Object.freeze([5, 6, 7]),
+  'TC-AR-R02': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-R03': Object.freeze([7]),
+  'TC-AR-R04': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-U01': Object.freeze([7]),
+  'TC-AR-U02': Object.freeze([7]),
+  'TC-AR-U03': Object.freeze([7]),
+  'TC-AR-U04': Object.freeze([7]),
+  'TC-AR-U05': Object.freeze([7]),
+  'TC-AR-U06': Object.freeze([7]),
+  'TC-AR-U07': Object.freeze([7]),
+  'TC-AR-P01': Object.freeze([3]),
+  'TC-AR-P02': Object.freeze([3]),
+  'TC-AR-P03': Object.freeze([3]),
+  'TC-AR-P04': Object.freeze([3]),
+  'TC-AR-P05': Object.freeze([3]),
+  'TC-AR-D01': Object.freeze([7]),
+  'TC-AR-D02': Object.freeze([7]),
+  'TC-AR-D03': Object.freeze([7]),
+  'TC-AR-D04': Object.freeze([7]),
+  'TC-AR-S01': Object.freeze([1]),
+  'TC-AR-S02': Object.freeze([1]),
+  'TC-AR-S03': Object.freeze([1]),
+  'TC-AR-S04': Object.freeze([1]),
+  'TC-AR-C01': Object.freeze([3]),
+  'TC-AR-C02': Object.freeze([3]),
+  'TC-AR-C03': Object.freeze([3]),
+  'TC-AR-C04': Object.freeze([3]),
+  'TC-AR-C05': Object.freeze([3]),
+  'TC-AR-C06': Object.freeze([3]),
+  'TC-AR-C07': Object.freeze([3]),
+  'TC-AR-C08': Object.freeze([3]),
+  'TC-AR-E01': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-E02': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-E03': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-E04': Object.freeze([7]),
+  'TC-AR-E05': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-E06': Object.freeze([7]),
+  'TC-AR-E07': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-E08': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-E09': Object.freeze([5, 6, 7]),
+  'TC-AR-E10': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-A01': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-A02': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-A03': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-A04': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-A05': Object.freeze([5, 6, 7, 8]),
+  'TC-AR-X01': Object.freeze([1, 2, 3, 4, 5, 6, 7, 8]),
+  'TC-AR-X02': Object.freeze([1, 2, 3, 4, 5, 6, 7, 8]),
+  'TC-AR-X03': Object.freeze([1, 2, 3, 4, 5, 6, 7, 8]),
+});
+
+export function coveredStepsForCase(caseId) {
+  return [...(ACCESS_CASE_STEP_COVERAGE[caseId] ?? [])];
+}
+
+export function formatCoveredSteps(steps) {
+  const normalized = [...new Set(steps)].sort((left, right) => left - right);
+  if (!normalized.length) return 'Unknown steps';
+  if (normalized.length === 1) return `Step ${normalized[0]}`;
+  return `Steps ${normalized[0]}–${normalized[normalized.length - 1]}`;
+}
+
+export function accessCaseTitle(caseId, description, steps = coveredStepsForCase(caseId)) {
+  return `${caseId} [${formatCoveredSteps(steps)}] ${description}`;
+}

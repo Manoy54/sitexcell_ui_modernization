@@ -19,7 +19,7 @@ pass.
 
 ## Current execution prerequisite
 
-On 2026-08-29 the 37-declaration Steps 5–8 run redirected the target URL to the
+On 2026-08-29 the earlier 37-declaration later-step run redirected the target URL to the
 Co-Siter home page without rendering `#gform_3`. `TC-AR-001` recorded
 `BLOCKED — AUTH-AR-01`; 36 dependent declarations did not run. The earlier
 2026-08-26 authenticated run remains successful historical core evidence, but it

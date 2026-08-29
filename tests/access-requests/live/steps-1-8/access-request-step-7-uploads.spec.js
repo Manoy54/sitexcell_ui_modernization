@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
 import { AccessRequestBlockedError, visibleValidationMessages } from '../../support/form-helpers.js';
 import { requireCapturedStepsFieldMap } from '../../support/field-map-gate.js';
@@ -52,7 +53,7 @@ async function requiredUploads(page) {
   return { uploads, required };
 }
 
-test('TC-AR-U01 rejects a missing required Step 7 upload', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-U01', 'rejects a missing required Step 7 upload'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U01',
     resultType: 'Acceptance',
@@ -76,7 +77,7 @@ test('TC-AR-U01 rejects a missing required Step 7 upload', async ({}, testInfo) 
   });
 });
 
-test('TC-AR-U02 accepts allowed synthetic files without submitting', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-U02', 'accepts allowed synthetic files without submitting'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U02',
     resultType: 'Acceptance',
@@ -98,7 +99,7 @@ test('TC-AR-U02 accepts allowed synthetic files without submitting', async ({}, 
   });
 });
 
-test('TC-AR-U03 rejects a disallowed synthetic file type', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-U03', 'rejects a disallowed synthetic file type'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U03',
     resultType: 'Acceptance',
@@ -130,7 +131,7 @@ test('TC-AR-U03 rejects a disallowed synthetic file type', async ({}, testInfo) 
   });
 });
 
-test('TC-AR-U04 enforces the declared upload size boundary', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-U04', 'enforces the declared upload size boundary'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U04',
     resultType: 'Acceptance',
@@ -208,7 +209,7 @@ test('TC-AR-U04 enforces the declared upload size boundary', async ({}, testInfo
   });
 });
 
-test('TC-AR-U05 replaces a reviewed file without retaining the previous filename', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-U05', 'replaces a reviewed file without retaining the previous filename'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U05',
     resultType: 'Acceptance',
@@ -248,7 +249,7 @@ test('TC-AR-U05 replaces a reviewed file without retaining the previous filename
   });
 });
 
-test('TC-AR-U06 removes a reviewed file and invalidates related confirmations', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-U06', 'removes a reviewed file and invalidates related confirmations'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U06',
     resultType: 'Acceptance',
@@ -298,7 +299,7 @@ test('TC-AR-U06 removes a reviewed file and invalidates related confirmations', 
   });
 });
 
-test('TC-AR-U07 records controlled upload failure as blocked until staging controls exist', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-U07', 'records controlled upload failure as blocked until staging controls exist'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U07',
     resultType: 'Acceptance',

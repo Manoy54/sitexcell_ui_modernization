@@ -14,7 +14,7 @@ function argument(name, fallback = null) {
 
 const reportPath = resolve(argument(
   'report',
-  '.test-artifacts/playwright/access-request-core-results.json',
+  '.test-artifacts/playwright/access-request-steps-1-8-results.json',
 ));
 const localOutputPath = resolve(argument(
   'local-output',
@@ -24,7 +24,7 @@ const committedOutputPath = resolve(argument(
   'committed-output',
   'docs/testing/access-request/access-request-results.json',
 ));
-const plannedCases = Number(argument('planned-cases', '4'));
+const plannedCases = Number(argument('planned-cases', '40'));
 const fixtureVersion = Number(argument('fixture-version', '1'));
 
 if (!Number.isInteger(plannedCases) || plannedCases < 1) {

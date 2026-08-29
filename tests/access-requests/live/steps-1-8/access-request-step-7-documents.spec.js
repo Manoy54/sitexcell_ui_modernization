@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import path from 'node:path';
 
 import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
@@ -34,7 +35,7 @@ for (const scenario of [
     reason: 'The authoritative document-validity and expiry rules are not approved.',
   },
 ]) {
-  test(`${scenario.caseId} records the unresolved saved-document decision`, async ({}, testInfo) => {
+  test(accessCaseTitle(scenario.caseId, 'records the unresolved saved-document decision'), async ({}, testInfo) => {
     await runLiveAccessCase(testInfo, {
       caseId: scenario.caseId,
       resultType: 'Decision',
@@ -50,7 +51,7 @@ for (const scenario of [
   });
 }
 
-test('TC-AR-D03 replaces a request document with explicit file identity evidence', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-D03', 'replaces a request document with explicit file identity evidence'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-D03',
     resultType: 'Acceptance',
@@ -78,7 +79,7 @@ test('TC-AR-D03 replaces a request document with explicit file identity evidence
     };
   });
 });
-test('TC-AR-D04 characterizes request-specific supporting documents', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-D04', 'characterizes request-specific supporting documents'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-D04',
     resultType: 'Characterization',

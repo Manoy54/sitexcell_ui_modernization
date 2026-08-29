@@ -3,7 +3,7 @@ import { defineConfig } from '@playwright/test';
 
 const resultReportPath = resolve(
   process.env.ACCESS_REPORT_PATH
-    ?? resolve(process.cwd(), '.test-artifacts', 'playwright', 'access-request-steps-5-8-results.json'),
+    ?? resolve(process.cwd(), '.test-artifacts', 'playwright', 'access-request-steps-1-8-results.json'),
 );
 
 export default defineConfig({
@@ -26,11 +26,11 @@ export default defineConfig({
   projects: [
     {
       name: 'access-preflight',
-      testMatch: ['core/access-request-preflight.setup.js'],
+      testMatch: ['steps-1-8/access-request-steps-1-8-authentication-preflight.setup.js'],
     },
     {
-      name: 'access-steps-5-8',
-      testMatch: ['steps-5-8/**/*.spec.js'],
+      name: 'access-steps-1-8',
+      testMatch: ['steps-1-8/**/*.spec.js'],
       dependencies: ['access-preflight'],
     },
   ],

@@ -33,7 +33,7 @@ test('builds the stable Access Request result contract from case evidence', () =
       runId: 'test-The-CRM-Carpenters-000001-20260829T000000000Z',
       targetUrl: 'https://co-siter.com.au/access-requests/',
       commit: 'abc123',
-      configuration: 'tests/access-requests/configs/playwright.steps-5-8.config.js',
+      configuration: 'tests/access-requests/configs/playwright.steps-1-8.config.js',
       browser: 'Microsoft Edge',
       viewport: { width: 1280, height: 720 },
       accountClassification: 'approved authenticated session',
@@ -117,7 +117,7 @@ test('classifies dependency-skipped declarations as blocked without counting the
     },
   };
   const report = {
-    config: { configFile: 'C:\\workspace\\tests\\access-requests\\configs\\playwright.steps-5-8.config.js' },
+    config: { configFile: 'C:\\workspace\\tests\\access-requests\\configs\\playwright.steps-1-8.config.js' },
     stats: { startTime: '2026-08-29T00:00:00.000Z', duration: 1_000 },
     suites: [{
       specs: [
@@ -198,7 +198,7 @@ test('consolidates Playwright evidence without treating a partial run as complet
   };
   const report = {
     config: {
-      configFile: 'C:\\workspace\\tests\\access-requests\\configs\\playwright.steps-5-8.config.js',
+      configFile: 'C:\\workspace\\tests\\access-requests\\configs\\playwright.steps-1-8.config.js',
     },
     stats: {
       startTime: '2026-08-29T00:00:00.000Z',
@@ -227,12 +227,13 @@ test('consolidates Playwright evidence without treating a partial run as complet
   assert.equal(result.run.runId, caseWithEnvironment.runId);
   assert.equal(
     result.run.configuration,
-    'tests/access-requests/configs/playwright.steps-5-8.config.js',
+    'tests/access-requests/configs/playwright.steps-1-8.config.js',
   );
   assert.equal(
     result.cases[0].environment.configuration,
-    'tests/access-requests/configs/playwright.steps-5-8.config.js',
+    'tests/access-requests/configs/playwright.steps-1-8.config.js',
   );
+  assert.deepEqual(result.cases[0].coveredSteps, [1, 2, 3, 4, 5, 6, 7, 8]);
   assert.equal(result.run.completedAt, '2026-08-29T00:01:00.000Z');
   assert.equal(result.summary.plannedCases, 17);
   assert.equal(result.summary.implementedCases, 1);

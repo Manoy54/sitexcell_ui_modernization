@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
 import { keyboardReachability } from '../../support/accessibility.js';
 import { AccessRequestBlockedError, openAccessRequestForm, visibleValidationMessages } from '../../support/form-helpers.js';
@@ -33,7 +34,7 @@ async function completeLaterSteps(page) {
   return { transitions, step8Actions };
 }
 
-test('TC-AR-E01 records Steps 5–8 manual-field candidates', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E01', 'records Steps 5–8 manual-field candidates'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E01',
     resultType: 'Efficiency',
@@ -57,7 +58,7 @@ test('TC-AR-E01 records Steps 5–8 manual-field candidates', async ({}, testInf
   });
 });
 
-test('TC-AR-E02 records user-equivalent interactions for the valid later-step path', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E02', 'records user-equivalent interactions for the valid later-step path'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E02',
     resultType: 'Efficiency',
@@ -77,7 +78,7 @@ test('TC-AR-E02 records user-equivalent interactions for the valid later-step pa
   });
 });
 
-test('TC-AR-E03 records repeated later-step values without assuming reuse authority', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E03', 'records repeated later-step values without assuming reuse authority'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E03',
     resultType: 'Efficiency',
@@ -107,7 +108,7 @@ test('TC-AR-E03 records repeated later-step values without assuming reuse author
   });
 });
 
-test('TC-AR-E04 records required and optional document handling effort', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E04', 'records required and optional document handling effort'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E04',
     resultType: 'Efficiency',
@@ -128,7 +129,7 @@ test('TC-AR-E04 records required and optional document handling effort', async (
   });
 });
 
-test('TC-AR-E05 records later-step transitions and backtracking points', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E05', 'records later-step transitions and backtracking points'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E05',
     resultType: 'Efficiency',
@@ -146,7 +147,7 @@ test('TC-AR-E05 records later-step transitions and backtracking points', async (
   });
 });
 
-test('TC-AR-E06 records validation-correction effort separately from first failure', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E06', 'records validation-correction effort separately from first failure'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E06',
     resultType: 'Efficiency',
@@ -173,7 +174,7 @@ test('TC-AR-E06 records validation-correction effort separately from first failu
   });
 });
 
-test('TC-AR-E07 compares desktop and phone interaction counts for the same fixture', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E07', 'compares desktop and phone interaction counts for the same fixture'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E07',
     resultType: 'Efficiency',
@@ -204,7 +205,7 @@ test('TC-AR-E07 compares desktop and phone interaction counts for the same fixtu
   });
 });
 
-test('TC-AR-E08 records keyboard focus effort through Steps 5–8', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E08', 'records keyboard focus effort through Steps 5–8'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E08',
     resultType: 'Efficiency',
@@ -240,7 +241,7 @@ test('TC-AR-E08 records keyboard focus effort through Steps 5–8', async ({}, t
   });
 });
 
-test('TC-AR-E09 measures data preservation after a recoverable error', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E09', 'measures data preservation after a recoverable error'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E09',
     resultType: 'Efficiency',
@@ -265,7 +266,7 @@ test('TC-AR-E09 measures data preservation after a recoverable error', async ({}
   });
 });
 
-test('TC-AR-E10 remains blocked until copy behavior and a human protocol are approved', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-E10', 'remains blocked until copy behavior and a human protocol are approved'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E10',
     resultType: 'Efficiency',

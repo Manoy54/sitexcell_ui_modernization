@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
 import {
   documentOverflow,
@@ -34,7 +35,7 @@ async function reachStep8(page, checkpoint = async () => {}) {
   await expect(page.locator(STEP[8])).toBeVisible();
 }
 
-test('TC-AR-A01 keeps the Steps 5–8 critical path keyboard reachable', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-A01', 'keeps the Steps 5–8 critical path keyboard reachable'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-A01',
     resultType: 'Acceptance',
@@ -58,7 +59,7 @@ test('TC-AR-A01 keeps the Steps 5–8 critical path keyboard reachable', async (
   });
 });
 
-test('TC-AR-A02 provides usable names for Steps 5–8 form controls', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-A02', 'provides usable names for Steps 5–8 form controls'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-A02',
     resultType: 'Acceptance',
@@ -84,7 +85,7 @@ for (const viewport of [
   { caseId: 'TC-AR-A03', label: 'phone', width: 390, height: 844 },
   { caseId: 'TC-AR-A04', label: 'tablet', width: 768, height: 1024 },
 ]) {
-  test(`${viewport.caseId} remains operable at the ${viewport.label} viewport`, async ({}, testInfo) => {
+  test(accessCaseTitle(viewport.caseId, `remains operable at the ${viewport.label} viewport`), async ({}, testInfo) => {
     await runLiveAccessCase(testInfo, {
       caseId: viewport.caseId,
       resultType: 'Acceptance',
@@ -109,7 +110,7 @@ for (const viewport of [
   });
 }
 
-test('TC-AR-A05 remains operable at a 200% equivalent viewport with reduced motion', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-A05', 'remains operable at a 200% equivalent viewport with reduced motion'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-A05',
     resultType: 'Acceptance',

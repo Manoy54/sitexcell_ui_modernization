@@ -244,14 +244,13 @@ The planned structure is:
 tests/access-requests/
 ├── configs/
 │   ├── playwright.live.config.js
-│   └── playwright.steps-5-8.config.js
+│   └── playwright.steps-1-8.config.js
 ├── fixtures/
 │   ├── access-request-baseline.js
 │   ├── access-request-branches.js
 │   └── uploads/
 ├── live/
-│   ├── core/
-│   └── steps-5-8/
+│   └── steps-1-8/
 │       ├── access-request-pre-submit.spec.js
 │       ├── access-request-step-5-branches.spec.js
 │       ├── access-request-step-6-branches.spec.js
@@ -532,7 +531,7 @@ Raw local result files:
 
 ```text
 .test-artifacts/playwright/access-request-core-results.json
-.test-artifacts/playwright/access-request-steps-5-8-results.json
+.test-artifacts/playwright/access-request-steps-1-8-results.json
 .test-artifacts/playwright/access-request-results.json
 .test-artifacts/playwright/history/<run-id>.json
 ```
@@ -766,7 +765,7 @@ changing the live form or making unsupported human-effort claims.
 
 Deliverables:
 
-- full core plus Steps 5–8 run;
+- full formal Steps 1–8 run;
 - current and archived reports;
 - consolidated sanitized JSON;
 - synchronized matrix, summary, findings, recommendations, and dashboard;
@@ -784,7 +783,7 @@ are also available for their respective suites:
 ```text
 npm run test:access:unit
 npm run test:access:live
-npm run test:access:live:steps-5-8
+npm run test:access:live:steps-1-8
 npm run test:access:live:branches
 npm run test:access:live:uploads
 npm run test:access:live:recovery

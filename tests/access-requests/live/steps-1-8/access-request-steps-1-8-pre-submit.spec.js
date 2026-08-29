@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import { completeBaselineThroughStep4, advanceFromStep } from '../../support/access-request-path.js';
 import { requireCapturedStepsFieldMap } from '../../support/field-map-gate.js';
 import { runLiveAccessCase } from '../../support/live-case.js';
@@ -13,7 +14,7 @@ import { FINAL_SUBMIT, STEP } from '../../support/selectors.js';
 
 const qualificationPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 
-test('TC-AR-006 reaches the valid Step 8 review state without submitting', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-006', 'reaches the valid Step 8 review state without submitting'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-006',
     resultType: 'Acceptance',

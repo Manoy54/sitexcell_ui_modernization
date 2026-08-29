@@ -1,3 +1,5 @@
+import { coveredStepsForCase } from './case-catalog.js';
+
 const RESULT_STATUSES = Object.freeze([
   'PASS',
   'FAIL',
@@ -147,7 +149,11 @@ function normalizeConfigurationPath(value) {
   if (typeof value !== 'string' || !value) return null;
   const normalized = value.replaceAll('\\', '/');
   const repositoryPathStart = normalized.lastIndexOf('tests/access-requests/configs/');
-  return repositoryPathStart >= 0 ? normalized.slice(repositoryPathStart) : normalized;
+  const repositoryPath = repositoryPathStart >= 0 ? normalized.slice(repositoryPathStart) : normalized;
+  return repositoryPath.replace(
+    'tests/access-requests/configs/playwright.steps-5-8.config.js',
+    'tests/access-requests/configs/playwright.steps-1-8.config.js',
+  );
 }
 
 export function buildConsolidatedResult({
@@ -198,6 +204,8 @@ export function consolidatePlaywrightReport(report, {
     ?? normalizeConfigurationPath(environment.configuration);
   const normalizedCases = extractedCases.map((item) => ({
     ...item,
+    suiteWave: 'Steps 1-8',
+    coveredSteps: item.coveredSteps ?? coveredStepsForCase(item.caseId),
     startingPoint: item.startingPoint ?? 'Authenticated Access Request Step 1',
     fixture: item.fixture ?? {
       version: fixtureVersion ?? 1,
@@ -217,7 +225,8 @@ export function consolidatePlaywrightReport(report, {
       if (extractedCaseIds.has(declared.caseId)) continue;
       normalizedCases.push({
         caseId: declared.caseId,
-        suiteWave: /^TC-AR-0[1-6]/i.test(declared.caseId) ? 'Core' : 'Steps 5-8',
+        suiteWave: 'Steps 1-8',
+        coveredSteps: coveredStepsForCase(declared.caseId),
         resultType: 'Dependency preflight',
         status: 'BLOCKED',
         step: null,

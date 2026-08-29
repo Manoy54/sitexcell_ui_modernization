@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import path from 'node:path';
 
 import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
@@ -45,7 +46,7 @@ const branchCases = [
 ];
 
 for (const scenario of branchCases) {
-  test(`${scenario.caseId} characterizes ${scenario.branch}`, async ({}, testInfo) => {
+  test(accessCaseTitle(scenario.caseId, `characterizes ${scenario.branch}`, [scenario.step]), async ({}, testInfo) => {
     await runLiveAccessCase(testInfo, {
       caseId: scenario.caseId,
       resultType: 'Characterization',
@@ -68,7 +69,7 @@ for (const scenario of branchCases) {
   });
 }
 
-test('TC-AR-B08 records controlling-answer changes without silently submitting stale state', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-B08', 'records controlling-answer changes without silently submitting stale state'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-B08',
     resultType: 'Characterization',

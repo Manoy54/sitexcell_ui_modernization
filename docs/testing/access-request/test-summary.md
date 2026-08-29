@@ -10,9 +10,9 @@ Status: Steps 5–8 automation is implemented; live execution is blocked by the 
 - Core implementation: `TC-AR-001`–`TC-AR-006`.
 - Steps 5–8 implementation: 36 cases across conditional branches, recovery,
   uploads, document context, efficiency, accessibility, and responsive behavior.
-- Steps 5–8 Playwright run size: 37 declarations including the authentication
-  preflight dependency.
-- Unit coverage: 17 tests for run IDs, final-submission guards, result
+- Formal Steps 1–8 Playwright run size: 40 declarations including the
+  authentication preflight dependency.
+- Unit coverage: 19 tests for run IDs, final-submission guards, result
   consolidation/sanitization, case catalog integrity, field-map rendering, and
   deterministic synthetic field values.
 
@@ -20,6 +20,7 @@ Status: Steps 5–8 automation is implemented; live execution is blocked by the 
 
 - Run ID: `test-The-CRM-Carpenters-000041-20260829T111406111Z`.
 - Date: 2026-08-29.
+- Scope: Earlier later-step run captured before the formal Steps 1–8 consolidation.
 - Target: `https://co-siter.com.au/access-requests/`.
 - Result: `BLOCKED` by `AUTH-AR-01`.
 - Observed route: `https://co-siter.com.au/`.
@@ -64,7 +65,7 @@ That historical 4/4 result does not override the current `AUTH-AR-01` blocker.
 ## Evidence and reporting
 
 - Raw Playwright report:
-  `.test-artifacts/playwright/access-request-steps-5-8-results.json`.
+  `.test-artifacts/playwright/access-request-steps-1-8-results.json`.
 - Archived raw report:
   `.test-artifacts/playwright/history/test-The-CRM-Carpenters-000041-20260829T111406111Z-steps-5-8.json`.
 - Local consolidated report:
@@ -104,7 +105,7 @@ Refresh an approved account/session that can render
 
 ```powershell
 npm run test:access:capture:steps-5-8
-npm run test:access:live:steps-5-8
+npm run test:access:live:steps-1-8
 ```
 
 Review focused failures before claiming a full pass. The suite must not bypass the

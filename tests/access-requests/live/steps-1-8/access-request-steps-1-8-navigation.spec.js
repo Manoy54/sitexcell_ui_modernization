@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { expect, test } from '@playwright/test';
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import path from 'node:path';
 
 import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
@@ -14,7 +15,7 @@ import { snapshotStepState } from '../../support/step-state.js';
 
 const qualificationPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 
-test('TC-AR-005 preserves entered values while navigating through the approved boundary', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-005', 'preserves entered values while navigating through the approved boundary'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-005',
     resultType: 'Acceptance',

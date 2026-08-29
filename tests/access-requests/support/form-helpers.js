@@ -1,5 +1,7 @@
 import { expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
+
+import { coveredStepsForCase } from './case-catalog.js';
 import { ACCESS_FORM, FINAL_SUBMIT, STEP } from './selectors.js';
 
 export const ACCESS_REQUEST_URL = process.env.ACCESS_REQUEST_URL
@@ -118,7 +120,7 @@ export async function attachCaseResult(testInfo, page, {
   stoppingPoint,
   finalSubmissionAttempted,
   firstFailure = null,
-  suiteWave = 'Core',
+  suiteWave = 'Steps 1-8',
   step = null,
   branch = null,
   blockerId = null,
@@ -126,6 +128,7 @@ export async function attachCaseResult(testInfo, page, {
   retryOutcome = null,
   findingIds = [],
   recommendationIds = [],
+  coveredSteps = coveredStepsForCase(caseId),
   extra = {},
 }) {
   const evidenceName = `${caseId}.json`;
@@ -135,6 +138,7 @@ export async function attachCaseResult(testInfo, page, {
     resultType,
     status,
     step,
+    coveredSteps,
     branch,
     durationMs: Date.now() - startedAt,
     environment: await testEnvironment(page),

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import {
   AccessRequestBlockedError,
   TEST_SITE,
@@ -10,7 +11,7 @@ import { ACCESS_FORM, FINAL_SUBMIT, STEP } from '../../support/selectors.js';
 import { connectToAuthenticatedContext } from '../../support/session.js';
 import { installFinalSubmissionGuard } from '../../support/safety-guards.js';
 
-test('TC-AR-001 opens the authenticated Access Request without submitting', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-001', 'opens the authenticated Access Request without submitting'), async ({}, testInfo) => {
   const startedAt = Date.now();
   const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
   const page = await context.newPage();

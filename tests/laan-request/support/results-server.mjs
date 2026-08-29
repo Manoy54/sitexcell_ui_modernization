@@ -171,7 +171,7 @@ const dashboardHtml = String.raw`<!doctype html>
     const REPORTS = {
       core: { file: 'live-results.json', label: 'Core', configuredTests: 3, scenarios: 3 },
       wave2: { file: 'wave2-results.json', label: 'Wave 2', configuredTests: 7, scenarios: 13 },
-      access: { file: 'access-request-steps-5-8-results.json', label: 'Access Requests Steps 5–8', configuredTests: 37, scenarios: 36 }
+      access: { file: 'access-request-steps-1-8-results.json', label: 'Access Requests Steps 1–8', configuredTests: 40, scenarios: 40 }
     };
     const ACCESS_PLAN = [
       { label: 'Core functional', total: 6, implemented: 6, ids: 'TC-AR-001–006' },
@@ -290,7 +290,7 @@ const dashboardHtml = String.raw`<!doctype html>
       return '<option value="' + current.file + '">Current ' + current.label + ' report</option>' + archived.map(item => '<option value="' + escapeHtml(item.path) + '"' + (activeReportPath === item.path ? ' selected' : '') + '>' + escapeHtml(item.id) + ' · ' + escapeHtml(formatDate(item.startTime)) + '</option>').join('');
     }
     function suiteCommand(suite, cases) {
-      if (suite === 'access') return 'npm run test:access:live:steps-5-8';
+      if (suite === 'access') return 'npm run test:access:live:steps-1-8';
       if (suite === 'core') return 'npm run test:laan:live';
       if (cases.length !== 1) return 'npm run test:laan:live:wave2';
       const file = cases[0].file;
@@ -319,7 +319,7 @@ const dashboardHtml = String.raw`<!doctype html>
       return '<header class="topbar"><div class="breadcrumb"><span>LAAN Requests</span><span>/</span><strong>' + escapeHtml(labels[activeSection]) + '</strong></div><div class="top-actions">' + actions + '</div></header>';
     }
     function pageHead(title, description, showSuiteSwitch = false) {
-      const suiteSwitch = showSuiteSwitch ? '<div class="suite-switch" role="tablist" aria-label="Test suite"><button class="suite-tab ' + (activeSuite === 'core' ? 'is-active' : '') + '" data-suite="core">3 Core</button><button class="suite-tab ' + (activeSuite === 'wave2' ? 'is-active' : '') + '" data-suite="wave2">Wave 2</button><button class="suite-tab ' + (activeSuite === 'access' ? 'is-active' : '') + '" data-suite="access">36 Access 5–8</button></div>' : '';
+      const suiteSwitch = showSuiteSwitch ? '<div class="suite-switch" role="tablist" aria-label="Test suite"><button class="suite-tab ' + (activeSuite === 'core' ? 'is-active' : '') + '" data-suite="core">3 Core</button><button class="suite-tab ' + (activeSuite === 'wave2' ? 'is-active' : '') + '" data-suite="wave2">Wave 2</button><button class="suite-tab ' + (activeSuite === 'access' ? 'is-active' : '') + '" data-suite="access">40 Access 1–8</button></div>' : '';
       return '<div class="page-head"><div><h1>' + escapeHtml(title) + '</h1><p>' + escapeHtml(description) + '</p></div>' + suiteSwitch + '</div>';
     }
     function notice(cases) {
@@ -352,7 +352,7 @@ const dashboardHtml = String.raw`<!doctype html>
       const failed = cases.filter(item => item.status === 'failed').length;
       const blocked = cases.filter(item => item.status === 'blocked').length;
       const skipped = cases.filter(item => item.status === 'skipped').length;
-      const status = failed ? ['failed', 'Needs review'] : blocked ? ['blocked', 'Blocked'] : skipped ? ['skipped', 'Not executed'] : ['passed', 'Passed'];
+      const status = report?.unavailable ? ['review', 'No report'] : failed ? ['failed', 'Needs review'] : blocked ? ['blocked', 'Blocked'] : skipped ? ['skipped', 'Not executed'] : ['passed', 'Passed'];
       return '<section class="surface"><div class="surface-head"><div><h2>Run details</h2><p>Only the essentials</p></div>' + statusPill(status[0], status[1]) + '</div><dl class="fact-list"><div><dt>Started</dt><dd>' + escapeHtml(formatDate(report?.stats?.startTime)) + '</dd></div><div><dt>Suite</dt><dd>' + escapeHtml(REPORTS[activeSuite].label) + '</dd></div><div><dt>Expected size</dt><dd>' + REPORTS[activeSuite].configuredTests + ' tests</dd></div><div><dt>Run scope</dt><dd>' + cases.length + ' ' + (cases.length === 1 ? 'declaration' : 'declarations') + '</dd></div><div><dt>Submission</dt><dd>Blocked</dd></div></dl></section>';
     }
     function shell(content) {
@@ -378,12 +378,15 @@ const dashboardHtml = String.raw`<!doctype html>
     function accessResultsView(report, cases) {
       const blocked = cases.filter(item => item.status === 'blocked').length;
       const failed = cases.filter(item => item.status === 'failed').length;
-      const accessNotice = blocked
-        ? '<div class="notice"><span><strong>' + blocked + ' blocked case</strong> · authentication must be refreshed before dependent Steps 5–8 cases can execute.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
+      const reportUnavailable = report?.unavailable === true;
+      const accessNotice = reportUnavailable
+        ? '<div class="notice"><span><strong>No formal Steps 1–8 report is available</strong> · run the unified Access Request suite to create current evidence.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
+        : blocked
+        ? '<div class="notice"><span><strong>' + blocked + ' blocked case</strong> · authentication must be refreshed before dependent Step 1–8 cases can execute.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
         : failed
           ? '<div class="notice"><span><strong>' + failed + ' failed case' + (failed === 1 ? '' : 's') + '</strong> · inspect evidence before rerunning.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>'
           : '<div class="notice is-success"><span><strong>Current implemented scope passed</strong> · final submission remained blocked.</span><button class="button" type="button" data-open-access="access-plan">View coverage plan</button></div>';
-      return shell(pageHead('Access Request Steps 5–8 results', 'Guarded live characterization and acceptance evidence', true) + accessNotice + summaryStrip(report, cases) + '<div class="workspace-grid"><section class="surface"><div class="surface-head"><div><h2>Access cases completed</h2><p>Each row is a named test case with expandable evidence.</p></div><span>' + cases.length + ' results</span></div><div class="command-bar"><span>Command</span><code>npm run test:access:live:steps-5-8</code></div>' + resultsTable(cases) + '</section>' + runFacts(report, cases) + '</div>');
+      return shell(pageHead('Access Request Steps 1–8 results', 'Guarded live characterization and acceptance evidence', true) + accessNotice + summaryStrip(report, cases) + '<div class="workspace-grid"><section class="surface"><div class="surface-head"><div><h2>Access cases completed</h2><p>Each row is a named test case with expandable evidence.</p></div><span>' + cases.length + ' results</span></div><div class="command-bar"><span>Command</span><code>npm run test:access:live:steps-1-8</code></div>' + resultsTable(cases) + '</section>' + runFacts(report, cases) + '</div>');
     }
     function accessPlanView() {
       const total = ACCESS_PLAN.reduce((sum, item) => sum + item.total, 0);
@@ -424,7 +427,7 @@ const dashboardHtml = String.raw`<!doctype html>
         if (!response.ok) throw new Error('Report unavailable');
         return await response.json();
       } catch {
-        return { suites: [], stats: {} };
+        return { suites: [], stats: {}, unavailable: true };
       }
     }
     async function loadReport(path) {

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import {
   AccessRequestBlockedError,
   attachCaseResult,
@@ -11,7 +12,7 @@ import { FINAL_SUBMIT } from '../../support/selectors.js';
 import { connectToAuthenticatedContext } from '../../support/session.js';
 import { installFinalSubmissionGuard } from '../../support/safety-guards.js';
 
-test('TC-AR-002 completes the synthetic baseline path through Step 4', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-002', 'completes the synthetic baseline path through Step 4'), async ({}, testInfo) => {
   const startedAt = Date.now();
   const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
   const page = await context.newPage();

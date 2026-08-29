@@ -4,7 +4,7 @@
     "runId": "test-The-CRM-Carpenters-000041-20260829T111406111Z",
     "targetUrl": "https://co-siter.com.au/",
     "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-    "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js",
+    "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js",
     "browser": "Microsoft Edge",
     "viewport": {
       "width": 1280,
@@ -39,7 +39,7 @@
   "cases": [
     {
       "caseId": "TC-AR-001",
-      "suiteWave": "Core",
+      "suiteWave": "Steps 1-8",
       "resultType": "Acceptance",
       "status": "BLOCKED",
       "step": null,
@@ -53,7 +53,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "The authenticated Access Request form and Step 1 are visible.",
       "observed": "Expected /access-requests/ but landed on /.",
@@ -76,6 +76,9 @@
       "syntheticDataPolicySatisfied": true,
       "capturedAt": "2026-08-29T11:14:18.165Z",
       "testSite": "The CRM Carpenters Test",
+      "coveredSteps": [
+        1
+      ],
       "startingPoint": "Authenticated Access Request Step 1",
       "fixture": {
         "version": 1,
@@ -85,7 +88,13 @@
     },
     {
       "caseId": "TC-AR-A01",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -99,7 +108,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-A01 keeps the Steps 5–8 critical path keyboard reachable",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -124,7 +133,13 @@
     },
     {
       "caseId": "TC-AR-A02",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -138,7 +153,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-A02 provides usable names for Steps 5–8 form controls",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -163,7 +178,13 @@
     },
     {
       "caseId": "TC-AR-A03",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -177,7 +198,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-A03 remains operable at the phone viewport",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -202,7 +223,13 @@
     },
     {
       "caseId": "TC-AR-A04",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -216,7 +243,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-A04 remains operable at the tablet viewport",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -241,7 +268,13 @@
     },
     {
       "caseId": "TC-AR-A05",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -255,7 +288,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-A05 remains operable at a 200% equivalent viewport with reduced motion",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -280,7 +313,10 @@
     },
     {
       "caseId": "TC-AR-B03",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -294,7 +330,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-B03 characterizes work-isolation-authority-permit-special-access",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -319,7 +355,10 @@
     },
     {
       "caseId": "TC-AR-B05",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        6
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -333,7 +372,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-B05 characterizes after-hours-high-risk",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -358,7 +397,10 @@
     },
     {
       "caseId": "TC-AR-B06",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        6
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -372,7 +414,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-B06 characterizes rooftop-structure-access",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -397,7 +439,12 @@
     },
     {
       "caseId": "TC-AR-B08",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -411,7 +458,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-B08 records controlling-answer changes without silently submitting stale state",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -436,7 +483,10 @@
     },
     {
       "caseId": "TC-AR-D01",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -450,7 +500,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-D01 records the unresolved saved-document decision",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -475,7 +525,10 @@
     },
     {
       "caseId": "TC-AR-D02",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -489,7 +542,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-D02 records the unresolved saved-document decision",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -514,7 +567,10 @@
     },
     {
       "caseId": "TC-AR-D03",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -528,7 +584,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-D03 replaces a request document with explicit file identity evidence",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -553,7 +609,10 @@
     },
     {
       "caseId": "TC-AR-D04",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -567,7 +626,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-D04 characterizes request-specific supporting documents",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -592,7 +651,13 @@
     },
     {
       "caseId": "TC-AR-E01",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -606,7 +671,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E01 records Steps 5–8 manual-field candidates",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -631,7 +696,13 @@
     },
     {
       "caseId": "TC-AR-E02",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -645,7 +716,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E02 records user-equivalent interactions for the valid later-step path",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -670,7 +741,13 @@
     },
     {
       "caseId": "TC-AR-E03",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -684,7 +761,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E03 records repeated later-step values without assuming reuse authority",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -709,7 +786,10 @@
     },
     {
       "caseId": "TC-AR-E04",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -723,7 +803,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E04 records required and optional document handling effort",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -748,7 +828,13 @@
     },
     {
       "caseId": "TC-AR-E05",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -762,7 +848,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E05 records later-step transitions and backtracking points",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -787,7 +873,10 @@
     },
     {
       "caseId": "TC-AR-E06",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -801,7 +890,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E06 records validation-correction effort separately from first failure",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -826,7 +915,13 @@
     },
     {
       "caseId": "TC-AR-E07",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -840,7 +935,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E07 compares desktop and phone interaction counts for the same fixture",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -865,7 +960,13 @@
     },
     {
       "caseId": "TC-AR-E08",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -879,7 +980,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E08 records keyboard focus effort through Steps 5–8",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -904,7 +1005,12 @@
     },
     {
       "caseId": "TC-AR-E09",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -918,7 +1024,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E09 measures data preservation after a recoverable error",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -943,7 +1049,13 @@
     },
     {
       "caseId": "TC-AR-E10",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -957,7 +1069,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-E10 remains blocked until copy behavior and a human protocol are approved",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -982,7 +1094,17 @@
     },
     {
       "caseId": "TC-AR-005",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -996,7 +1118,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-005 preserves entered values while navigating through the approved boundary",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1021,7 +1143,17 @@
     },
     {
       "caseId": "TC-AR-006",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1035,7 +1167,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-006 reaches the valid Step 8 review state without submitting",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1060,7 +1192,12 @@
     },
     {
       "caseId": "TC-AR-R01",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1074,7 +1211,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-R01 preserves Step 5–7 values through Back and Next",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1099,7 +1236,13 @@
     },
     {
       "caseId": "TC-AR-R02",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1113,7 +1256,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-R02 characterizes reload state on every approved later step",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1138,7 +1281,10 @@
     },
     {
       "caseId": "TC-AR-R03",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1152,7 +1298,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-R03 preserves unrelated state while correcting later-step validation",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1177,7 +1323,13 @@
     },
     {
       "caseId": "TC-AR-R04",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1191,7 +1343,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-R04 remains blocked until the draft lifecycle is approved",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1216,7 +1368,10 @@
     },
     {
       "caseId": "TC-AR-U01",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1230,7 +1385,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-U01 rejects a missing required Step 7 upload",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1255,7 +1410,10 @@
     },
     {
       "caseId": "TC-AR-U02",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1269,7 +1427,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-U02 accepts allowed synthetic files without submitting",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1294,7 +1452,10 @@
     },
     {
       "caseId": "TC-AR-U03",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1308,7 +1469,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-U03 rejects a disallowed synthetic file type",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1333,7 +1494,10 @@
     },
     {
       "caseId": "TC-AR-U04",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1347,7 +1511,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-U04 enforces the declared upload size boundary",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1372,7 +1536,10 @@
     },
     {
       "caseId": "TC-AR-U05",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1386,7 +1553,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-U05 replaces a reviewed file without retaining the previous filename",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1411,7 +1578,10 @@
     },
     {
       "caseId": "TC-AR-U06",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1425,7 +1595,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-U06 removes a reviewed file and invalidates related confirmations",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",
@@ -1450,7 +1620,10 @@
     },
     {
       "caseId": "TC-AR-U07",
-      "suiteWave": "Steps 5-8",
+      "suiteWave": "Steps 1-8",
+      "coveredSteps": [
+        7
+      ],
       "resultType": "Dependency preflight",
       "status": "BLOCKED",
       "step": null,
@@ -1464,7 +1637,7 @@
         },
         "url": "https://co-siter.com.au/",
         "commit": "304842dbf40710635c577a24a2e05ffaa7d3edad",
-        "configuration": "tests/access-requests/configs/playwright.steps-5-8.config.js"
+        "configuration": "tests/access-requests/configs/playwright.steps-1-8.config.js"
       },
       "expected": "TC-AR-U07 records controlled upload failure as blocked until staging controls exist",
       "observed": "Not executed because AUTH-AR-01 blocked the authentication preflight.",

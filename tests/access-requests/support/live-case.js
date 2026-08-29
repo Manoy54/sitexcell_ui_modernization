@@ -10,7 +10,7 @@ export async function runLiveAccessCase(testInfo, {
   caseId,
   resultType,
   expected,
-  suiteWave = 'Steps 5-8',
+  suiteWave = 'Steps 1-8',
   step = null,
   branch = null,
 }, exercise) {

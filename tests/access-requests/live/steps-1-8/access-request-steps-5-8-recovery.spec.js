@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
 
+import { accessCaseTitle } from '../../support/case-catalog.js';
 import { advanceFromStep, completeBaselineThroughStep4 } from '../../support/access-request-path.js';
 import {
   AccessRequestBlockedError,
@@ -28,7 +29,7 @@ async function reachStep(page, targetStep) {
   }
 }
 
-test('TC-AR-R01 preserves Step 5–7 values through Back and Next', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-R01', 'preserves Step 5–7 values through Back and Next'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-R01',
     resultType: 'Acceptance',
@@ -59,7 +60,7 @@ test('TC-AR-R01 preserves Step 5–7 values through Back and Next', async ({}, t
   });
 });
 
-test('TC-AR-R02 characterizes reload state on every approved later step', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-R02', 'characterizes reload state on every approved later step'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-R02',
     resultType: 'Characterization',
@@ -88,7 +89,7 @@ test('TC-AR-R02 characterizes reload state on every approved later step', async 
   });
 });
 
-test('TC-AR-R03 preserves unrelated state while correcting later-step validation', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-R03', 'preserves unrelated state while correcting later-step validation'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-R03',
     resultType: 'Acceptance',
@@ -142,7 +143,7 @@ test('TC-AR-R03 preserves unrelated state while correcting later-step validation
   });
 });
 
-test('TC-AR-R04 remains blocked until the draft lifecycle is approved', async ({}, testInfo) => {
+test(accessCaseTitle('TC-AR-R04', 'remains blocked until the draft lifecycle is approved'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-R04',
     resultType: 'Decision',
