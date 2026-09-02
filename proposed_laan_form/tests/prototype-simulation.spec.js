@@ -114,6 +114,16 @@ test('rejects impossible dates inline and recovers on correction', async ({ page
   await expect(page.getByTestId('stage-two')).toBeVisible();
 });
 
+test('keeps Inspection, Installation, and Maintenance selectable', async ({ page }) => {
+  for (const activity of ['Inspection', 'Installation', 'Maintenance']) {
+    await page.goto('/?simulation=1');
+    await page.evaluate(() => sessionStorage.clear());
+    await page.reload();
+    await chooseActivity(page, activity);
+    await expect(page.getByTestId('activity-control')).toContainText(activity);
+  }
+});
+
 test('searches and selects a canonical Site with keyboard input', async ({ page }) => {
   const site = page.getByTestId('site-search');
   await site.fill('CRM');
@@ -133,9 +143,24 @@ test('invalidates confirmation for an invalid, oversized, replaced, or removed u
   await upload.setInputFiles(validFile);
   await expect(page.getByTestId('stage-two').getByText('Uploaded', { exact: false }).first()).toBeVisible();
   await page.getByTestId('upload-reviewed').check();
+  await upload.setInputFiles({ name: 'replacement.pdf', mimeType: 'application/pdf', buffer: Buffer.from('replacement') });
+  await expect(page.getByTestId('stage-two').getByText('replacement.pdf', { exact: false })).toBeVisible();
+  await expect(page.getByTestId('upload-reviewed')).not.toBeChecked();
+  await page.getByTestId('upload-reviewed').check();
   await page.getByTestId('required-remove-0').click();
   await expect(page.getByTestId('upload-reviewed')).not.toBeChecked();
   await expect(page.getByTestId('required-upload')).toHaveCount(1);
+});
+
+test('accepts a required upload at the exact size limit', async ({ page }) => {
+  await completeStageOne(page);
+  await page.getByTestId('required-upload').setInputFiles({
+    name: 'exact-limit.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.alloc(20 * 1024 * 1024),
+  });
+  await expect(page.getByTestId('stage-two').getByText('exact-limit.pdf', { exact: false })).toBeVisible();
+  await expect(page.getByTestId('stage-two').getByText('Uploaded', { exact: false }).first()).toBeVisible();
 });
 
 test('supports a simulated upload retry and keeps Submit disabled until every confirmation is complete', async ({ page }) => {
@@ -182,18 +207,6 @@ test('enforces configured commencement-date boundaries while accepting exact lim
   await page.getByTestId('commencement-date').fill('31-12-2028');
   await page.getByRole('button', { name: 'Next', exact: true }).click();
   await expect(page.getByTestId('commencementDate-error')).toHaveText(/on or before 31-12-2027/);
-});
-
-test('renders every Stage 2 prototype layout with the same semantic controls', async ({ page }) => {
-  for (const variant of ['A', 'B', 'C']) {
-    await page.goto(`/?simulation=1&variant=${variant}`);
-    await page.evaluate(() => sessionStorage.clear());
-    await page.reload();
-    await completeStageOne(page);
-    await expect(page.getByTestId('stage-two')).toBeVisible();
-    await expect(page.getByTestId('stage-two-submit')).toBeDisabled();
-    await expect(page.getByRole('complementary', { name: 'Request workspace' })).toBeVisible();
-  }
 });
 
 test('keeps the simulation usable at a phone viewport', async ({ page }) => {

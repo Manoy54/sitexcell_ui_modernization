@@ -1,4 +1,4 @@
-import { activities, owners, sites, uploadRules as prototypeUploadRules } from '../../fixtures/laan-fixtures.js';
+import { activities, owners, sites, uploadRules as prototypeUploadRules } from '../../fixtures/prototype-fixtures.js';
 import { siteContextById } from '../../fixtures/site-context.example.js';
 
 const root = document.querySelector('#prototype-root');
@@ -17,16 +17,7 @@ const dateBoundaryInputs = {
     minimum: nativeConfig.minimumCommencementDate ?? new URLSearchParams(window.location.search).get('minDate') ?? '',
     maximum: nativeConfig.maximumCommencementDate ?? new URLSearchParams(window.location.search).get('maxDate') ?? '',
 };
-const prototypeVariants = {
-    A: 'Original stack',
-    B: 'Single-screen split',
-    C: 'Three-lane workspace',
-};
 const prototypeSearchParams = new URLSearchParams(window.location.search);
-const currentPrototypeVariant = () => {
-    const variant = new URLSearchParams(window.location.search).get('variant')?.toUpperCase();
-    return Object.hasOwn(prototypeVariants, variant) ? variant : 'B';
-};
 
 const defaultState = {
     step: 1,
@@ -641,19 +632,22 @@ const renderUploadCard = (kind, label, required) => {
     const hasError = files.some((item) => item.status === 'error');
     const statusCopy = !files.length
         ? `${required ? 'Required' : 'Optional'} · PDF, JPG or PNG · maximum ${uploadRules.maximumLabel}`
-        : files.map((item) => item.status === 'uploading'
+        : '';
+    const fileRows = files.map((item, index) => {
+        const status = item.status === 'uploading'
             ? `Uploading ${escapeHtml(item.name)}…`
             : item.status === 'error'
                 ? escapeHtml(item.error)
-                : `${escapeHtml(item.name)} · ${formatBytes(item.size)} · Uploaded`).join(' · ');
+                : `${escapeHtml(item.name)} · ${formatBytes(item.size)} · Uploaded`;
+        return `<div class="upload-file-row" data-testid="${kind}-file-${index}"><span>${status}</span><button class="icon-button" type="button" data-testid="${kind}-remove-${index}" data-action="remove-file" data-upload-kind="${kind}" data-upload-index="${index}" aria-label="Remove ${escapeHtml(item.name)}">${icon('close', 'icon-small')}</button></div>`;
+    }).join('');
 
     return `<div class="upload-card${hasError ? ' has-error' : ''}">
         <span class="upload-icon">${icon(files.length ? 'file' : 'upload')}</span>
-        <div class="upload-copy"><strong>${label}${required ? ' *' : ''}</strong><span>${statusCopy}</span></div>
+        <div class="upload-copy"><strong>${label}${required ? ' *' : ''}</strong><span>${statusCopy}</span>${fileRows}</div>
         <div class="upload-buttons">
             <input class="sr-only" id="${inputId}" data-testid="${kind}-upload" data-upload-kind="${kind}" type="file" accept=".pdf,.jpg,.jpeg,.png"${kind === 'additional' ? ' multiple' : ''}>
-            <button class="upload-button" type="button" data-action="choose-file" data-upload-kind="${kind}">${files.length ? 'Replace' : 'Choose file'}</button>
-            ${files.map((item, index) => `<button class="icon-button" type="button" data-testid="${kind}-remove-${index}" data-action="remove-file" data-upload-kind="${kind}" data-upload-index="${index}" aria-label="Remove ${escapeHtml(item.name)}">${icon('close', 'icon-small')}</button>`).join('')}
+            <button class="upload-button" type="button" data-action="choose-file" data-upload-kind="${kind}">${kind === 'additional' ? 'Add files' : files.length ? 'Replace' : 'Choose file'}</button>
         </div>
     </div>`;
 };
@@ -731,67 +725,12 @@ const renderStageTwoOriginal = () => `<div class="page-two-prototype page-two-or
     ${renderStageTwoActions()}
 </div>`;
 
-const renderStageTwoSplit = () => `<div class="page-two-prototype page-two-split" data-testid="stage-two">
-    <div class="stage-two-context-line">
-        <span>${escapeHtml(state.fields.activity)} request</span>
-        <span>${escapeHtml(state.fields.commencementDate)}</span>
-        <span title="${escapeHtml(selectedSite()?.name ?? '')}">${escapeHtml(selectedSite()?.name ?? 'Site not selected')}</span>
-        <button type="button" data-action="go-stage-one">Edit request context</button>
-    </div>
-    <div class="page-two-split-grid">
-        <section class="page-two-details" aria-labelledby="access-details-heading">
-            <h2 class="page-two-panel-heading" id="access-details-heading">Access details</h2>
-            ${renderPageTwoFields()}
-        </section>
-        <aside class="page-two-evidence-panel" aria-labelledby="evidence-heading">
-            <h2 class="page-two-panel-heading" id="evidence-heading">Evidence and confirmation</h2>
-            ${renderPageTwoEvidence()}
-            ${renderStageTwoActions()}
-        </aside>
-    </div>
-</div>`;
-
-const renderStageTwoLanes = () => `<div class="page-two-prototype page-two-lanes" data-testid="stage-two">
-    ${renderContextStrip()}
-    <div class="page-two-lane-grid">
-        <section aria-labelledby="carrier-lane-heading">
-            <h2 class="page-two-panel-heading" id="carrier-lane-heading">Carrier</h2>
-            <div class="lane-fields">
-                ${renderTextField({ name: 'carrier', id: 'input_1_58', label: 'Registered Carrier Name', count: true })}
-                ${renderTextField({ name: 'projectReference', id: 'input_1_18', label: 'Carrier Project Reference', count: true })}
-            </div>
-        </section>
-        <section aria-labelledby="tenant-lane-heading">
-            <h2 class="page-two-panel-heading" id="tenant-lane-heading">Tenant and access</h2>
-            <div class="lane-fields tenant-lane-fields">
-                ${renderTextField({ name: 'tenantCompany', id: 'input_1_19', label: 'Tenant Company Name', help: 'Tenant/Lessee Name', count: true })}
-                ${renderTextField({ name: 'contactName', id: 'input_1_83', label: 'Tenant Contact Person' })}
-                ${renderTextField({ name: 'contactPhone', id: 'input_1_87', label: 'Tenant Contact Number', type: 'tel' })}
-                ${renderTextField({ name: 'workLocation', id: 'input_1_22', label: 'Tenant Location/Floor', help: 'EG L14, Rooftop, Tower', count: true })}
-                ${renderTextField({ name: 'affectedAreas', id: 'input_1_64', label: 'Areas to be Accessed', count: true })}
-            </div>
-        </section>
-        <aside aria-labelledby="evidence-lane-heading">
-            <h2 class="page-two-panel-heading" id="evidence-lane-heading">Evidence</h2>
-            ${renderPageTwoEvidence()}
-            ${renderStageTwoActions()}
-        </aside>
-    </div>
-</div>`;
-
 const renderStageTwo = () => {
-    const variant = currentPrototypeVariant();
-    const content = variant === 'A'
-        ? renderStageTwoOriginal()
-        : variant === 'C'
-            ? renderStageTwoLanes()
-            : renderStageTwoSplit();
-
-    return `${renderErrorSummary()}${renderCompletion()}${content}`;
+    return `${renderErrorSummary()}${renderCompletion()}${renderStageTwoOriginal()}`;
 };
 
 const renderForm = () => `
-    <form class="form-wrap${state.step === 2 ? ` is-stage-two variant-${currentPrototypeVariant().toLowerCase()}` : ''}" id="laan-prototype-form" data-testid="laan-form" novalidate>
+    <form class="form-wrap${state.step === 2 ? ' is-stage-two' : ''}" id="laan-prototype-form" data-testid="laan-form" novalidate>
         ${renderProgress()}
         ${state.step === 1 ? `<div data-testid="stage-one">${renderStageOne()}</div>` : renderStageTwo()}
     </form>`;
@@ -834,22 +773,9 @@ const renderWorkspace = () => {
     </aside>`;
 };
 
-const renderPrototypeSwitcher = () => {
-    if (isNativeWordPress || state.step !== 2) {
-        return '';
-    }
-
-    const variant = currentPrototypeVariant();
-    return `<nav class="prototype-switcher" aria-label="Page 2 prototype variants">
-        <button type="button" data-action="cycle-variant" data-direction="-1" aria-label="Previous variant">&larr;</button>
-        <span><strong>${variant}</strong> &mdash; ${prototypeVariants[variant]}</span>
-        <button type="button" data-action="cycle-variant" data-direction="1" aria-label="Next variant">&rarr;</button>
-    </nav>`;
-};
-
 const renderApplication = () => {
     const overflowState = Object.keys(state.errors).length || state.completionShown ? ' has-overflow-state' : '';
-    return `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout${state.step === 2 ? ` is-stage-two variant-${currentPrototypeVariant().toLowerCase()}${overflowState}` : ''}"><div class="form-surface">${renderForm()}</div>${renderWorkspace()}</div></section>${renderPrototypeSwitcher()}</main>`;
+    return `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout${state.step === 2 ? ` is-stage-two${overflowState}` : ''}"><div class="form-surface">${renderForm()}</div>${renderWorkspace()}</div></section></main>`;
 };
 
 const render = ({ focusSite = false, focusError = false, scrollTop = false } = {}) => {
@@ -883,16 +809,6 @@ const render = ({ focusSite = false, focusError = false, scrollTop = false } = {
             }
         });
     }
-};
-
-const cyclePrototypeVariant = (direction) => {
-    const keys = Object.keys(prototypeVariants);
-    const currentIndex = keys.indexOf(currentPrototypeVariant());
-    const nextIndex = (currentIndex + direction + keys.length) % keys.length;
-    const url = new URL(window.location.href);
-    url.searchParams.set('variant', keys[nextIndex]);
-    window.history.replaceState({}, '', url);
-    render({ scrollTop: true });
 };
 
 const validateStageOne = () => {
@@ -1203,18 +1119,6 @@ root.addEventListener('focusin', (event) => {
     }
 });
 
-document.addEventListener('keydown', (event) => {
-    const isTextEditing = event.target instanceof HTMLInputElement
-        || event.target instanceof HTMLTextAreaElement
-        || event.target instanceof HTMLSelectElement
-        || event.target?.isContentEditable;
-
-    if (!isNativeWordPress && state.step === 2 && !isTextEditing && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
-        event.preventDefault();
-        cyclePrototypeVariant(event.key === 'ArrowLeft' ? -1 : 1);
-    }
-});
-
 root.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && (state.openDropdown || state.siteMenuOpen || state.calendarOpen)) {
         event.preventDefault();
@@ -1257,11 +1161,6 @@ root.addEventListener('click', (event) => {
     }
 
     const action = control.dataset.action;
-
-    if (action === 'cycle-variant') {
-        cyclePrototypeVariant(Number(control.dataset.direction));
-        return;
-    }
 
     if (action === 'toggle-dropdown') {
         state.openDropdown = state.openDropdown === control.dataset.dropdown ? '' : control.dataset.dropdown;
