@@ -133,6 +133,26 @@ test('searches and selects a canonical Site with keyboard input', async ({ page 
   await expect(page.getByTestId('site-result')).toHaveCount(0);
 });
 
+test('supports keyboard activation through the Stage 1 gate', async ({ page }) => {
+  const activity = page.getByTestId('activity-control');
+  await activity.focus();
+  await activity.press('Enter');
+  const installation = page.getByRole('option', { name: 'Installation', exact: true });
+  await installation.focus();
+  await installation.press('Enter');
+  await page.getByTestId('commencement-date').fill('30-09-2026');
+  const site = page.getByTestId('site-search');
+  await site.fill('CRM');
+  await site.press('Enter');
+  const terms = page.getByTestId('terms-confirmation');
+  await terms.focus();
+  await terms.press('Space');
+  const next = page.getByTestId('stage-one-submit');
+  await next.focus();
+  await next.press('Enter');
+  await expect(page.getByTestId('stage-two')).toBeVisible();
+});
+
 test('invalidates confirmation for an invalid, oversized, replaced, or removed upload', async ({ page }) => {
   await completeStageOne(page);
   const upload = page.getByTestId('required-upload');
