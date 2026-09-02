@@ -1,5 +1,5 @@
 import { activities, owners, sites, uploadRules as prototypeUploadRules } from '../../fixtures/laan-fixtures.js';
-import { siteContextById } from '../../fixtures/site-context.js';
+import { siteContextById } from '../../fixtures/site-context.example.js';
 
 const root = document.querySelector('#prototype-root');
 const nativeConfig = window.SitexcellLaanConfig ?? {};
@@ -12,7 +12,11 @@ const siteRecords = Array.isArray(nativeConfig.sites) && nativeConfig.sites.leng
     ? nativeConfig.sites
     : sites.map((site) => ({ ...site, ...siteContextById[site.id] }));
 const uploadRules = nativeConfig.uploadRules ?? prototypeUploadRules;
-const pendingFiles = { required: null, additional: null };
+const pendingFiles = { required: null, additional: [] };
+const dateBoundaryInputs = {
+    minimum: nativeConfig.minimumCommencementDate ?? new URLSearchParams(window.location.search).get('minDate') ?? '',
+    maximum: nativeConfig.maximumCommencementDate ?? new URLSearchParams(window.location.search).get('maxDate') ?? '',
+};
 const prototypeVariants = {
     A: 'Original stack',
     B: 'Single-screen split',
@@ -48,7 +52,7 @@ const defaultState = {
     },
     files: {
         required: null,
-        additional: null,
+        additional: [],
     },
     confirmations: {
         uploadReviewed: false,
@@ -80,7 +84,13 @@ const restoreSessionState = () => {
         ...structuredClone(defaultState),
         ...restored,
         fields: { ...defaultState.fields, ...restored.fields },
-        files: { ...defaultState.files, ...restored.files },
+        files: {
+            ...defaultState.files,
+            ...restored.files,
+            additional: Array.isArray(restored.files?.additional)
+                ? restored.files.additional
+                : restored.files?.additional ? [restored.files.additional] : [],
+        },
         confirmations: { ...defaultState.confirmations, ...restored.confirmations },
         errors: {},
         siteMenuOpen: false,
@@ -131,6 +141,32 @@ const parseDateValue = (value) => {
         : null;
 };
 
+const parseBoundary = (value, label) => {
+    if (!value) {
+        return { value: '', time: null, error: '' };
+    }
+
+    const parsed = parseDateValue(value);
+    const time = parsed ? Date.UTC(parsed.year, parsed.month, parsed.day) : null;
+    const calendarValid = parsed && new Date(time).getUTCFullYear() === parsed.year
+        && new Date(time).getUTCMonth() === parsed.month
+        && new Date(time).getUTCDate() === parsed.day;
+
+    return {
+        value,
+        time: calendarValid ? time : null,
+        error: calendarValid ? '' : `${label} must be a real date in DD-MM-YYYY format.`,
+    };
+};
+
+const minimumBoundary = parseBoundary(dateBoundaryInputs.minimum, 'The minimum commencement date');
+const maximumBoundary = parseBoundary(dateBoundaryInputs.maximum, 'The maximum commencement date');
+const dateBoundaryPolicy = { minimum: minimumBoundary.value, maximum: maximumBoundary.value };
+const dateBoundaryConfigError = minimumBoundary.error
+    || maximumBoundary.error
+    || (minimumBoundary.time !== null && maximumBoundary.time !== null && minimumBoundary.time > maximumBoundary.time
+        ? 'The configured commencement-date range is invalid.' : '');
+
 const shortMonthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const weekdayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 const today = new Date();
@@ -147,6 +183,10 @@ const calendarDateFromKey = (key) => {
 };
 
 const dateIsValid = (value) => {
+    if (dateBoundaryConfigError) {
+        return false;
+    }
+
     const parsed = parseDateValue(value);
 
     if (!parsed) {
@@ -155,9 +195,50 @@ const dateIsValid = (value) => {
 
     const date = new Date(Date.UTC(parsed.year, parsed.month, parsed.day));
 
-    return date.getUTCFullYear() === parsed.year
+    const calendarValid = date.getUTCFullYear() === parsed.year
         && date.getUTCMonth() === parsed.month
         && date.getUTCDate() === parsed.day;
+
+    if (!calendarValid) {
+        return false;
+    }
+
+    const valueTime = date.getTime();
+    const minimumTime = minimumBoundary.time ?? -Infinity;
+    const maximumTime = maximumBoundary.time ?? Infinity;
+    return valueTime >= minimumTime && valueTime <= maximumTime;
+};
+
+const dateBoundaryError = (value) => {
+    if (dateBoundaryConfigError) {
+        return dateBoundaryConfigError;
+    }
+
+    const parsed = parseDateValue(value);
+    if (!parsed || (!dateBoundaryPolicy.minimum && !dateBoundaryPolicy.maximum)) {
+        return '';
+    }
+
+    const calendarDate = new Date(Date.UTC(parsed.year, parsed.month, parsed.day));
+    if (calendarDate.getUTCFullYear() !== parsed.year
+        || calendarDate.getUTCMonth() !== parsed.month
+        || calendarDate.getUTCDate() !== parsed.day) {
+        return '';
+    }
+
+    const valueTime = Date.UTC(parsed.year, parsed.month, parsed.day);
+    const minimum = parseDateValue(dateBoundaryPolicy.minimum);
+    const maximum = parseDateValue(dateBoundaryPolicy.maximum);
+
+    if (minimum && valueTime < Date.UTC(minimum.year, minimum.month, minimum.day)) {
+        return `Use a commencement date on or after ${dateBoundaryPolicy.minimum}.`;
+    }
+
+    if (maximum && valueTime > Date.UTC(maximum.year, maximum.month, maximum.day)) {
+        return `Use a commencement date on or before ${dateBoundaryPolicy.maximum}.`;
+    }
+
+    return '';
 };
 
 const stageOneChecks = () => ({
@@ -186,6 +267,8 @@ const formIsReady = () => Object.values(stageOneChecks()).every(Boolean)
     && requiredUploadComplete()
     && declarationsComplete();
 
+const renderReadinessContent = (ready) => `<div><strong>${ready ? 'Request details are ready for review' : 'Request details are incomplete'}</strong><span>${ready ? 'All required fields, evidence and confirmations are complete.' : 'The Request workspace lists the outstanding requirements.'}</span></div>${icon(ready ? 'check' : 'info')}`;
+
 const serializableState = () => ({
     step: state.step,
     fields: state.fields,
@@ -206,7 +289,7 @@ const setState = (changes, options = {}) => {
 };
 
 const errorFor = (name) => state.errors[name]
-    ? `<span class="field-error" id="${name}-error">${escapeHtml(state.errors[name])}</span>`
+    ? `<span class="field-error" id="${name}-error" data-testid="${name}-error">${escapeHtml(state.errors[name])}</span>`
     : '';
 
 const errorClass = (name) => state.errors[name] ? ' has-error' : '';
@@ -273,7 +356,7 @@ const renderDropdown = ({ name, id, label, placeholder, options }) => {
     const menuId = `${name}-options`;
 
     return `<div class="control-shell dropdown-shell">
-        <button class="control dropdown-trigger" id="${id}" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="${open}" aria-controls="${menuId}" data-action="toggle-dropdown" data-dropdown="${name}">
+        <button class="control dropdown-trigger" id="${id}" data-testid="${name}-control" type="button" role="combobox" aria-haspopup="listbox" aria-expanded="${open}" aria-controls="${menuId}" data-action="toggle-dropdown" data-dropdown="${name}">
             <span class="dropdown-value">${escapeHtml(selectedLabel)}</span>
             ${icon('chevron', `icon-small dropdown-chevron${open ? ' is-open' : ''}`)}
         </button>
@@ -380,9 +463,9 @@ const renderSiteResults = () => {
 
     const matches = filteredSites();
 
-    return `<div class="site-results" role="listbox" aria-label="Site results">
+    return `<div class="site-results" role="listbox" aria-label="Site results" data-testid="site-results">
         ${matches.length
-            ? matches.map((site, index) => `<button class="site-result${index === 0 ? ' is-highlighted' : ''}" type="button" role="option" data-action="select-site" data-site-id="${escapeHtml(site.id)}"><strong>${escapeHtml(site.name)}</strong><span>${escapeHtml(siteMeta(site))}</span></button>`).join('')
+            ? matches.map((site, index) => `<button class="site-result${index === 0 ? ' is-highlighted' : ''}" type="button" role="option" data-testid="site-result" data-action="select-site" data-site-id="${escapeHtml(site.id)}"><strong>${escapeHtml(site.name)}</strong><span>${escapeHtml(siteMeta(site))}</span></button>`).join('')
             : '<p class="site-no-results">No Sites match this search.</p>'}
     </div>`;
 };
@@ -406,7 +489,7 @@ const renderTerms = () => `
     <div class="terms-area${errorClass('termsAccepted')}">
         <span class="field-label">Acceptance of Terms and Conditions <span class="required">*</span></span>
         <label class="check-row terms-check">
-            <input id="choice_1_63_1" name="termsAccepted" type="checkbox"${state.fields.termsAccepted ? ' checked' : ''}${describedBy('termsAccepted')}>
+            <input id="choice_1_63_1" data-testid="terms-confirmation" name="termsAccepted" type="checkbox"${state.fields.termsAccepted ? ' checked' : ''}${describedBy('termsAccepted')}>
             <span>I accept the Terms and Conditions of the co-siter™ Portal</span>
         </label>
         ${errorFor('termsAccepted')}
@@ -469,9 +552,9 @@ const renderTerms = () => `
 
 const renderDraftActions = () => `
     <div class="draft-actions" aria-label="Prototype draft actions">
-        <button class="button-link" type="button" data-action="save-draft">Save draft</button>
-        <button class="button-link" type="button" data-action="restore-draft"${sessionStorage.getItem(draftKey) ? '' : ' disabled'}>Restore</button>
-        <button class="button-link" type="button" data-action="discard-draft"${sessionStorage.getItem(draftKey) ? '' : ' disabled'}>Discard</button>
+        <button class="button-link" type="button" data-testid="save-draft" data-action="save-draft">Save draft</button>
+        <button class="button-link" type="button" data-testid="restore-draft" data-action="restore-draft"${sessionStorage.getItem(draftKey) ? '' : ' disabled'}>Restore</button>
+        <button class="button-link" type="button" data-testid="discard-draft" data-action="discard-draft"${sessionStorage.getItem(draftKey) ? '' : ' disabled'}>Discard</button>
         ${state.draftMessage ? `<span class="draft-status" role="status">${escapeHtml(state.draftMessage)}</span>` : ''}
     </div>`;
 
@@ -488,7 +571,7 @@ const renderStageOne = () => `
         <div class="field stage-one-date${errorClass('commencementDate')}">
             <label for="input_1_12">Proposed Commencement Date <span class="required">*</span></label>
             <div class="control-shell">
-                <input class="control" id="input_1_12" name="commencementDate" type="text" inputmode="numeric" placeholder="dd-mm-yyyy" value="${escapeHtml(state.fields.commencementDate)}"${describedBy('commencementDate', 'date-help')}>
+                <input class="control" id="input_1_12" data-testid="commencement-date" name="commencementDate" type="text" inputmode="numeric" placeholder="dd-mm-yyyy" value="${escapeHtml(state.fields.commencementDate)}"${describedBy('commencementDate', 'date-help')}>
                 <button class="control-icon no-divider" type="button" data-action="toggle-calendar" aria-label="${state.calendarOpen ? 'Close' : 'Open'} commencement date calendar" aria-expanded="${state.calendarOpen}">${icon('calendar', 'icon-small')}</button>
                 ${renderCalendar()}
             </div>
@@ -504,7 +587,7 @@ const renderStageOne = () => `
     <div class="field stage-one-site${errorClass('siteId')}">
         <label for="input_1_41">Site name <span class="required">*</span></label>
         <div class="control-shell site-control">
-            <input class="control" id="input_1_41" name="siteQuery" type="search" autocomplete="off" placeholder="Type or open Site list" value="${escapeHtml(state.fields.siteQuery)}" role="combobox" aria-expanded="${state.siteMenuOpen}" aria-controls="site-results"${describedBy('siteId', 'site-help')}>
+            <input class="control" id="input_1_41" data-testid="site-search" name="siteQuery" type="search" autocomplete="off" placeholder="Type or open Site list" value="${escapeHtml(state.fields.siteQuery)}" role="combobox" aria-expanded="${state.siteMenuOpen}" aria-controls="site-results"${describedBy('siteId', 'site-help')}>
             ${selectedSite() ? `<button class="control-icon site-clear" type="button" data-action="clear-site" aria-label="Clear selected Site">${icon('close', 'icon-small')}</button>` : ''}
             <button class="control-icon${state.siteMenuOpen ? ' is-open' : ''}" type="button" data-action="toggle-site-menu" aria-label="${state.siteMenuOpen ? 'Close' : 'Open'} complete Site list" aria-expanded="${state.siteMenuOpen}">${icon('chevron', `icon-small dropdown-chevron${state.siteMenuOpen ? ' is-open' : ''}`)}</button>
             ${renderSiteResults()}
@@ -516,7 +599,7 @@ const renderStageOne = () => `
     ${renderSiteRequirements()}
     ${renderTerms()}
     <div class="form-actions">
-        <button class="button-primary" type="submit">Next</button>
+        <button class="button-primary" data-testid="stage-one-submit" type="submit">Next</button>
         ${renderDraftActions()}
     </div>`;
 
@@ -536,7 +619,7 @@ const renderContextStrip = () => {
 const renderTextField = ({ name, id, label, placeholder = '', type = 'text', span = false, help = '', count = false }) => `
     <div class="field${span ? ' field-span' : ''}${errorClass(name)}">
         <label for="${id}">${label} <span class="required">*</span></label>
-        <input class="control" id="${id}" name="${name}" type="${type}" placeholder="${escapeHtml(placeholder)}" value="${escapeHtml(state.fields[name])}"${describedBy(name)}>
+        <input class="control" id="${id}" data-testid="${name}-field" name="${name}" type="${type}" placeholder="${escapeHtml(placeholder)}" value="${escapeHtml(state.fields[name])}"${describedBy(name)}>
         ${help || count ? `<span class="field-help field-meta">${help ? `<span>${escapeHtml(help)}</span>` : '<span></span>'}${count ? `<span data-character-count="${name}">${state.fields[name].length} of 255 max characters</span>` : ''}</span>` : ''}
         ${errorFor(name)}
     </div>`;
@@ -550,24 +633,27 @@ const formatBytes = (bytes) => {
 };
 
 const renderUploadCard = (kind, label, required) => {
-    const file = state.files[kind];
+    const files = kind === 'additional'
+        ? state.files.additional
+        : state.files.required ? [state.files.required] : [];
+    const file = files[0] ?? null;
     const inputId = `${kind}-file-input`;
-    const hasError = file?.status === 'error';
-    const statusCopy = !file
+    const hasError = files.some((item) => item.status === 'error');
+    const statusCopy = !files.length
         ? `${required ? 'Required' : 'Optional'} · PDF, JPG or PNG · maximum ${uploadRules.maximumLabel}`
-        : file.status === 'uploading'
-            ? `Uploading ${escapeHtml(file.name)}…`
-            : file.status === 'error'
-                ? escapeHtml(file.error)
-                : `${escapeHtml(file.name)} · ${formatBytes(file.size)} · Uploaded`;
+        : files.map((item) => item.status === 'uploading'
+            ? `Uploading ${escapeHtml(item.name)}…`
+            : item.status === 'error'
+                ? escapeHtml(item.error)
+                : `${escapeHtml(item.name)} · ${formatBytes(item.size)} · Uploaded`).join(' · ');
 
     return `<div class="upload-card${hasError ? ' has-error' : ''}">
-        <span class="upload-icon">${icon(file ? 'file' : 'upload')}</span>
+        <span class="upload-icon">${icon(files.length ? 'file' : 'upload')}</span>
         <div class="upload-copy"><strong>${label}${required ? ' *' : ''}</strong><span>${statusCopy}</span></div>
         <div class="upload-buttons">
-            <input class="sr-only" id="${inputId}" data-upload-kind="${kind}" type="file" accept=".pdf,.jpg,.jpeg,.png">
-            <button class="upload-button" type="button" data-action="choose-file" data-upload-kind="${kind}">${file ? 'Replace' : 'Choose file'}</button>
-            ${file ? `<button class="icon-button" type="button" data-action="remove-file" data-upload-kind="${kind}" aria-label="Remove ${escapeHtml(file.name)}">${icon('close', 'icon-small')}</button>` : ''}
+            <input class="sr-only" id="${inputId}" data-testid="${kind}-upload" data-upload-kind="${kind}" type="file" accept=".pdf,.jpg,.jpeg,.png"${kind === 'additional' ? ' multiple' : ''}>
+            <button class="upload-button" type="button" data-action="choose-file" data-upload-kind="${kind}">${files.length ? 'Replace' : 'Choose file'}</button>
+            ${files.map((item, index) => `<button class="icon-button" type="button" data-testid="${kind}-remove-${index}" data-action="remove-file" data-upload-kind="${kind}" data-upload-index="${index}" aria-label="Remove ${escapeHtml(item.name)}">${icon('close', 'icon-small')}</button>`).join('')}
         </div>
     </div>`;
 };
@@ -577,19 +663,19 @@ const renderConfirmations = () => {
 
     return `<div class="confirmations">
         <label class="confirmation-card check-row">
-            <input name="siteDetailsReviewed" type="checkbox"${state.confirmations.siteDetailsReviewed ? ' checked' : ''}>
+            <input data-testid="site-details-reviewed" name="siteDetailsReviewed" type="checkbox"${state.confirmations.siteDetailsReviewed ? ' checked' : ''}>
             <span>Drawings have been uploaded? <span class="required">*</span></span>
         </label>
         <label class="confirmation-card check-row${uploadDisabled ? ' is-disabled' : ''}">
-            <input name="uploadReviewed" type="checkbox"${state.confirmations.uploadReviewed ? ' checked' : ''}${uploadDisabled ? ' disabled' : ''}>
+            <input data-testid="upload-reviewed" name="uploadReviewed" type="checkbox"${state.confirmations.uploadReviewed ? ' checked' : ''}${uploadDisabled ? ' disabled' : ''}>
             <span>LAAN has been uploaded <span class="required">*</span></span>
         </label>
         <label class="confirmation-card check-row">
-            <input name="workDetailsReviewed" type="checkbox"${state.confirmations.workDetailsReviewed ? ' checked' : ''}>
+            <input data-testid="work-details-reviewed" name="workDetailsReviewed" type="checkbox"${state.confirmations.workDetailsReviewed ? ' checked' : ''}>
             <span>Additional supporting documents have been provided as required? <span class="required">*</span></span>
         </label>
         <label class="confirmation-card check-row">
-            <input name="accuracyAccepted" type="checkbox"${state.confirmations.accuracyAccepted ? ' checked' : ''}>
+            <input data-testid="accuracy-accepted" name="accuracyAccepted" type="checkbox"${state.confirmations.accuracyAccepted ? ' checked' : ''}>
             <span>I confirm that the information provided is true and accurate. <span class="required">*</span></span>
         </label>
     </div>`;
@@ -598,72 +684,12 @@ const renderConfirmations = () => {
 const renderReadiness = () => {
     const ready = formIsReady();
 
-    return `<div class="readiness-panel${ready ? ' is-ready' : ''}" role="status">
-        <div><strong>${ready ? 'Request details are ready for review' : 'Request details are incomplete'}</strong><span>${ready ? 'All required fields, evidence and confirmations are complete.' : 'The Request workspace lists the outstanding requirements.'}</span></div>
-        ${icon(ready ? 'check' : 'info')}
-    </div>`;
+    return `<div class="readiness-panel${ready ? ' is-ready' : ''}" data-testid="readiness-panel" role="status">${renderReadinessContent(ready)}</div>`;
 };
 
 const renderCompletion = () => state.completionShown
     ? `<div class="completion-banner" role="status">${icon('check')}<div><strong>${isNativeWordPress ? 'LAAN request submitted' : 'Prototype ready for submission'}</strong><span>${isNativeWordPress ? `Request ID #${escapeHtml(state.submittedRequestId)}` : 'No record was created and no information was sent.'}</span></div></div>`
     : '';
-
-const renderStageTwoLegacy = () => `
-    ${renderErrorSummary()}
-    ${renderCompletion()}
-    <h2 class="form-title">Access details</h2>
-    <p class="form-intro">Complete the existing LAAN access details and review the required evidence.</p>
-    ${renderContextStrip()}
-    <section class="form-section" aria-labelledby="project-heading">
-        <h3 class="form-section-heading" id="project-heading">Project and carrier details</h3>
-        <div class="page-two-grid">
-            ${renderTextField({ name: 'carrier', id: 'input_1_58', label: 'Carrier', placeholder: 'Enter carrier name' })}
-            ${renderTextField({ name: 'projectReference', id: 'input_1_18', label: 'Carrier Project Reference No.', placeholder: 'Enter project reference' })}
-            ${renderTextField({ name: 'tenantCompany', id: 'input_1_19', label: 'Tenant Company Name', placeholder: 'Enter tenant company' })}
-            ${renderTextField({ name: 'contactName', id: 'input_1_83', label: 'Contact Name', placeholder: 'Enter contact name' })}
-            ${renderTextField({ name: 'contactPhone', id: 'input_1_87', label: 'Contact Phone', placeholder: 'Enter phone number', type: 'tel' })}
-        </div>
-    </section>
-    <section class="form-section" aria-labelledby="work-heading">
-        <h3 class="form-section-heading" id="work-heading">Work location and affected areas</h3>
-        <div class="page-two-grid">
-            ${renderTextField({ name: 'workLocation', id: 'input_1_22', label: 'Location of Works', placeholder: 'Describe the work location', span: true })}
-            ${renderTextField({ name: 'affectedAreas', id: 'input_1_64', label: 'Areas Affected', placeholder: 'Describe the affected areas', span: true })}
-        </div>
-    </section>
-    <section class="form-section" aria-labelledby="technical-heading">
-        <h3 class="form-section-heading" id="technical-heading">Technical details</h3>
-        <div class="error-summary" role="note"><strong>Conditional rules pending approval.</strong><span>These existing fields remain visible and disabled so the prototype does not invent activity-specific business rules.</span></div>
-        <div class="page-two-grid">
-            <div class="field"><label for="input_1_69">Cable start</label><input class="control" id="input_1_69" type="text" disabled placeholder="Pending applicability rule"></div>
-            <div class="field"><label for="input_1_70">Cable end</label><input class="control" id="input_1_70" type="text" disabled placeholder="Pending applicability rule"></div>
-            <div class="field"><label for="input_1_71">Riser details</label><input class="control" id="input_1_71" type="text" disabled placeholder="Pending applicability rule"></div>
-            <div class="field"><label for="input_1_73">Fibre details</label><input class="control" id="input_1_73" type="text" disabled placeholder="Pending applicability rule"></div>
-        </div>
-    </section>
-    <section class="form-section" aria-labelledby="documents-heading">
-        <h3 class="form-section-heading" id="documents-heading">Documents</h3>
-        <div class="upload-stack">
-            ${renderUploadCard('required', 'Required LAAN document', true)}
-            ${renderUploadCard('additional', 'Additional supporting document', false)}
-        </div>
-    </section>
-    <section class="form-section" aria-labelledby="declarations-heading">
-        <h3 class="form-section-heading" id="declarations-heading">Confirmations and declarations</h3>
-        ${renderConfirmations()}
-        <div class="field" style="margin-top: 12px">
-            <label for="contractor-response">Contractor response <span class="field-optional">(optional)</span></label>
-            <textarea class="control-textarea" id="contractor-response" name="contractorResponse" placeholder="Add an optional response">${escapeHtml(state.fields.contractorResponse)}</textarea>
-        </div>
-        ${renderReadiness()}
-    </section>
-    <div class="form-actions">
-        <div class="form-actions-group">
-            <button class="button-secondary" type="button" data-action="go-stage-one">Back</button>
-            <button class="button-primary" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting…' : (isNativeWordPress ? (state.submittedRequestId ? 'Request submitted' : 'Submit LAAN request') : 'Review ready request')}</button>
-        </div>
-        ${renderDraftActions()}
-    </div>`;
 
 const renderPageTwoFields = () => `<div class="page-two-grid original-field-grid">
     ${renderTextField({ name: 'carrier', id: 'input_1_58', label: 'Registered Carrier Name', count: true })}
@@ -686,25 +712,26 @@ const renderPageTwoEvidence = () => `<div class="page-two-evidence">
     <section class="submission-confirmation" aria-labelledby="declarations-heading">
         <h3 class="form-section-heading" id="declarations-heading">Please confirm your submission</h3>
         ${renderConfirmations()}
+        ${renderReadiness()}
     </section>
 </div>`;
 
 const renderStageTwoActions = () => `<div class="form-actions stage-two-actions">
     <div class="form-actions-group">
-        <button class="button-secondary" type="button" data-action="go-stage-one">Previous</button>
-        <button class="button-primary" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting&hellip;' : (state.submittedRequestId ? 'Request submitted' : 'Submit')}</button>
+        <button class="button-secondary" data-testid="stage-two-back" type="button" data-action="go-stage-one">Previous</button>
+        <button class="button-primary" data-testid="stage-two-submit" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting&hellip;' : (state.submittedRequestId ? 'Request submitted' : 'Submit')}</button>
     </div>
     <span class="stage-two-status">${formIsReady() ? 'All required details are complete.' : 'Complete all required details to continue.'}</span>
 </div>`;
 
-const renderStageTwoOriginal = () => `<div class="page-two-prototype page-two-original">
+const renderStageTwoOriginal = () => `<div class="page-two-prototype page-two-original" data-testid="stage-two">
     <h2 class="sr-only">Access details and evidence</h2>
     ${renderPageTwoFields()}
     ${renderPageTwoEvidence()}
     ${renderStageTwoActions()}
 </div>`;
 
-const renderStageTwoSplit = () => `<div class="page-two-prototype page-two-split">
+const renderStageTwoSplit = () => `<div class="page-two-prototype page-two-split" data-testid="stage-two">
     <div class="stage-two-context-line">
         <span>${escapeHtml(state.fields.activity)} request</span>
         <span>${escapeHtml(state.fields.commencementDate)}</span>
@@ -724,7 +751,7 @@ const renderStageTwoSplit = () => `<div class="page-two-prototype page-two-split
     </div>
 </div>`;
 
-const renderStageTwoLanes = () => `<div class="page-two-prototype page-two-lanes">
+const renderStageTwoLanes = () => `<div class="page-two-prototype page-two-lanes" data-testid="stage-two">
     ${renderContextStrip()}
     <div class="page-two-lane-grid">
         <section aria-labelledby="carrier-lane-heading">
@@ -764,9 +791,9 @@ const renderStageTwo = () => {
 };
 
 const renderForm = () => `
-    <form class="form-wrap${state.step === 2 ? ` is-stage-two variant-${currentPrototypeVariant().toLowerCase()}` : ''}" id="laan-prototype-form" novalidate>
+    <form class="form-wrap${state.step === 2 ? ` is-stage-two variant-${currentPrototypeVariant().toLowerCase()}` : ''}" id="laan-prototype-form" data-testid="laan-form" novalidate>
         ${renderProgress()}
-        ${state.step === 1 ? renderStageOne() : renderStageTwo()}
+        ${state.step === 1 ? `<div data-testid="stage-one">${renderStageOne()}</div>` : renderStageTwo()}
     </form>`;
 
 const checklistItem = (complete, label) => `<li class="${complete ? 'is-complete' : ''}"><span class="check-dot">${icon('check', 'icon-small')}</span><span>${escapeHtml(label)}</span></li>`;
@@ -799,11 +826,11 @@ const renderWorkspace = () => {
         </dl>
         <p class="workspace-kicker">Required items</p>
         <ul class="workspace-checklist">${items.map(([complete, label]) => checklistItem(complete, label)).join('')}</ul>
-        <details class="state-inspector">
+        ${!isNativeWordPress ? `<details class="state-inspector">
             <summary>Prototype state and edge controls</summary>
             ${state.step === 2 ? `<div class="draft-actions"><button class="button-link" type="button" data-action="fixture-valid-upload">Valid file</button><button class="button-link" type="button" data-action="fixture-upload-failure">Failed upload</button><button class="button-link" type="button" data-action="fixture-oversize-upload">Over 20 MB</button></div>` : ''}
             <pre data-state-json></pre>
-        </details>
+        </details>` : ''}
     </aside>`;
 };
 
@@ -822,7 +849,7 @@ const renderPrototypeSwitcher = () => {
 
 const renderApplication = () => {
     const overflowState = Object.keys(state.errors).length || state.completionShown ? ' has-overflow-state' : '';
-    return `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout${state.step === 2 ? ` is-stage-two variant-${currentPrototypeVariant().toLowerCase()}${overflowState}` : ''}"><div class="form-surface">${renderForm()}</div>${state.step === 1 ? renderWorkspace() : ''}</div></section>${renderPrototypeSwitcher()}</main>`;
+    return `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout${state.step === 2 ? ` is-stage-two variant-${currentPrototypeVariant().toLowerCase()}${overflowState}` : ''}"><div class="form-surface">${renderForm()}</div>${renderWorkspace()}</div></section>${renderPrototypeSwitcher()}</main>`;
 };
 
 const render = ({ focusSite = false, focusError = false, scrollTop = false } = {}) => {
@@ -837,7 +864,7 @@ const render = ({ focusSite = false, focusError = false, scrollTop = false } = {
 
     if (focusSite) {
         requestAnimationFrame(() => {
-            const input = root.querySelector('#input_1_41');
+            const input = root.querySelector('[data-testid="site-search"]');
             input?.focus();
             input?.setSelectionRange(input.value.length, input.value.length);
         });
@@ -878,7 +905,12 @@ const validateStageOne = () => {
     if (!state.fields.commencementDate.trim()) {
         errors.commencementDate = 'Enter the proposed commencement date.';
     } else if (!dateIsValid(state.fields.commencementDate)) {
-        errors.commencementDate = 'Enter a real date in DD-MM-YYYY format, for example 05-09-2026.';
+        const boundaryError = dateBoundaryError(state.fields.commencementDate);
+        if (boundaryError) {
+            errors.commencementDate = boundaryError;
+        } else {
+            errors.commencementDate = 'Enter a real date in DD-MM-YYYY format, for example 05-09-2026.';
+        }
     }
 
     if (!selectedSite()) {
@@ -956,9 +988,9 @@ const submitNativeRequest = async () => {
         formData.append('required', pendingFiles.required, pendingFiles.required.name);
     }
 
-    if (pendingFiles.additional) {
-        formData.append('additional', pendingFiles.additional, pendingFiles.additional.name);
-    }
+    pendingFiles.additional.forEach((file) => {
+        formData.append('additional[]', file, file.name);
+    });
 
     try {
         const response = await fetch(nativeConfig.ajaxUrl, { method: 'POST', body: formData, credentials: 'same-origin' });
@@ -976,7 +1008,7 @@ const submitNativeRequest = async () => {
         state.completionShown = true;
         state.submittedRequestId = result.data?.requestId ?? 0;
         pendingFiles.required = null;
-        pendingFiles.additional = null;
+        pendingFiles.additional = [];
         sessionStorage.removeItem(sessionKey);
         render({ scrollTop: true });
     } catch (error) {
@@ -1016,6 +1048,13 @@ const updateFieldWithoutRender = (name, value) => {
             ? 'All required details are complete.'
             : 'Complete all required details to continue.';
     }
+
+    const readiness = root.querySelector('[data-testid="readiness-panel"]');
+    if (readiness && state.step === 2) {
+        const ready = formIsReady();
+        readiness.classList.toggle('is-ready', ready);
+        readiness.innerHTML = renderReadinessContent(ready);
+    }
 };
 
 const applyFile = (kind, file) => {
@@ -1025,7 +1064,37 @@ const applyFile = (kind, file) => {
 
     state.confirmations.uploadReviewed = kind === 'required' ? false : state.confirmations.uploadReviewed;
     state.completionShown = false;
-    pendingFiles[kind] = null;
+    if (kind === 'required') {
+        pendingFiles.required = null;
+    }
+
+    if (kind === 'additional') {
+        const entry = !acceptedType || !withinLimit
+            ? {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                status: 'error',
+                error: !acceptedType ? 'Unsupported file type. Use PDF, JPG or PNG.' : `File is larger than ${uploadRules.maximumLabel}.`,
+            }
+            : { name: file.name, size: file.size, type: file.type, status: 'uploading' };
+        state.files.additional = [...state.files.additional, entry];
+        if (!entry.error) {
+            pendingFiles.additional.push(file);
+        }
+        persistSession();
+        render();
+        if (!entry.error) {
+            window.setTimeout(() => {
+                const current = state.files.additional.find((item) => item.name === file.name && item.status === 'uploading');
+                if (!current) return;
+                current.status = 'uploaded';
+                persistSession();
+                render();
+            }, 420);
+        }
+        return;
+    }
 
     if (!acceptedType || !withinLimit) {
         state.files[kind] = {
@@ -1103,8 +1172,12 @@ root.addEventListener('input', (event) => {
 root.addEventListener('change', (event) => {
     const target = event.target;
 
-    if (target instanceof HTMLInputElement && target.dataset.uploadKind && target.files?.[0]) {
-        applyFile(target.dataset.uploadKind, target.files[0]);
+    if (target instanceof HTMLInputElement && target.dataset.uploadKind && target.files?.length) {
+        if (target.dataset.uploadKind === 'additional') {
+            Array.from(target.files).forEach((file) => applyFile('additional', file));
+        } else {
+            applyFile(target.dataset.uploadKind, target.files[0]);
+        }
         return;
     }
 
@@ -1311,8 +1384,14 @@ root.addEventListener('click', (event) => {
 
     if (action === 'remove-file') {
         const kind = control.dataset.uploadKind;
-        state.files[kind] = null;
-        pendingFiles[kind] = null;
+        if (kind === 'additional') {
+            const index = Number(control.dataset.uploadIndex);
+            state.files.additional = state.files.additional.filter((_, fileIndex) => fileIndex !== index);
+            pendingFiles.additional = pendingFiles.additional.filter((file) => state.files.additional.some((item) => item.name === file.name));
+        } else {
+            state.files[kind] = null;
+            pendingFiles[kind] = null;
+        }
         if (kind === 'required') {
             state.confirmations.uploadReviewed = false;
         }
@@ -1334,7 +1413,13 @@ root.addEventListener('click', (event) => {
                 ...structuredClone(defaultState),
                 ...draft,
                 fields: { ...defaultState.fields, ...draft.fields },
-                files: { ...defaultState.files, ...draft.files },
+                files: {
+                    ...defaultState.files,
+                    ...draft.files,
+                    additional: Array.isArray(draft.files?.additional)
+                        ? draft.files.additional
+                        : draft.files?.additional ? [draft.files.additional] : [],
+                },
                 confirmations: { ...defaultState.confirmations, ...draft.confirmations },
                 errors: {},
                 draftMessage: 'Draft restored.',
@@ -1363,7 +1448,7 @@ root.addEventListener('click', (event) => {
 });
 
 window.addEventListener('beforeunload', (event) => {
-    const hasUnsavedInput = Object.values(state.fields).some(Boolean) || state.files.required || state.files.additional;
+    const hasUnsavedInput = Object.values(state.fields).some(Boolean) || state.files.required || state.files.additional.length;
     const explicitDraft = sessionStorage.getItem(draftKey);
 
     if (hasUnsavedInput && !explicitDraft) {

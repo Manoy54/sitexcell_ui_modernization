@@ -7,7 +7,7 @@ This matrix preserves the observed LAAN field contract while separating confirme
 | Field | Current role | Required | Prototype behavior | Rule status |
 | --- | --- | --- | --- | --- |
 | Activity (`input_1_11`) | Inspection, Installation, or Maintenance | Yes | Preserve position and options; activity changes trigger affected-field review | Confirmed interaction; conditional mapping pending where applicable |
-| Commencement date (`input_1_12`) | LAAN commencement date | Yes | Accept strict `DD-MM-YYYY`; reject impossible dates inline; preserve correction value | Format confirmed; past/future policy pending |
+| Commencement date (`input_1_12`) | LAAN commencement date | Yes | Accept strict `DD-MM-YYYY`; reject impossible dates inline; preserve correction value; enforce configured `minimumCommencementDate`/`maximumCommencementDate` boundaries when supplied | Calendar policy is the safe default; business range remains configurable until approved |
 | Owner (`input_1_40`) | Optional owner selection | No | Preserve current selector and optional status | Confirmed |
 | Site (`input_1_41`) | Selected approved Site | Yes | Search by name, address, or identifier; support keyboard selection; show selected-site context | Lookup improvement approved; authoritative source pending |
 | Derived Site context | Address and Site notes | Derived | Show after Site selection; update when Site changes | Presentation and drawing-requirements link added; real Site ID, address, and notes snapshot integrated for all 297 Sites |
