@@ -40,6 +40,7 @@
     "test:access:live:responsive": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\tests\\access-requests\\support\\run-live-session.ps1 -ConfigFile tests/access-requests/configs/playwright.access-request.config.js -SuiteLabel responsive -PlannedCaseCount 5 -Grep \"TC-AR-A0[1-5]\"",
     "test:access:capture:steps-1-8": "node tests/access-requests/support/capture-steps-1-8-field-map.mjs",
     "test:access:capture:steps-5-8": "node tests/access-requests/support/capture-steps-5-8-field-map.mjs",
+    "test:prototype:playwright": "playwright test --config=proposed_laan_form/playwright.config.js",
     "session:setup": "node tests/laan-request/support/create-storage-state.mjs",
     "results:serve": "node tests/laan-request/support/results-server.mjs"
   },
