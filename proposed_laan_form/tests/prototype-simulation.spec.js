@@ -70,6 +70,36 @@ test('reaches the simulated ready state without an external submission', async (
   expect(requests.filter((request) => request.method() === 'POST')).toEqual([]);
 });
 
+test('preserves Stage 2 values when navigating back and resets only affected confirmation state', async ({ page }) => {
+  await completeStageOne(page);
+  await page.locator('[name="carrier"]').fill('Carrier that must persist');
+  await page.locator('input[name="siteDetailsReviewed"]').check();
+  await page.locator('input[name="workDetailsReviewed"]').check();
+  await page.locator('[data-action="go-stage-one"]').first().click();
+  await expect(page.locator('#input_1_11')).toBeVisible();
+  await page.locator('#input_1_11').click();
+  await page.getByRole('option', { name: 'Inspection', exact: true }).click();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(page.locator('[name="carrier"]')).toHaveValue('Carrier that must persist');
+  await expect(page.locator('input[name="siteDetailsReviewed"]')).toBeChecked();
+  await expect(page.locator('input[name="workDetailsReviewed"]')).not.toBeChecked();
+});
+
+test('saves, restores, and discards an explicit draft', async ({ page }) => {
+  await chooseActivity(page);
+  await page.locator('#input_1_12').fill('30-09-2026');
+  await page.locator('[data-action="save-draft"]').click();
+  await expect(page.getByText('Draft saved in this prototype session.', { exact: true })).toBeVisible();
+  await page.evaluate(() => sessionStorage.removeItem('proposed-laan-form-session-v1'));
+  await page.reload();
+  await page.locator('[data-action="restore-draft"]').click();
+  await expect(page.locator('#input_1_12')).toHaveValue('30-09-2026');
+  await expect(page.getByText('Draft restored.', { exact: true })).toBeVisible();
+  await page.locator('[data-action="discard-draft"]').click();
+  await expect(page.getByText('Saved draft discarded.', { exact: true })).toBeVisible();
+  await expect(page.locator('[data-action="restore-draft"]')).toBeDisabled();
+});
+
 test('rejects impossible dates inline and recovers on correction', async ({ page }) => {
   await chooseActivity(page);
   await page.locator('#input_1_12').fill('32-13-2026');
@@ -104,6 +134,26 @@ test('invalidates confirmation for an invalid, oversized, replaced, or removed u
   await page.locator('[data-action="remove-file"][data-upload-kind="required"]').click();
   await expect(page.locator('input[name="uploadReviewed"]')).not.toBeChecked();
   await expect(page.locator('#required-file-input')).toHaveCount(1);
+});
+
+test('supports a simulated upload retry and keeps Submit disabled until every confirmation is complete', async ({ page }) => {
+  await completeStageOne(page);
+  await expect(page.getByRole('button', { name: 'Submit', exact: true })).toBeDisabled();
+  const upload = page.locator('#required-file-input');
+  await upload.setInputFiles({ name: 'interrupted.txt', mimeType: 'text/plain', buffer: Buffer.from('interrupted') });
+  await expect(page.getByText('Unsupported file type', { exact: false })).toBeVisible();
+  await upload.setInputFiles(validFile);
+  await expect(page.getByText('Uploaded', { exact: false }).first()).toBeVisible();
+  await page.locator('input[name="siteDetailsReviewed"]').check();
+  await page.locator('input[name="uploadReviewed"]').check();
+  await page.locator('input[name="workDetailsReviewed"]').check();
+  await page.locator('input[name="accuracyAccepted"]').check();
+  for (const [name, value] of Object.entries({
+    carrier: 'Synthetic Carrier', projectReference: 'SIM-20260902-002', tenantCompany: 'Synthetic Tenant',
+    contactName: 'Synthetic Tester', contactPhone: '0400000099', workLocation: 'Synthetic location',
+    affectedAreas: 'Synthetic area',
+  })) await page.locator(`[name="${name}"]`).fill(value);
+  await expect(page.getByRole('button', { name: 'Submit', exact: true })).toBeEnabled();
 });
 
 test('keeps the simulation usable at a phone viewport', async ({ page }) => {
