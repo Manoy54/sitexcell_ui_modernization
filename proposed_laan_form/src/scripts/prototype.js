@@ -1,7 +1,5 @@
 import { activities, owners, sites, uploadRules as prototypeUploadRules } from '../../fixtures/laan-fixtures.js';
-import { siteContextById } from '../../fixtures/site-context.example.js';
-
-// Selected Page 2 direction: live vertical form flow with the persistent Request workspace.
+import { siteContextById } from '../../fixtures/site-context.js';
 
 const root = document.querySelector('#prototype-root');
 const nativeConfig = window.SitexcellLaanConfig ?? {};
@@ -10,13 +8,21 @@ const isNativeWordPress = Boolean(nativeConfig.native);
 const sessionKey = isNativeWordPress ? 'sitexcell-laan-form-session-v1' : 'proposed-laan-form-session-v1';
 const draftKey = 'proposed-laan-form-explicit-draft-v1';
 const drawingRequirementsUrl = 'https://drive.google.com/file/d/1IrbzzKeussLKHe75Ef0k3-wiiokR2JW5/view?usp=sharing';
-const exampleSiteContext = siteContextById['4127303000013010623'] ?? {};
 const siteRecords = Array.isArray(nativeConfig.sites) && nativeConfig.sites.length
     ? nativeConfig.sites
-    : sites.map((site) => ({ ...site, ...(siteContextById[site.id] ?? (site.id === sites[0]?.id ? exampleSiteContext : {})) }));
+    : sites.map((site) => ({ ...site, ...siteContextById[site.id] }));
 const uploadRules = nativeConfig.uploadRules ?? prototypeUploadRules;
-const pendingFiles = { required: null, additional: [] };
+const pendingFiles = { required: null, additional: null };
+const prototypeVariants = {
+    A: 'Original stack',
+    B: 'Single-screen split',
+    C: 'Three-lane workspace',
+};
 const prototypeSearchParams = new URLSearchParams(window.location.search);
+const currentPrototypeVariant = () => {
+    const variant = new URLSearchParams(window.location.search).get('variant')?.toUpperCase();
+    return Object.hasOwn(prototypeVariants, variant) ? variant : 'B';
+};
 
 const defaultState = {
     step: 1,
@@ -42,7 +48,7 @@ const defaultState = {
     },
     files: {
         required: null,
-        additional: [],
+        additional: null,
     },
     confirmations: {
         uploadReviewed: false,
@@ -70,18 +76,11 @@ const restoreSessionState = () => {
 
     const restored = JSON.parse(saved);
 
-    const restoredAdditionalFiles = restored.files?.additional;
-    const additionalFiles = Array.isArray(restoredAdditionalFiles)
-        ? restoredAdditionalFiles
-        : restoredAdditionalFiles
-            ? [restoredAdditionalFiles]
-            : [];
-
     const restoredState = {
         ...structuredClone(defaultState),
         ...restored,
         fields: { ...defaultState.fields, ...restored.fields },
-        files: { ...defaultState.files, ...restored.files, additional: additionalFiles },
+        files: { ...defaultState.files, ...restored.files },
         confirmations: { ...defaultState.confirmations, ...restored.confirmations },
         errors: {},
         siteMenuOpen: false,
@@ -550,53 +549,25 @@ const formatBytes = (bytes) => {
     return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 };
 
-const uploadFilesFor = (kind) => {
-    const value = state.files[kind];
-
-    if (kind === 'additional') {
-        return Array.isArray(value) ? value : value ? [value] : [];
-    }
-
-    return value ? [value] : [];
-};
-
-const renderUploadFileStatus = (file) => {
-    if (file.status === 'uploading') {
-        return 'Uploading…';
-    }
-
-    if (file.status === 'error') {
-        return file.error;
-    }
-
-    return `${formatBytes(file.size)} · Uploaded`;
-};
-
 const renderUploadCard = (kind, label, required) => {
-    const files = uploadFilesFor(kind);
-    const file = files[0] ?? null;
+    const file = state.files[kind];
     const inputId = `${kind}-file-input`;
-    const hasError = files.some((item) => item.status === 'error');
-    const statusCopy = !files.length
-        ? `${required ? 'Required' : 'Optional'} · PDF, JPG or PNG · maximum ${uploadRules.maximumLabel}${required ? '' : ' each'}`
-        : kind === 'additional'
-            ? `${files.length} document${files.length === 1 ? '' : 's'} selected`
-            : file.status === 'uploading'
-                ? `Uploading ${escapeHtml(file.name)}…`
-                : file.status === 'error'
-                    ? escapeHtml(file.error)
-                    : `${escapeHtml(file.name)} · ${formatBytes(file.size)} · Uploaded`;
-    const additionalFileList = kind === 'additional' && files.length
-        ? `<ul class="upload-file-list">${files.map((item, index) => `<li><span class="upload-file-name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</span><span class="upload-file-status">${escapeHtml(renderUploadFileStatus(item))}</span><button class="icon-button" type="button" data-action="remove-file" data-upload-kind="${kind}" data-upload-index="${index}" aria-label="Remove ${escapeHtml(item.name)}">${icon('close', 'icon-small')}</button></li>`).join('')}</ul>`
-        : '';
+    const hasError = file?.status === 'error';
+    const statusCopy = !file
+        ? `${required ? 'Required' : 'Optional'} · PDF, JPG or PNG · maximum ${uploadRules.maximumLabel}`
+        : file.status === 'uploading'
+            ? `Uploading ${escapeHtml(file.name)}…`
+            : file.status === 'error'
+                ? escapeHtml(file.error)
+                : `${escapeHtml(file.name)} · ${formatBytes(file.size)} · Uploaded`;
 
-    return `<div class="upload-card upload-card-${kind}${hasError ? ' has-error' : ''}">
+    return `<div class="upload-card${hasError ? ' has-error' : ''}">
         <span class="upload-icon">${icon(file ? 'file' : 'upload')}</span>
-        <div class="upload-copy"><strong>${label}${required ? ' *' : ''}</strong><span>${statusCopy}</span>${additionalFileList}</div>
+        <div class="upload-copy"><strong>${label}${required ? ' *' : ''}</strong><span>${statusCopy}</span></div>
         <div class="upload-buttons">
-            <input class="sr-only" id="${inputId}" data-upload-kind="${kind}" type="file" accept=".pdf,.jpg,.jpeg,.png"${kind === 'additional' ? ' multiple' : ''}>
-            <button class="upload-button" type="button" data-action="choose-file" data-upload-kind="${kind}">${kind === 'additional' ? 'Add files' : (file ? 'Replace' : 'Choose file')}</button>
-            ${kind === 'required' && file ? `<button class="icon-button" type="button" data-action="remove-file" data-upload-kind="${kind}" aria-label="Remove ${escapeHtml(file.name)}">${icon('close', 'icon-small')}</button>` : ''}
+            <input class="sr-only" id="${inputId}" data-upload-kind="${kind}" type="file" accept=".pdf,.jpg,.jpeg,.png">
+            <button class="upload-button" type="button" data-action="choose-file" data-upload-kind="${kind}">${file ? 'Replace' : 'Choose file'}</button>
+            ${file ? `<button class="icon-button" type="button" data-action="remove-file" data-upload-kind="${kind}" aria-label="Remove ${escapeHtml(file.name)}">${icon('close', 'icon-small')}</button>` : ''}
         </div>
     </div>`;
 };
@@ -624,9 +595,75 @@ const renderConfirmations = () => {
     </div>`;
 };
 
+const renderReadiness = () => {
+    const ready = formIsReady();
+
+    return `<div class="readiness-panel${ready ? ' is-ready' : ''}" role="status">
+        <div><strong>${ready ? 'Request details are ready for review' : 'Request details are incomplete'}</strong><span>${ready ? 'All required fields, evidence and confirmations are complete.' : 'The Request workspace lists the outstanding requirements.'}</span></div>
+        ${icon(ready ? 'check' : 'info')}
+    </div>`;
+};
+
 const renderCompletion = () => state.completionShown
     ? `<div class="completion-banner" role="status">${icon('check')}<div><strong>${isNativeWordPress ? 'LAAN request submitted' : 'Prototype ready for submission'}</strong><span>${isNativeWordPress ? `Request ID #${escapeHtml(state.submittedRequestId)}` : 'No record was created and no information was sent.'}</span></div></div>`
     : '';
+
+const renderStageTwoLegacy = () => `
+    ${renderErrorSummary()}
+    ${renderCompletion()}
+    <h2 class="form-title">Access details</h2>
+    <p class="form-intro">Complete the existing LAAN access details and review the required evidence.</p>
+    ${renderContextStrip()}
+    <section class="form-section" aria-labelledby="project-heading">
+        <h3 class="form-section-heading" id="project-heading">Project and carrier details</h3>
+        <div class="page-two-grid">
+            ${renderTextField({ name: 'carrier', id: 'input_1_58', label: 'Carrier', placeholder: 'Enter carrier name' })}
+            ${renderTextField({ name: 'projectReference', id: 'input_1_18', label: 'Carrier Project Reference No.', placeholder: 'Enter project reference' })}
+            ${renderTextField({ name: 'tenantCompany', id: 'input_1_19', label: 'Tenant Company Name', placeholder: 'Enter tenant company' })}
+            ${renderTextField({ name: 'contactName', id: 'input_1_83', label: 'Contact Name', placeholder: 'Enter contact name' })}
+            ${renderTextField({ name: 'contactPhone', id: 'input_1_87', label: 'Contact Phone', placeholder: 'Enter phone number', type: 'tel' })}
+        </div>
+    </section>
+    <section class="form-section" aria-labelledby="work-heading">
+        <h3 class="form-section-heading" id="work-heading">Work location and affected areas</h3>
+        <div class="page-two-grid">
+            ${renderTextField({ name: 'workLocation', id: 'input_1_22', label: 'Location of Works', placeholder: 'Describe the work location', span: true })}
+            ${renderTextField({ name: 'affectedAreas', id: 'input_1_64', label: 'Areas Affected', placeholder: 'Describe the affected areas', span: true })}
+        </div>
+    </section>
+    <section class="form-section" aria-labelledby="technical-heading">
+        <h3 class="form-section-heading" id="technical-heading">Technical details</h3>
+        <div class="error-summary" role="note"><strong>Conditional rules pending approval.</strong><span>These existing fields remain visible and disabled so the prototype does not invent activity-specific business rules.</span></div>
+        <div class="page-two-grid">
+            <div class="field"><label for="input_1_69">Cable start</label><input class="control" id="input_1_69" type="text" disabled placeholder="Pending applicability rule"></div>
+            <div class="field"><label for="input_1_70">Cable end</label><input class="control" id="input_1_70" type="text" disabled placeholder="Pending applicability rule"></div>
+            <div class="field"><label for="input_1_71">Riser details</label><input class="control" id="input_1_71" type="text" disabled placeholder="Pending applicability rule"></div>
+            <div class="field"><label for="input_1_73">Fibre details</label><input class="control" id="input_1_73" type="text" disabled placeholder="Pending applicability rule"></div>
+        </div>
+    </section>
+    <section class="form-section" aria-labelledby="documents-heading">
+        <h3 class="form-section-heading" id="documents-heading">Documents</h3>
+        <div class="upload-stack">
+            ${renderUploadCard('required', 'Required LAAN document', true)}
+            ${renderUploadCard('additional', 'Additional supporting document', false)}
+        </div>
+    </section>
+    <section class="form-section" aria-labelledby="declarations-heading">
+        <h3 class="form-section-heading" id="declarations-heading">Confirmations and declarations</h3>
+        ${renderConfirmations()}
+        <div class="field" style="margin-top: 12px">
+            <label for="contractor-response">Contractor response <span class="field-optional">(optional)</span></label>
+            <textarea class="control-textarea" id="contractor-response" name="contractorResponse" placeholder="Add an optional response">${escapeHtml(state.fields.contractorResponse)}</textarea>
+        </div>
+        ${renderReadiness()}
+    </section>
+    <div class="form-actions">
+        <div class="form-actions-group">
+            <button class="button-secondary" type="button" data-action="go-stage-one">Back</button>
+            <button class="button-primary" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting…' : (isNativeWordPress ? (state.submittedRequestId ? 'Request submitted' : 'Submit LAAN request') : 'Review ready request')}</button>
+        </div>
+        ${renderDraftActions()}
+    </div>`;
 
 const renderPageTwoFields = () => `<div class="page-two-grid original-field-grid">
     ${renderTextField({ name: 'carrier', id: 'input_1_58', label: 'Registered Carrier Name', count: true })}
@@ -635,7 +672,7 @@ const renderPageTwoFields = () => `<div class="page-two-grid original-field-grid
     ${renderTextField({ name: 'contactName', id: 'input_1_83', label: 'Tenant Contact Person', help: 'Tenant Contact Person' })}
     ${renderTextField({ name: 'contactPhone', id: 'input_1_87', label: 'Tenant Contact Number', type: 'tel' })}
     ${renderTextField({ name: 'workLocation', id: 'input_1_22', label: 'Tenant Location/Floor', help: 'EG L14, Rooftop, Tower', count: true })}
-    ${renderTextField({ name: 'affectedAreas', id: 'input_1_64', label: 'Areas to be Accessed', help: 'EG: MDF L6, L14. Plant Roof and rooftop.', count: true })}
+    ${renderTextField({ name: 'affectedAreas', id: 'input_1_64', label: 'Areas to be Accessed', help: 'EG: MDF L6, L14. Plant Roof and rooftop.', count: true, span: true })}
 </div>`;
 
 const renderPageTwoEvidence = () => `<div class="page-two-evidence">
@@ -657,17 +694,77 @@ const renderStageTwoActions = () => `<div class="form-actions stage-two-actions"
         <button class="button-secondary" type="button" data-action="go-stage-one">Previous</button>
         <button class="button-primary" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting&hellip;' : (state.submittedRequestId ? 'Request submitted' : 'Submit')}</button>
     </div>
+    <span class="stage-two-status">${formIsReady() ? 'All required details are complete.' : 'Complete all required details to continue.'}</span>
 </div>`;
 
-const renderStageTwo = () => `${renderErrorSummary()}${renderCompletion()}<div class="page-two-prototype page-two-original">
+const renderStageTwoOriginal = () => `<div class="page-two-prototype page-two-original">
     <h2 class="sr-only">Access details and evidence</h2>
     ${renderPageTwoFields()}
     ${renderPageTwoEvidence()}
     ${renderStageTwoActions()}
 </div>`;
 
+const renderStageTwoSplit = () => `<div class="page-two-prototype page-two-split">
+    <div class="stage-two-context-line">
+        <span>${escapeHtml(state.fields.activity)} request</span>
+        <span>${escapeHtml(state.fields.commencementDate)}</span>
+        <span title="${escapeHtml(selectedSite()?.name ?? '')}">${escapeHtml(selectedSite()?.name ?? 'Site not selected')}</span>
+        <button type="button" data-action="go-stage-one">Edit request context</button>
+    </div>
+    <div class="page-two-split-grid">
+        <section class="page-two-details" aria-labelledby="access-details-heading">
+            <h2 class="page-two-panel-heading" id="access-details-heading">Access details</h2>
+            ${renderPageTwoFields()}
+        </section>
+        <aside class="page-two-evidence-panel" aria-labelledby="evidence-heading">
+            <h2 class="page-two-panel-heading" id="evidence-heading">Evidence and confirmation</h2>
+            ${renderPageTwoEvidence()}
+            ${renderStageTwoActions()}
+        </aside>
+    </div>
+</div>`;
+
+const renderStageTwoLanes = () => `<div class="page-two-prototype page-two-lanes">
+    ${renderContextStrip()}
+    <div class="page-two-lane-grid">
+        <section aria-labelledby="carrier-lane-heading">
+            <h2 class="page-two-panel-heading" id="carrier-lane-heading">Carrier</h2>
+            <div class="lane-fields">
+                ${renderTextField({ name: 'carrier', id: 'input_1_58', label: 'Registered Carrier Name', count: true })}
+                ${renderTextField({ name: 'projectReference', id: 'input_1_18', label: 'Carrier Project Reference', count: true })}
+            </div>
+        </section>
+        <section aria-labelledby="tenant-lane-heading">
+            <h2 class="page-two-panel-heading" id="tenant-lane-heading">Tenant and access</h2>
+            <div class="lane-fields tenant-lane-fields">
+                ${renderTextField({ name: 'tenantCompany', id: 'input_1_19', label: 'Tenant Company Name', help: 'Tenant/Lessee Name', count: true })}
+                ${renderTextField({ name: 'contactName', id: 'input_1_83', label: 'Tenant Contact Person' })}
+                ${renderTextField({ name: 'contactPhone', id: 'input_1_87', label: 'Tenant Contact Number', type: 'tel' })}
+                ${renderTextField({ name: 'workLocation', id: 'input_1_22', label: 'Tenant Location/Floor', help: 'EG L14, Rooftop, Tower', count: true })}
+                ${renderTextField({ name: 'affectedAreas', id: 'input_1_64', label: 'Areas to be Accessed', count: true })}
+            </div>
+        </section>
+        <aside aria-labelledby="evidence-lane-heading">
+            <h2 class="page-two-panel-heading" id="evidence-lane-heading">Evidence</h2>
+            ${renderPageTwoEvidence()}
+            ${renderStageTwoActions()}
+        </aside>
+    </div>
+</div>`;
+
+const renderStageTwo = () => {
+    const variant = currentPrototypeVariant();
+    const content = variant === 'A'
+        ? renderStageTwoOriginal()
+        : variant === 'C'
+            ? renderStageTwoLanes()
+            : renderStageTwoSplit();
+
+    return `${renderErrorSummary()}${renderCompletion()}${content}`;
+};
+
 const renderForm = () => `
-    <form class="form-wrap${state.step === 2 ? ' is-stage-two' : ''}" id="laan-prototype-form" novalidate>
+    <form class="form-wrap${state.step === 2 ? ` is-stage-two variant-${currentPrototypeVariant().toLowerCase()}` : ''}" id="laan-prototype-form" novalidate>
         ${renderProgress()}
         ${state.step === 1 ? renderStageOne() : renderStageTwo()}
     </form>`;
@@ -702,13 +799,39 @@ const renderWorkspace = () => {
         </dl>
         <p class="workspace-kicker">Required items</p>
         <ul class="workspace-checklist">${items.map(([complete, label]) => checklistItem(complete, label)).join('')}</ul>
+        <details class="state-inspector">
+            <summary>Prototype state and edge controls</summary>
+            ${state.step === 2 ? `<div class="draft-actions"><button class="button-link" type="button" data-action="fixture-valid-upload">Valid file</button><button class="button-link" type="button" data-action="fixture-upload-failure">Failed upload</button><button class="button-link" type="button" data-action="fixture-oversize-upload">Over 20 MB</button></div>` : ''}
+            <pre data-state-json></pre>
+        </details>
     </aside>`;
 };
 
-const renderApplication = () => `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout${state.step === 2 ? ' is-stage-two' : ''}"><div class="form-surface">${renderForm()}</div>${renderWorkspace()}</div></section></main>`;
+const renderPrototypeSwitcher = () => {
+    if (isNativeWordPress || state.step !== 2) {
+        return '';
+    }
+
+    const variant = currentPrototypeVariant();
+    return `<nav class="prototype-switcher" aria-label="Page 2 prototype variants">
+        <button type="button" data-action="cycle-variant" data-direction="-1" aria-label="Previous variant">&larr;</button>
+        <span><strong>${variant}</strong> &mdash; ${prototypeVariants[variant]}</span>
+        <button type="button" data-action="cycle-variant" data-direction="1" aria-label="Next variant">&rarr;</button>
+    </nav>`;
+};
+
+const renderApplication = () => {
+    const overflowState = Object.keys(state.errors).length || state.completionShown ? ' has-overflow-state' : '';
+    return `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout${state.step === 2 ? ` is-stage-two variant-${currentPrototypeVariant().toLowerCase()}${overflowState}` : ''}"><div class="form-surface">${renderForm()}</div>${state.step === 1 ? renderWorkspace() : ''}</div></section>${renderPrototypeSwitcher()}</main>`;
+};
 
 const render = ({ focusSite = false, focusError = false, scrollTop = false } = {}) => {
     root.innerHTML = renderApplication();
+    const inspector = root.querySelector('[data-state-json]');
+
+    if (inspector) {
+        inspector.textContent = JSON.stringify(serializableState(), null, 2);
+    }
 
     document.title = isNativeWordPress ? 'LAAN Request' : 'Reference dashboard · LAAN Request Prototype';
 
@@ -733,6 +856,16 @@ const render = ({ focusSite = false, focusError = false, scrollTop = false } = {
             }
         });
     }
+};
+
+const cyclePrototypeVariant = (direction) => {
+    const keys = Object.keys(prototypeVariants);
+    const currentIndex = keys.indexOf(currentPrototypeVariant());
+    const nextIndex = (currentIndex + direction + keys.length) % keys.length;
+    const url = new URL(window.location.href);
+    url.searchParams.set('variant', keys[nextIndex]);
+    window.history.replaceState({}, '', url);
+    render({ scrollTop: true });
 };
 
 const validateStageOne = () => {
@@ -823,9 +956,9 @@ const submitNativeRequest = async () => {
         formData.append('required', pendingFiles.required, pendingFiles.required.name);
     }
 
-    pendingFiles.additional.forEach(({ file }) => {
-        formData.append('additional[]', file, file.name);
-    });
+    if (pendingFiles.additional) {
+        formData.append('additional', pendingFiles.additional, pendingFiles.additional.name);
+    }
 
     try {
         const response = await fetch(nativeConfig.ajaxUrl, { method: 'POST', body: formData, credentials: 'same-origin' });
@@ -843,7 +976,7 @@ const submitNativeRequest = async () => {
         state.completionShown = true;
         state.submittedRequestId = result.data?.requestId ?? 0;
         pendingFiles.required = null;
-        pendingFiles.additional = [];
+        pendingFiles.additional = null;
         sessionStorage.removeItem(sessionKey);
         render({ scrollTop: true });
     } catch (error) {
@@ -861,9 +994,27 @@ const updateFieldWithoutRender = (name, value) => {
     delete state.errors[name];
     persistSession();
 
+    const inspector = root.querySelector('[data-state-json]');
+    if (inspector) {
+        inspector.textContent = JSON.stringify(serializableState(), null, 2);
+    }
+
     const characterCount = root.querySelector(`[data-character-count="${name}"]`);
     if (characterCount) {
         characterCount.textContent = `${value.length} of 255 max characters`;
+    }
+
+    // Text input intentionally avoids a full render so the caret is not lost.
+    // Keep readiness controls synchronized with the in-memory state instead.
+    const submit = root.querySelector('button[type="submit"]');
+    if (submit && state.step === 2) {
+        submit.disabled = !formIsReady() || state.submitting || Boolean(state.submittedRequestId);
+    }
+    const status = root.querySelector('.stage-two-status');
+    if (status && state.step === 2) {
+        status.textContent = formIsReady()
+            ? 'All required details are complete.'
+            : 'Complete all required details to continue.';
     }
 };
 
@@ -903,58 +1054,6 @@ const applyFile = (kind, file) => {
         persistSession();
         render();
     }, 420);
-};
-
-const applyAdditionalFiles = (files) => {
-    if (!files.length) {
-        return;
-    }
-
-    state.completionShown = false;
-    const existingFiles = uploadFilesFor('additional');
-    const nextFiles = files.map((file, index) => {
-        const extension = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
-        const acceptedType = uploadRules.acceptedTypes.includes(file.type) || uploadRules.acceptedExtensions.includes(extension);
-        const withinLimit = file.size <= uploadRules.maximumBytes;
-        const id = `${Date.now()}-${index}-${Math.random().toString(36).slice(2)}`;
-
-        return {
-            id,
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            status: acceptedType && withinLimit ? 'uploading' : 'error',
-            ...(acceptedType && withinLimit
-                ? {}
-                : { error: !acceptedType ? 'Unsupported file type. Use PDF, JPG or PNG.' : `File is larger than ${uploadRules.maximumLabel}.` }),
-        };
-    });
-
-    state.files.additional = [...existingFiles, ...nextFiles];
-    pendingFiles.additional.push(...nextFiles
-        .map((entry, index) => entry.status === 'uploading' ? { id: entry.id, file: files[index] } : null)
-        .filter(Boolean));
-    persistSession();
-    render();
-
-    nextFiles.forEach((entry) => {
-        if (entry.status !== 'uploading') {
-            return;
-        }
-
-        window.setTimeout(() => {
-            const currentFiles = uploadFilesFor('additional');
-            const currentFile = currentFiles.find((item) => item.id === entry.id);
-
-            if (!currentFile || currentFile.status !== 'uploading') {
-                return;
-            }
-
-            state.files.additional = currentFiles.map((item) => item.id === entry.id ? { ...item, status: 'uploaded' } : item);
-            persistSession();
-            render();
-        }, 420);
-    });
 };
 
 const applyUploadFixture = (fixture) => {
@@ -1004,12 +1103,8 @@ root.addEventListener('input', (event) => {
 root.addEventListener('change', (event) => {
     const target = event.target;
 
-    if (target instanceof HTMLInputElement && target.dataset.uploadKind && target.files?.length) {
-        if (target.dataset.uploadKind === 'additional') {
-            applyAdditionalFiles([...target.files]);
-        } else {
-            applyFile(target.dataset.uploadKind, target.files[0]);
-        }
+    if (target instanceof HTMLInputElement && target.dataset.uploadKind && target.files?.[0]) {
+        applyFile(target.dataset.uploadKind, target.files[0]);
         return;
     }
 
@@ -1032,6 +1127,18 @@ root.addEventListener('focusin', (event) => {
     if (event.target instanceof HTMLInputElement && event.target.name === 'siteQuery' && !state.siteMenuOpen) {
         state.siteMenuOpen = true;
         render({ focusSite: true });
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    const isTextEditing = event.target instanceof HTMLInputElement
+        || event.target instanceof HTMLTextAreaElement
+        || event.target instanceof HTMLSelectElement
+        || event.target?.isContentEditable;
+
+    if (!isNativeWordPress && state.step === 2 && !isTextEditing && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+        event.preventDefault();
+        cyclePrototypeVariant(event.key === 'ArrowLeft' ? -1 : 1);
     }
 });
 
@@ -1077,6 +1184,11 @@ root.addEventListener('click', (event) => {
     }
 
     const action = control.dataset.action;
+
+    if (action === 'cycle-variant') {
+        cyclePrototypeVariant(Number(control.dataset.direction));
+        return;
+    }
 
     if (action === 'toggle-dropdown') {
         state.openDropdown = state.openDropdown === control.dataset.dropdown ? '' : control.dataset.dropdown;
@@ -1199,16 +1311,8 @@ root.addEventListener('click', (event) => {
 
     if (action === 'remove-file') {
         const kind = control.dataset.uploadKind;
-        if (kind === 'additional') {
-            const index = Number(control.dataset.uploadIndex);
-            const files = uploadFilesFor(kind);
-            const [removedFile] = files.splice(index, 1);
-            state.files.additional = files;
-            pendingFiles.additional = pendingFiles.additional.filter(({ id }) => id !== removedFile?.id);
-        } else {
-            state.files[kind] = null;
-            pendingFiles[kind] = null;
-        }
+        state.files[kind] = null;
+        pendingFiles[kind] = null;
         if (kind === 'required') {
             state.confirmations.uploadReviewed = false;
         }
@@ -1259,9 +1363,7 @@ root.addEventListener('click', (event) => {
 });
 
 window.addEventListener('beforeunload', (event) => {
-    const hasUnsavedInput = Object.values(state.fields).some(Boolean)
-        || state.files.required
-        || uploadFilesFor('additional').length > 0;
+    const hasUnsavedInput = Object.values(state.fields).some(Boolean) || state.files.required || state.files.additional;
     const explicitDraft = sessionStorage.getItem(draftKey);
 
     if (hasUnsavedInput && !explicitDraft) {
