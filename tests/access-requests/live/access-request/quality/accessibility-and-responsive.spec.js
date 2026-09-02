@@ -33,7 +33,7 @@ async function reachStep8(page, checkpoint = async () => {}) {
 test(accessCaseTitle('TC-AR-A01', 'keeps the Steps 5–8 critical path keyboard reachable'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-A01',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'Critical Steps 5–8 controls can receive focus in DOM order.',
     step: 8,
     branch: 'keyboard-only',
@@ -57,7 +57,7 @@ test(accessCaseTitle('TC-AR-A01', 'keeps the Steps 5–8 critical path keyboard 
 test(accessCaseTitle('TC-AR-A02', 'provides usable names for Steps 5–8 form controls'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-A02',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'Visible Steps 5–8 controls have labels or accessible names.',
     step: 8,
     branch: 'labels-errors-focus',
@@ -83,7 +83,7 @@ for (const viewport of [
   test(accessCaseTitle(viewport.caseId, `remains operable at the ${viewport.label} viewport`), async ({}, testInfo) => {
     await runLiveAccessCase(testInfo, {
       caseId: viewport.caseId,
-      resultType: 'Acceptance',
+      resultType: 'Characterization',
       expected: `Steps 5–8 remain operable without horizontal document overflow at ${viewport.width}×${viewport.height}.`,
       step: 8,
       branch: `${viewport.label}-responsive`,
@@ -108,7 +108,7 @@ for (const viewport of [
 test(accessCaseTitle('TC-AR-A05', 'remains operable at a 200% equivalent viewport with reduced motion'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-A05',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'Steps 5–8 remain readable and operable at 200% equivalent layout width with reduced motion.',
     step: 8,
     branch: 'zoom-reduced-motion',

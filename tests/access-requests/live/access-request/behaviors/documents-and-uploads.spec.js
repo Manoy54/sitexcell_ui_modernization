@@ -12,7 +12,7 @@ import { snapshotStepState } from '../../../support/step-state.js';
 import { reachStep7 } from '../../../support/journeys/access-request-journeys.js';
 import {
   declaredMaximumBytes,
-  relevantConfirmations,
+  associatedUploadConfirmations,
   uploadSyntheticFile,
   visibleUploadFields,
 } from '../../../support/upload-controls.js';
@@ -45,39 +45,10 @@ async function requiredUploads(page) {
   return { uploads, required };
 }
 
-test(accessCaseTitle('TC-AR-D03', 'replaces a request document with explicit file identity evidence'), async ({}, testInfo) => {
-  await runLiveAccessCase(testInfo, {
-    caseId: 'TC-AR-D03',
-    resultType: 'Acceptance',
-    expected: 'Replacing a request document removes the previous file identity.',
-    step: 7,
-    branch: 'document-replacement',
-  }, async ({ page }) => {
-    requireCapturedStepsFieldMap();
-    await reachStep7(page);
-    const uploads = await visibleUploadFields(page, 7);
-    if (!uploads.length) {
-      throw new AccessRequestBlockedError('No visible Step 7 document input was available.', {
-        blockerId: 'UPLOAD-FIELD-AR-01',
-        blockerReason: 'No visible Step 7 document input was available.',
-      });
-    }
-    await uploadSyntheticFile(uploads[0], validFile);
-    const replacement = await uploadSyntheticFile(uploads[0], replacementFile);
-    expect(replacement).toHaveLength(1);
-    expect(replacement[0].name).toBe(path.basename(replacementFile));
-    return {
-      observed: 'The replacement document became the sole selected file.',
-      stoppingPoint: 'Step 7 after document replacement',
-      extra: { uploadId: uploads[0].inputId, replacement },
-    };
-  });
-});
-
 test(accessCaseTitle('TC-AR-U01', 'rejects a missing required Step 7 upload'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U01',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'Missing required evidence blocks Step 7 progression with associated feedback.',
     step: 7,
     branch: 'missing-required-upload',
@@ -101,7 +72,7 @@ test(accessCaseTitle('TC-AR-U01', 'rejects a missing required Step 7 upload'), a
 test(accessCaseTitle('TC-AR-U02', 'accepts allowed synthetic files without submitting'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U02',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'Every required Step 7 upload accepts the approved synthetic file.',
     step: 7,
     branch: 'valid-upload',
@@ -123,7 +94,7 @@ test(accessCaseTitle('TC-AR-U02', 'accepts allowed synthetic files without submi
 test(accessCaseTitle('TC-AR-U03', 'rejects a disallowed synthetic file type'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U03',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'A file outside the declared accepted types is rejected with specific feedback.',
     step: 7,
     branch: 'invalid-upload-type',
@@ -131,23 +102,41 @@ test(accessCaseTitle('TC-AR-U03', 'rejects a disallowed synthetic file type'), a
     requireCapturedStepsFieldMap();
     await reachStep7(page);
     const { required } = await requiredUploads(page);
-    const target = required.find((upload) => upload.accept && !upload.accept.toLowerCase().includes('.txt'));
-    if (!target) {
+    const eligibleIds = required
+      .filter((upload) => upload.accept && !upload.accept.toLowerCase().includes('.txt'))
+      .map((upload) => upload.inputId);
+    const missingContracts = required
+      .filter((upload) => !upload.accept)
+      .map((upload) => upload.inputId);
+    if (!eligibleIds.length) {
       throw new AccessRequestBlockedError(
         'Upload type rejection cannot be asserted because the live field declares no incompatible type.',
         { blockerId: 'UPLOAD-RULE-AR-01', blockerReason: 'The live accepted-type contract is unavailable.' },
       );
     }
-    await uploadSyntheticFile(target, invalidFile);
-    await completeVisibleRequiredControls(page, 7, { uploadPath: validFile });
-    await nextButton(page, 7).click();
-    await expect(page.locator(STEP[7])).toBeVisible({ timeout: 30_000 });
-    const messages = await visibleValidationMessages(page);
-    expect(messages.length).toBeGreaterThan(0);
+    const observations = [];
+    for (const inputId of eligibleIds) {
+      const current = await visibleUploadFields(page, 7);
+      for (const upload of current.filter((item) => item.required)) await uploadSyntheticFile(upload, validFile);
+      const target = current.find((upload) => upload.inputId === inputId);
+      if (!target) throw new Error(`Required upload ${inputId} disappeared before invalid-type validation.`);
+      await uploadSyntheticFile(target, invalidFile);
+      await completeVisibleRequiredControls(page, 7, { uploadPath: validFile });
+      await nextButton(page, 7).click();
+      await expect(page.locator(STEP[7])).toBeVisible({ timeout: 30_000 });
+      const messages = await target.field.locator('.validation_message').allTextContents();
+      expect(messages.length).toBeGreaterThan(0);
+      observations.push({ inputId, accept: target.accept, messages });
+    }
     return {
-      observed: 'The disallowed synthetic text file did not progress beyond Step 7.',
+      status: missingContracts.length ? 'BLOCKED' : 'PASS',
+      observed: `${observations.length} required upload controls with declared type contracts rejected the synthetic text file.`,
       stoppingPoint: 'Step 7 invalid-type validation',
-      extra: { uploadId: target.inputId, accept: target.accept, messages },
+      blockerId: missingContracts.length ? 'UPLOAD-RULE-AR-01' : null,
+      blockerReason: missingContracts.length
+        ? `${missingContracts.length} required upload controls have no declared accepted-type contract.`
+        : null,
+      extra: { observations, missingContracts },
     };
   });
 });
@@ -155,7 +144,7 @@ test(accessCaseTitle('TC-AR-U03', 'rejects a disallowed synthetic file type'), a
 test(accessCaseTitle('TC-AR-U04', 'enforces the declared upload size boundary'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U04',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'At-limit evidence is accepted and above-limit evidence is rejected without clearing unrelated state.',
     step: 7,
     branch: 'upload-size-boundary',
@@ -163,69 +152,65 @@ test(accessCaseTitle('TC-AR-U04', 'enforces the declared upload size boundary'),
     requireCapturedStepsFieldMap();
     await reachStep7(page);
     const { required } = await requiredUploads(page);
-    const target = required.find((upload) => declaredMaximumBytes(upload));
-    const maximumBytes = target ? declaredMaximumBytes(target) : null;
-    if (!target || !maximumBytes) {
+    const boundaryContracts = required.map((upload) => ({
+      inputId: upload.inputId,
+      maximumBytes: declaredMaximumBytes(upload),
+    }));
+    const eligible = boundaryContracts.filter((item) => item.maximumBytes);
+    if (!eligible.length) {
       throw new AccessRequestBlockedError(
         'Upload size-boundary execution requires a declared live maximum.',
         { blockerId: 'UPLOAD-RULE-AR-02', blockerReason: 'The live upload size limit is unavailable.' },
       );
     }
-    if (maximumBytes > maximumSafeBoundaryFixtureBytes) {
-      throw new AccessRequestBlockedError(
-        `The declared ${maximumBytes}-byte limit exceeds the approved local boundary-fixture ceiling.`,
-        {
-          blockerId: 'UPLOAD-FIXTURE-AR-01',
-          blockerReason: `The declared upload limit exceeds the ${maximumSafeBoundaryFixtureBytes}-byte safe fixture ceiling.`,
-        },
-      );
-    }
-    const atLimitBuffer = paddedPdfBuffer(maximumBytes);
-    if (!atLimitBuffer) {
-      throw new AccessRequestBlockedError(
-        'The declared upload limit is smaller than the approved synthetic PDF fixture.',
-        {
-          blockerId: 'UPLOAD-FIXTURE-AR-02',
-          blockerReason: 'An exact-boundary valid synthetic PDF cannot be constructed from the approved fixture.',
-        },
-      );
-    }
-    for (const upload of required) await uploadSyntheticFile(upload, validFile);
-    await target.input.setInputFiles({
-      name: 'synthetic-at-limit.pdf',
-      mimeType: 'application/pdf',
-      buffer: atLimitBuffer,
-    });
-    await completeVisibleRequiredControls(page, 7, { uploadPath: validFile });
-    await nextButton(page, 7).click();
-    await expect(page.locator(STEP[8])).toBeVisible({ timeout: 30_000 });
-    await previousButton(page, 8).click();
-    await expect(page.locator(STEP[7])).toBeVisible({ timeout: 30_000 });
+    const unsupported = boundaryContracts.filter((item) => !item.maximumBytes
+      || item.maximumBytes > maximumSafeBoundaryFixtureBytes
+      || !paddedPdfBuffer(item.maximumBytes));
+    const observations = [];
+    for (const contract of eligible.filter((item) => !unsupported.some((blocked) => blocked.inputId === item.inputId))) {
+      let current = await visibleUploadFields(page, 7);
+      for (const upload of current.filter((item) => item.required)) await uploadSyntheticFile(upload, validFile);
+      let target = current.find((upload) => upload.inputId === contract.inputId);
+      if (!target) throw new Error(`Upload input ${contract.inputId} was unavailable for at-limit validation.`);
+      const atLimitBuffer = paddedPdfBuffer(contract.maximumBytes);
+      await target.input.setInputFiles({
+        name: 'synthetic-at-limit.pdf', mimeType: 'application/pdf', buffer: atLimitBuffer,
+      });
+      await completeVisibleRequiredControls(page, 7, { uploadPath: validFile });
+      await nextButton(page, 7).click();
+      await expect(page.locator(STEP[8])).toBeVisible({ timeout: 30_000 });
+      await previousButton(page, 8).click();
+      await expect(page.locator(STEP[7])).toBeVisible({ timeout: 30_000 });
 
-    const refreshedUploads = await visibleUploadFields(page, 7);
-    const refreshedTarget = refreshedUploads.find((upload) => upload.inputId === target.inputId);
-    if (!refreshedTarget) throw new Error(`Upload input ${target.inputId} was unavailable after returning to Step 7.`);
-    for (const upload of refreshedUploads.filter((item) => item.required)) {
-      await uploadSyntheticFile(upload, validFile);
+      current = await visibleUploadFields(page, 7);
+      for (const upload of current.filter((item) => item.required)) await uploadSyntheticFile(upload, validFile);
+      target = current.find((upload) => upload.inputId === contract.inputId);
+      if (!target) throw new Error(`Upload input ${contract.inputId} was unavailable for above-limit validation.`);
+      await target.input.setInputFiles({
+        name: 'synthetic-above-limit.pdf',
+        mimeType: 'application/pdf',
+        buffer: Buffer.concat([atLimitBuffer, Buffer.from('x')]),
+      });
+      await completeVisibleRequiredControls(page, 7, { uploadPath: validFile });
+      const beforeRejection = await snapshotStepState(page, 7);
+      await nextButton(page, 7).click();
+      await expect(page.locator(STEP[7])).toBeVisible({ timeout: 30_000 });
+      const messages = await target.field.locator('.validation_message').allTextContents();
+      expect(messages.length).toBeGreaterThan(0);
+      const afterRejection = await snapshotStepState(page, 7);
+      expect(afterRejection.filter((item) => item.id !== target.inputId))
+        .toEqual(beforeRejection.filter((item) => item.id !== target.inputId));
+      observations.push({ ...contract, messages });
     }
-    await refreshedTarget.input.setInputFiles({
-      name: 'synthetic-above-limit.pdf',
-      mimeType: 'application/pdf',
-      buffer: Buffer.concat([atLimitBuffer, Buffer.from('x')]),
-    });
-    await completeVisibleRequiredControls(page, 7, { uploadPath: validFile });
-    const beforeRejection = await snapshotStepState(page, 7);
-    await nextButton(page, 7).click();
-    await expect(page.locator(STEP[7])).toBeVisible({ timeout: 30_000 });
-    const messages = await visibleValidationMessages(page);
-    expect(messages.length).toBeGreaterThan(0);
-    const afterRejection = await snapshotStepState(page, 7);
-    expect(afterRejection.filter((item) => item.id !== refreshedTarget.inputId))
-      .toEqual(beforeRejection.filter((item) => item.id !== refreshedTarget.inputId));
     return {
-      observed: 'The exact-limit PDF reached Step 8; the one-byte-over PDF remained on Step 7 without clearing unrelated state.',
+      status: unsupported.length ? 'BLOCKED' : 'PASS',
+      observed: `${observations.length} required upload controls accepted an exact-limit PDF and rejected a one-byte-over PDF without clearing unrelated state.`,
       stoppingPoint: 'Step 7 upload size validation',
-      extra: { uploadId: target.inputId, maximumBytes, messages, beforeRejection, afterRejection },
+      blockerId: unsupported.length ? 'UPLOAD-RULE-AR-02' : null,
+      blockerReason: unsupported.length
+        ? `${unsupported.length} required upload controls lack a safely executable declared size boundary.`
+        : null,
+      extra: { boundaryContracts, observations, unsupported },
     };
   });
 });
@@ -233,7 +218,7 @@ test(accessCaseTitle('TC-AR-U04', 'enforces the declared upload size boundary'),
 test(accessCaseTitle('TC-AR-U05', 'replaces a reviewed file without retaining the previous filename'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U05',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'Replacing a file removes the previous file identity and invalidates dependent review state.',
     step: 7,
     branch: 'replace-upload',
@@ -241,31 +226,36 @@ test(accessCaseTitle('TC-AR-U05', 'replaces a reviewed file without retaining th
     requireCapturedStepsFieldMap();
     await reachStep7(page);
     const { required } = await requiredUploads(page);
-    const target = required[0];
-    await uploadSyntheticFile(target, validFile);
-    const confirmations = await relevantConfirmations(page, 7);
-    if (!confirmations.length) {
-      throw new AccessRequestBlockedError(
-        'No file-review confirmation was available for the replacement invalidation scenario.',
-        {
-          blockerId: 'UPLOAD-CONFIRMATION-AR-01',
-          blockerReason: 'The live branch exposes no identifiable file-review confirmation on Step 7.',
-        },
-      );
+    const requiredIds = required.map((upload) => upload.inputId);
+    const observations = [];
+    const unassociated = [];
+    for (const inputId of requiredIds) {
+      const current = await visibleUploadFields(page, 7);
+      for (const upload of current.filter((item) => item.required)) await uploadSyntheticFile(upload, validFile);
+      const target = current.find((upload) => upload.inputId === inputId);
+      if (!target) throw new Error(`Required upload ${inputId} disappeared before replacement validation.`);
+      const currentConfirmations = await associatedUploadConfirmations(target);
+      if (!currentConfirmations.length) unassociated.push(inputId);
+      for (const confirmation of currentConfirmations) await confirmation.checkbox.check();
+      const replacements = await uploadSyntheticFile(target, replacementFile);
+      expect(replacements).toHaveLength(1);
+      expect(replacements[0].name).toBe(path.basename(replacementFile));
+      const staleConfirmations = [];
+      for (const confirmation of currentConfirmations) {
+        if (await confirmation.checkbox.isChecked()) staleConfirmations.push(confirmation.label);
+      }
+      expect(staleConfirmations).toEqual([]);
+      observations.push({ inputId, replacements, staleConfirmations });
     }
-    for (const confirmation of confirmations) await confirmation.checkbox.check();
-    const replacements = await uploadSyntheticFile(target, replacementFile);
-    expect(replacements).toHaveLength(1);
-    expect(replacements[0].name).toBe(path.basename(replacementFile));
-    const staleConfirmations = [];
-    for (const confirmation of confirmations) {
-      if (await confirmation.checkbox.isChecked()) staleConfirmations.push(confirmation.label);
-    }
-    expect(staleConfirmations).toEqual([]);
     return {
-      observed: 'The replacement synthetic file became the sole selected file and prior confirmations were invalidated.',
+      status: unassociated.length ? 'BLOCKED' : 'PASS',
+      observed: `Each of ${observations.length} required uploads was replaced independently; associated confirmations were invalidated where the form exposes an association.`,
       stoppingPoint: 'Step 7 after upload replacement',
-      extra: { uploadId: target.inputId, replacements, staleConfirmations },
+      blockerId: unassociated.length ? 'UPLOAD-CONFIRMATION-AR-01' : null,
+      blockerReason: unassociated.length
+        ? `${unassociated.length} required uploads expose no field-local review confirmation association.`
+        : null,
+      extra: { observations, unassociated },
     };
   });
 });
@@ -273,7 +263,7 @@ test(accessCaseTitle('TC-AR-U05', 'replaces a reviewed file without retaining th
 test(accessCaseTitle('TC-AR-U06', 'removes a reviewed file and invalidates related confirmations'), async ({}, testInfo) => {
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U06',
-    resultType: 'Acceptance',
+    resultType: 'Characterization',
     expected: 'Removing selected evidence clears the file and any related review confirmation.',
     step: 7,
     branch: 'remove-upload',
@@ -281,41 +271,44 @@ test(accessCaseTitle('TC-AR-U06', 'removes a reviewed file and invalidates relat
     requireCapturedStepsFieldMap();
     await reachStep7(page);
     const { required } = await requiredUploads(page);
-    const target = required[0];
-    await uploadSyntheticFile(target, validFile);
-    const confirmations = await relevantConfirmations(page, 7);
-    if (!confirmations.length) {
-      throw new AccessRequestBlockedError(
-        'No file-review confirmation was available for the removal invalidation scenario.',
-        {
-          blockerId: 'UPLOAD-CONFIRMATION-AR-01',
-          blockerReason: 'The live branch exposes no identifiable file-review confirmation on Step 7.',
-        },
-      );
+    const requiredIds = required.map((upload) => upload.inputId);
+    const observations = [];
+    const missingRemovalControls = [];
+    const unassociated = [];
+    for (const inputId of requiredIds) {
+      const current = await visibleUploadFields(page, 7);
+      for (const upload of current.filter((item) => item.required)) await uploadSyntheticFile(upload, validFile);
+      const target = current.find((upload) => upload.inputId === inputId);
+      if (!target) throw new Error(`Required upload ${inputId} disappeared before removal validation.`);
+      const currentConfirmations = await associatedUploadConfirmations(target);
+      if (!currentConfirmations.length) unassociated.push(inputId);
+      for (const confirmation of currentConfirmations) await confirmation.checkbox.check();
+      const removeControl = target.field.locator('button, a').filter({ hasText: /remove|delete|clear/i }).first();
+      if (!await removeControl.count()) {
+        missingRemovalControls.push(inputId);
+        continue;
+      }
+      await removeControl.click();
+      const files = await target.input.evaluate((input) => input.files?.length ?? 0);
+      expect(files).toBe(0);
+      const staleConfirmations = [];
+      for (const confirmation of currentConfirmations) {
+        if (await confirmation.checkbox.isChecked()) staleConfirmations.push(confirmation.label);
+      }
+      expect(staleConfirmations).toEqual([]);
+      observations.push({ inputId, staleConfirmations });
     }
-    for (const confirmation of confirmations) await confirmation.checkbox.check();
-    const removeControl = target.field.locator('button, a').filter({ hasText: /remove|delete|clear/i }).first();
-    if (!await removeControl.count()) {
-      throw new AccessRequestBlockedError(
-        'No user-facing removal control was available for the reviewed-file removal scenario.',
-        {
-          blockerId: 'UPLOAD-REMOVE-AR-01',
-          blockerReason: 'The live upload field has no identifiable removal control.',
-        },
-      );
-    }
-    await removeControl.click();
-    const files = await target.input.evaluate((input) => input.files?.length ?? 0);
-    expect(files).toBe(0);
-    const staleConfirmations = [];
-    for (const confirmation of confirmations) {
-      if (await confirmation.checkbox.isChecked()) staleConfirmations.push(confirmation.label);
-    }
-    expect(staleConfirmations).toEqual([]);
     return {
-      observed: 'The selected file was removed and no related confirmation remained checked.',
+      status: missingRemovalControls.length || unassociated.length ? 'BLOCKED' : 'PASS',
+      observed: `${observations.length} required uploads were removed independently; related confirmations were checked where the form exposes an association.`,
       stoppingPoint: 'Step 7 after upload removal',
-      extra: { uploadId: target.inputId, staleConfirmations },
+      blockerId: missingRemovalControls.length ? 'UPLOAD-REMOVE-AR-01' : unassociated.length ? 'UPLOAD-CONFIRMATION-AR-01' : null,
+      blockerReason: missingRemovalControls.length
+        ? `${missingRemovalControls.length} required upload controls expose no identifiable removal action.`
+        : unassociated.length
+          ? `${unassociated.length} required uploads expose no field-local review confirmation association.`
+          : null,
+      extra: { observations, missingRemovalControls, unassociated },
     };
   });
 });

@@ -9,6 +9,7 @@ const defaultUploadPath = path.resolve('tests/access-requests/fixtures/synthetic
 
 export async function startAtStep5(page, { uploadPath = defaultUploadPath } = {}) {
   const baseline = await completeBaselineThroughStep4(page, { qualificationPath: uploadPath });
+  await completeVisibleRequiredControls(page, 4, { uploadPath });
   await advanceFromStep(page, 4);
   return baseline;
 }
@@ -31,7 +32,7 @@ export async function reachStep7(page, { uploadPath = defaultUploadPath } = {}) 
 }
 
 export async function reachStep8Review(page, { uploadPath = defaultUploadPath } = {}) {
-  const { baseline } = await startAtStep5(page, { uploadPath });
+  const baseline = await startAtStep5(page, { uploadPath });
   const actions = [];
   for (const step of [5, 6, 7]) {
     actions.push({

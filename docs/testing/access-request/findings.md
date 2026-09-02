@@ -44,7 +44,23 @@ This is the canonical evidence-backed findings register. Do not add a recommenda
 - Keep raw reports and authenticated artifacts out of this file.
 - Sanitize screenshots, copied values, and notes before committing.
 
-## Current execution note — 2026-08-29
+## Current execution note — 2026-09-02
+
+Current evidence run: `test-The-CRM-Carpenters-000088-20260902T044916697Z`
+
+The complete serial baseline executed 33 browser cases. It recorded six
+approved-oracle assertion failures for triage (R03, TC-AR-005, TC-AR-006, A01,
+A02, and E07) and five explicit execution/decision blockers. R02 timed out
+without a case attachment and is not counted as executed. No final submission
+was attempted.
+
+The upload and document gaps are recorded as blockers in the consolidated
+report: accepted type and size contracts are absent, upload confirmations are
+not field-associated, removal controls are not identifiable, and no
+request-specific document field is present in the captured branch. These are
+not silently promoted to product findings.
+
+## Historical execution note — 2026-08-29
 
 The earlier 37-declaration later-step run was blocked at `TC-AR-001` because the target
 redirected to `/` and did not render `#gform_3`. This is recorded as

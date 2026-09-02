@@ -33,6 +33,12 @@ async function controllingGroups(page, stepNumber) {
     for (const control of step.querySelectorAll('select, input[type="radio"], input[type="checkbox"]')) {
       if (control.disabled || control.type === 'hidden') continue;
       const field = control.closest('.gfield');
+      const fieldStyle = field ? getComputedStyle(field) : null;
+      const fieldVisible = Boolean(field)
+        && fieldStyle.display !== 'none'
+        && fieldStyle.visibility !== 'hidden'
+        && field.offsetParent !== null;
+      if (!fieldVisible) continue;
       const label = field?.querySelector('.gfield_label, legend')?.textContent.trim()
         ?? control.getAttribute('aria-label')
         ?? control.id;
@@ -105,20 +111,38 @@ export async function characterizeConditionalControls(page, stepNumber, {
   for (const group of groups) {
     if (group.options.length < 2) continue;
     let before = await captureStepFieldStates(page, stepNumber);
+    let populatedForGroup = false;
     for (const option of group.options) {
       const control = group.kind === 'select'
         ? page.locator(`#${group.id}`)
         : page.locator(`#${option.id}`);
-      if (group.kind === 'select') await control.selectOption(String(option.value));
-      if (group.kind === 'radio') await control.check();
+      if (!await control.isVisible().catch(() => false) || await control.isDisabled().catch(() => true)) continue;
+      if (group.kind === 'select') await control.selectOption(String(option.value), { timeout: 5_000 });
+      if (group.kind === 'radio') {
+        try {
+          await control.check({ timeout: 5_000 });
+        } catch (error) {
+          if (!await control.isVisible().catch(() => false)) continue;
+          await control.check({ force: true, timeout: 5_000 });
+        }
+      }
       if (group.kind === 'checkbox') {
-        if (option.value) await control.check();
-        else await control.uncheck();
+        try {
+          if (option.value) await control.check({ timeout: 5_000 });
+          else await control.uncheck({ timeout: 5_000 });
+        } catch (error) {
+          if (!await control.isVisible().catch(() => false)) continue;
+          if (option.value) await control.check({ force: true, timeout: 5_000 });
+          else await control.uncheck({ force: true, timeout: 5_000 });
+        }
       }
       await page.waitForTimeout(100);
       const after = await captureStepFieldStates(page, stepNumber);
-      if (populateVisibleRequired) await populateVisibleRequired();
-      const populated = populateVisibleRequired
+      if (populateVisibleRequired && !populatedForGroup) {
+        await populateVisibleRequired();
+        populatedForGroup = true;
+      }
+      const populated = populatedForGroup
         ? await captureStepFieldStates(page, stepNumber)
         : after;
       observations.push({

@@ -1,6 +1,6 @@
 # Access Request Test Structure Implementation Plan
 
-Status: Implemented; live execution remains dependent on the approved authenticated session
+Status: Implemented; integrated authenticated evidence is recorded and refreshed by the guarded runner
 Scope: Access Request automated test cases and supporting test infrastructure
 Decision basis: grilling session and domain-modeling review
 
@@ -36,9 +36,13 @@ Prototype UI work remains outside this scope.
    prerequisites remain explicit blockers. A blocked case is not a pass.
 9. Existing case IDs, result schema, safety behavior, and command compatibility
    are preserved during migration.
-10. The 40 currently implemented live cases are migrated first. The complete
+10. The 34 currently implemented browser cases are migrated first. The complete
     catalog of 64 cases remains the coverage source of truth; unimplemented
     cases remain catalog-only until their behavior and prerequisites exist.
+
+The legacy `test:access:capture:steps-5-8` command is retained as a compatibility
+alias, but intentionally writes the authoritative Steps 1–8 field-map outputs;
+use `test:access:capture:steps-1-8` for the unambiguous command name.
 
 ## 3. Target directory structure
 
@@ -62,7 +66,6 @@ tests/access-requests/
 │     │  ├─ conditional-branches.spec.js
 │     │  ├─ documents-and-uploads.spec.js
 │     │  ├─ navigation-and-recovery.spec.js
-│     │  └─ decision-gates.spec.js
 │     └─ quality/
 │        ├─ accessibility-and-responsive.spec.js
 │        └─ efficiency.spec.js
@@ -110,9 +113,9 @@ and controls do not become assertion-heavy test files.
 | `00-authentication-preflight.setup.js` | `TC-AR-001` | Authenticated Access Request entry and no-submit preflight. |
 | `behaviors/entry-validation-and-context.spec.js` | `TC-AR-002`–`TC-AR-004` | Step 1 validation, Site-derived context, and baseline reachability. |
 | `behaviors/conditional-branches.spec.js` | `TC-AR-B03`, `TC-AR-B05`, `TC-AR-B06`, `TC-AR-B08` | Conditional controls and controlling-answer changes. |
-| `behaviors/documents-and-uploads.spec.js` | `TC-AR-D03`, `TC-AR-D04`, `TC-AR-U01`–`TC-AR-U06` | Request-specific documents, replacement/removal, and ordinary upload behavior. |
+| `behaviors/documents-and-uploads.spec.js` | `TC-AR-D04`, `TC-AR-U01`–`TC-AR-U06` | Request-specific documents, replacement/removal, and ordinary upload behavior. `TC-AR-D03` is derived from `TC-AR-U05`. |
 | `behaviors/navigation-and-recovery.spec.js` | `TC-AR-R01`–`TC-AR-R03` | Back/Next, reload characterization, and recoverable validation behavior. |
-| `behaviors/decision-gates.spec.js` | `TC-AR-D01`, `TC-AR-D02`, `TC-AR-U07`, `TC-AR-E10`, `TC-AR-R04` | Cases whose execution depends on an approved product, governance, staging, or human protocol decision. |
+| Decision register (no live spec) | `TC-AR-D01`, `TC-AR-D02`, `TC-AR-U07`, `TC-AR-E10`, `TC-AR-R04` | Cases whose execution depends on an approved product, governance, staging, or human protocol decision. |
 
 ### Quality
 
@@ -217,7 +220,7 @@ remain as compatibility aliases while the migration is adopted.
 7. Update result consolidation and dashboard inputs only where needed to retain
    the existing result schema and add the new capability metadata. **Complete.**
 8. Run the full unit suite and compare the discovered case inventory against the
-   40-case implemented manifest. **Complete: 21 unit tests pass; Playwright lists 40 cases.**
+   34-case browser manifest plus derived/decision records. **Complete: 35 unit tests pass; Playwright lists 34 browser cases.**
 9. Run a no-submission structural smoke check. **Complete: final-submit guards remain covered by unit tests.**
 10. Refresh the approved session and recapture the Steps 5–8 field map before
     attempting live Steps 5–8 execution. **Pending external authentication.**
@@ -231,7 +234,7 @@ blocked. Blocked evidence remains visible and attributable to its blocker.
 
 The migration is acceptable only when all of the following are true:
 
-- All 40 implemented case IDs are discovered exactly once.
+- All 34 browser case IDs are discovered exactly once; 48 cases are accounted for when derived and decision records are included.
 - The 64-case catalog remains internally consistent.
 - Every implemented case has non-empty step coverage.
 - `TC-AR-006` is discoverable as the canonical Step 1→Step 8 journey.
@@ -269,11 +272,14 @@ results as historical artifacts. Do not reset unrelated working-tree changes.
 - No removal of safety guards.
 - No forced execution against an unauthorized or unstable live route.
 - No conversion of policy blockers into passing assertions.
-- No implementation of the 24 catalog-only cases without their required
+- No implementation of the 16 catalog-only cases without their required
   behavior, fixtures, or approvals.
 
 ## 13. Approval boundary
 
-Implementation of this plan was approved on 2026-08-29 and is now applied. Any
+Implementation of this plan was approved on 2026-08-29 and is now applied. The
+current synchronized baseline is run `test-The-CRM-Carpenters-000088-20260902T044916697Z`:
+34 browser declarations, 48 accounted cases including derived/decision records,
+16 planning-only cases, and 35 passing unit tests. Any
 future structural changes require a new reviewable plan or an explicit update
 to this decision record.

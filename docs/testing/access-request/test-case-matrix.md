@@ -17,7 +17,17 @@ Live statuses are `PASS`, `FAIL`, `BLOCKED`, `NOT APPLICABLE`, or
 `INCONCLUSIVE`. `NOT RUN` is planning state only and must never be counted as a
 pass.
 
-## Current execution prerequisite
+## Current execution evidence
+
+Current evidence run: `test-The-CRM-Carpenters-000088-20260902T044916697Z`
+
+The complete serial 34-declaration baseline produced 33 executed browser cases:
+10 acceptance passes, 11 characterizations, 3 measurements, 6 failures, 5
+blocked cases, and 3 NOT APPLICABLE outcomes. Zero final submissions occurred.
+The synchronized field map is Steps 1–8; the field/rule ledger contains 264
+technical-inventory-only rows awaiting owner-approved business rules.
+
+## Historical execution prerequisite
 
 On 2026-08-29 the earlier 37-declaration later-step run redirected the target URL to the
 Co-Siter home page without rendering `#gform_3`. `TC-AR-001` recorded
@@ -30,25 +40,25 @@ authentication and the resulting empty field map are the current live blockers.
 
 | ID | Type | Scenario | Expected safe result | Automation | Current status |
 | --- | --- | --- | --- | --- | --- |
-| `TC-AR-001` | Acceptance | Open the authenticated Access Request. | Form and Step 1 are visible; final Submit is hidden; zero submission attempts. | Implemented | Latest `BLOCKED — AUTH-AR-01`; historical `PASS` 2026-08-26 |
-| `TC-AR-002` | Characterization | Complete required fields through the approved baseline path. | Valid synthetic values reach Step 4 with field-by-field evidence and approved synthetic upload. | Implemented | Historical `PASS`; latest dependency did not run after `AUTH-AR-01` |
-| `TC-AR-003` | Characterization | Validate conditional sections; the initial automated slice covers Site-derived context. | The dedicated Site resolves to its canonical building; remaining branch families are mapped by `TC-AR-B*`. | Implemented, partial | Historical `PASS`; latest dependency did not run after `AUTH-AR-01` |
-| `TC-AR-004` | Acceptance | Advance from an empty Step 1. | Remain on Step 1 with field-level feedback; Submit remains unavailable. | Implemented | Historical `PASS`; latest dependency did not run after `AUTH-AR-01` |
-| `TC-AR-005` | Acceptance | Navigate forward/back across approved steps. | Entered values and derived Site context remain unchanged. | Implemented | `BLOCKED — AUTH-AR-01` / field-map prerequisite |
-| `TC-AR-006` | Acceptance | Reach the valid Step 8 pre-submit state. | Review state is complete and final Submit is visible but untouched. | Implemented; boundary approved | `BLOCKED — AUTH-AR-01` / field-map prerequisite |
+| `TC-AR-001` | Acceptance | Open the authenticated Access Request. | Form and Step 1 are visible; final Submit is hidden; zero submission attempts. | Implemented | `PASS` in current run |
+| `TC-AR-002` | Characterization | Complete required fields through the approved baseline path. | Valid synthetic values reach Step 4 with field-by-field evidence and approved synthetic upload. | Implemented | `PASS` in current run |
+| `TC-AR-003` | Characterization | Validate Site-derived conditional context. | The dedicated Site resolves to its canonical building. | Implemented | `PASS` in current run |
+| `TC-AR-004` | Acceptance | Advance from an empty Step 1. | Remain on Step 1 with field-level feedback; Submit remains unavailable. | Implemented | `PASS` in current run |
+| `TC-AR-005` | Acceptance | Navigate forward/back across approved steps. | Entered values and derived Site context remain unchanged. | Implemented | `FAIL` current run |
+| `TC-AR-006` | Acceptance | Reach the valid Step 8 pre-submit state. | Review state is complete and final Submit is visible but untouched. | Implemented; boundary approved | `FAIL` current run |
 
 ## Conditional branch cases
 
 | ID | Step | Branch family | Expected result | Current status |
 | --- | ---: | --- | --- | --- |
-| `TC-AR-B01` | 1 | Tenure confirmation variants. | Visibility, requiredness, and values match the selected tenure branch. | Planned — not implemented |
-| `TC-AR-B02` | 1 | Network/emergency information variants. | Only applicable emergency/network controls participate in validation. | Planned — not implemented |
-| `TC-AR-B03` | 5 | Nature of work, isolation, authority, permit, and special-access variants. | Each answer exposes the correct dependent controls without stale required values. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-B04` | 4 | Contractor-count variants. | The correct number of contractor identity, induction, and qualification groups appears. | Planned — not implemented |
-| `TC-AR-B05` | 6 | After-hours and high-risk-work variants. | Required safety details change with the selected risk branch. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-B06` | 6 | Rooftop/structure-access variants. | Access-specific questions and confirmations appear only when applicable. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-B07` | 2 | Site-specific document requirements and acknowledgement. | Requirements match the selected Site and must be acknowledged before progression. | Planned — not implemented |
-| `TC-AR-B08` | 1–7 | Change a controlling answer after entering dependent values. | Hidden/irrelevant values cannot remain silently submittable; still-relevant values persist. | Implemented; `BLOCKED — AUTH-AR-01` / field map |
+| `TC-AR-B01` | 1 | Tenure confirmation variants. | Visibility, requiredness, and values match the selected tenure branch. | `PASS` current run |
+| `TC-AR-B02` | 1 | Network/emergency information variants. | Only applicable emergency/network controls participate in validation. | `PASS` current run |
+| `TC-AR-B03` | 5 | Nature of work, isolation, authority, permit, and special-access variants. | Each answer exposes the correct dependent controls without stale required values. | `PASS` current run |
+| `TC-AR-B04` | 4 | Contractor-count variants. | The correct number of contractor identity, induction, and qualification groups appears. | `PASS` current run |
+| `TC-AR-B05` | 6 | After-hours and high-risk-work variants. | Required safety details change with the selected risk branch. | `NOT APPLICABLE` current branch |
+| `TC-AR-B06` | 6 | Rooftop/structure-access variants. | Access-specific questions and confirmations appear only when applicable. | `PASS` current run |
+| `TC-AR-B07` | 2 | Site-specific document requirements and acknowledgement. | Requirements match the selected Site and must be acknowledged before progression. | `PASS` current run |
+| `TC-AR-B08` | 1–7 | Change a controlling answer after entering dependent values. | Hidden/irrelevant values cannot remain silently submittable; still-relevant values persist. | `NOT APPLICABLE` current branch |
 
 Exact option-level branch cases must be added after the authenticated field map
 is recaptured. The branch families above are not evidence that every option is
@@ -58,16 +68,16 @@ already covered.
 
 | ID | Type | Scenario | Expected result | Current status |
 | --- | --- | --- | --- | --- |
-| `TC-AR-R01` | Acceptance | Step back/next after valid entry. | Values persist without duplicate lookup or entry. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-R02` | Characterization | Reload on each approved step. | Lost/preserved values and recovery effort are recorded per step. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-R03` | Acceptance | Correct a validation error. | Unrelated valid values survive and focus returns to actionable feedback. | Implemented; `BLOCKED — AUTH-AR-01` |
+| `TC-AR-R01` | Acceptance | Step back/next after valid entry. | Values persist without duplicate lookup or entry. | Derived from `TC-AR-005`; `FAIL` current run |
+| `TC-AR-R02` | Characterization | Reload on each approved step. | Lost/preserved values and recovery effort are recorded per step. | Implemented; timed out without an attached case result |
+| `TC-AR-R03` | Acceptance | Correct a validation error. | Unrelated valid values survive and focus returns to actionable feedback. | `FAIL` current run |
 | `TC-AR-R04` | Decision | Save and Continue Later lifecycle. | Ownership, expiry, access, privacy, restore, and discard rules are approved before execution. | Implemented explicit blocker — `DECISION-AR-DRAFT` |
-| `TC-AR-U01` | Acceptance | Omit a required upload. | Progression is blocked with an exact, associated message. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-U02` | Acceptance | Upload an allowed synthetic file. | File is accepted and other entered values persist. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-U03` | Acceptance | Upload a disallowed file type. | File is rejected safely with a specific message. | Implemented; auth and accepted-type contract gates remain |
-| `TC-AR-U04` | Acceptance | Upload at and above the size limit. | Boundary is enforced without clearing unrelated values. | Implemented; auth and declared-size-limit gates remain |
-| `TC-AR-U05` | Acceptance | Replace a reviewed/confirmed file. | Replacement invalidates any review or confirmation tied to the previous file. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-U06` | Acceptance | Remove a reviewed/confirmed file. | Removal clears or invalidates the related confirmation/readiness state. | Implemented; `BLOCKED — AUTH-AR-01` |
+| `TC-AR-U01` | Acceptance | Omit a required upload. | Progression is blocked with an exact, associated message. | `PASS` current run |
+| `TC-AR-U02` | Acceptance | Upload an allowed synthetic file. | File is accepted and other entered values persist. | `PASS` current run |
+| `TC-AR-U03` | Acceptance | Upload a disallowed file type. | File is rejected safely with a specific message. | `BLOCKED` — no accepted-type contract |
+| `TC-AR-U04` | Acceptance | Upload at and above the size limit. | Boundary is enforced without clearing unrelated values. | `BLOCKED` — no declared size limit |
+| `TC-AR-U05` | Acceptance | Replace a reviewed/confirmed file. | Replacement invalidates any review or confirmation tied to the previous file. | `BLOCKED` — no field-local confirmation association |
+| `TC-AR-U06` | Acceptance | Remove a reviewed/confirmed file. | Removal clears or invalidates the related confirmation/readiness state. | `BLOCKED` — no identifiable removal action |
 | `TC-AR-U07` | Acceptance | Recover from a safe, controlled upload failure. | Retry is possible and unrelated state is preserved. | Implemented explicit blocker — staging controls required |
 
 ## Person, document, Site, and copy/reuse cases
@@ -75,34 +85,34 @@ already covered.
 | Range | Type | Concrete scope | Current status |
 | --- | --- | --- | --- |
 | `TC-AR-P01`–`TC-AR-P05` | Characterization/Decision | First-time person; returning person; valid known details; updated details; same person in another role. | Planned — not implemented; person source/authority requires approval |
-| `TC-AR-D01`–`TC-AR-D04` | Characterization/Decision | Valid saved document; expired document; replacement; request-specific document. | Implemented; live cases blocked by auth and authority/UI decisions remain explicit |
-| `TC-AR-S01`–`TC-AR-S04` | Acceptance/Efficiency | Partial search; similar names; keyboard selection; interaction/keystroke effort. | Planned — not implemented |
+| `TC-AR-D01`–`TC-AR-D04` | Characterization/Decision | Valid saved document; expired document; replacement; request-specific document. | D01/D02 decision-blocked; D03 derived from U05; D04 `BLOCKED` — request-specific UI absent |
+| `TC-AR-S01`–`TC-AR-S04` | Acceptance/Efficiency | Partial search; similar names; keyboard selection; interaction/keystroke effort. | Implemented; S01 `NOT APPLICABLE`, S02–S04 `PASS` |
 | `TC-AR-C01`–`TC-AR-C08` | Decision/Acceptance | Copy person, address, and company/contact data; verify match, editability, source isolation, unrelated-value preservation, and forbidden reuse. | Planned — not implemented; copy rules and source/target pairs need approval |
 
 ## Efficiency cases
 
 | ID | Measurement | Evidence requirement | Current status |
 | --- | --- | --- | --- |
-| `TC-AR-E01` | Manual field count. | Same fixture and branch; raw controls plus user-equivalent count. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-E02` | Clicks/interactions. | Agreed interaction-counting rules and same fixture. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-E03` | Repeated person values. | Field-level repetition map with semantic equivalence confirmed. | Implemented characterization; auth/field-map blocked |
-| `TC-AR-E04` | Repeated document handling. | Upload/reference actions and document validity context. | Implemented characterization; auth/document decisions remain |
-| `TC-AR-E05` | Steps/screens and backtracking. | Transition log for the same approved path. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-E06` | Validation corrections. | First failure retained; retry outcome recorded separately. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-E07` | Desktop versus mobile effort. | Same fixture on approved desktop/phone/tablet viewports. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-E08` | Keyboard interaction/friction. | Focus order, unreachable controls, and user-equivalent key count. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-E09` | Data preservation after error. | Before/after field snapshot and recovery effort. | Implemented; `BLOCKED — AUTH-AR-01` |
+| `TC-AR-E01` | Manual field count. | Same fixture and branch; raw controls plus user-equivalent count. | Derived from E02; `PASS` |
+| `TC-AR-E02` | Clicks/interactions. | Agreed interaction-counting rules and same fixture. | `PASS` current run |
+| `TC-AR-E03` | Repeated person values. | Field-level repetition map with semantic equivalence confirmed. | Derived from E02; `PASS` |
+| `TC-AR-E04` | Repeated document handling. | Upload/reference actions and document validity context. | Derived from E02; `PASS` |
+| `TC-AR-E05` | Steps/screens and backtracking. | Transition log for the same approved path. | Derived from E02; `PASS` |
+| `TC-AR-E06` | Validation corrections. | First failure retained; retry outcome recorded separately. | Derived from R03; `FAIL` |
+| `TC-AR-E07` | Desktop versus mobile effort. | Same fixture on approved desktop/phone/tablet viewports. | `FAIL` current run |
+| `TC-AR-E08` | Keyboard interaction/friction. | Focus order, unreachable controls, and user-equivalent key count. | Derived from A01; `FAIL` |
+| `TC-AR-E09` | Data preservation after error. | Before/after field snapshot and recovery effort. | Derived from R03; `FAIL` |
 | `TC-AR-E10` | Manual repeat entry versus one-click copy. | Approved source/target pair and at least three comparable human sessions. | Implemented explicit blocker — copy behavior/human protocol unavailable |
 
 ## Accessibility and responsive cases
 
 | ID | Scenario | Expected result | Current status |
 | --- | --- | --- | --- |
-| `TC-AR-A01` | Keyboard-only approved path. | All critical controls are reachable in logical order with visible focus. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-A02` | Labels, names, and error association. | Controls have usable accessible names and errors identify/focus the affected field. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-A03` | Phone viewport `390×844`. | No horizontal overflow or unreachable critical control through the approved boundary. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-A04` | Tablet viewport `768×1024`. | Same quality gates as desktop through the approved boundary. | Implemented; `BLOCKED — AUTH-AR-01` |
-| `TC-AR-A05` | 200% zoom and reduced motion. | Content remains operable/readable; motion preferences are respected where animation exists. | Implemented; `BLOCKED — AUTH-AR-01` |
+| `TC-AR-A01` | Keyboard-only approved path. | All critical controls are reachable in logical order with visible focus. | `FAIL` current run |
+| `TC-AR-A02` | Labels, names, and error association. | Controls have usable accessible names and errors identify/focus the affected field. | `FAIL` current run |
+| `TC-AR-A03` | Phone viewport `390×844`. | No horizontal overflow or unreachable critical control through the approved boundary. | `PASS` current run |
+| `TC-AR-A04` | Tablet viewport `768×1024`. | Same quality gates as desktop through the approved boundary. | `PASS` current run |
+| `TC-AR-A05` | 200% zoom and reduced motion. | Content remains operable/readable; motion preferences are respected where animation exists. | `PASS` current run |
 
 ## Cross-workflow cases
 
@@ -163,3 +173,14 @@ scope:
 - zero final submissions were attempted; and
 - the remaining 24 matrix cases are still planning-only or outside the Steps
   5–8 implementation scope.
+
+## Current execution update (2026-09-02)
+
+This section supersedes the historical run notes above. The catalog now has 34
+browser declarations, 9 derived cases, 5 decision blockers, and 16 planning-only
+cases. The current full run is `test-The-CRM-Carpenters-000088-20260902T044916697Z`.
+It executed 33 browser cases and reports 10 acceptance passes, 11
+characterizations, 3 measurements, 6 failures, 5 blocked cases, and 3 NOT
+APPLICABLE outcomes. The Steps 1–8 field map (392 controls/264 grouped rows)
+and field/rule ledger are synchronized to this run; no final submission was
+attempted.

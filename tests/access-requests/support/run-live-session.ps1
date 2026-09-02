@@ -8,7 +8,7 @@ param(
     [string]$ConfigFile = 'tests/access-requests/configs/playwright.access-request.config.js',
     [string]$ReportFile = 'access-request-results.json',
     [string]$SuiteLabel = 'access-request',
-    [int]$PlannedCaseCount = 40
+    [int]$PlannedCaseCount = 34
 )
 
 $ErrorActionPreference = 'Stop'

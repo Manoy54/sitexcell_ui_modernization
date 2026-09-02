@@ -6,6 +6,14 @@ const resultReportPath = resolve(
     ?? resolve(process.cwd(), '.test-artifacts', 'playwright', 'access-request-results.json'),
 );
 
+const configuredWorkers = process.env.ACCESS_WORKERS ?? '1';
+const workerCount = Number(configuredWorkers);
+if (!Number.isInteger(workerCount) || workerCount < 1 || workerCount !== 1) {
+  throw new Error(
+    `ACCESS_WORKERS must be exactly 1 until the approved isolation experiment passes; received "${configuredWorkers}".`,
+  );
+}
+
 export default defineConfig({
   testDir: resolve(process.cwd(), 'tests', 'access-requests', 'live'),
   timeout: 180_000,
@@ -13,7 +21,7 @@ export default defineConfig({
     timeout: 20_000,
   },
   fullyParallel: false,
-  workers: 1,
+  workers: workerCount,
   reporter: [
     ['list'],
     ['json', { outputFile: resultReportPath }],
@@ -25,13 +33,32 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'access-preflight',
+      name: 'access-authentication',
       testMatch: ['access-request/00-authentication-preflight.setup.js'],
     },
     {
-      name: 'access-request',
+      name: 'access-early',
+      testMatch: [
+        'access-request/behaviors/entry-validation-and-context.spec.js',
+        'access-request/behaviors/early-conditional-branches.spec.js',
+        'access-request/behaviors/site-search.spec.js',
+      ],
+      dependencies: ['access-authentication'],
+    },
+    {
+      name: 'access-step5-readiness',
+      testMatch: ['access-request/01-later-step-readiness.setup.js'],
+      dependencies: ['access-authentication'],
+    },
+    {
+      name: 'access-later',
       testMatch: ['access-request/**/*.spec.js'],
-      dependencies: ['access-preflight'],
+      testIgnore: [
+        'access-request/behaviors/entry-validation-and-context.spec.js',
+        'access-request/behaviors/early-conditional-branches.spec.js',
+        'access-request/behaviors/site-search.spec.js',
+      ],
+      dependencies: ['access-step5-readiness'],
     },
   ],
 });

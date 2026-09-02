@@ -1,113 +1,99 @@
 # Access Requests Test Summary
 
-Status: Unified Access Request automation is implemented; live execution is blocked by the current authenticated session.
+Status: Unified Steps 1–8 baseline executed with truthful PASS, FAIL, BLOCKED, and NOT APPLICABLE classifications.
 
 ## Current implementation
 
 - Approved matrix: 64 cases.
-- Executable cases: 40.
-- Remaining planned cases without executable declarations: 24.
-- Core implementation: `TC-AR-001`–`TC-AR-006`.
-- Steps 5–8 implementation: 36 cases across conditional branches, recovery,
-  uploads, document context, efficiency, accessibility, and responsive behavior.
-- Formal unified Access Request Playwright run size: 40 declarations including the
-  authentication preflight dependency.
-- Unit coverage: 21 tests for run IDs, final-submission guards, result
-  consolidation/sanitization, case catalog integrity, field-map rendering, and
-  deterministic synthetic field values.
+- Classified: 64/64 (100%).
+- Browser declarations: 34.
+- Derived results: 9.
+- Decision blockers: 5.
+- Remaining planning-only cases: 16.
+- Implemented/declared/derived-or-decision coverage: 48/64 (75%).
+- Technical field inventory: 392 captured controls grouped into 264 field/rule rows across Steps 1–8.
+- Field/rule evidence-backed rows: 0; all rows are explicitly `technical-inventory-only` pending owner approval.
+- Final-submit attempts: 0.
+- Unit coverage: 35 tests pass.
 
 ## Latest live run
 
-- Run ID: `test-The-CRM-Carpenters-000041-20260829T111406111Z`.
-- Date: 2026-08-29.
-- Scope: Earlier later-step run captured before the formal Steps 1–8 consolidation.
+Current evidence run: `test-The-CRM-Carpenters-000088-20260902T044916697Z`
+
+- Run ID: `test-The-CRM-Carpenters-000088-20260902T044916697Z`.
+- Date: 2026-09-02.
+- Scope: Complete serial 34-case Steps 1–8 browser declaration set.
 - Target: `https://co-siter.com.au/access-requests/`.
-- Result: `BLOCKED` by `AUTH-AR-01`.
-- Observed route: `https://co-siter.com.au/`.
-- Executed: 1 authentication preflight.
-- Dependent cases not run: 36.
-- Product failures: 0 established.
-- Final submission attempts: 0.
-- Consolidated result counts: 37 declared/implemented, 1 executed, 37
-  classified `BLOCKED`, 0 passed, 0 failed.
+- Result: `FAIL` because six approved-oracle assertions failed after prerequisites passed; five additional cases were blocked by explicit contracts or decisions.
+- Executable declarations: 34.
+- Executed browser cases: 33.
+- Acceptance passes: 10.
+- Characterizations: 11.
+- Measurements: 3.
+- Product/behavior failures: 6.
+- Execution/decision blockers: 5.
+- NOT APPLICABLE outcomes: 3.
+- Final submission attempts: 0; Step 8 remained the maximum boundary.
 
-The target redirected to `/` and did not render `#gform_3`. This is an
-authentication/authorization prerequisite failure, not an Access Request product
-defect. A visible refresh attempt also timed out before the authenticated form
-became available.
-
-## Previous successful evidence
-
-The refreshed authenticated run on 2026-08-26 remains the latest successful core
-behavior evidence:
-
-- `TC-AR-001` passed the authenticated Step 1 preflight.
-- `TC-AR-002` reached Step 4 with synthetic contractor details and qualification
-  upload.
-- `TC-AR-003` confirmed the Site-derived hidden building context.
-- `TC-AR-004` confirmed empty Step 1 validation.
-- No final submission was attempted.
-
-That historical 4/4 result does not override the current `AUTH-AR-01` blocker.
-
-## Steps 5–8 coverage implemented
-
-| Family | Executable cases | Current live status |
-| --- | ---: | --- |
-| Core navigation and pre-submit | 2 | Blocked by authentication/field-map prerequisite |
-| Conditional branches | 4 | Blocked by authentication/field-map prerequisite |
-| Recovery | 4 | Implemented; current run blocked by authentication; draft lifecycle remains explicitly blocked |
-| Uploads | 7 | Live cases blocked; size/failure cases retain explicit rule/staging gates |
-| Document context | 4 | Live cases blocked; saved-document authority decisions remain explicit |
-| Efficiency | 10 | Live evidence blocked; copy/human protocol remains explicitly blocked |
-| Accessibility and responsive | 5 | Blocked by authentication/field-map prerequisite |
+The run proves the harness, authentication, field-map freshness, serial gating,
+and final-submit guard. It does not establish backend acceptance or a clean
+product baseline. The six failures are preserved in the consolidated result for
+triage; blockers are not converted to failures or passes.
 
 ## Evidence and reporting
 
-- Raw Playwright report:
-  `.test-artifacts/playwright/access-request-results.json`.
-- Archived raw report:
-  `.test-artifacts/playwright/history/test-The-CRM-Carpenters-000041-20260829T111406111Z-steps-5-8.json`.
-- Local consolidated report:
-  `.test-artifacts/playwright/access-request-results.json`.
 - Sanitized committed report: [`access-request-results.json`](./access-request-results.json).
-- Field-map JSON: [`steps-5-8-field-map.json`](./steps-5-8-field-map.json).
-- Field-map summary: [`steps-5-8-field-map.md`](./steps-5-8-field-map.md).
+- Full Steps 1–8 field map: [`steps-1-8-field-map.json`](./steps-1-8-field-map.json) and [`steps-1-8-field-map.md`](./steps-1-8-field-map.md).
+- Field/rule ledger: [`field-rule-ledger.json`](./field-rule-ledger.json) and [`field-rule-ledger.md`](./field-rule-ledger.md).
+- Governing specification: [`test-refinement-spec.md`](./test-refinement-spec.md).
+- Coverage ledger: [`coverage-ledger.md`](./coverage-ledger.md).
 
-The field-map capture is currently `BLOCKED` and contains no guessed Step 5–8
-selectors. Once authentication is restored, `npm run
-test:access:capture:steps-5-8` captures the real fields before live behavior
-assertions execute.
+## Current interpretation
 
-## Findings and recommendations
+- Tenure, emergency/network, Site acknowledgement, contractor-count, Site
+  selection, conditional branches, and responsive cases now have direct live
+  declarations.
+- U03 and U04 are blocked because the live upload controls expose no accepted
+  type or size contract. U05 is blocked because review confirmations are not
+  associated with individual uploads. U06 is blocked because no user-facing
+  removal action is identifiable. D04 is blocked because no request-specific
+  document field is present in the captured branch.
+- R03, TC-AR-005/006, A01/A02, and E07 retain their observed failures for
+  root-cause triage. R02 timed out before producing a case attachment and is
+  therefore not counted as executed. No recommendation is approved solely from
+  automated timing.
+- The field/rule ledger prevents the captured DOM from being mistaken for
+  approved business coverage; every row names an owner and blocker.
 
-No Step 5–8 product finding or recommendation is approved from the blocked run.
-The result contract supports linked findings and recommendations, but those
-collections remain empty until reproducible live evidence exists.
+### Failure triage before rerun
+
+| Case | Working classification | Required confirmation |
+|---|---|---|
+| `TC-AR-006` | Harness setup defect fixed after run 000088 | Rerun the corrected Step 8 review assertion |
+| `TC-AR-E07` | Transition-timing/harness issue suspected; idle guard added | Rerun with the guarded transition helper |
+| `TC-AR-A01` | Accessibility oracle/helper scope issue suspected; save-link exclusion added | Rerun and review any remaining missing controls |
+| `TC-AR-A02` | Accessible-name helper gap suspected; native button names now supported | Rerun and classify remaining unlabeled controls |
+| `TC-AR-R03` | Potential product validation/state issue | Rerun with field-specific evidence before defect classification |
+| `TC-AR-005` | Potential persistence issue; Step 6 values changed after Back | Rerun and compare the approved persistence oracle |
+
+These are provisional triage labels, not approved findings. The next live wave
+must preserve the first failure and determine whether the corrected harness,
+the live form, or the business oracle is responsible.
 
 ## Prototype gate
 
-- Core implementation complete: Yes.
-- Latest core execution available: No — `AUTH-AR-01`.
-- Steps 5–8 implementation complete: Yes for the approved 36-case scope.
-- Steps 5–8 live evidence complete: No.
-- Field/branch map complete: No — `AUTH-AR-01`.
-- Upload restrictions verified: No.
-- Accessibility/responsive evidence complete: No.
-- Efficiency evidence complete: No.
-- Prototype implementation authorized: No.
+- Technical inventory complete: Yes, Steps 1–8.
+- Automated declarations complete for Phase 1 scope: Yes, 34 browser cases.
+- Clean acceptance baseline: No.
+- Business-rule overlay complete: No.
+- Upload contracts complete: No.
 - Prototype approved: No.
 
-## Required next action
+## Required next actions
 
-Refresh an approved account/session that can render
-`https://co-siter.com.au/access-requests/`, then run:
-
-```powershell
-npm run test:access:capture:steps-5-8
-npm run test:access:live
-```
-
-Review focused failures before claiming a full pass. The suite must not bypass the
-field-map gate, weaken final-submission guards, or classify skipped dependent
-cases as passed.
+1. Triage the six failed assertions against the attached evidence and decide
+   whether each is a product defect or an outdated oracle.
+2. Obtain owner approval for requiredness, upload contracts, document sources,
+   review mappings, and persistence rules; populate the field/rule ledger.
+3. Re-run the full suite after corrections and require two consecutive clean
+   serial baselines before considering worker parallelism.

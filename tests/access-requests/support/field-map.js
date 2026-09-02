@@ -12,8 +12,12 @@ function fieldOptions(field) {
 
 export function renderFieldMapMarkdown(fieldMap) {
   const status = fieldMap.status === 'captured' ? 'Captured' : 'Blocked';
+  const stepNumbers = (fieldMap.steps ?? []).map((item) => item.step).sort((left, right) => left - right);
+  const stepRange = stepNumbers.length
+    ? `${stepNumbers[0]}–${stepNumbers.at(-1)}`
+    : '1–8';
   const lines = [
-    '# Access Requests Steps 5–8 Field and Branch Map',
+    `# Access Requests Steps ${stepRange} Field and Branch Map`,
     '',
     `Status: ${status}  `,
     `Captured at: ${fieldMap.capturedAt ?? 'Not captured'}  `,
@@ -69,7 +73,7 @@ export function renderFieldMapMarkdown(fieldMap) {
   return `${lines.join('\n')}\n`;
 }
 
-export async function captureStepsFieldMap(page, stepNumbers = [5, 6, 7, 8]) {
+export async function captureStepsFieldMap(page, stepNumbers = [1, 2, 3, 4, 5, 6, 7, 8]) {
   const steps = [];
   for (const stepNumber of stepNumbers) {
     const step = page.locator(STEP[stepNumber]);
@@ -108,7 +112,10 @@ export async function captureStepsFieldMap(page, stepNumbers = [5, 6, 7, 8]) {
             || control.getAttribute('aria-label')
             || null,
           type,
-          required: control.required || control.getAttribute('aria-required') === 'true',
+          required: control.required
+            || control.getAttribute('aria-required') === 'true'
+            || field?.classList.contains('gfield_contains_required')
+            || Boolean(field?.querySelector('.gfield_required')),
           disabled: control.disabled,
           visibleByDefault: visible,
           options,

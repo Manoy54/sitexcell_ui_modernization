@@ -1,6 +1,6 @@
 # Access Requests Steps 5–8 Test Implementation Plan
 
-Status: Unified test implementation completed; live evidence blocked by `AUTH-AR-01`<br>
+Status: Unified test implementation completed; integrated evidence run recorded on 2026-09-02<br>
 Decision date: 2026-08-29<br>
 Scope owner: SiteXcell Access Requests testing<br>
 Implementation boundary: Automated test cases, evidence, findings, and recommendations only
@@ -38,8 +38,8 @@ This plan extends, but does not replace:
 - [`findings.md`](./findings.md), which is the human-readable findings register;
 - [`recommendations.md`](./recommendations.md), which is the human-readable
   recommendations register; and
-- [`test-summary.md`](./test-summary.md), which must be reconciled with the latest
-  executable evidence before Step 5–8 results are added.
+- [`test-summary.md`](./test-summary.md), which is reconciled to the latest
+  executable evidence by the documentation freshness check.
 
 If these documents conflict, the implementation must stop and reconcile the
 conflict in the same change set. Test code must not silently choose a business
@@ -83,6 +83,20 @@ The following decisions are approved for this plan:
     summary agree.
 
 ## 4. Current baseline
+
+### Integrated evidence superseding the pre-implementation baseline
+
+The authenticated Steps 1–8 field map and the guarded integrated run are now
+available. The current matrix contains 64 approved cases: 34 browser
+declarations, 9 derived evidence records, 5 decision-gated records, and 16
+planning-only cases. The integrated run executed 33 browser cases plus one
+readiness setup; five browser cases were direct blockers and six direct cases
+failed. Step 8 review was reached where the path allowed it, and the final
+Submit control and final Step 8 POST remained untouched.
+
+The 392-control technical inventory is intentionally not treated as approved
+behavior: all 264 grouped field/rule rows remain owner-review items until their
+business oracle, input contract, and evidence case are approved.
 
 The current repository contains executable live coverage for four core cases:
 
@@ -904,14 +918,14 @@ Implementation must proceed in this order:
 
 - [x] Receive explicit authorization to implement this plan.
 - [x] Reconcile the current 4-case core baseline.
-- [ ] Confirm the approved authenticated session and Step 8 review boundary.
-- [x] Attempt field/branch-map capture and produce sanitized blocked outputs;
-  real Step 5–8 fields remain pending `AUTH-AR-01`.
+- [x] Confirm the approved authenticated session and Step 8 review boundary.
+- [x] Capture the authenticated Steps 1–8 field/branch map and produce a
+  sanitized technical inventory; unresolved business rules remain gated.
 - [x] Approve the behavior-equivalence groups and decision tables.
 - [x] Implement and unit-test the consolidated result contract.
 - [x] Implement shared deterministic fixtures and traversal helpers.
-- [x] Implement `TC-AR-006` through Step 8 review; live execution remains
-  pending `AUTH-AR-01` and the field-map gate.
+- [x] Implement `TC-AR-006` through Step 8 review; execution evidence is
+  recorded with its review-integrity failure.
 - [x] Implement Step 5 branch and stale-state cases.
 - [x] Implement Step 6 decision-table and stale-state cases.
 - [x] Implement Step 7 upload and recovery cases.
@@ -919,8 +933,8 @@ Implementation must proceed in this order:
 - [x] Implement accessibility and responsive cases.
 - [ ] Capture efficiency evidence without making unsupported usability claims.
 - [ ] Run focused suites and core regression after each wave.
-- [x] Run the complete consolidated suite; the authentication preflight blocked
-  36 dependent declarations.
+- [x] Run the complete consolidated suite; the result records executed,
+  failed, blocked, and not-applicable cases without inflating coverage.
 - [x] Produce sanitized results, findings, and recommendations.
 - [x] Reconcile all documentation and dashboard totals.
 - [x] Confirm zero submissions and report the final known/unknown/blocked state.

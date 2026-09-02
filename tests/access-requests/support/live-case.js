@@ -3,6 +3,8 @@ import {
   attachCaseResult,
   openAccessRequestForm,
 } from './form-helpers.js';
+import { caseMetadataForCase } from './case-catalog.js';
+import { requireCapturedStepsFieldMap } from './field-map-gate.js';
 import { installFinalSubmissionGuard } from './safety-guards.js';
 import { connectToAuthenticatedContext } from './session.js';
 
@@ -13,16 +15,59 @@ export async function runLiveAccessCase(testInfo, {
   suiteWave = 'Steps 1-8',
   step = null,
   branch = null,
+  skipOpen = false,
 }, exercise) {
   const startedAt = Date.now();
-  const { browser, context, ownsBrowser } = await connectToAuthenticatedContext();
+  const timings = {};
+  const contextStartedAt = Date.now();
+  let connection;
+  try {
+    connection = await connectToAuthenticatedContext();
+  } catch (error) {
+    const blockerReason = String(error?.message ?? error);
+    testInfo.annotations.push({ type: 'result-status', description: 'BLOCKED' });
+    await attachCaseResult(testInfo, null, {
+      caseId,
+      resultType,
+      status: 'BLOCKED',
+      startedAt,
+      expected,
+      observed: blockerReason,
+      stoppingPoint: 'Authentication/authorization preflight',
+      finalSubmissionAttempted: false,
+      blockerId: 'AUTH-AR-01',
+      blockerReason,
+      timings: { contextSetupMs: Date.now() - contextStartedAt },
+    });
+    throw new AccessRequestBlockedError(`Access Request execution blocked: ${blockerReason}`, {
+      blockerId: 'AUTH-AR-01',
+      blockerReason,
+    });
+  }
+  const { browser, context, ownsBrowser, ownsContext } = connection;
+  timings.contextSetupMs = Date.now() - contextStartedAt;
   const page = await context.newPage();
   const wasFinalSubmissionAttempted = await installFinalSubmissionGuard(page);
 
   try {
     try {
-      await openAccessRequestForm(page);
+      const prerequisiteStartedAt = Date.now();
+      const caseMetadata = caseMetadataForCase(caseId);
+      if (caseMetadata?.prerequisites.includes('captured-field-map')) {
+        requireCapturedStepsFieldMap();
+      }
+      timings.prerequisiteCheckMs = Date.now() - prerequisiteStartedAt;
+      if (skipOpen) {
+        timings.openFormMs = 0;
+        timings.formNavigationSkipped = true;
+      } else {
+        const openStartedAt = Date.now();
+        await openAccessRequestForm(page);
+        timings.openFormMs = Date.now() - openStartedAt;
+      }
+      const exerciseStartedAt = Date.now();
       const outcome = await exercise({ page, context }) ?? {};
+      timings.exerciseMs = Date.now() - exerciseStartedAt;
       const finalSubmissionAttempted = await wasFinalSubmissionAttempted();
       if (finalSubmissionAttempted) {
         throw new Error('The final submission guard observed a prohibited submission attempt.');
@@ -45,6 +90,7 @@ export async function runLiveAccessCase(testInfo, {
         retryOutcome: outcome.retryOutcome ?? null,
         findingIds: outcome.findingIds ?? [],
         recommendationIds: outcome.recommendationIds ?? [],
+        timings,
         extra: outcome.extra ?? {},
       });
       return outcome;
@@ -70,11 +116,13 @@ export async function runLiveAccessCase(testInfo, {
         branch,
         blockerId: status === 'BLOCKED' ? error.blockerId : null,
         blockerReason: status === 'BLOCKED' ? error.blockerReason : null,
+        timings,
       });
       throw error;
     }
   } finally {
     await page.close();
+    if (ownsContext) await context.close();
     if (ownsBrowser) await browser.close();
   }
 }

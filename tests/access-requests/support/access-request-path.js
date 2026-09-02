@@ -7,6 +7,7 @@ import {
   TEST_BUILDING,
   TEST_SITE,
 } from './form-helpers.js';
+import { waitForTransientLoading } from './required-controls.js';
 import { STEP, nextButton } from './selectors.js';
 
 async function fillValues(page, values) {
@@ -23,13 +24,15 @@ export async function completeBaselineThroughStep4(page, {
   await siteSelect.selectOption({ label: TEST_SITE });
   await page.locator('#choice_3_528_0').check();
   await page.locator('#choice_3_464_1').check();
+  await waitForTransientLoading(page);
   await nextButton(page, 1).click();
-  await expect(page.locator(STEP[2])).toBeVisible();
+  await expect(page.locator(STEP[2])).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('#input_3_9')).toHaveValue(TEST_BUILDING);
 
   await page.locator('#input_3_430_1').check();
+  await waitForTransientLoading(page);
   await nextButton(page, 2).click();
-  await expect(page.locator(STEP[3])).toBeVisible();
+  await expect(page.locator(STEP[3])).toBeVisible({ timeout: 30_000 });
 
   await fillValues(page, {
     '#input_3_10': fixture.project.associatedLaanId,
@@ -59,6 +62,7 @@ export async function completeBaselineThroughStep4(page, {
     '#input_3_30': fixture.workers[1].email,
     '#input_3_33': fixture.workers[1].address,
   });
+  await waitForTransientLoading(page);
   await nextButton(page, 3).click();
   await expect(page.locator(STEP[4])).toBeVisible({ timeout: 30_000 });
 

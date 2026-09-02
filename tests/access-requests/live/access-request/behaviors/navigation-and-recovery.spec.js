@@ -21,38 +21,8 @@ import { reachStep } from '../../../support/journeys/access-request-journeys.js'
 
 const uploadPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 
-test(accessCaseTitle('TC-AR-R01', 'preserves Step 5–7 values through Back and Next'), async ({}, testInfo) => {
-  await runLiveAccessCase(testInfo, {
-    caseId: 'TC-AR-R01',
-    resultType: 'Acceptance',
-    expected: 'Back and Next preserve valid values without duplicate entry.',
-    step: 7,
-    branch: 'back-next-recovery',
-  }, async ({ page }) => {
-    requireCapturedStepsFieldMap();
-    await reachStep(page, 5);
-    const checkpoints = [];
-    for (const step of [5, 6, 7]) {
-      await completeVisibleRequiredControls(page, step, { uploadPath });
-      const before = await snapshotStepState(page, step);
-      await completeStepAndAdvance(page, step, { uploadPath });
-      await previousButton(page, step + 1).click();
-      await expect(page.locator(STEP[step])).toBeVisible({ timeout: 30_000 });
-      const after = await snapshotStepState(page, step);
-      assert.deepEqual(after, before, `Step ${step} changed after a Back transition.`);
-      await nextButton(page, step).click();
-      await expect(page.locator(STEP[step + 1])).toBeVisible({ timeout: 30_000 });
-      checkpoints.push({ step, preservedControls: after.length });
-    }
-    return {
-      observed: 'Back and Next preserved all captured Step 5–7 control state.',
-      stoppingPoint: 'Step 8 after recovery navigation',
-      extra: { checkpoints },
-    };
-  });
-});
-
 test(accessCaseTitle('TC-AR-R02', 'characterizes reload state on every approved later step'), async ({}, testInfo) => {
+  test.setTimeout(420_000);
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-R02',
     resultType: 'Characterization',

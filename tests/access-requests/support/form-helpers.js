@@ -65,8 +65,8 @@ export async function openAccessRequestForm(page) {
 export async function testEnvironment(page) {
   return {
     browser: 'Microsoft Edge',
-    viewport: page.viewportSize(),
-    url: page.url(),
+    viewport: page?.viewportSize?.() ?? null,
+    url: page?.url?.() ?? ACCESS_REQUEST_URL,
     commit: process.env.ACCESS_COMMIT
       ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
     configuration: process.env.ACCESS_CONFIG_FILE
@@ -126,6 +126,7 @@ export async function attachCaseResult(testInfo, page, {
   blockerId = null,
   blockerReason = null,
   retryOutcome = null,
+  timings = {},
   findingIds = [],
   recommendationIds = [],
   coveredSteps = coveredStepsForCase(caseId),
@@ -159,6 +160,7 @@ export async function attachCaseResult(testInfo, page, {
     recommendationIds,
     blockerId,
     blockerReason,
+    timings,
     runId: process.env.ACCESS_RUN_ID ?? null,
     stoppingPoint,
     locatorGuardInstalled: true,

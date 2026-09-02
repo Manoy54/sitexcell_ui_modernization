@@ -3,7 +3,7 @@ import test from 'node:test';
 
 import { renderFieldMapMarkdown } from '../support/field-map.js';
 
-test('renders a sanitized, reviewable Steps 5-8 field map summary', () => {
+test('renders a sanitized, reviewable Steps 1-8 field map summary', () => {
   const markdown = renderFieldMapMarkdown({
     schemaVersion: 1,
     status: 'captured',
@@ -11,7 +11,7 @@ test('renders a sanitized, reviewable Steps 5-8 field map summary', () => {
     targetUrl: 'https://co-siter.com.au/access-requests/',
     accountClassification: 'approved authenticated session',
     steps: [{
-      step: 5,
+      step: 1,
       fields: [{
         id: 'input_3_500',
         name: 'input_500',
@@ -27,12 +27,16 @@ test('renders a sanitized, reviewable Steps 5-8 field map summary', () => {
         accept: null,
         multiple: false,
       }],
+    }, {
+      step: 8,
+      fields: [],
     }],
   });
 
-  assert.match(markdown, /^# Access Requests Steps 5–8 Field and Branch Map/m);
+  assert.match(markdown, /^# Access Requests Steps 1–8 Field and Branch Map/m);
   assert.match(markdown, /Status: Captured/);
-  assert.match(markdown, /## Step 5/);
+  assert.match(markdown, /## Step 1/);
+  assert.match(markdown, /## Step 8/);
   assert.match(markdown, /`input_3_500` \| Nature of work \| `select-one` \| Yes/);
   assert.match(markdown, /Maintenance/);
 });

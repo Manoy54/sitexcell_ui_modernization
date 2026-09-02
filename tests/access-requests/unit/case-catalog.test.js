@@ -13,6 +13,11 @@ import {
   caseMetadataForCase,
   coveredStepsForCase,
 } from '../support/case-catalog.js';
+import {
+  ACCESS_BROWSER_CASE_IDS,
+  ACCESS_DECISION_BLOCKERS,
+  ACCESS_DERIVED_CASE_SOURCES,
+} from '../support/coverage-model.js';
 
 test('names Access Request cases with their covered step range', () => {
   assert.equal(
@@ -37,15 +42,16 @@ test('every implemented Steps 5–8 case has explicit step coverage', () => {
   }
 });
 
-test('maps every implemented case to one existing capability test file', () => {
-  const implementedIds = [...IMPLEMENTED_ACCESS_CASE_IDS].sort();
+test('maps every browser case to one existing capability test file', () => {
+  const browserIds = [...ACCESS_BROWSER_CASE_IDS].sort();
   const mappedIds = Object.keys(ACCESS_LIVE_CASE_FILE_MAP).sort();
 
-  assert.equal(IMPLEMENTED_ACCESS_CASE_IDS.length, 40);
-  assert.equal(new Set(IMPLEMENTED_ACCESS_CASE_IDS).size, 40);
-  assert.deepEqual(mappedIds, implementedIds);
+  assert.equal(IMPLEMENTED_ACCESS_CASE_IDS.length, 48);
+  assert.equal(new Set(IMPLEMENTED_ACCESS_CASE_IDS).size, 48);
+  assert.equal(ACCESS_BROWSER_CASE_IDS.length, 34);
+  assert.deepEqual(mappedIds, browserIds);
 
-  for (const caseId of IMPLEMENTED_ACCESS_CASE_IDS) {
+  for (const caseId of ACCESS_BROWSER_CASE_IDS) {
     const metadata = caseMetadataForCase(caseId);
     assert.ok(metadata, `${caseId} has metadata`);
     assert.ok(metadata.capability, `${caseId} has a capability`);
@@ -54,9 +60,16 @@ test('maps every implemented case to one existing capability test file', () => {
     assert.ok(metadata.prerequisites.length > 0, `${caseId} has prerequisites`);
     assert.ok(existsSync(resolve('tests/access-requests', metadata.testFile)), `${caseId} file exists`);
   }
+
+  for (const caseId of [
+    ...Object.keys(ACCESS_DERIVED_CASE_SOURCES),
+    ...ACCESS_DECISION_BLOCKERS.map((item) => item.caseId),
+  ]) {
+    assert.equal(caseMetadataForCase(caseId).testFile, null, `${caseId} has no browser declaration`);
+  }
 });
 
-test('discovers each implemented case declaration exactly once', () => {
+test('discovers each browser case declaration exactly once', () => {
   const output = execFileSync(
     process.execPath,
     [
@@ -69,6 +82,6 @@ test('discovers each implemented case declaration exactly once', () => {
   );
   const discoveredIds = [...output.matchAll(/\b(TC-AR-[A-Z0-9-]+)\b/g)].map((match) => match[1]);
 
-  assert.equal(discoveredIds.length, IMPLEMENTED_ACCESS_CASE_IDS.length);
-  assert.deepEqual([...new Set(discoveredIds)].sort(), [...IMPLEMENTED_ACCESS_CASE_IDS].sort());
+  assert.equal(discoveredIds.length, ACCESS_BROWSER_CASE_IDS.length);
+  assert.deepEqual([...new Set(discoveredIds)].sort(), [...ACCESS_BROWSER_CASE_IDS].sort());
 });

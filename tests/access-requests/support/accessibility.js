@@ -1,12 +1,18 @@
 import { STEP } from './selectors.js';
 
 export async function keyboardReachability(page, stepNumber) {
-  const controls = page.locator(`${STEP[stepNumber]} a[href]:visible, ${STEP[stepNumber]} button:visible, ${STEP[stepNumber]} input:visible, ${STEP[stepNumber]} select:visible, ${STEP[stepNumber]} textarea:visible`);
+  const controls = page.locator(`${STEP[stepNumber]} a[href]:visible:not(#gform_save_3_footer_link), ${STEP[stepNumber]} button:visible, ${STEP[stepNumber]} input:visible, ${STEP[stepNumber]} select:visible, ${STEP[stepNumber]} textarea:visible`);
   const expected = [];
+  const radioNames = new Set();
   for (let index = 0; index < await controls.count(); index += 1) {
     const control = controls.nth(index);
     if (await control.isDisabled()) continue;
     if (await control.getAttribute('tabindex') === '-1') continue;
+    if (await control.getAttribute('type') === 'radio') {
+      const name = await control.getAttribute('name');
+      if (name && radioNames.has(name)) continue;
+      if (name) radioNames.add(name);
+    }
     expected.push({
       id: await control.getAttribute('id'),
       name: await control.getAttribute('name'),
@@ -84,7 +90,9 @@ export async function unlabeledVisibleControls(page, stepNumber) {
       const labelledBy = control.getAttribute('aria-labelledby');
       const hasLabelledBy = labelledBy && labelledBy.split(/\s+/).every((id) => document.getElementById(id));
       const explicitLabel = control.id && document.querySelector(`label[for="${CSS.escape(control.id)}"]`);
-      return !control.getAttribute('aria-label') && !hasLabelledBy && !explicitLabel;
+      const nativeButtonName = ['button', 'submit', 'reset'].includes(control.type)
+        && Boolean(control.value || control.textContent?.trim());
+      return !control.getAttribute('aria-label') && !hasLabelledBy && !explicitLabel && !nativeButtonName;
     })
     .map((control) => ({ id: control.id || null, name: control.name || null, type: control.type })));
 }

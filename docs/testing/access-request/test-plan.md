@@ -24,7 +24,11 @@ The current analysis identifies:
   locator and network guards prohibit final submission
 - Final submission: prohibited in all automated runs
 
-Current execution note (2026-08-29): the earlier 37-declaration later-step suite is
+Current execution note (2026-09-02): the complete serial 34-declaration baseline
+is synchronized to `test-The-CRM-Carpenters-000088-20260902T044916697Z` and
+reports 33 executed cases, 10 acceptance passes, 11 characterizations, 3
+measurements, 6 failures, 5 blocked cases, and 3 NOT APPLICABLE outcomes. Zero
+final submissions were attempted. The earlier 37-declaration later-step suite is
 implemented, but the latest guarded run redirected the target URL to the Co-Siter
 home page without rendering `#gform_3`. `AUTH-AR-01` blocked the preflight and 36
 dependent declarations did not run. The 2026-08-26 4/4 core pass remains the
@@ -157,7 +161,7 @@ Implemented initial slice:
 
 Implemented Steps 5–8 slice:
 
-- a dedicated guarded Playwright configuration with 36 stable case declarations
+- a dedicated guarded Playwright configuration with 34 browser case declarations
   plus the authentication preflight;
 - deterministic shared traversal and synthetic fixture helpers;
 - conditional, navigation, recovery, upload, document, efficiency,
@@ -169,8 +173,9 @@ Implemented Steps 5–8 slice:
 - unit coverage for result aggregation, sanitization, catalog integrity,
   field-map rendering, and synthetic values.
 
-The current field map is intentionally `BLOCKED` by `AUTH-AR-01`; its Step 5–8
-field arrays remain empty rather than containing speculative selectors.
+The current authenticated Steps 1–8 field map is captured in
+`steps-1-8-field-map.json`; its technical controls remain separate from the
+owner-reviewed field/rule ledger and do not imply approved business rules.
 
 ## 6. Test waves
 

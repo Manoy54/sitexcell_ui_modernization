@@ -38,6 +38,22 @@ following form:
 
 `test-The-CRM-Carpenters-000001-<UTC timestamp>`
 
+## Current evidence run — 2026-09-02
+
+Current evidence run: `test-The-CRM-Carpenters-000088-20260902T044916697Z`
+
+The complete serial 34-declaration baseline executed against the approved
+authenticated session. It produced 33 executed browser cases, 10 acceptance
+passes, 11 characterizations, 3 measurements, 6 failures, 5 explicit blockers,
+and 3 NOT APPLICABLE outcomes. No final submission was attempted. The full
+Steps 1–8 field map and field/rule ledger are synchronized to this run.
+
+The six counted failures are retained as triage evidence: R03 recovery behavior,
+TC-AR-005/006 navigation/review behavior, A01/A02 accessibility assertions, and
+E07 comparable desktop/phone execution. R02 timed out without a case attachment
+and is not counted as executed. Upload type/size/association/removal gaps and
+missing request-specific document UI are blockers, not product failures.
+
 The identifier is entered into Associated LAAN ID, Project Reference, test
 contact names, and non-deliverable `example.invalid` email addresses.
 
@@ -50,7 +66,7 @@ contact names, and non-deliverable `example.invalid` email addresses.
   final Submit visible but untouched.
 - Save and Continue Later is not clicked.
 
-## Revalidation on 2026-08-29
+## Historical revalidation on 2026-08-29
 
 The 37-declaration Steps 5–8 configuration used the saved Playwright state and
 requested `/access-requests/`. It redirected to `/`, where `#gform_3` was not

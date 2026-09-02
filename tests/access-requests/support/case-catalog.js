@@ -63,6 +63,14 @@ export const IMPLEMENTED_ACCESS_CASE_IDS = Object.freeze([
   'TC-AR-002',
   'TC-AR-003',
   'TC-AR-004',
+  'TC-AR-B01',
+  'TC-AR-B02',
+  'TC-AR-B04',
+  'TC-AR-B07',
+  'TC-AR-S01',
+  'TC-AR-S02',
+  'TC-AR-S03',
+  'TC-AR-S04',
   ...STEPS_5_TO_8_CASE_IDS,
 ]);
 
@@ -71,24 +79,26 @@ const LIVE_CASE_FILE_GROUPS = Object.freeze({
   'live/access-request/behaviors/entry-validation-and-context.spec.js': Object.freeze([
     'TC-AR-002', 'TC-AR-003', 'TC-AR-004',
   ]),
+  'live/access-request/behaviors/early-conditional-branches.spec.js': Object.freeze([
+    'TC-AR-B01', 'TC-AR-B02', 'TC-AR-B07',
+  ]),
+  'live/access-request/behaviors/site-search.spec.js': Object.freeze([
+    'TC-AR-S01', 'TC-AR-S02', 'TC-AR-S03', 'TC-AR-S04',
+  ]),
   'live/access-request/journeys/navigation-persistence.spec.js': Object.freeze(['TC-AR-005']),
   'live/access-request/journeys/complete-review-path.spec.js': Object.freeze(['TC-AR-006']),
   'live/access-request/behaviors/conditional-branches.spec.js': Object.freeze([
-    'TC-AR-B03', 'TC-AR-B05', 'TC-AR-B06', 'TC-AR-B08',
+    'TC-AR-B03', 'TC-AR-B04', 'TC-AR-B05', 'TC-AR-B06', 'TC-AR-B08',
   ]),
   'live/access-request/behaviors/navigation-and-recovery.spec.js': Object.freeze([
-    'TC-AR-R01', 'TC-AR-R02', 'TC-AR-R03',
-  ]),
-  'live/access-request/behaviors/decision-gates.spec.js': Object.freeze([
-    'TC-AR-D01', 'TC-AR-D02', 'TC-AR-U07', 'TC-AR-E10', 'TC-AR-R04',
+    'TC-AR-R02', 'TC-AR-R03',
   ]),
   'live/access-request/behaviors/documents-and-uploads.spec.js': Object.freeze([
-    'TC-AR-D03', 'TC-AR-D04', 'TC-AR-U01', 'TC-AR-U02', 'TC-AR-U03', 'TC-AR-U04',
+    'TC-AR-D04', 'TC-AR-U01', 'TC-AR-U02', 'TC-AR-U03', 'TC-AR-U04',
     'TC-AR-U05', 'TC-AR-U06',
   ]),
   'live/access-request/quality/efficiency.spec.js': Object.freeze([
-    'TC-AR-E01', 'TC-AR-E02', 'TC-AR-E03', 'TC-AR-E04', 'TC-AR-E05', 'TC-AR-E06',
-    'TC-AR-E07', 'TC-AR-E08', 'TC-AR-E09',
+    'TC-AR-E02', 'TC-AR-E07',
   ]),
   'live/access-request/quality/accessibility-and-responsive.spec.js': Object.freeze([
     'TC-AR-A01', 'TC-AR-A02', 'TC-AR-A03', 'TC-AR-A04', 'TC-AR-A05',
@@ -112,10 +122,16 @@ const ACCESS_CASE_METADATA = Object.fromEntries([
   ...metadataForGroup(['TC-AR-002', 'TC-AR-003', 'TC-AR-004'], {
     capability: 'functional', executionMode: 'focused', risk: 'medium', prerequisites: ['authenticated-session'],
   }),
+  ...metadataForGroup(['TC-AR-B01', 'TC-AR-B02', 'TC-AR-B07'], {
+    capability: 'conditional', executionMode: 'focused', risk: 'high', prerequisites: ['authenticated-session'],
+  }),
+  ...metadataForGroup(['TC-AR-S01', 'TC-AR-S02', 'TC-AR-S03', 'TC-AR-S04'], {
+    capability: 'site-search', executionMode: 'focused', risk: 'medium', prerequisites: ['authenticated-session'],
+  }),
   ...metadataForGroup(['TC-AR-005', 'TC-AR-006'], {
     capability: 'journey', executionMode: 'e2e', risk: 'high', prerequisites: ['authenticated-session', 'captured-field-map'],
   }),
-  ...metadataForGroup(['TC-AR-B03', 'TC-AR-B05', 'TC-AR-B06', 'TC-AR-B08'], {
+  ...metadataForGroup(['TC-AR-B03', 'TC-AR-B04', 'TC-AR-B05', 'TC-AR-B06', 'TC-AR-B08'], {
     capability: 'conditional', executionMode: 'focused', risk: 'high', prerequisites: ['authenticated-session', 'captured-field-map'],
   }),
   ...metadataForGroup(['TC-AR-D03', 'TC-AR-D04', 'TC-AR-U01', 'TC-AR-U02', 'TC-AR-U03', 'TC-AR-U04', 'TC-AR-U05', 'TC-AR-U06'], {

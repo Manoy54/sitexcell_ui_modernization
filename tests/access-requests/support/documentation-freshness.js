@@ -1,0 +1,69 @@
+import { validateCapturedFieldMap } from './field-map-gate.js';
+
+function validTimestamp(value) {
+  const timestamp = Date.parse(value ?? '');
+  return Number.isNaN(timestamp) ? null : timestamp;
+}
+
+export function validateAccessDocumentation({ result, fieldMap, fieldRuleLedger, narratives = {} }) {
+  const errors = [];
+  if (result?.schemaVersion !== 2) errors.push('The consolidated result schema version 2 is required.');
+  if (fieldMap?.schemaVersion !== 2) errors.push('The Steps 1–8 field-map schema version 2 is required.');
+  if (fieldRuleLedger?.schemaVersion !== 1) errors.push('The field/rule ledger schema version 1 is required.');
+
+  const fieldValidation = validateCapturedFieldMap(fieldMap);
+  if (fieldValidation.missingSteps.length) {
+    errors.push(`Missing field-map steps ${fieldValidation.missingSteps.join(', ')}.`);
+  }
+  if (fieldValidation.emptySteps.length) {
+    errors.push(`Empty field-map steps ${fieldValidation.emptySteps.join(', ')}.`);
+  }
+
+  const completedAt = validTimestamp(result?.run?.completedAt);
+  const capturedAt = validTimestamp(fieldMap?.capturedAt);
+  if (completedAt !== null && capturedAt !== null && completedAt < capturedAt) {
+    errors.push('The consolidated result is older than the field map and must be rerun.');
+  }
+  if (fieldRuleLedger?.sourceFieldMapCapturedAt !== fieldMap?.capturedAt) {
+    errors.push('The field/rule ledger is not synchronized to the current field map.');
+  }
+  const capturedControls = (fieldMap?.steps ?? [])
+    .reduce((count, step) => count + (step.fields?.length ?? 0), 0);
+  if (fieldRuleLedger?.summary?.controls !== capturedControls) {
+    errors.push(`The field/rule ledger must account for all ${capturedControls} captured controls.`);
+  }
+  if (fieldRuleLedger?.summary?.fields !== fieldRuleLedger?.rows?.length) {
+    errors.push('The field/rule ledger field count does not match its rows.');
+  }
+
+  const expectedSummary = {
+    matrixCases: 64,
+    classifiedCases: 64,
+    implementedCases: 48,
+    decisionBlockers: 5,
+    plannedOnlyCases: 16,
+  };
+  for (const [key, expected] of Object.entries(expectedSummary)) {
+    if (result?.summary?.[key] !== expected) {
+      errors.push(`${key} must equal ${expected}; received ${result?.summary?.[key] ?? 'missing'}.`);
+    }
+  }
+
+  if (result?.safety?.finalSubmissionAttempted === true
+    || result?.safety?.finalSubmissionCompleted === true) {
+    errors.push('A final submission attempt or completion invalidates the safe evidence baseline.');
+  }
+
+  const runId = result?.run?.runId;
+  if (!runId) {
+    errors.push('The consolidated result has no run ID.');
+  } else {
+    for (const [name, contents] of Object.entries(narratives)) {
+      if (!String(contents).includes(`Current evidence run: \`${runId}\``)) {
+        errors.push(`${name} does not reference current evidence run ${runId}.`);
+      }
+    }
+  }
+
+  return errors;
+}

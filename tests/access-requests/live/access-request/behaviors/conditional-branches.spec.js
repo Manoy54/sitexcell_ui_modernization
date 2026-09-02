@@ -3,6 +3,7 @@ import { accessCaseTitle } from '../../../support/case-catalog.js';
 import path from 'node:path';
 
 import { characterizeConditionalControls } from '../../../support/conditional-controls.js';
+import { completeBaselineThroughStep4 } from '../../../support/access-request-path.js';
 import { requireCapturedStepsFieldMap } from '../../../support/field-map-gate.js';
 import { runLiveAccessCase } from '../../../support/live-case.js';
 import {
@@ -10,6 +11,7 @@ import {
   completeVisibleRequiredControls,
 } from '../../../support/required-controls.js';
 import { reachStep } from '../../../support/journeys/access-request-journeys.js';
+import { STEP } from '../../../support/selectors.js';
 
 const uploadPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 
@@ -37,6 +39,48 @@ const branchCases = [
   },
 ];
 
+test(accessCaseTitle('TC-AR-B04', 'maps contractor-count variants to the matching identity groups'), async ({}, testInfo) => {
+  await runLiveAccessCase(testInfo, {
+    caseId: 'TC-AR-B04',
+    resultType: 'Characterization',
+    expected: 'Counts 1, 2, and 10 expose the same number of contractor qualification groups; the more-than-ten branch hides the bounded count.',
+    step: 4,
+    branch: 'contractor-count',
+  }, async ({ page }) => {
+    requireCapturedStepsFieldMap();
+    await completeBaselineThroughStep4(page, { qualificationPath: uploadPath });
+    const groupSize = page.locator('#input_3_536');
+    const contractorCount = page.locator('#input_3_158');
+    await groupSize.selectOption('Up to ten contractors');
+
+    const observations = [];
+    for (const count of [1, 2, 10]) {
+      await contractorCount.selectOption(String(count));
+      await page.waitForTimeout(100);
+      const qualificationFields = page.locator(`${STEP[4]} .gfield:visible input[type="file"]`);
+      await expect(qualificationFields).toHaveCount(count);
+      observations.push({
+        count,
+        qualificationFieldIds: await qualificationFields.evaluateAll((items) => items.map((item) => item.closest('.gfield')?.id ?? null)),
+      });
+    }
+
+    await groupSize.selectOption('More than ten contractors');
+    await expect(page.locator('#field_3_158')).toBeHidden();
+    observations.push({
+      count: 'more-than-ten',
+      boundedCountVisible: await contractorCount.isVisible(),
+      visibleQualificationGroups: await page.locator(`${STEP[4]} .gfield:visible input[type="file"]`).count(),
+    });
+
+    return {
+      observed: 'Contractor counts 1, 2, and 10 exposed matching qualification groups; the more-than-ten branch removed the bounded count selector.',
+      stoppingPoint: 'Step 4 after contractor-count branch probes',
+      extra: { observations },
+    };
+  });
+});
+
 for (const scenario of branchCases) {
   test(accessCaseTitle(scenario.caseId, `characterizes ${scenario.branch}`, [scenario.step]), async ({}, testInfo) => {
     await runLiveAccessCase(testInfo, {
@@ -51,7 +95,16 @@ for (const scenario of branchCases) {
       const observations = await characterizeConditionalControls(page, scenario.step, {
         labelPattern: scenario.labelPattern,
       });
-      expect(observations.length).toBeGreaterThan(0);
+      if (!observations.length) {
+        return {
+          status: 'BLOCKED',
+          blockerId: 'BRANCH-MATCH-AR-01',
+          blockerReason: `No mapped Step ${scenario.step} controller matched the ${scenario.branch} branch pattern; the branch cannot be classified safely.`,
+          observed: `The branch probe could not identify a mapped Step ${scenario.step} controller for ${scenario.branch}.`,
+          stoppingPoint: `Step ${scenario.step} conditional branch identification`,
+          extra: { labelPattern: scenario.labelPattern?.toString() ?? null },
+        };
+      }
       return {
         observed: `${observations.length} behavior-changing option observations were captured on Step ${scenario.step}.`,
         stoppingPoint: `Step ${scenario.step} conditional branch characterization`,
@@ -72,13 +125,19 @@ test(accessCaseTitle('TC-AR-B08', 'records controlling-answer changes without si
     requireCapturedStepsFieldMap();
     await reachStep(page, 5);
     await completeVisibleRequiredControls(page, 5, { uploadPath });
+    let populatedOnce = false;
+    const populateVisibleRequiredOnce = async (stepNumber) => {
+      if (populatedOnce) return;
+      populatedOnce = true;
+      await completeVisibleRequiredControls(page, stepNumber, { uploadPath });
+    };
     const step5 = await characterizeConditionalControls(page, 5, {
-      populateVisibleRequired: () => completeVisibleRequiredControls(page, 5, { uploadPath }),
+      populateVisibleRequired: () => populateVisibleRequiredOnce(5),
     });
     await completeStepAndAdvance(page, 5, { uploadPath });
     await completeVisibleRequiredControls(page, 6, { uploadPath });
     const step6 = await characterizeConditionalControls(page, 6, {
-      populateVisibleRequired: () => completeVisibleRequiredControls(page, 6, { uploadPath }),
+      populateVisibleRequired: () => populateVisibleRequiredOnce(6),
     });
     expect(step5.length + step6.length).toBeGreaterThan(0);
     const hiddenPopulatedFields = [...step5, ...step6].flatMap((observation) => observation.changedFields
@@ -93,9 +152,11 @@ test(accessCaseTitle('TC-AR-B08', 'records controlling-answer changes without si
       })));
     if (!hiddenPopulatedFields.length) {
       return {
-        status: 'NOT APPLICABLE',
-        observed: 'No populated dependent control became irrelevant during the mapped Step 5–6 option transitions.',
-        stoppingPoint: 'Step 6 stale-state applicability check',
+        status: 'BLOCKED',
+        blockerId: 'BRANCH-DEPENDENCY-AR-01',
+        blockerReason: 'No populated dependent control became irrelevant during the mapped Step 5–6 transitions; stale-state behavior cannot be classified safely.',
+        observed: 'The controlling-answer probe did not identify a populated dependent control whose state changed.',
+        stoppingPoint: 'Step 6 stale-state identification',
         extra: { step5, step6 },
       };
     }

@@ -53,3 +53,19 @@ export async function relevantConfirmations(page, stepNumber = 7) {
   }
   return confirmations;
 }
+
+export async function associatedUploadConfirmations(upload) {
+  const checkboxes = upload.field.locator('input[type="checkbox"]:visible');
+  const confirmations = [];
+  for (let index = 0; index < await checkboxes.count(); index += 1) {
+    const checkbox = checkboxes.nth(index);
+    const id = await checkbox.getAttribute('id');
+    const label = id ? upload.field.locator(`label[for="${id}"]`) : null;
+    confirmations.push({
+      checkbox,
+      id,
+      label: label && await label.count() ? (await label.textContent())?.trim() : id,
+    });
+  }
+  return confirmations;
+}
