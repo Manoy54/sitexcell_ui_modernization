@@ -14,6 +14,7 @@ import {
   clearOneCompletedRequiredControl,
   completeStepAndAdvance,
   completeVisibleRequiredControls,
+  waitForTransientLoading,
 } from '../../../support/required-controls.js';
 import { previousButton, STEP, nextButton } from '../../../support/selectors.js';
 import { snapshotStepState } from '../../../support/step-state.js';
@@ -76,8 +77,15 @@ test(accessCaseTitle('TC-AR-R03', 'preserves unrelated state while correcting la
       }
       const before = await snapshotStepState(page, step);
       await nextButton(page, step).click();
-      const remained = await page.locator(STEP[step]).isVisible().catch(() => false);
-      expect(remained).toBe(true);
+      await waitForTransientLoading(page);
+      await expect.poll(async () => {
+        if (await page.locator(STEP[step]).isVisible().catch(() => false)) return 'current';
+        if (await page.locator(STEP[step + 1]).isVisible().catch(() => false)) return 'next';
+        return 'pending';
+      }, {
+        timeout: 30_000,
+        message: `Step ${step} did not settle on the expected validation state.`,
+      }).toBe('current');
       const messages = await visibleValidationMessages(page);
       expect(messages.length).toBeGreaterThan(0);
       const afterError = await snapshotStepState(page, step);

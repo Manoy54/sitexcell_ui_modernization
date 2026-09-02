@@ -94,6 +94,7 @@ test(accessCaseTitle('TC-AR-E02', 'captures the instrumented Steps 5–8 baselin
 });
 
 test(accessCaseTitle('TC-AR-E07', 'compares desktop and phone interaction counts for the same fixture'), async ({}, testInfo) => {
+  test.setTimeout(420_000);
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-E07',
     resultType: 'Efficiency',

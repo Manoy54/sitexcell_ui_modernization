@@ -1,6 +1,7 @@
 import {
   AccessRequestBlockedError,
   attachCaseResult,
+  captureAccessProgress,
   openAccessRequestForm,
 } from './form-helpers.js';
 import { caseMetadataForCase } from './case-catalog.js';
@@ -117,6 +118,7 @@ export async function runLiveAccessCase(testInfo, {
         blockerId: status === 'BLOCKED' ? error.blockerId : null,
         blockerReason: status === 'BLOCKED' ? error.blockerReason : null,
         timings,
+        extra: { progress: await captureAccessProgress(page) },
       });
       throw error;
     }

@@ -19,7 +19,7 @@ pass.
 
 ## Current execution evidence
 
-Current evidence run: `test-The-CRM-Carpenters-000088-20260902T044916697Z`
+Current evidence run: `test-The-CRM-Carpenters-000093-20260902T091212639Z`
 
 The complete serial 34-declaration baseline produced 33 executed browser cases:
 10 acceptance passes, 11 characterizations, 3 measurements, 6 failures, 5

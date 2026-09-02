@@ -190,7 +190,7 @@ export const ACCESS_CASE_STEP_COVERAGE = Object.freeze({
   'TC-AR-D01': Object.freeze([7]),
   'TC-AR-D02': Object.freeze([7]),
   'TC-AR-D03': Object.freeze([7]),
-  'TC-AR-D04': Object.freeze([7]),
+  'TC-AR-D04': Object.freeze([8]),
   'TC-AR-S01': Object.freeze([1]),
   'TC-AR-S02': Object.freeze([1]),
   'TC-AR-S03': Object.freeze([1]),

@@ -22,11 +22,19 @@ export async function visibleUploadFields(page, stepNumber = 7) {
   return uploads;
 }
 export function declaredMaximumBytes(upload) {
-  const match = upload.description.match(/(?:maximum|max(?:imum)?(?: file)? size)\D*(\d+(?:\.\d+)?)\s*(kb|mb|gb)/i);
+  const match = String(upload.description ?? '').match(
+    /(?:maximum|max\.?)\s*(?:file\s*)?size\D*(\d+(?:\.\d+)?)\s*(kb|mb|gb)/i,
+  );
   if (!match) return null;
   const value = Number(match[1]);
   const multipliers = { kb: 1024, mb: 1024 ** 2, gb: 1024 ** 3 };
   return Math.floor(value * multipliers[match[2].toLowerCase()]);
+}
+
+export function isRequestSpecificUpload(upload) {
+  return /additional|request|support|other/i.test(
+    [upload.label, upload.description].filter(Boolean).join(' '),
+  );
 }
 
 export async function uploadSyntheticFile(upload, filePath) {

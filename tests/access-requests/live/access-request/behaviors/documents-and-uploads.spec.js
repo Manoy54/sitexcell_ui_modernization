@@ -9,10 +9,11 @@ import { runLiveAccessCase } from '../../../support/live-case.js';
 import { completeVisibleRequiredControls } from '../../../support/required-controls.js';
 import { previousButton, STEP, nextButton } from '../../../support/selectors.js';
 import { snapshotStepState } from '../../../support/step-state.js';
-import { reachStep7 } from '../../../support/journeys/access-request-journeys.js';
+import { reachStep, reachStep7 } from '../../../support/journeys/access-request-journeys.js';
 import {
   declaredMaximumBytes,
   associatedUploadConfirmations,
+  isRequestSpecificUpload,
   uploadSyntheticFile,
   visibleUploadFields,
 } from '../../../support/upload-controls.js';
@@ -317,13 +318,13 @@ test(accessCaseTitle('TC-AR-D04', 'characterizes request-specific supporting doc
     caseId: 'TC-AR-D04',
     resultType: 'Characterization',
     expected: 'Request-specific supporting document fields are identified separately from saved-document sources.',
-    step: 7,
+    step: 8,
     branch: 'request-specific-document',
   }, async ({ page }) => {
     requireCapturedStepsFieldMap();
-    await reachStep7(page);
-    const uploads = await visibleUploadFields(page, 7);
-    const requestSpecific = uploads.filter((upload) => /additional|request|support|other/i.test(upload.label ?? ''));
+    await reachStep(page, 8);
+    const uploads = await visibleUploadFields(page, 8);
+    const requestSpecific = uploads.filter(isRequestSpecificUpload);
     if (!requestSpecific.length) {
       throw new AccessRequestBlockedError('No request-specific document field was identified in the captured branch.', {
         blockerId: 'DOCUMENT-UI-AR-01',
@@ -334,7 +335,7 @@ test(accessCaseTitle('TC-AR-D04', 'characterizes request-specific supporting doc
     for (const upload of requestSpecific) evidence.push(...await uploadSyntheticFile(upload, validFile));
     return {
       observed: `${requestSpecific.length} request-specific document fields were identified and populated with synthetic evidence.`,
-      stoppingPoint: 'Step 7 request-specific document characterization',
+      stoppingPoint: 'Step 8 request-specific document characterization',
       extra: {
         fields: requestSpecific.map(({ inputId, label, required, accept }) => ({ inputId, label, required, accept })),
         evidence,

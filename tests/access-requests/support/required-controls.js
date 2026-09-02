@@ -31,6 +31,11 @@ export async function waitForTransientLoading(page) {
   const loading = page.locator('#loading');
   if (!await loading.count()) return;
   await loading.waitFor({ state: 'hidden', timeout: 30_000 });
+  // Gravity Forms can replace the overlay during conditional recalculation.
+  // Confirm a second settled state before the next interaction so a control
+  // is not clicked in the small gap between two asynchronous updates.
+  await page.waitForTimeout(50);
+  if (await loading.count()) await loading.waitFor({ state: 'hidden', timeout: 30_000 });
 }
 
 export async function completeVisibleRequiredControls(page, stepNumber, {

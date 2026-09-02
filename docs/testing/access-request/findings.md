@@ -46,7 +46,7 @@ This is the canonical evidence-backed findings register. Do not add a recommenda
 
 ## Current execution note — 2026-09-02
 
-Current evidence run: `test-The-CRM-Carpenters-000088-20260902T044916697Z`
+Current evidence run: `test-The-CRM-Carpenters-000093-20260902T091212639Z`
 
 The complete serial baseline executed 33 browser cases. It recorded six
 approved-oracle assertion failures for triage (R03, TC-AR-005, TC-AR-006, A01,

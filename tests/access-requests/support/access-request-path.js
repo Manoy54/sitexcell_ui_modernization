@@ -22,7 +22,9 @@ export async function completeBaselineThroughStep4(page, {
   const fixture = accessRequestBaseline(runId);
   const siteSelect = await findTestSiteSelect(page);
   await siteSelect.selectOption({ label: TEST_SITE });
+  await waitForTransientLoading(page);
   await page.locator('#choice_3_528_0').check();
+  await waitForTransientLoading(page);
   await page.locator('#choice_3_464_1').check();
   await waitForTransientLoading(page);
   await nextButton(page, 1).click();
@@ -67,7 +69,9 @@ export async function completeBaselineThroughStep4(page, {
   await expect(page.locator(STEP[4])).toBeVisible({ timeout: 30_000 });
 
   await page.locator('#input_3_536').selectOption({ label: fixture.contractor.countLabel });
+  await waitForTransientLoading(page);
   await page.locator('#input_3_158').selectOption(fixture.contractor.identityGroupCount);
+  await waitForTransientLoading(page);
   const qualificationUpload = page.locator('#field_3_445 input[type="file"]').first();
   await expect(qualificationUpload).toBeVisible();
   await fillValues(page, {

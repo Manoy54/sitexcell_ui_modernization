@@ -41,7 +41,7 @@ Prioritize correctness and safety first, then user/operational impact, evidence 
 
 ## Current execution note — 2026-09-02
 
-Current evidence run: `test-The-CRM-Carpenters-000088-20260902T044916697Z`
+Current evidence run: `test-The-CRM-Carpenters-000093-20260902T091212639Z`
 
 The baseline is now synchronized and reproducible, but no recommendation is
 approved yet. Six failures require product/oracle triage, while upload and

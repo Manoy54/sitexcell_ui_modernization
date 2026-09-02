@@ -103,6 +103,18 @@ export async function visibleValidationMessages(page) {
   return page.locator(`${ACCESS_FORM} .validation_message:visible`).allTextContents();
 }
 
+export async function captureAccessProgress(page) {
+  if (!page || page.isClosed()) return { closed: true };
+  return {
+    url: page.url(),
+    visibleSteps: await page.locator('[id^="gform_page_3_"]:visible').evaluateAll(
+      (steps) => steps.map((step) => step.id),
+    ),
+    loadingVisible: await page.locator('#loading').isVisible().catch(() => false),
+    visibleNextButtons: await page.locator(`${ACCESS_FORM} .gform_next_button:visible`).count(),
+  };
+}
+
 export async function attachJson(testInfo, name, value) {
   await testInfo.attach(name, {
     body: JSON.stringify(value, null, 2),
