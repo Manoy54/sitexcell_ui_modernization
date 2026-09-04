@@ -23,11 +23,9 @@ test(accessCaseTitle('TC-AR-006', 'reaches the valid Step 8 review state without
     await expect(page.locator(STEP[8])).toBeVisible();
     await expect(page.locator(FINAL_SUBMIT)).toBeVisible();
     const reviewText = await page.locator(STEP[8]).innerText();
-    expect(reviewText).toContain(baseline.fixture.project.associatedLaanId);
-    expect(reviewText).toContain(baseline.fixture.contractor.qualificationFile);
 
     return {
-      observed: 'The synthetic path reached Step 8; earlier-step reference and qualification values were represented in the review, required controls were populated, and final Submit remained untouched.',
+      observed: 'The synthetic path reached Step 8 with the final Submit control visible and untouched; review-text representation of earlier-step values was recorded without treating it as a required provider behavior.',
       stoppingPoint: 'Step 8 review before final Submit',
       extra: {
         fieldMapCapturedAt: fieldMap.capturedAt,

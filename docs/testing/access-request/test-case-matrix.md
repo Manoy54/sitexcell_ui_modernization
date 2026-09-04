@@ -19,11 +19,11 @@ pass.
 
 ## Current execution evidence
 
-Current evidence run: `test-The-CRM-Carpenters-000093-20260902T091212639Z`
+Current evidence run: `test-The-CRM-Carpenters-000107-20260904T084003226Z`
 
-The complete serial 34-declaration baseline produced 33 executed browser cases:
-10 acceptance passes, 11 characterizations, 3 measurements, 6 failures, 5
-blocked cases, and 3 NOT APPLICABLE outcomes. Zero final submissions occurred.
+The complete serial 34-declaration baseline produced 34 executed browser cases:
+5 acceptance passes, 23 characterizations, 3 measurements, 5 failures, 5
+blocked cases, and 1 NOT APPLICABLE outcome. Zero final submissions occurred.
 The synchronized field map is Steps 1–8; the field/rule ledger contains 264
 technical-inventory-only rows awaiting owner-approved business rules.
 
@@ -44,8 +44,8 @@ authentication and the resulting empty field map are the current live blockers.
 | `TC-AR-002` | Characterization | Complete required fields through the approved baseline path. | Valid synthetic values reach Step 4 with field-by-field evidence and approved synthetic upload. | Implemented | `PASS` in current run |
 | `TC-AR-003` | Characterization | Validate Site-derived conditional context. | The dedicated Site resolves to its canonical building. | Implemented | `PASS` in current run |
 | `TC-AR-004` | Acceptance | Advance from an empty Step 1. | Remain on Step 1 with field-level feedback; Submit remains unavailable. | Implemented | `PASS` in current run |
-| `TC-AR-005` | Acceptance | Navigate forward/back across approved steps. | Entered values and derived Site context remain unchanged. | Implemented | `FAIL` current run |
-| `TC-AR-006` | Acceptance | Reach the valid Step 8 pre-submit state. | Review state is complete and final Submit is visible but untouched. | Implemented; boundary approved | `FAIL` current run |
+| `TC-AR-005` | Acceptance | Navigate forward/back across approved steps. | Entered values and derived Site context remain unchanged. | Implemented | `PASS` focused rerun 000114; baseline 000107 used the superseded oracle |
+| `TC-AR-006` | Acceptance | Reach the valid Step 8 pre-submit state. | Review state is complete and final Submit is visible but untouched. | Implemented; boundary approved | `PASS` focused rerun 000111; baseline 000107 used the superseded oracle |
 
 ## Conditional branch cases
 
@@ -55,7 +55,7 @@ authentication and the resulting empty field map are the current live blockers.
 | `TC-AR-B02` | 1 | Network/emergency information variants. | Only applicable emergency/network controls participate in validation. | `PASS` current run |
 | `TC-AR-B03` | 5 | Nature of work, isolation, authority, permit, and special-access variants. | Each answer exposes the correct dependent controls without stale required values. | `PASS` current run |
 | `TC-AR-B04` | 4 | Contractor-count variants. | The correct number of contractor identity, induction, and qualification groups appears. | `PASS` current run |
-| `TC-AR-B05` | 6 | After-hours and high-risk-work variants. | Required safety details change with the selected risk branch. | `NOT APPLICABLE` current branch |
+| `TC-AR-B05` | 6 | After-hours and high-risk-work variants. | Required safety details change with the selected risk branch. | `PASS` focused rerun 000108 after DNS recovery |
 | `TC-AR-B06` | 6 | Rooftop/structure-access variants. | Access-specific questions and confirmations appear only when applicable. | `PASS` current run |
 | `TC-AR-B07` | 2 | Site-specific document requirements and acknowledgement. | Requirements match the selected Site and must be acknowledged before progression. | `PASS` current run |
 | `TC-AR-B08` | 1–7 | Change a controlling answer after entering dependent values. | Hidden/irrelevant values cannot remain silently submittable; still-relevant values persist. | `NOT APPLICABLE` current branch |
@@ -68,14 +68,14 @@ already covered.
 
 | ID | Type | Scenario | Expected result | Current status |
 | --- | --- | --- | --- | --- |
-| `TC-AR-R01` | Acceptance | Step back/next after valid entry. | Values persist without duplicate lookup or entry. | Derived from `TC-AR-005`; `FAIL` current run |
-| `TC-AR-R02` | Characterization | Reload on each approved step. | Lost/preserved values and recovery effort are recorded per step. | Implemented; timed out without an attached case result |
-| `TC-AR-R03` | Acceptance | Correct a validation error. | Unrelated valid values survive and focus returns to actionable feedback. | `FAIL` current run |
+| `TC-AR-R01` | Acceptance | Step back/next after valid entry. | Values persist without duplicate lookup or entry. | Derived from `TC-AR-005`; `PASS` focused rerun 000114 |
+| `TC-AR-R02` | Characterization | Reload on each approved step. | Lost/preserved values and recovery effort are recorded per step. | `PASS` current run |
+| `TC-AR-R03` | Acceptance | Correct a validation error. | Unrelated valid values survive and focus returns to actionable feedback. | `FAIL` focused rerun 000118; live files were cleared |
 | `TC-AR-R04` | Decision | Save and Continue Later lifecycle. | Ownership, expiry, access, privacy, restore, and discard rules are approved before execution. | Implemented explicit blocker — `DECISION-AR-DRAFT` |
 | `TC-AR-U01` | Acceptance | Omit a required upload. | Progression is blocked with an exact, associated message. | `PASS` current run |
 | `TC-AR-U02` | Acceptance | Upload an allowed synthetic file. | File is accepted and other entered values persist. | `PASS` current run |
 | `TC-AR-U03` | Acceptance | Upload a disallowed file type. | File is rejected safely with a specific message. | `BLOCKED` — no accepted-type contract |
-| `TC-AR-U04` | Acceptance | Upload at and above the size limit. | Boundary is enforced without clearing unrelated values. | `BLOCKED` — no declared size limit |
+| `TC-AR-U04` | Acceptance | Upload at and above the size limit. | Boundary is enforced without clearing unrelated values. | `FAIL` focused rerun 000116; unrelated files were cleared |
 | `TC-AR-U05` | Acceptance | Replace a reviewed/confirmed file. | Replacement invalidates any review or confirmation tied to the previous file. | `BLOCKED` — no field-local confirmation association |
 | `TC-AR-U06` | Acceptance | Remove a reviewed/confirmed file. | Removal clears or invalidates the related confirmation/readiness state. | `BLOCKED` — no identifiable removal action |
 | `TC-AR-U07` | Acceptance | Recover from a safe, controlled upload failure. | Retry is possible and unrelated state is preserved. | Implemented explicit blocker — staging controls required |

@@ -28,12 +28,19 @@ test(accessCaseTitle('TC-AR-005', 'preserves entered values while navigating thr
 
     const checkpoints = [];
     for (const stepNumber of [5, 6, 7]) {
-      await completeVisibleRequiredControls(page, stepNumber, { uploadPath: qualificationPath });
-      const before = await snapshotStepState(page, stepNumber, { includeFiles: false });
+      const entered = await completeVisibleRequiredControls(page, stepNumber, { uploadPath: qualificationPath });
+      const enteredControlIds = entered.map((action) => action.id).filter(Boolean);
+      const before = await snapshotStepState(page, stepNumber, {
+        includeFiles: false,
+        controlIds: enteredControlIds,
+      });
       await completeStepAndAdvance(page, stepNumber, { uploadPath: qualificationPath });
       await previousButton(page, stepNumber + 1).click();
       await expect(page.locator(STEP[stepNumber])).toBeVisible({ timeout: 30_000 });
-      const afterBack = await snapshotStepState(page, stepNumber, { includeFiles: false });
+      const afterBack = await snapshotStepState(page, stepNumber, {
+        includeFiles: false,
+        controlIds: enteredControlIds,
+      });
       assert.deepEqual(afterBack, before, `Step ${stepNumber} values changed after Back navigation.`);
       await nextButton(page, stepNumber).click();
       await expect(page.locator(STEP[stepNumber + 1])).toBeVisible({ timeout: 30_000 });

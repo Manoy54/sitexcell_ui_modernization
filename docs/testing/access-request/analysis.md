@@ -38,21 +38,29 @@ following form:
 
 `test-The-CRM-Carpenters-000001-<UTC timestamp>`
 
-## Current evidence run — 2026-09-02
+## Current evidence run — 2026-09-04
 
-Current evidence run: `test-The-CRM-Carpenters-000093-20260902T091212639Z`
+Current evidence run: `test-The-CRM-Carpenters-000107-20260904T084003226Z`
 
 The complete serial 34-declaration baseline executed against the approved
-authenticated session. It produced 33 executed browser cases, 10 acceptance
-passes, 11 characterizations, 3 measurements, 6 failures, 5 explicit blockers,
-and 3 NOT APPLICABLE outcomes. No final submission was attempted. The full
+authenticated session. It produced 34 executed browser cases, 5 acceptance
+passes, 23 characterizations, 3 measurements, 5 failures, 5 explicit blockers,
+and 1 NOT APPLICABLE outcome. No final submission was attempted. The full
 Steps 1–8 field map and field/rule ledger are synchronized to this run.
 
-The six counted failures are retained as triage evidence: R03 recovery behavior,
-TC-AR-005/006 navigation/review behavior, A01/A02 accessibility assertions, and
-E07 comparable desktop/phone execution. R02 timed out without a case attachment
-and is not counted as executed. Upload type/size/association/removal gaps and
-missing request-specific document UI are blockers, not product failures.
+The five baseline failures are retained as triage evidence: a transient DNS
+failure for B05, upload/state preservation in U04 and R03, navigation
+persistence in TC-AR-005, and the outdated review-value assertion in TC-AR-006.
+Focused reruns later confirmed B05 and TC-AR-006 after their respective fixes;
+U04 and R03 still reproduce live upload-state loss. U03 and D04 remain explicit
+contract/UI blockers, not product failures.
+
+Focused reruns: B05 passed in `test-The-CRM-Carpenters-000108-20260904T100021457Z`;
+TC-AR-006 and TC-AR-005 passed in `test-The-CRM-Carpenters-000111-20260904T100339097Z`
+and `test-The-CRM-Carpenters-000114-20260904T103046340Z`; U04 failed with
+unrelated files cleared in `test-The-CRM-Carpenters-000116-20260904T103935027Z`;
+R03 failed with unrelated files cleared in
+`test-The-CRM-Carpenters-000118-20260904T120742537Z`.
 
 The identifier is entered into Associated LAAN ID, Project Reference, test
 contact names, and non-deliverable `example.invalid` email addresses.

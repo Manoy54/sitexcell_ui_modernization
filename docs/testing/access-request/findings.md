@@ -44,15 +44,21 @@ This is the canonical evidence-backed findings register. Do not add a recommenda
 - Keep raw reports and authenticated artifacts out of this file.
 - Sanitize screenshots, copied values, and notes before committing.
 
-## Current execution note — 2026-09-02
+## Current execution note — 2026-09-04
 
-Current evidence run: `test-The-CRM-Carpenters-000093-20260902T091212639Z`
+Current evidence run: `test-The-CRM-Carpenters-000107-20260904T084003226Z`
 
-The complete serial baseline executed 33 browser cases. It recorded six
-approved-oracle assertion failures for triage (R03, TC-AR-005, TC-AR-006, A01,
-A02, and E07) and five explicit execution/decision blockers. R02 timed out
-without a case attachment and is not counted as executed. No final submission
-was attempted.
+The complete serial baseline executed 34 browser cases. It recorded five
+failed statuses for triage and five explicit execution/decision blockers. The
+focused reruns confirmed B05 and TC-AR-006 after their test-side corrections,
+but reproduced upload/state loss in U04 and R03. TC-AR-005 also passed after
+its snapshot oracle was corrected. No final submission was attempted.
+
+The remaining live behavior is not silently promoted to a product finding:
+U04 clears unrelated Step 7 files `input_3_128` and `input_3_42` after an
+oversized-file rejection, while R03 clears `field_3_444` and `input_3_44` after
+validation. Both require product-owner confirmation of the intended upload
+retention contract before a finding is opened.
 
 The upload and document gaps are recorded as blockers in the consolidated
 report: accepted type and size contracts are absent, upload confirmations are

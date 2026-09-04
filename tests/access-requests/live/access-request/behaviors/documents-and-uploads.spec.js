@@ -8,7 +8,11 @@ import { requireCapturedStepsFieldMap } from '../../../support/field-map-gate.js
 import { runLiveAccessCase } from '../../../support/live-case.js';
 import { completeVisibleRequiredControls } from '../../../support/required-controls.js';
 import { previousButton, STEP, nextButton } from '../../../support/selectors.js';
-import { snapshotStepState } from '../../../support/step-state.js';
+import {
+  changedStateIds,
+  snapshotStepState,
+  stateItemMatchesControl,
+} from '../../../support/step-state.js';
 import { reachStep, reachStep7 } from '../../../support/journeys/access-request-journeys.js';
 import {
   declaredMaximumBytes,
@@ -143,6 +147,7 @@ test(accessCaseTitle('TC-AR-U03', 'rejects a disallowed synthetic file type'), a
 });
 
 test(accessCaseTitle('TC-AR-U04', 'enforces the declared upload size boundary'), async ({}, testInfo) => {
+  test.setTimeout(420_000);
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-U04',
     resultType: 'Characterization',
@@ -199,8 +204,14 @@ test(accessCaseTitle('TC-AR-U04', 'enforces the declared upload size boundary'),
       const messages = await target.field.locator('.validation_message').allTextContents();
       expect(messages.length).toBeGreaterThan(0);
       const afterRejection = await snapshotStepState(page, 7);
-      expect(afterRejection.filter((item) => item.id !== target.inputId))
-        .toEqual(beforeRejection.filter((item) => item.id !== target.inputId));
+      const targetControl = { id: target.inputId, fieldId: target.fieldId };
+      const beforeUnrelated = beforeRejection.filter((item) => !stateItemMatchesControl(item, targetControl));
+      const afterUnrelated = afterRejection.filter((item) => !stateItemMatchesControl(item, targetControl));
+      const changedUnrelatedIds = changedStateIds(beforeUnrelated, afterUnrelated);
+      expect(afterUnrelated, changedUnrelatedIds.length
+        ? `Rejected upload changed unrelated controls: ${changedUnrelatedIds.join(', ')}`
+        : 'Rejected upload changed unrelated controls.')
+        .toEqual(beforeUnrelated);
       observations.push({ ...contract, messages });
     }
     return {

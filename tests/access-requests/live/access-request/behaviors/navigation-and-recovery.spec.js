@@ -17,7 +17,11 @@ import {
   waitForTransientLoading,
 } from '../../../support/required-controls.js';
 import { previousButton, STEP, nextButton } from '../../../support/selectors.js';
-import { snapshotStepState } from '../../../support/step-state.js';
+import {
+  changedStateIds,
+  snapshotStepState,
+  stateItemMatchesControl,
+} from '../../../support/step-state.js';
 import { reachStep } from '../../../support/journeys/access-request-journeys.js';
 
 const uploadPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
@@ -53,6 +57,7 @@ test(accessCaseTitle('TC-AR-R02', 'characterizes reload state on every approved 
 });
 
 test(accessCaseTitle('TC-AR-R03', 'preserves unrelated state while correcting later-step validation'), async ({}, testInfo) => {
+  test.setTimeout(420_000);
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-R03',
     resultType: 'Acceptance',
@@ -89,9 +94,14 @@ test(accessCaseTitle('TC-AR-R03', 'preserves unrelated state while correcting la
       const messages = await visibleValidationMessages(page);
       expect(messages.length).toBeGreaterThan(0);
       const afterError = await snapshotStepState(page, step);
-      const unrelatedBefore = before.filter((item) => item.id !== cleared.id);
-      const unrelatedAfter = afterError.filter((item) => item.id !== cleared.id);
-      assert.deepEqual(unrelatedAfter, unrelatedBefore, `Step ${step} cleared unrelated values after validation.`);
+      const unrelatedBefore = before.filter((item) => !stateItemMatchesControl(item, cleared));
+      const unrelatedAfter = afterError.filter((item) => !stateItemMatchesControl(item, cleared));
+      const changedUnrelatedIds = changedStateIds(unrelatedBefore, unrelatedAfter);
+      assert.deepEqual(
+        unrelatedAfter,
+        unrelatedBefore,
+        `Step ${step} cleared unrelated values after validation. Changed controls: ${changedUnrelatedIds.join(', ') || 'none'}.`,
+      );
       const focus = await page.evaluate((fieldId) => {
         const active = document.activeElement;
         return {

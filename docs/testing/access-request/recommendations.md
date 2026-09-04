@@ -39,15 +39,17 @@ Recommendations become prototype requirements only after evidence and business a
 
 Prioritize correctness and safety first, then user/operational impact, evidence confidence, effort, and dependency readiness. Do not approve a recommendation that silently changes a business rule or data owner.
 
-## Current execution note — 2026-09-02
+## Current execution note — 2026-09-04
 
-Current evidence run: `test-The-CRM-Carpenters-000093-20260902T091212639Z`
+Current evidence run: `test-The-CRM-Carpenters-000107-20260904T084003226Z`
 
-The baseline is now synchronized and reproducible, but no recommendation is
-approved yet. Six failures require product/oracle triage, while upload and
-document contract gaps remain explicit blockers. The field/rule ledger contains
-264 technical-inventory-only rows awaiting owner decisions; recommendations
-must preserve required data, ownership, and the Step 8 no-submit boundary.
+The baseline is synchronized and reproducible, but no recommendation is
+approved yet. Focused reruns resolved the B05 DNS classification and the
+TC-AR-005/006 test-oracle issues. U04 and R03 still require product-owner
+triage for collateral upload loss after server-side validation. The field/rule
+ledger contains 264 technical-inventory-only rows awaiting owner decisions;
+recommendations must preserve required data, ownership, and the Step 8
+no-submit boundary.
 
 ## Historical execution note — 2026-08-29
 
