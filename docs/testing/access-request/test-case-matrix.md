@@ -27,7 +27,7 @@ The complete serial 34-declaration baseline produced 32 executed browser cases:
 The synchronized field map is Steps 1–8; the field/rule ledger contains 264
 technical-inventory-only rows awaiting owner-approved business rules.
 
-Focused evidence run: `test-The-CRM-Carpenters-000131-20260905T133906210Z`
+Focused evidence run: `test-The-CRM-Carpenters-000134-20260905T141421125Z`
 
 ## Historical execution prerequisite
 
@@ -86,10 +86,10 @@ already covered.
 
 | Range | Type | Concrete scope | Current status |
 | --- | --- | --- | --- |
-| `TC-AR-P01`–`TC-AR-P05` | Characterization/Decision | First-time person; returning person; valid known details; updated details; same person in another role. | Focused run 000131: P01/P04 `PASS` characterization; P02/P03/P05 `BLOCKED` by missing UI/authority |
+| `TC-AR-P01`–`TC-AR-P05` | Characterization/Decision | First-time person; returning person; valid known details; updated details; same person in another role. | Focused run 000134: P01/P04 `PASS` characterization; P02/P03/P05 `BLOCKED` by missing UI/authority |
 | `TC-AR-D01`–`TC-AR-D04` | Characterization/Decision | Valid saved document; expired document; replacement; request-specific document. | D01/D02 decision-blocked; D03 derived from U05; D04 `BLOCKED` — request-specific UI absent |
 | `TC-AR-S01`–`TC-AR-S04` | Acceptance/Efficiency | Partial search; similar names; keyboard selection; interaction/keystroke effort. | Implemented; S01 `NOT APPLICABLE`, S02–S04 `PASS` |
-| `TC-AR-C01`–`TC-AR-C08` | Decision/Acceptance | Copy person, address, and company/contact data; verify match, editability, source isolation, unrelated-value preservation, and forbidden reuse. | Focused run 000131: all eight `BLOCKED`; no explicit copy/reuse UI was visible and rules remain unapproved |
+| `TC-AR-C01`–`TC-AR-C08` | Decision/Acceptance | Copy person, address, and company/contact data; verify match, editability, source isolation, unrelated-value preservation, and forbidden reuse. | Focused run 000134: all eight `BLOCKED`; no explicit copy/reuse UI was visible and rules remain unapproved |
 
 ## Efficiency cases
 
@@ -120,9 +120,9 @@ already covered.
 
 | ID | Type | Scenario | Current status |
 | --- | --- | --- | --- |
-| `TC-AR-X01` | Decision | Map semantically equivalent LAAN values to authoritative Access Request sources. | `BLOCKED` focused run 000131; candidate labels observed, source ownership unapproved |
-| `TC-AR-X02` | Acceptance/Decision | Verify shared Site context remains consistent. | `BLOCKED` focused run 000131; suites use different dedicated Sites |
-| `TC-AR-X03` | Efficiency | Measure duplicate entry across related requests. | `BLOCKED` focused run 000131; shared fixture and human protocol unavailable |
+| `TC-AR-X01` | Decision | Map semantically equivalent LAAN values to authoritative Access Request sources. | `BLOCKED` focused run 000134; candidate labels observed, source ownership unapproved |
+| `TC-AR-X02` | Acceptance/Decision | Verify shared Site context remains consistent. | `BLOCKED` focused run 000134; configured Site labels differ and the LAAN target was not visible |
+| `TC-AR-X03` | Efficiency | Measure duplicate entry across related requests. | `BLOCKED` focused run 000134; shared fixture and human protocol unavailable |
 
 ## Step coverage map
 

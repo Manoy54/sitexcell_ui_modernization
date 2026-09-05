@@ -62,7 +62,7 @@ R03 failed with unrelated files cleared in
 `test-The-CRM-Carpenters-000118-20260904T120742537Z`.
 
 Focused exploratory run
-`test-The-CRM-Carpenters-000131-20260905T133906210Z` executed all 16 new
+`test-The-CRM-Carpenters-000134-20260905T141421125Z` executed all 16 new
 observation-only probes plus authentication. `P01` and `P04` passed as
 characterizations of manual synthetic entry and editability. `P02`, `P03`, and
 `P05` were blocked because no explicit returning-person or role-reuse source was

@@ -48,9 +48,9 @@ converted to failures or passes.
 
 ## Focused exploratory run
 
-- Focused evidence run: `test-The-CRM-Carpenters-000131-20260905T133906210Z`.
+- Focused evidence run: `test-The-CRM-Carpenters-000134-20260905T141421125Z`.
 - Scope: Authentication plus all 16 `P*`, `C*`, and `X*` exploratory probes.
-- Technical runner result: 17/17 Playwright tests passed in 10.1 minutes.
+- Technical runner result: 17/17 Playwright tests passed in 7.7 minutes.
 - Evidence result: 2 characterization passes (`P01`, `P04`), 14 blockers, and 0 failures.
 - Copy/reuse result: no explicit Step 3 copy/reuse affordance was visible.
 - Person result: manual synthetic entry/editing worked; returning-person and role-reuse sources were absent or unapproved.

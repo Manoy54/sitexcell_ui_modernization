@@ -68,7 +68,7 @@ not silently promoted to product findings.
 
 ## Focused exploratory execution note — 2026-09-05
 
-Focused evidence run: `test-The-CRM-Carpenters-000131-20260905T133906210Z`
+Focused evidence run: `test-The-CRM-Carpenters-000134-20260905T141421125Z`
 
 The authenticated run executed all 16 person, copy/reuse, and cross-workflow
 probes plus authentication. It recorded two characterization passes and 14
@@ -103,7 +103,7 @@ affordance was visible for `P02`, `P03`, or `P05`.
 
 ### Evidence
 
-Focused run `test-The-CRM-Carpenters-000131-20260905T133906210Z`: `P01` and
+Focused run `test-The-CRM-Carpenters-000134-20260905T141421125Z`: `P01` and
 `P04` retained synthetic manual values; `P02`, `P03`, and `P05` recorded
 owner-linked blockers. See
 [`access-request-exploratory-results.json`](./access-request-exploratory-results.json).
@@ -163,7 +163,7 @@ controls.
 
 ### Evidence
 
-Focused run `test-The-CRM-Carpenters-000131-20260905T133906210Z`: all eight
+Focused run `test-The-CRM-Carpenters-000134-20260905T141421125Z`: all eight
 `C*` probes completed technically and recorded `BLOCKED`, with a responsible
 product/business owner and zero submit attempts. See
 [`access-request-exploratory-results.json`](./access-request-exploratory-results.json).
@@ -224,7 +224,7 @@ was not visible. No approved human-effort protocol was available.
 
 ### Evidence
 
-Focused run `test-The-CRM-Carpenters-000131-20260905T133906210Z`: two candidate
+Focused run `test-The-CRM-Carpenters-000134-20260905T141421125Z`: two candidate
 concept groups were observed; Access Request exposed `The CRM Carpenters Test`
 while the configured LAAN target `siteXcell Pty Ltd` was not visible.
 `X01`–`X03` remained owner-linked blockers.

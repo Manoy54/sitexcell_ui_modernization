@@ -1,9 +1,10 @@
 {
   "schemaVersion": 2,
   "run": {
-    "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+    "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
     "targetUrl": "https://co-siter.com.au/access-requests/",
-    "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+    "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+    "trackedWorktreeDirty": false,
     "configuration": "tests/access-requests/configs/playwright.access-request.config.js",
     "browser": "Microsoft Edge",
     "viewport": {
@@ -11,8 +12,8 @@
       "height": 720
     },
     "accountClassification": "approved authenticated session",
-    "startedAt": "2026-09-05T13:39:09.039Z",
-    "completedAt": "2026-09-05T13:49:17.291Z",
+    "startedAt": "2026-09-05T14:14:23.166Z",
+    "completedAt": "2026-09-05T14:22:07.999Z",
     "fixtureVersion": 1
   },
   "summary": {
@@ -27,7 +28,7 @@
     "executedCases": 17,
     "acceptancePasses": 1,
     "characterizations": 4,
-    "measurements": 1,
+    "measurements": 0,
     "derivedResults": 0,
     "decisionBlockers": 5,
     "plannedOnlyCases": 16,
@@ -65,7 +66,7 @@
         1
       ],
       "branch": null,
-      "durationMs": 12249,
+      "durationMs": 10203,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -73,7 +74,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "testSite": "The CRM Carpenters Test",
@@ -148,10 +150,10 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2679,
-        "availabilityCheckMs": 9121
+        "contextSetupMs": 2552,
+        "availabilityCheckMs": 7169
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 1",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -162,9 +164,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:39:22.146Z",
+      "capturedAt": "2026-09-05T14:14:34.294Z",
       "testFile": "live/access-request/00-authentication-preflight.setup.js"
     },
     {
@@ -184,7 +186,7 @@
         3
       ],
       "branch": "copy-individual",
-      "durationMs": 29552,
+      "durationMs": 37320,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -192,7 +194,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -215,12 +218,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2563,
-        "prerequisiteCheckMs": 3,
-        "openFormMs": 13167,
-        "exerciseMs": 13658
+        "contextSetupMs": 2582,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 8123,
+        "exerciseMs": 26472
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 copy-individual UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -231,9 +234,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:39:52.948Z",
+      "capturedAt": "2026-09-05T14:15:12.726Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -253,7 +256,7 @@
         3
       ],
       "branch": "copy-address",
-      "durationMs": 32234,
+      "durationMs": 39228,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -261,7 +264,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -284,12 +288,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2179,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 7687,
-        "exerciseMs": 22196
+        "contextSetupMs": 2226,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 8813,
+        "exerciseMs": 27998
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 copy-address UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -300,9 +304,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:40:25.675Z",
+      "capturedAt": "2026-09-05T14:15:52.444Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -322,7 +326,7 @@
         3
       ],
       "branch": "copy-company-contact",
-      "durationMs": 24276,
+      "durationMs": 23616,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -330,7 +334,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -353,12 +358,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2216,
-        "prerequisiteCheckMs": 4,
-        "openFormMs": 8226,
-        "exerciseMs": 13666
+        "contextSetupMs": 2206,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 8146,
+        "exerciseMs": 13084
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 copy-company-contact UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -369,9 +374,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:40:50.506Z",
+      "capturedAt": "2026-09-05T14:16:16.580Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -391,7 +396,7 @@
         3
       ],
       "branch": "copy-value-match",
-      "durationMs": 45662,
+      "durationMs": 20969,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -399,7 +404,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -422,12 +428,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2214,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 8078,
-        "exerciseMs": 35160
+        "contextSetupMs": 2204,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 6075,
+        "exerciseMs": 12526
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 copy-value-match UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -438,9 +444,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:41:36.667Z",
+      "capturedAt": "2026-09-05T14:16:38.036Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -460,7 +466,7 @@
         3
       ],
       "branch": "copy-editability",
-      "durationMs": 22454,
+      "durationMs": 21846,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -468,7 +474,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -491,12 +498,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2186,
-        "prerequisiteCheckMs": 3,
-        "openFormMs": 7035,
-        "exerciseMs": 13060
+        "contextSetupMs": 2187,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 7226,
+        "exerciseMs": 12255
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 copy-editability UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -507,9 +514,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:41:59.469Z",
+      "capturedAt": "2026-09-05T14:17:00.406Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -529,7 +536,7 @@
         3
       ],
       "branch": "copy-source-isolation",
-      "durationMs": 54115,
+      "durationMs": 26391,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -537,7 +544,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -560,12 +568,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2247,
+        "contextSetupMs": 2204,
         "prerequisiteCheckMs": 3,
-        "openFormMs": 12669,
-        "exerciseMs": 39009
+        "openFormMs": 6185,
+        "exerciseMs": 17834
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 copy-source-isolation UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -576,9 +584,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:42:54.149Z",
+      "capturedAt": "2026-09-05T14:17:27.289Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -598,7 +606,7 @@
         3
       ],
       "branch": "copy-unrelated-preservation",
-      "durationMs": 25364,
+      "durationMs": 36866,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -606,7 +614,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -629,12 +638,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2265,
-        "prerequisiteCheckMs": 3,
-        "openFormMs": 7294,
-        "exerciseMs": 15643
+        "contextSetupMs": 2210,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 8601,
+        "exerciseMs": 25892
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 copy-unrelated-preservation UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -645,9 +654,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:43:20.017Z",
+      "capturedAt": "2026-09-05T14:18:04.594Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -667,7 +676,7 @@
         3
       ],
       "branch": "copy-forbidden-reuse",
-      "durationMs": 57603,
+      "durationMs": 23904,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -675,7 +684,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -698,12 +708,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2227,
+        "contextSetupMs": 2211,
         "prerequisiteCheckMs": 3,
-        "openFormMs": 8064,
-        "exerciseMs": 47146
+        "openFormMs": 7933,
+        "exerciseMs": 13569
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 copy-forbidden-reuse UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -714,9 +724,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:44:18.178Z",
+      "capturedAt": "2026-09-05T14:18:28.915Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -736,7 +746,7 @@
         1
       ],
       "branch": "cross-workflow-semantic-candidates",
-      "durationMs": 42614,
+      "durationMs": 25059,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -744,7 +754,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/laan-requests/",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "accessFields": [
@@ -892,7 +903,7 @@
           }
         ],
         "pageTwo": [],
-        "transitionBlocker": "LAAN Step 1 is missing 1 required visible control(s).",
+        "transitionBlocker": "The visible LAAN Site selector does not offer the dedicated Site \"siteXcell Pty Ltd\".",
         "finalSubmissionAttempted": false
       },
       "candidates": [
@@ -954,12 +965,12 @@
       "blockerReason": "Candidate labels are externally observable, but authoritative semantic mappings and source ownership are not approved.",
       "owner": "product/business + operations/data",
       "timings": {
-        "contextSetupMs": 2199,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 17585,
-        "exerciseMs": 22701
+        "contextSetupMs": 2202,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 8129,
+        "exerciseMs": 14570
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "LAAN Step 1 after cross-workflow field inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -970,9 +981,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:45:01.191Z",
+      "capturedAt": "2026-09-05T14:18:54.509Z",
       "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
     },
     {
@@ -992,7 +1003,7 @@
         1
       ],
       "branch": "cross-workflow-site-context",
-      "durationMs": 17931,
+      "durationMs": 17035,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1000,7 +1011,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/laan-requests/",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "accessSiteObserved": true,
@@ -1008,7 +1020,7 @@
       "observations": [],
       "entryPoint": "Authenticated Access Request Step 1",
       "expected": "The configured Access Request and LAAN fixtures use the same externally visible synthetic Site label.",
-      "observed": "Access Request uses \"The CRM Carpenters Test\" while LAAN uses \"siteXcell Pty Ltd\".",
+      "observed": "Access Request configured Site \"The CRM Carpenters Test\" was visible; LAAN configured Site \"siteXcell Pty Ltd\" was not visible",
       "startingPoint": "Authenticated Access Request Step 1",
       "firstFailure": null,
       "retryOutcome": null,
@@ -1025,12 +1037,12 @@
       "blockerReason": "The visible Access Request and LAAN suites do not expose the same dedicated synthetic Site label.",
       "owner": "product/business + operations/data + QA",
       "timings": {
-        "contextSetupMs": 2322,
+        "contextSetupMs": 2202,
         "prerequisiteCheckMs": 2,
-        "openFormMs": 6462,
-        "exerciseMs": 8994
+        "openFormMs": 7933,
+        "exerciseMs": 6730
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "LAAN Step 1 after visible Site-label comparison",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1041,9 +1053,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:45:19.336Z",
+      "capturedAt": "2026-09-05T14:19:11.767Z",
       "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
     },
     {
@@ -1063,7 +1075,7 @@
         1
       ],
       "branch": "cross-workflow-duplicate-entry",
-      "durationMs": 39238,
+      "durationMs": 22138,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1071,12 +1083,13 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/laan-requests/",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "accessVisibleFields": 6,
       "laanVisibleFields": 5,
-      "transitionBlocker": "LAAN Step 1 is missing 1 required visible control(s).",
+      "transitionBlocker": "The visible LAAN Site selector does not offer the dedicated Site \"siteXcell Pty Ltd\".",
       "observations": [
         {
           "concept": "site",
@@ -1116,12 +1129,12 @@
       "blockerReason": "A shared fixture and approved comparable human-effort protocol are unavailable.",
       "owner": "product/business + operations/data + QA",
       "timings": {
-        "contextSetupMs": 2173,
+        "contextSetupMs": 2231,
         "prerequisiteCheckMs": 2,
-        "openFormMs": 14121,
-        "exerciseMs": 22814
+        "openFormMs": 8112,
+        "exerciseMs": 11627
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "LAAN Step 1 after duplicate-entry candidate inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1132,9 +1145,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:45:58.759Z",
+      "capturedAt": "2026-09-05T14:19:34.159Z",
       "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
     },
     {
@@ -1154,7 +1167,7 @@
         3
       ],
       "branch": "first-time-person-entry",
-      "durationMs": 56289,
+      "durationMs": 36384,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1162,7 +1175,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "fieldIds": [
@@ -1188,12 +1202,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2231,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 9561,
-        "exerciseMs": 44351
+        "contextSetupMs": 2190,
+        "prerequisiteCheckMs": 1,
+        "openFormMs": 7187,
+        "exerciseMs": 26820
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 after synthetic first-time person entry",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1204,9 +1218,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:46:55.309Z",
+      "capturedAt": "2026-09-05T14:20:10.788Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1226,7 +1240,7 @@
         3
       ],
       "branch": "returning-person-source",
-      "durationMs": 22706,
+      "durationMs": 29777,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1234,7 +1248,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -1257,12 +1272,12 @@
       "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
       "owner": "product/business + operations/data",
       "timings": {
-        "contextSetupMs": 2215,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 7141,
-        "exerciseMs": 13180
+        "contextSetupMs": 2206,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 7521,
+        "exerciseMs": 19897
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 returning-person UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1273,9 +1288,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:47:18.390Z",
+      "capturedAt": "2026-09-05T14:20:40.993Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1295,7 +1310,7 @@
         3
       ],
       "branch": "known-person-details",
-      "durationMs": 66215,
+      "durationMs": 33692,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1303,7 +1318,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -1326,12 +1342,12 @@
       "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
       "owner": "product/business + operations/data",
       "timings": {
-        "contextSetupMs": 2197,
-        "prerequisiteCheckMs": 3,
-        "openFormMs": 18405,
-        "exerciseMs": 45458
+        "contextSetupMs": 2229,
+        "prerequisiteCheckMs": 1,
+        "openFormMs": 8038,
+        "exerciseMs": 23270
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 known-person source inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1342,9 +1358,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:48:25.093Z",
+      "capturedAt": "2026-09-05T14:21:15.104Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1364,7 +1380,7 @@
         3
       ],
       "branch": "edit-person-details",
-      "durationMs": 26965,
+      "durationMs": 27564,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1372,7 +1388,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "changedFields": [
@@ -1395,12 +1412,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2211,
+        "contextSetupMs": 2227,
         "prerequisiteCheckMs": 3,
-        "openFormMs": 8113,
-        "exerciseMs": 16471
+        "openFormMs": 8559,
+        "exerciseMs": 16612
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 after editing synthetic person details",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1411,9 +1428,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:48:52.533Z",
+      "capturedAt": "2026-09-05T14:21:43.141Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1433,7 +1450,7 @@
         3
       ],
       "branch": "same-person-role-reuse",
-      "durationMs": 23261,
+      "durationMs": 23345,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1441,7 +1458,8 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "commit": "8490795e86826d808c64e31efc5efbc66dbb5922",
+        "trackedWorktreeDirty": false,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "observations": [],
@@ -1464,12 +1482,12 @@
       "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
       "owner": "product/business + operations/data",
       "timings": {
-        "contextSetupMs": 2190,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 7115,
-        "exerciseMs": 13779
+        "contextSetupMs": 2207,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 7203,
+        "exerciseMs": 13765
       },
-      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z",
       "stoppingPoint": "Step 3 role-reuse UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1480,9 +1498,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+        "runId": "test-The-CRM-Carpenters-000134-20260905T141421125Z"
       },
-      "capturedAt": "2026-09-05T13:49:16.273Z",
+      "capturedAt": "2026-09-05T14:22:07.015Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {

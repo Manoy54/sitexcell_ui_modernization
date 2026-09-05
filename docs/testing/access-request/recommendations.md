@@ -43,7 +43,7 @@ Prioritize correctness and safety first, then user/operational impact, evidence 
 
 Current evidence run: `test-The-CRM-Carpenters-000124-20260905T080659244Z`
 
-Focused evidence run: `test-The-CRM-Carpenters-000131-20260905T133906210Z`
+Focused evidence run: `test-The-CRM-Carpenters-000134-20260905T141421125Z`
 
 The baseline is synchronized and reproducible, but no recommendation is
 approved yet. Focused reruns resolved the B05 DNS classification and the
