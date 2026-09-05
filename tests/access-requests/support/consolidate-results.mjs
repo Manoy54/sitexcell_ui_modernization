@@ -24,7 +24,7 @@ const committedOutputPath = resolve(argument(
   'committed-output',
   'docs/testing/access-request/access-request-results.json',
 ));
-const plannedCases = Number(argument('planned-cases', '34'));
+const plannedCases = Number(argument('planned-cases', '50'));
 const fixtureVersion = Number(argument('fixture-version', '1'));
 
 if (!Number.isInteger(plannedCases) || plannedCases < 1) {

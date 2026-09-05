@@ -1,0 +1,1789 @@
+{
+  "schemaVersion": 2,
+  "run": {
+    "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+    "targetUrl": "https://co-siter.com.au/access-requests/",
+    "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+    "configuration": "tests/access-requests/configs/playwright.access-request.config.js",
+    "browser": "Microsoft Edge",
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "accountClassification": "approved authenticated session",
+    "startedAt": "2026-09-05T13:39:09.039Z",
+    "completedAt": "2026-09-05T13:49:17.291Z",
+    "fixtureVersion": 1
+  },
+  "summary": {
+    "matrixCases": 64,
+    "classifiedCases": 64,
+    "selectedCases": 16,
+    "plannedCases": 64,
+    "implementedCases": 48,
+    "automatedDeclarations": 17,
+    "exploratoryProbes": 16,
+    "executableCases": 17,
+    "executedCases": 17,
+    "acceptancePasses": 1,
+    "characterizations": 4,
+    "measurements": 1,
+    "derivedResults": 0,
+    "decisionBlockers": 5,
+    "plannedOnlyCases": 16,
+    "passed": 3,
+    "failed": 0,
+    "blocked": 14,
+    "inconclusive": 0,
+    "notApplicable": 0,
+    "zeroSubmissionConfirmed": true,
+    "waveStatus": "BLOCKED"
+  },
+  "safety": {
+    "approvedBoundary": "Step 8 review; final submission prohibited",
+    "locatorGuardInstalled": true,
+    "networkGuardInstalled": true,
+    "finalSubmitClicked": false,
+    "finalSubmissionAttempted": false,
+    "finalSubmissionCompleted": false,
+    "syntheticDataPolicySatisfied": true
+  },
+  "cases": [
+    {
+      "caseId": "TC-AR-001",
+      "capability": "functional",
+      "executionMode": "smoke",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Acceptance",
+      "status": "PASS",
+      "step": null,
+      "coveredSteps": [
+        1
+      ],
+      "branch": null,
+      "durationMs": 12249,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "testSite": "The CRM Carpenters Test",
+      "metrics": {
+        "visibleControls": 8,
+        "requiredControls": 1,
+        "disabledControls": 0,
+        "manualFieldCandidates": 5,
+        "controls": [
+          {
+            "id": "input_3_526",
+            "type": "text",
+            "required": false,
+            "disabled": false
+          },
+          {
+            "id": "input_3_406",
+            "type": "select",
+            "required": false,
+            "disabled": false
+          },
+          {
+            "id": "input_3_407",
+            "type": "select",
+            "required": true,
+            "disabled": false
+          },
+          {
+            "id": "choice_3_528_0",
+            "type": "radio",
+            "required": false,
+            "disabled": false
+          },
+          {
+            "id": "choice_3_532_0",
+            "type": "radio",
+            "required": false,
+            "disabled": false
+          },
+          {
+            "id": "choice_3_532_1",
+            "type": "radio",
+            "required": false,
+            "disabled": false
+          },
+          {
+            "id": "choice_3_464_1",
+            "type": "checkbox",
+            "required": false,
+            "disabled": false
+          },
+          {
+            "id": "gform_next_button_3_426",
+            "type": "button",
+            "required": false,
+            "disabled": false
+          }
+        ]
+      },
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "The authenticated Access Request form and Step 1 are visible; final Submit is hidden.",
+      "observed": "The form and Step 1 are visible; Step 2 and final Submit are hidden.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-001.json"
+      ],
+      "findingIds": [],
+      "recommendationIds": [],
+      "blockerId": null,
+      "blockerReason": null,
+      "owner": null,
+      "timings": {
+        "contextSetupMs": 2679,
+        "availabilityCheckMs": 9121
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 1",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:39:22.146Z",
+      "testFile": "live/access-request/00-authentication-preflight.setup.js"
+    },
+    {
+      "caseId": "TC-AR-C01",
+      "capability": "copy-and-reuse",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "copy-individual",
+      "durationMs": 29552,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Explicit person-copy controls are identified without assuming an approved source or target.",
+      "observed": "No explicit copy/reuse affordance matched the copy-individual observation on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-C01.json"
+      ],
+      "findingIds": [
+        "F-AR-002"
+      ],
+      "recommendationIds": [
+        "R-AR-002"
+      ],
+      "blockerId": "COPY-UI-AR-01",
+      "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "owner": "product/business",
+      "timings": {
+        "contextSetupMs": 2563,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 13167,
+        "exerciseMs": 13658
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 copy-individual UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:39:52.948Z",
+      "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
+    },
+    {
+      "caseId": "TC-AR-C02",
+      "capability": "copy-and-reuse",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "copy-address",
+      "durationMs": 32234,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Explicit address-copy controls are identified without assuming an approved source or target.",
+      "observed": "No explicit copy/reuse affordance matched the copy-address observation on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-C02.json"
+      ],
+      "findingIds": [
+        "F-AR-002"
+      ],
+      "recommendationIds": [
+        "R-AR-002"
+      ],
+      "blockerId": "COPY-UI-AR-01",
+      "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "owner": "product/business",
+      "timings": {
+        "contextSetupMs": 2179,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 7687,
+        "exerciseMs": 22196
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 copy-address UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:40:25.675Z",
+      "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
+    },
+    {
+      "caseId": "TC-AR-C03",
+      "capability": "copy-and-reuse",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "copy-company-contact",
+      "durationMs": 24276,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Explicit company/contact-copy controls are identified without assuming an approved source or target.",
+      "observed": "No explicit copy/reuse affordance matched the copy-company-contact observation on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-C03.json"
+      ],
+      "findingIds": [
+        "F-AR-002"
+      ],
+      "recommendationIds": [
+        "R-AR-002"
+      ],
+      "blockerId": "COPY-UI-AR-01",
+      "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "owner": "product/business",
+      "timings": {
+        "contextSetupMs": 2216,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 8226,
+        "exerciseMs": 13666
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 copy-company-contact UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:40:50.506Z",
+      "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
+    },
+    {
+      "caseId": "TC-AR-C04",
+      "capability": "copy-and-reuse",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "copy-value-match",
+      "durationMs": 45662,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Copied values are compared only after an explicit source-target pair is approved.",
+      "observed": "No explicit copy/reuse affordance matched the copy-value-match observation on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-C04.json"
+      ],
+      "findingIds": [
+        "F-AR-002"
+      ],
+      "recommendationIds": [
+        "R-AR-002"
+      ],
+      "blockerId": "COPY-UI-AR-01",
+      "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "owner": "product/business",
+      "timings": {
+        "contextSetupMs": 2214,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 8078,
+        "exerciseMs": 35160
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 copy-value-match UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:41:36.667Z",
+      "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
+    },
+    {
+      "caseId": "TC-AR-C05",
+      "capability": "copy-and-reuse",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "copy-editability",
+      "durationMs": 22454,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Copied-value editability is judged only after an explicit source-target pair is approved.",
+      "observed": "No explicit copy/reuse affordance matched the copy-editability observation on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-C05.json"
+      ],
+      "findingIds": [
+        "F-AR-002"
+      ],
+      "recommendationIds": [
+        "R-AR-002"
+      ],
+      "blockerId": "COPY-UI-AR-01",
+      "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "owner": "product/business",
+      "timings": {
+        "contextSetupMs": 2186,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 7035,
+        "exerciseMs": 13060
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 copy-editability UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:41:59.469Z",
+      "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
+    },
+    {
+      "caseId": "TC-AR-C06",
+      "capability": "copy-and-reuse",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "copy-source-isolation",
+      "durationMs": 54115,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Source isolation is judged only after an explicit copy source-target pair is approved.",
+      "observed": "No explicit copy/reuse affordance matched the copy-source-isolation observation on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-C06.json"
+      ],
+      "findingIds": [
+        "F-AR-002"
+      ],
+      "recommendationIds": [
+        "R-AR-002"
+      ],
+      "blockerId": "COPY-UI-AR-01",
+      "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "owner": "product/business",
+      "timings": {
+        "contextSetupMs": 2247,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 12669,
+        "exerciseMs": 39009
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 copy-source-isolation UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:42:54.149Z",
+      "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
+    },
+    {
+      "caseId": "TC-AR-C07",
+      "capability": "copy-and-reuse",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "copy-unrelated-preservation",
+      "durationMs": 25364,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Unrelated-value preservation is judged only after an explicit copy source-target pair is approved.",
+      "observed": "No explicit copy/reuse affordance matched the copy-unrelated-preservation observation on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-C07.json"
+      ],
+      "findingIds": [
+        "F-AR-002"
+      ],
+      "recommendationIds": [
+        "R-AR-002"
+      ],
+      "blockerId": "COPY-UI-AR-01",
+      "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "owner": "product/business",
+      "timings": {
+        "contextSetupMs": 2265,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 7294,
+        "exerciseMs": 15643
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 copy-unrelated-preservation UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:43:20.017Z",
+      "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
+    },
+    {
+      "caseId": "TC-AR-C08",
+      "capability": "copy-and-reuse",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "copy-forbidden-reuse",
+      "durationMs": 57603,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Forbidden reuse is not inferred without approved eligibility and exclusion rules.",
+      "observed": "No explicit copy/reuse affordance matched the copy-forbidden-reuse observation on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-C08.json"
+      ],
+      "findingIds": [
+        "F-AR-002"
+      ],
+      "recommendationIds": [
+        "R-AR-002"
+      ],
+      "blockerId": "COPY-UI-AR-01",
+      "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "owner": "product/business",
+      "timings": {
+        "contextSetupMs": 2227,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 8064,
+        "exerciseMs": 47146
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 copy-forbidden-reuse UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:44:18.178Z",
+      "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
+    },
+    {
+      "caseId": "TC-AR-X01",
+      "capability": "cross-workflow",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 1,
+      "coveredSteps": [
+        1
+      ],
+      "branch": "cross-workflow-semantic-candidates",
+      "durationMs": 42614,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/laan-requests/",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "accessFields": [
+        {
+          "fieldId": "field_3_526",
+          "label": "Associated LAAN ID",
+          "controls": [
+            {
+              "id": "input_3_526",
+              "type": "text",
+              "required": false
+            }
+          ]
+        },
+        {
+          "fieldId": "field_3_406",
+          "label": "Owner Name (Optional)",
+          "controls": [
+            {
+              "id": "input_3_406",
+              "type": "select",
+              "required": false
+            }
+          ]
+        },
+        {
+          "fieldId": "field_3_407",
+          "label": "Site Name (Mandatory)*",
+          "controls": [
+            {
+              "id": "input_3_407",
+              "type": "select",
+              "required": true
+            }
+          ]
+        },
+        {
+          "fieldId": "field_3_528",
+          "label": "Tenure is in place*",
+          "controls": [
+            {
+              "id": "choice_3_528_0",
+              "type": "radio",
+              "required": false
+            }
+          ]
+        },
+        {
+          "fieldId": "field_3_532",
+          "label": "View Network Emergency Procedures",
+          "controls": [
+            {
+              "id": "choice_3_532_0",
+              "type": "radio",
+              "required": false
+            },
+            {
+              "id": "choice_3_532_1",
+              "type": "radio",
+              "required": false
+            }
+          ]
+        },
+        {
+          "fieldId": "field_3_464",
+          "label": "Acceptance of Terms and Conditions*",
+          "controls": [
+            {
+              "id": "choice_3_464_1",
+              "type": "checkbox",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "accessLaanFields": [
+        {
+          "fieldId": "field_3_526",
+          "label": "Associated LAAN ID",
+          "controls": [
+            {
+              "id": "input_3_526",
+              "type": "text",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "laanFields": {
+        "pageOne": [
+          {
+            "fieldId": "field_1_11",
+            "label": "What type of activity does this LAAN relate to?*",
+            "controls": [
+              {
+                "id": "input_1_11",
+                "type": "select",
+                "required": true
+              }
+            ]
+          },
+          {
+            "fieldId": "field_1_12",
+            "label": "Proposed Commencement Date of Activity*",
+            "controls": [
+              {
+                "id": "input_1_12",
+                "type": "text",
+                "required": true
+              }
+            ]
+          },
+          {
+            "fieldId": "field_1_40",
+            "label": "Owner Name (Optional)",
+            "controls": [
+              {
+                "id": "input_1_40",
+                "type": "select",
+                "required": false
+              }
+            ]
+          },
+          {
+            "fieldId": "field_1_41",
+            "label": "Site name*",
+            "controls": [
+              {
+                "id": "input_1_41",
+                "type": "select",
+                "required": true
+              }
+            ]
+          },
+          {
+            "fieldId": "field_1_63",
+            "label": "Acceptance of Terms and Conditions*",
+            "controls": [
+              {
+                "id": "choice_1_63_1",
+                "type": "checkbox",
+                "required": false
+              }
+            ]
+          }
+        ],
+        "pageTwo": [],
+        "transitionBlocker": "LAAN Step 1 is missing 1 required visible control(s).",
+        "finalSubmissionAttempted": false
+      },
+      "candidates": [
+        {
+          "concept": "site",
+          "accessLabels": [
+            "Site Name (Mandatory)*"
+          ],
+          "laanLabels": [
+            "Site name*"
+          ]
+        },
+        {
+          "concept": "project",
+          "accessLabels": [
+            "Associated LAAN ID"
+          ],
+          "laanLabels": [
+            "What type of activity does this LAAN relate to?*"
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "concept": "site",
+          "accessLabels": [
+            "Site Name (Mandatory)*"
+          ],
+          "laanLabels": [
+            "Site name*"
+          ]
+        },
+        {
+          "concept": "project",
+          "accessLabels": [
+            "Associated LAAN ID"
+          ],
+          "laanLabels": [
+            "What type of activity does this LAAN relate to?*"
+          ]
+        }
+      ],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Visible Access Request and LAAN labels identify reuse candidates without declaring semantic equivalence.",
+      "observed": "2 cross-workflow concept group(s) and 1 Access Request LAAN-labelled field(s) were observed; none are asserted equivalent.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-X01.json"
+      ],
+      "findingIds": [
+        "F-AR-003"
+      ],
+      "recommendationIds": [
+        "R-AR-003"
+      ],
+      "blockerId": "CROSS-WORKFLOW-AUTHORITY-AR-01",
+      "blockerReason": "Candidate labels are externally observable, but authoritative semantic mappings and source ownership are not approved.",
+      "owner": "product/business + operations/data",
+      "timings": {
+        "contextSetupMs": 2199,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 17585,
+        "exerciseMs": 22701
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "LAAN Step 1 after cross-workflow field inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:45:01.191Z",
+      "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
+    },
+    {
+      "caseId": "TC-AR-X02",
+      "capability": "cross-workflow",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Characterization",
+      "status": "BLOCKED",
+      "step": 1,
+      "coveredSteps": [
+        1
+      ],
+      "branch": "cross-workflow-site-context",
+      "durationMs": 17931,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/laan-requests/",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "accessSiteObserved": true,
+      "laanSiteObserved": false,
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "The configured Access Request and LAAN fixtures use the same externally visible synthetic Site label.",
+      "observed": "Access Request uses \"The CRM Carpenters Test\" while LAAN uses \"siteXcell Pty Ltd\".",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-X02.json"
+      ],
+      "findingIds": [
+        "F-AR-003"
+      ],
+      "recommendationIds": [
+        "R-AR-003"
+      ],
+      "blockerId": "CROSS-WORKFLOW-FIXTURE-AR-01",
+      "blockerReason": "The visible Access Request and LAAN suites do not expose the same dedicated synthetic Site label.",
+      "owner": "product/business + operations/data + QA",
+      "timings": {
+        "contextSetupMs": 2322,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 6462,
+        "exerciseMs": 8994
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "LAAN Step 1 after visible Site-label comparison",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:45:19.336Z",
+      "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
+    },
+    {
+      "caseId": "TC-AR-X03",
+      "capability": "cross-workflow",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Efficiency",
+      "status": "BLOCKED",
+      "step": 1,
+      "coveredSteps": [
+        1
+      ],
+      "branch": "cross-workflow-duplicate-entry",
+      "durationMs": 39238,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/laan-requests/",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "accessVisibleFields": 6,
+      "laanVisibleFields": 5,
+      "transitionBlocker": "LAAN Step 1 is missing 1 required visible control(s).",
+      "observations": [
+        {
+          "concept": "site",
+          "accessLabels": [
+            "Site Name (Mandatory)*"
+          ],
+          "laanLabels": [
+            "Site name*"
+          ]
+        },
+        {
+          "concept": "project",
+          "accessLabels": [
+            "Associated LAAN ID"
+          ],
+          "laanLabels": [
+            "What type of activity does this LAAN relate to?*"
+          ]
+        }
+      ],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Duplicate-entry candidates are inventoried without claiming human effort savings.",
+      "observed": "2 candidate duplicate-entry concept group(s) were inventoried; no effort or reuse conclusion was made.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-X03.json"
+      ],
+      "findingIds": [
+        "F-AR-003"
+      ],
+      "recommendationIds": [
+        "R-AR-003"
+      ],
+      "blockerId": "CROSS-WORKFLOW-PROTOCOL-AR-01",
+      "blockerReason": "A shared fixture and approved comparable human-effort protocol are unavailable.",
+      "owner": "product/business + operations/data + QA",
+      "timings": {
+        "contextSetupMs": 2173,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 14121,
+        "exerciseMs": 22814
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "LAAN Step 1 after duplicate-entry candidate inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:45:58.759Z",
+      "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
+    },
+    {
+      "caseId": "TC-AR-P01",
+      "capability": "person-context",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Characterization",
+      "status": "PASS",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "first-time-person-entry",
+      "durationMs": 56289,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "fieldIds": [
+        "input_3_22",
+        "input_3_23",
+        "input_3_458",
+        "input_3_27",
+        "input_3_25",
+        "input_3_28"
+      ],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Visible person fields accept synthetic first-time details without using a saved-person source.",
+      "observed": "Six visible person fields accepted and retained the synthetic first-time worker details.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-P01.json"
+      ],
+      "findingIds": [],
+      "recommendationIds": [],
+      "blockerId": null,
+      "blockerReason": null,
+      "owner": null,
+      "timings": {
+        "contextSetupMs": 2231,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 9561,
+        "exerciseMs": 44351
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 after synthetic first-time person entry",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:46:55.309Z",
+      "testFile": "live/access-request/behaviors/person-context.spec.js"
+    },
+    {
+      "caseId": "TC-AR-P02",
+      "capability": "person-context",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Characterization",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "returning-person-source",
+      "durationMs": 22706,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Any explicit returning-person source is identified without selecting a real person.",
+      "observed": "No explicit returning-person selector was visible on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-P02.json"
+      ],
+      "findingIds": [
+        "F-AR-001"
+      ],
+      "recommendationIds": [
+        "R-AR-001"
+      ],
+      "blockerId": "PERSON-AUTHORITY-AR-01",
+      "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
+      "owner": "product/business + operations/data",
+      "timings": {
+        "contextSetupMs": 2215,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 7141,
+        "exerciseMs": 13180
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 returning-person UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:47:18.390Z",
+      "testFile": "live/access-request/behaviors/person-context.spec.js"
+    },
+    {
+      "caseId": "TC-AR-P03",
+      "capability": "person-context",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "known-person-details",
+      "durationMs": 66215,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Known-person reuse is not judged without an approved identity and freshness authority.",
+      "observed": "No known-person source was visible, and no identity or freshness authority is approved.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-P03.json"
+      ],
+      "findingIds": [
+        "F-AR-001"
+      ],
+      "recommendationIds": [
+        "R-AR-001"
+      ],
+      "blockerId": "PERSON-AUTHORITY-AR-01",
+      "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
+      "owner": "product/business + operations/data",
+      "timings": {
+        "contextSetupMs": 2197,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 18405,
+        "exerciseMs": 45458
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 known-person source inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:48:25.093Z",
+      "testFile": "live/access-request/behaviors/person-context.spec.js"
+    },
+    {
+      "caseId": "TC-AR-P04",
+      "capability": "person-context",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Characterization",
+      "status": "PASS",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "edit-person-details",
+      "durationMs": 26965,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "changedFields": [
+        "role",
+        "phone",
+        "address"
+      ],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Visible manually entered person details remain editable before progression.",
+      "observed": "The visible synthetic person details were changed and the updated values remained in the controls.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-P04.json"
+      ],
+      "findingIds": [],
+      "recommendationIds": [],
+      "blockerId": null,
+      "blockerReason": null,
+      "owner": null,
+      "timings": {
+        "contextSetupMs": 2211,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 8113,
+        "exerciseMs": 16471
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 after editing synthetic person details",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:48:52.533Z",
+      "testFile": "live/access-request/behaviors/person-context.spec.js"
+    },
+    {
+      "caseId": "TC-AR-P05",
+      "capability": "person-context",
+      "executionMode": "exploratory",
+      "risk": "medium",
+      "prerequisites": [
+        "authenticated-session",
+        "captured-field-map"
+      ],
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "step": 3,
+      "coveredSteps": [
+        3
+      ],
+      "branch": "same-person-role-reuse",
+      "durationMs": 23261,
+      "environment": {
+        "browser": "Microsoft Edge",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "url": "https://co-siter.com.au/access-requests/#gf_3",
+        "commit": "14eb65aaa03de4102032cd8f3e459ef4be028381",
+        "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
+      },
+      "observations": [],
+      "entryPoint": "Authenticated Access Request Step 1",
+      "expected": "Any explicit same-person role-reuse affordance is recorded without assuming role permissions.",
+      "observed": "No explicit same-person role-reuse affordance was visible on Step 3.",
+      "startingPoint": "Authenticated Access Request Step 1",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [
+        "TC-AR-P05.json"
+      ],
+      "findingIds": [
+        "F-AR-001"
+      ],
+      "recommendationIds": [
+        "R-AR-001"
+      ],
+      "blockerId": "PERSON-AUTHORITY-AR-01",
+      "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
+      "owner": "product/business + operations/data",
+      "timings": {
+        "contextSetupMs": 2190,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 7115,
+        "exerciseMs": 13779
+      },
+      "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z",
+      "stoppingPoint": "Step 3 role-reuse UI inventory",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "fixture": {
+        "version": 1,
+        "profile": "synthetic-access-request",
+        "runId": "test-The-CRM-Carpenters-000131-20260905T133906210Z"
+      },
+      "capturedAt": "2026-09-05T13:49:16.273Z",
+      "testFile": "live/access-request/behaviors/person-context.spec.js"
+    },
+    {
+      "caseId": "TC-AR-D01",
+      "capability": "decision-gate",
+      "executionMode": "decision-register",
+      "risk": "high",
+      "prerequisites": [
+        "authenticated-session",
+        "approved-prerequisite"
+      ],
+      "testFile": null,
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "coveredSteps": [
+        7
+      ],
+      "branch": "decision-register",
+      "durationMs": 0,
+      "environment": null,
+      "expected": "The named owner approves the missing rule, authority, protocol, or safe environment.",
+      "observed": "The saved-document source, ownership, and authenticated UI are not approved.",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [],
+      "findingIds": [],
+      "recommendationIds": [],
+      "blockerId": "DOCUMENT-SOURCE-AR-01",
+      "blockerReason": "The saved-document source, ownership, and authenticated UI are not approved.",
+      "owner": "operations/data + security/privacy",
+      "runId": null,
+      "startingPoint": "Decision register",
+      "stoppingPoint": "Decision prerequisite",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "executed": false
+    },
+    {
+      "caseId": "TC-AR-D02",
+      "capability": "decision-gate",
+      "executionMode": "decision-register",
+      "risk": "high",
+      "prerequisites": [
+        "authenticated-session",
+        "approved-prerequisite"
+      ],
+      "testFile": null,
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "coveredSteps": [
+        7
+      ],
+      "branch": "decision-register",
+      "durationMs": 0,
+      "environment": null,
+      "expected": "The named owner approves the missing rule, authority, protocol, or safe environment.",
+      "observed": "The authoritative document-validity and expiry rules are not approved.",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [],
+      "findingIds": [],
+      "recommendationIds": [],
+      "blockerId": "DOCUMENT-VALIDITY-AR-01",
+      "blockerReason": "The authoritative document-validity and expiry rules are not approved.",
+      "owner": "operations/data",
+      "runId": null,
+      "startingPoint": "Decision register",
+      "stoppingPoint": "Decision prerequisite",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "executed": false
+    },
+    {
+      "caseId": "TC-AR-U07",
+      "capability": "decision-gate",
+      "executionMode": "decision-register",
+      "risk": "high",
+      "prerequisites": [
+        "authenticated-session",
+        "approved-prerequisite"
+      ],
+      "testFile": null,
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "coveredSteps": [
+        7
+      ],
+      "branch": "decision-register",
+      "durationMs": 0,
+      "environment": null,
+      "expected": "The named owner approves the missing rule, authority, protocol, or safe environment.",
+      "observed": "Approved staging or upload fault-injection controls are unavailable.",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [],
+      "findingIds": [],
+      "recommendationIds": [],
+      "blockerId": "UPLOAD-STAGING-AR-01",
+      "blockerReason": "Approved staging or upload fault-injection controls are unavailable.",
+      "owner": "developer + security/privacy",
+      "runId": null,
+      "startingPoint": "Decision register",
+      "stoppingPoint": "Decision prerequisite",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "executed": false
+    },
+    {
+      "caseId": "TC-AR-E10",
+      "capability": "decision-gate",
+      "executionMode": "decision-register",
+      "risk": "high",
+      "prerequisites": [
+        "authenticated-session",
+        "approved-prerequisite"
+      ],
+      "testFile": null,
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "branch": "decision-register",
+      "durationMs": 0,
+      "environment": null,
+      "expected": "The named owner approves the missing rule, authority, protocol, or safe environment.",
+      "observed": "Approved copy behavior and the comparable human measurement protocol are unavailable.",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [],
+      "findingIds": [],
+      "recommendationIds": [],
+      "blockerId": "COPY-PROTOCOL-AR-01",
+      "blockerReason": "Approved copy behavior and the comparable human measurement protocol are unavailable.",
+      "owner": "product/business + QA",
+      "runId": null,
+      "startingPoint": "Decision register",
+      "stoppingPoint": "Decision prerequisite",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "executed": false
+    },
+    {
+      "caseId": "TC-AR-R04",
+      "capability": "decision-gate",
+      "executionMode": "decision-register",
+      "risk": "high",
+      "prerequisites": [
+        "authenticated-session",
+        "approved-prerequisite"
+      ],
+      "testFile": null,
+      "suiteWave": "Steps 1-8",
+      "resultType": "Decision",
+      "status": "BLOCKED",
+      "coveredSteps": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "branch": "decision-register",
+      "durationMs": 0,
+      "environment": null,
+      "expected": "The named owner approves the missing rule, authority, protocol, or safe environment.",
+      "observed": "Draft ownership, expiry, privacy, restore, and discard rules are not approved.",
+      "firstFailure": null,
+      "retryOutcome": null,
+      "evidence": [],
+      "findingIds": [],
+      "recommendationIds": [],
+      "blockerId": "DECISION-AR-DRAFT",
+      "blockerReason": "Draft ownership, expiry, privacy, restore, and discard rules are not approved.",
+      "owner": "product/business + security/privacy",
+      "runId": null,
+      "startingPoint": "Decision register",
+      "stoppingPoint": "Decision prerequisite",
+      "locatorGuardInstalled": true,
+      "networkGuardInstalled": true,
+      "finalSubmitClicked": false,
+      "finalSubmissionAttempted": false,
+      "finalSubmissionCompleted": false,
+      "syntheticDataPolicySatisfied": true,
+      "executed": false
+    }
+  ],
+  "findings": [],
+  "recommendations": [],
+  "blockers": [
+    {
+      "id": "COPY-UI-AR-01",
+      "reason": "No explicitly labelled copy or reuse control is visible on Step 3.",
+      "caseIds": [
+        "TC-AR-C01",
+        "TC-AR-C02",
+        "TC-AR-C03",
+        "TC-AR-C04",
+        "TC-AR-C05",
+        "TC-AR-C06",
+        "TC-AR-C07",
+        "TC-AR-C08"
+      ],
+      "owner": "product/business"
+    },
+    {
+      "id": "CROSS-WORKFLOW-AUTHORITY-AR-01",
+      "reason": "Candidate labels are externally observable, but authoritative semantic mappings and source ownership are not approved.",
+      "caseIds": [
+        "TC-AR-X01"
+      ],
+      "owner": "product/business + operations/data"
+    },
+    {
+      "id": "CROSS-WORKFLOW-FIXTURE-AR-01",
+      "reason": "The visible Access Request and LAAN suites do not expose the same dedicated synthetic Site label.",
+      "caseIds": [
+        "TC-AR-X02"
+      ],
+      "owner": "product/business + operations/data + QA"
+    },
+    {
+      "id": "CROSS-WORKFLOW-PROTOCOL-AR-01",
+      "reason": "A shared fixture and approved comparable human-effort protocol are unavailable.",
+      "caseIds": [
+        "TC-AR-X03"
+      ],
+      "owner": "product/business + operations/data + QA"
+    },
+    {
+      "id": "PERSON-AUTHORITY-AR-01",
+      "reason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
+      "caseIds": [
+        "TC-AR-P02",
+        "TC-AR-P03",
+        "TC-AR-P05"
+      ],
+      "owner": "product/business + operations/data"
+    },
+    {
+      "id": "DOCUMENT-SOURCE-AR-01",
+      "reason": "The saved-document source, ownership, and authenticated UI are not approved.",
+      "caseIds": [
+        "TC-AR-D01"
+      ],
+      "owner": "operations/data + security/privacy"
+    },
+    {
+      "id": "DOCUMENT-VALIDITY-AR-01",
+      "reason": "The authoritative document-validity and expiry rules are not approved.",
+      "caseIds": [
+        "TC-AR-D02"
+      ],
+      "owner": "operations/data"
+    },
+    {
+      "id": "UPLOAD-STAGING-AR-01",
+      "reason": "Approved staging or upload fault-injection controls are unavailable.",
+      "caseIds": [
+        "TC-AR-U07"
+      ],
+      "owner": "developer + security/privacy"
+    },
+    {
+      "id": "COPY-PROTOCOL-AR-01",
+      "reason": "Approved copy behavior and the comparable human measurement protocol are unavailable.",
+      "caseIds": [
+        "TC-AR-E10"
+      ],
+      "owner": "product/business + QA"
+    },
+    {
+      "id": "DECISION-AR-DRAFT",
+      "reason": "Draft ownership, expiry, privacy, restore, and discard rules are not approved.",
+      "caseIds": [
+        "TC-AR-R04"
+      ],
+      "owner": "product/business + security/privacy"
+    }
+  ],
+  "prerequisites": []
+}

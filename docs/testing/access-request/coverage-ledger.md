@@ -60,16 +60,16 @@ schema. Do not populate unknown values by inference.
 | `TC-AR-R04` | 1 | 2 | Declared blocker | Move to decision register | Draft ownership, privacy, expiry, restore, and discard |
 | `TC-AR-U01`–`U06` | 6 | 1 | Declared | Refactor into per-upload-field matrix | Exact MIME, extension, size, confirmation, and state-preservation rules |
 | `TC-AR-U07` | 1 | 1 | Declared blocker | Move to decision register | Safe staging or upload fault injection |
-| `TC-AR-P01`–`P05` | 5 | 2 | Missing | Add after source/authority approval | Person identity, freshness, editability, and role reuse |
+| `TC-AR-P01`–`P05` | 5 | 2 | Exploratory probes declared | Run visible Step 3 entry/reuse inventory; keep authority-dependent outcomes blocked | Person identity, freshness, editability, and role reuse |
 | `TC-AR-D01`, `D02` | 2 | 2 | Declared blockers | Move to decision register until document contract exists | Saved-document source and validity authority |
 | `TC-AR-D03`, `D04` | 2 | 1 | Declared | Share evidence with upload journeys where setup matches | Replacement identity and request-specific document rules |
 | `TC-AR-S01`–`S04` | 4 | 1 | Implemented | S01 N/A; S02–S04 direct live checks | Native select has no partial-text search widget; exact, keyboard, and effort evidence retained |
-| `TC-AR-C01`–`C08` | 8 | 2 | Missing | Add only after approved source-target pairs | Copy permission, editability, isolation, forbidden reuse, preservation |
+| `TC-AR-C01`–`C08` | 8 | 2 | Exploratory probes declared | Inventory explicit copy UI; do not exercise unapproved source-target behavior | Copy permission, editability, isolation, forbidden reuse, preservation |
 | `TC-AR-E01`–`E05` | 5 | 1 | Declared | Derive compatible records from one instrumented baseline | Stable fixture, counting contract, and source evidence links |
 | `TC-AR-E06`–`E09` | 4 | 1 | Declared | Share validation, responsive, keyboard, and preservation evidence where equivalent | Human-equivalent metric definitions and stronger assertions |
 | `TC-AR-E10` | 1 | 2 | Declared blocker | Move to decision register/human protocol | Approved copy behavior and comparable participant protocol |
 | `TC-AR-A01`–`A05` | 5 | 1 | Declared | Extend from Steps 5–8 to the representative Steps 1–8 path | Early-step accessibility, conditional controls, and consistent fixtures |
-| `TC-AR-X01`–`X03` | 3 | 2 | Missing | Add after shared fixture and source authority exist | Semantic equivalence, shared Site context, and cross-workflow effort |
+| `TC-AR-X01`–`X03` | 3 | 2 | Exploratory probes declared | Compare visible fields and configured synthetic Sites; keep semantic/effort conclusions blocked | Semantic equivalence, shared Site context, and cross-workflow effort |
 | **Total** | **64** | — | **48 accounted for / 16 planning-only** | Declaration is not evidence | Current result: 33 executed, 10 acceptance passes, 11 characterizations, 3 measurements, 6 failures, 5 blocked, 3 N/A |
 
 ## 5. Representative scenario ledger
@@ -121,6 +121,7 @@ Every summary must report these values independently:
 | Matrix cases | All approved case IDs; currently 64 |
 | Classified cases | Cases with phase, oracle, tier, owner, and intended evidence |
 | Automated declarations | Browser or non-browser executable declarations |
+| Exploratory probes | Executable observation-only declarations that do not promote planning or decision-gated cases |
 | Executable cases | Declarations whose prerequisites are currently satisfied |
 | Executed cases | Cases that actually exercised behavior in the named run |
 | Acceptance passes | Approved rules that passed |

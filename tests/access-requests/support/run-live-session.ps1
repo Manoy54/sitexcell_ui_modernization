@@ -8,7 +8,7 @@ param(
     [string]$ConfigFile = 'tests/access-requests/configs/playwright.access-request.config.js',
     [string]$ReportFile = 'access-request-results.json',
     [string]$SuiteLabel = 'access-request',
-    [int]$PlannedCaseCount = 34
+    [int]$PlannedCaseCount = 50
 )
 
 $ErrorActionPreference = 'Stop'
@@ -20,6 +20,7 @@ $runContext = & node.exe 'tests/access-requests/support/create-run-context.mjs' 
 $env:ACCESS_RUN_ID = $runContext.identifier
 $env:ACCESS_RUN_STARTED_AT = [DateTimeOffset]::Now.ToString('o')
 $env:ACCESS_COMMIT = (& git.exe rev-parse HEAD).Trim()
+$env:ACCESS_TRACKED_WORKTREE_DIRTY = if (& git.exe status --porcelain --untracked-files=no) { 'true' } else { 'false' }
 $env:ACCESS_CONFIG_FILE = $ConfigFile
 Write-Host "Run ID: $($env:ACCESS_RUN_ID)"
 

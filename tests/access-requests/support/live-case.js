@@ -49,11 +49,15 @@ export async function runLiveAccessCase(testInfo, {
   timings.contextSetupMs = Date.now() - contextStartedAt;
   const page = await context.newPage();
   const wasFinalSubmissionAttempted = await installFinalSubmissionGuard(page);
+  let evidenceCoveredSteps;
 
   try {
     try {
       const prerequisiteStartedAt = Date.now();
       const caseMetadata = caseMetadataForCase(caseId);
+      evidenceCoveredSteps = caseMetadata?.executionMode === 'exploratory'
+        ? caseMetadata.probeSteps
+        : undefined;
       if (caseMetadata?.prerequisites.includes('captured-field-map')) {
         requireCapturedStepsFieldMap();
       }
@@ -88,10 +92,12 @@ export async function runLiveAccessCase(testInfo, {
         branch: outcome.branch ?? branch,
         blockerId: outcome.blockerId ?? null,
         blockerReason: outcome.blockerReason ?? null,
+        owner: outcome.owner ?? null,
         retryOutcome: outcome.retryOutcome ?? null,
         findingIds: outcome.findingIds ?? [],
         recommendationIds: outcome.recommendationIds ?? [],
         timings,
+        coveredSteps: evidenceCoveredSteps,
         extra: outcome.extra ?? {},
       });
       return outcome;
@@ -118,6 +124,7 @@ export async function runLiveAccessCase(testInfo, {
         blockerId: status === 'BLOCKED' ? error.blockerId : null,
         blockerReason: status === 'BLOCKED' ? error.blockerReason : null,
         timings,
+        coveredSteps: evidenceCoveredSteps,
         extra: { progress: await captureAccessProgress(page) },
       });
       throw error;

@@ -1,4 +1,7 @@
-import { ACCESS_CASE_CATALOG } from './case-catalog.js';
+import {
+  ACCESS_CASE_CATALOG,
+  EXPLORATORY_ACCESS_CASE_IDS,
+} from './case-catalog.js';
 
 const DERIVED_CASE_SOURCES = Object.freeze({
   'TC-AR-R01': Object.freeze(['TC-AR-005']),
@@ -49,6 +52,7 @@ export const ACCESS_DECISION_BLOCKERS = Object.freeze([
 
 const DECISION_CASE_IDS = new Set(ACCESS_DECISION_BLOCKERS.map((item) => item.caseId));
 const DERIVED_CASE_IDS = new Set(Object.keys(ACCESS_DERIVED_CASE_SOURCES));
+const EXPLORATORY_CASE_IDS = new Set(EXPLORATORY_ACCESS_CASE_IDS);
 const CURRENT_BROWSER_CASE_IDS = new Set([
   'TC-AR-001', 'TC-AR-002', 'TC-AR-003', 'TC-AR-004', 'TC-AR-005', 'TC-AR-006',
   'TC-AR-B01', 'TC-AR-B02', 'TC-AR-B03', 'TC-AR-B04',
@@ -144,11 +148,14 @@ export function summarizeCoverage({ declaredCaseIds = [], cases = [], prerequisi
     matrixCases: ACCESS_CASE_CATALOG.length,
     classifiedCases: ACCESS_COVERAGE_RECORDS.length,
     automatedDeclarations: new Set(declaredCaseIds).size,
+    exploratoryProbes: new Set(declaredCaseIds.filter((caseId) => EXPLORATORY_CASE_IDS.has(caseId))).size,
     executableCases: new Set(eligibleDeclarations).size,
     executedCases: executed.length,
     acceptancePasses: executed.filter((item) => item.resultType === 'Acceptance' && item.status === 'PASS').length,
     characterizations: executed.filter((item) => item.resultType === 'Characterization').length,
-    measurements: executed.filter((item) => item.resultType === 'Efficiency').length,
+    measurements: executed.filter(
+      (item) => item.resultType === 'Efficiency' && item.status === 'PASS',
+    ).length,
     derivedResults: cases.filter((item) => item.derived === true).length,
     decisionBlockers: ACCESS_DECISION_BLOCKERS.length,
     plannedCases: ACCESS_COVERAGE_RECORDS.filter((item) => item.automation === 'planned').length,

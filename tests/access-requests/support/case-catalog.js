@@ -74,6 +74,13 @@ export const IMPLEMENTED_ACCESS_CASE_IDS = Object.freeze([
   ...STEPS_5_TO_8_CASE_IDS,
 ]);
 
+export const EXPLORATORY_ACCESS_CASE_IDS = Object.freeze([
+  'TC-AR-P01', 'TC-AR-P02', 'TC-AR-P03', 'TC-AR-P04', 'TC-AR-P05',
+  'TC-AR-C01', 'TC-AR-C02', 'TC-AR-C03', 'TC-AR-C04',
+  'TC-AR-C05', 'TC-AR-C06', 'TC-AR-C07', 'TC-AR-C08',
+  'TC-AR-X01', 'TC-AR-X02', 'TC-AR-X03',
+]);
+
 const LIVE_CASE_FILE_GROUPS = Object.freeze({
   'live/access-request/00-authentication-preflight.setup.js': Object.freeze(['TC-AR-001']),
   'live/access-request/behaviors/entry-validation-and-context.spec.js': Object.freeze([
@@ -84,6 +91,16 @@ const LIVE_CASE_FILE_GROUPS = Object.freeze({
   ]),
   'live/access-request/behaviors/site-search.spec.js': Object.freeze([
     'TC-AR-S01', 'TC-AR-S02', 'TC-AR-S03', 'TC-AR-S04',
+  ]),
+  'live/access-request/behaviors/person-context.spec.js': Object.freeze([
+    'TC-AR-P01', 'TC-AR-P02', 'TC-AR-P03', 'TC-AR-P04', 'TC-AR-P05',
+  ]),
+  'live/access-request/behaviors/copy-and-reuse.spec.js': Object.freeze([
+    'TC-AR-C01', 'TC-AR-C02', 'TC-AR-C03', 'TC-AR-C04',
+    'TC-AR-C05', 'TC-AR-C06', 'TC-AR-C07', 'TC-AR-C08',
+  ]),
+  'live/access-request/behaviors/cross-workflow.spec.js': Object.freeze([
+    'TC-AR-X01', 'TC-AR-X02', 'TC-AR-X03',
   ]),
   'live/access-request/journeys/navigation-persistence.spec.js': Object.freeze(['TC-AR-005']),
   'live/access-request/journeys/complete-review-path.spec.js': Object.freeze(['TC-AR-006']),
@@ -127,6 +144,15 @@ const ACCESS_CASE_METADATA = Object.fromEntries([
   }),
   ...metadataForGroup(['TC-AR-S01', 'TC-AR-S02', 'TC-AR-S03', 'TC-AR-S04'], {
     capability: 'site-search', executionMode: 'focused', risk: 'medium', prerequisites: ['authenticated-session'],
+  }),
+  ...metadataForGroup(['TC-AR-P01', 'TC-AR-P02', 'TC-AR-P03', 'TC-AR-P04', 'TC-AR-P05'], {
+    capability: 'person-context', executionMode: 'exploratory', risk: 'medium', prerequisites: ['authenticated-session', 'captured-field-map'], probeSteps: Object.freeze([3]),
+  }),
+  ...metadataForGroup(['TC-AR-C01', 'TC-AR-C02', 'TC-AR-C03', 'TC-AR-C04', 'TC-AR-C05', 'TC-AR-C06', 'TC-AR-C07', 'TC-AR-C08'], {
+    capability: 'copy-and-reuse', executionMode: 'exploratory', risk: 'medium', prerequisites: ['authenticated-session', 'captured-field-map'], probeSteps: Object.freeze([3]),
+  }),
+  ...metadataForGroup(['TC-AR-X01', 'TC-AR-X02', 'TC-AR-X03'], {
+    capability: 'cross-workflow', executionMode: 'exploratory', risk: 'medium', prerequisites: ['authenticated-session', 'captured-field-map'], probeSteps: Object.freeze([1]),
   }),
   ...metadataForGroup(['TC-AR-005', 'TC-AR-006'], {
     capability: 'journey', executionMode: 'e2e', risk: 'high', prerequisites: ['authenticated-session', 'captured-field-map'],
@@ -236,4 +262,12 @@ export function formatCoveredSteps(steps) {
 
 export function accessCaseTitle(caseId, description, steps = coveredStepsForCase(caseId)) {
   return `${caseId} [${formatCoveredSteps(steps)}] ${description}`;
+}
+
+export function probeStepsForCase(caseId) {
+  return [...(ACCESS_CASE_METADATA[caseId]?.probeSteps ?? [])];
+}
+
+export function accessProbeTitle(caseId, description) {
+  return `${caseId} [Exploratory Access Request ${formatCoveredSteps(probeStepsForCase(caseId))}] ${description}`;
 }

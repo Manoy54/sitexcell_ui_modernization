@@ -406,6 +406,7 @@ The dashboard summary must show:
 - evidence reference;
 - finding and recommendation links;
 - blocked or inconclusive explanation.
+- exploratory-probe count, kept separate from approved implementation coverage.
 
 The dashboard summarizes evidence; the committed Markdown records remain authoritative for reasoning and decisions.
 

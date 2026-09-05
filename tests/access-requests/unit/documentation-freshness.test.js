@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { validateAccessDocumentation } from '../support/documentation-freshness.js';
+import {
+  validateAccessDocumentation,
+  validateExploratoryDocumentation,
+} from '../support/documentation-freshness.js';
+import { EXPLORATORY_ACCESS_CASE_IDS } from '../support/case-catalog.js';
 
 const runId = 'test-The-CRM-Carpenters-000080-20260902T021521360Z';
 const result = {
@@ -67,4 +71,34 @@ test('rejects stale or misleading Access Request artifacts', () => {
   assert.ok(errors.some((item) => /matrixCases must equal 64/i.test(item)));
   assert.ok(errors.some((item) => /final submission attempt/i.test(item)));
   assert.ok(errors.some((item) => /test-summary\.md does not reference/i.test(item)));
+});
+
+test('accepts a separately committed exploratory result without promoting planned cases', () => {
+  const exploratoryRunId = 'test-The-CRM-Carpenters-000130-20260905T130755200Z';
+  const exploratoryResult = {
+    schemaVersion: 2,
+    run: { runId: exploratoryRunId },
+    summary: {
+      selectedCases: 16,
+      exploratoryProbes: 16,
+      plannedOnlyCases: 16,
+      zeroSubmissionConfirmed: true,
+    },
+    safety: {
+      finalSubmissionAttempted: false,
+      finalSubmissionCompleted: false,
+    },
+    cases: EXPLORATORY_ACCESS_CASE_IDS.map((caseId) => ({
+      caseId,
+      status: caseId === 'TC-AR-P01' ? 'PASS' : 'BLOCKED',
+      owner: caseId === 'TC-AR-P01' ? null : 'product/business',
+      finalSubmissionAttempted: false,
+    })),
+  };
+  const narratives = Object.fromEntries(
+    ['test-summary.md', 'analysis.md', 'test-case-matrix.md', 'findings.md', 'recommendations.md']
+      .map((name) => [name, `Focused evidence run: \`${exploratoryRunId}\``]),
+  );
+
+  assert.deepEqual(validateExploratoryDocumentation({ result: exploratoryResult, narratives }), []);
 });

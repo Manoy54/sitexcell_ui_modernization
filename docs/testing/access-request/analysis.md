@@ -38,22 +38,21 @@ following form:
 
 `test-The-CRM-Carpenters-000001-<UTC timestamp>`
 
-## Current evidence run — 2026-09-04
+## Current evidence run — 2026-09-05
 
-Current evidence run: `test-The-CRM-Carpenters-000107-20260904T084003226Z`
+Current evidence run: `test-The-CRM-Carpenters-000124-20260905T080659244Z`
 
 The complete serial 34-declaration baseline executed against the approved
-authenticated session. It produced 34 executed browser cases, 5 acceptance
-passes, 23 characterizations, 3 measurements, 5 failures, 5 explicit blockers,
-and 1 NOT APPLICABLE outcome. No final submission was attempted. The full
+authenticated session. It produced 32 executed browser cases, 7 acceptance
+passes, 21 characterizations, 3 measurements, 2 direct failures, 6 browser
+blockers, and 1 NOT APPLICABLE outcome. No final submission was attempted. The full
 Steps 1–8 field map and field/rule ledger are synchronized to this run.
 
-The five baseline failures are retained as triage evidence: a transient DNS
-failure for B05, upload/state preservation in U04 and R03, navigation
-persistence in TC-AR-005, and the outdated review-value assertion in TC-AR-006.
-Focused reruns later confirmed B05 and TC-AR-006 after their respective fixes;
-U04 and R03 still reproduce live upload-state loss. U03 and D04 remain explicit
-contract/UI blockers, not product failures.
+U04 and R03 retain reproducible upload/state-preservation failures. B05 and
+B08 are blocked because the current branch did not expose mapped controllers;
+U03, U05, U06, and D04 remain explicit contract/UI blockers rather than product
+failures. Derived E06 and E09 inherit R03's failure without another browser
+traversal.
 
 Focused reruns: B05 passed in `test-The-CRM-Carpenters-000108-20260904T100021457Z`;
 TC-AR-006 and TC-AR-005 passed in `test-The-CRM-Carpenters-000111-20260904T100339097Z`
@@ -61,6 +60,18 @@ and `test-The-CRM-Carpenters-000114-20260904T103046340Z`; U04 failed with
 unrelated files cleared in `test-The-CRM-Carpenters-000116-20260904T103935027Z`;
 R03 failed with unrelated files cleared in
 `test-The-CRM-Carpenters-000118-20260904T120742537Z`.
+
+Focused exploratory run
+`test-The-CRM-Carpenters-000131-20260905T133906210Z` executed all 16 new
+observation-only probes plus authentication. `P01` and `P04` passed as
+characterizations of manual synthetic entry and editability. `P02`, `P03`, and
+`P05` were blocked because no explicit returning-person or role-reuse source was
+visible and authority rules are unavailable. All eight `C*` cases were blocked
+because no explicit copy/reuse affordance was visible. `X01` and `X03` captured
+Site and project/LAAN candidate concepts without asserting equivalence; `X02`
+recorded that the configured labels differ and the LAAN target label was not
+visible. The focused result contains 14 blockers, no failures, and zero
+submission attempts.
 
 The identifier is entered into Associated LAAN ID, Project Reference, test
 contact names, and non-deliverable `example.invalid` email addresses.

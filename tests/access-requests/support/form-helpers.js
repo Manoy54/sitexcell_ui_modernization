@@ -69,6 +69,7 @@ export async function testEnvironment(page) {
     url: page?.url?.() ?? ACCESS_REQUEST_URL,
     commit: process.env.ACCESS_COMMIT
       ?? execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+    trackedWorktreeDirty: process.env.ACCESS_TRACKED_WORKTREE_DIRTY === 'true',
     configuration: process.env.ACCESS_CONFIG_FILE
       ?? 'tests/access-requests/configs/playwright.access-request.config.js',
   };
@@ -137,6 +138,7 @@ export async function attachCaseResult(testInfo, page, {
   branch = null,
   blockerId = null,
   blockerReason = null,
+  owner = null,
   retryOutcome = null,
   timings = {},
   findingIds = [],
@@ -172,6 +174,7 @@ export async function attachCaseResult(testInfo, page, {
     recommendationIds,
     blockerId,
     blockerReason,
+    owner,
     timings,
     runId: process.env.ACCESS_RUN_ID ?? null,
     stoppingPoint,

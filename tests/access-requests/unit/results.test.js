@@ -54,6 +54,7 @@ test('builds the stable Access Request result contract from case evidence', () =
     plannedCases: 64,
     implementedCases: 48,
     automatedDeclarations: 1,
+    exploratoryProbes: 0,
     executableCases: 1,
     executedCases: 1,
     acceptancePasses: 1,
@@ -322,6 +323,7 @@ test('promotes blocked case evidence into the consolidated blocker register', ()
       status: 'BLOCKED',
       blockerId: 'AUTH-AR-01',
       blockerReason: 'The authenticated Access Request form was unavailable.',
+      owner: 'security/privacy',
     }],
   });
 
@@ -329,6 +331,7 @@ test('promotes blocked case evidence into the consolidated blocker register', ()
     id: 'AUTH-AR-01',
     reason: 'The authenticated Access Request form was unavailable.',
     caseIds: ['TC-AR-006'],
+    owner: 'security/privacy',
   }]);
 });
 
@@ -381,6 +384,7 @@ test('separates matrix, declaration, execution, derived, and decision counts', (
     plannedCases: 64,
     implementedCases: 48,
     automatedDeclarations: 3,
+    exploratoryProbes: 0,
     executableCases: 3,
     executedCases: 3,
     acceptancePasses: 1,

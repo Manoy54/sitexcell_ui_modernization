@@ -15,9 +15,8 @@ async function fillValues(page, values) {
     await page.locator(selector).fill(value);
   }
 }
-export async function completeBaselineThroughStep4(page, {
+export async function reachAccessRequestStep3(page, {
   runId = process.env.ACCESS_RUN_ID,
-  qualificationPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf'),
 } = {}) {
   const fixture = accessRequestBaseline(runId);
   const siteSelect = await findTestSiteSelect(page);
@@ -35,6 +34,19 @@ export async function completeBaselineThroughStep4(page, {
   await waitForTransientLoading(page);
   await nextButton(page, 2).click();
   await expect(page.locator(STEP[3])).toBeVisible({ timeout: 30_000 });
+
+  return {
+    fixture,
+    siteSelectorId: await siteSelect.getAttribute('id'),
+  };
+}
+
+export async function completeBaselineThroughStep4(page, {
+  runId = process.env.ACCESS_RUN_ID,
+  qualificationPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf'),
+} = {}) {
+  const baseline = await reachAccessRequestStep3(page, { runId });
+  const { fixture } = baseline;
 
   await fillValues(page, {
     '#input_3_10': fixture.project.associatedLaanId,
@@ -86,8 +98,7 @@ export async function completeBaselineThroughStep4(page, {
   await expect(page.locator('#field_3_445')).toContainText(fixture.contractor.qualificationFile);
 
   return {
-    fixture,
-    siteSelectorId: await siteSelect.getAttribute('id'),
+    ...baseline,
     qualificationFieldId: await qualificationUpload.getAttribute('id'),
   };
 }

@@ -268,6 +268,7 @@ function summarizeCases(cases, { selectedCases, declaredCaseIds, prerequisites }
     plannedCases: coverage.matrixCases,
     implementedCases,
     automatedDeclarations: coverage.automatedDeclarations,
+    exploratoryProbes: coverage.exploratoryProbes,
     executableCases: coverage.executableCases,
     executedCases: executedCases.length,
     acceptancePasses: coverage.acceptancePasses,
@@ -298,6 +299,7 @@ function collectBlockers(cases, configuredBlockers) {
       reason: item.blockerReason ?? item.observed,
       caseIds: [],
     };
+    if (!blocker.owner && item.owner) blocker.owner = item.owner;
     if (!blocker.caseIds.includes(item.caseId)) blocker.caseIds.push(item.caseId);
     blockersById.set(blocker.id, blocker);
   }
@@ -441,6 +443,7 @@ export function consolidatePlaywrightReport(report, {
         viewport: environment.viewport ?? null,
         url: environment.url ?? null,
         commit: environment.commit ?? null,
+        trackedWorktreeDirty: environment.trackedWorktreeDirty ?? null,
         configuration,
       },
       expected: declared.title,
@@ -473,6 +476,7 @@ export function consolidatePlaywrightReport(report, {
       runId: firstCase.runId ?? null,
       targetUrl: environment.url ?? null,
       commit: environment.commit ?? null,
+      trackedWorktreeDirty: environment.trackedWorktreeDirty ?? null,
       configuration,
       browser: environment.browser ?? null,
       viewport: environment.viewport ?? null,

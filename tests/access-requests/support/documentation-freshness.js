@@ -1,4 +1,5 @@
 import { validateCapturedFieldMap } from './field-map-gate.js';
+import { EXPLORATORY_ACCESS_CASE_IDS } from './case-catalog.js';
 
 function validTimestamp(value) {
   const timestamp = Date.parse(value ?? '');
@@ -61,6 +62,53 @@ export function validateAccessDocumentation({ result, fieldMap, fieldRuleLedger,
     for (const [name, contents] of Object.entries(narratives)) {
       if (!String(contents).includes(`Current evidence run: \`${runId}\``)) {
         errors.push(`${name} does not reference current evidence run ${runId}.`);
+      }
+    }
+  }
+
+  return errors;
+}
+
+export function validateExploratoryDocumentation({ result, narratives = {} }) {
+  const errors = [];
+  const expectedIds = new Set(EXPLORATORY_ACCESS_CASE_IDS);
+  const cases = (result?.cases ?? []).filter((item) => expectedIds.has(item.caseId));
+  const actualIds = new Set(cases.map((item) => item.caseId));
+
+  if (result?.schemaVersion !== 2) errors.push('The exploratory result schema version 2 is required.');
+  if (result?.summary?.selectedCases !== expectedIds.size) {
+    errors.push(`The exploratory result must select ${expectedIds.size} cases.`);
+  }
+  if (result?.summary?.exploratoryProbes !== expectedIds.size) {
+    errors.push(`exploratoryProbes must equal ${expectedIds.size}.`);
+  }
+  if (result?.summary?.plannedOnlyCases !== expectedIds.size) {
+    errors.push(`The ${expectedIds.size} exploratory cases must remain planning-only.`);
+  }
+  for (const caseId of expectedIds) {
+    if (!actualIds.has(caseId)) errors.push(`The exploratory result is missing ${caseId}.`);
+  }
+  for (const item of cases) {
+    if (item.status === 'BLOCKED' && !item.owner) {
+      errors.push(`${item.caseId} is blocked without a responsible owner.`);
+    }
+    if (item.finalSubmissionAttempted === true) {
+      errors.push(`${item.caseId} recorded a prohibited final submission attempt.`);
+    }
+  }
+  if (result?.summary?.zeroSubmissionConfirmed !== true
+    || result?.safety?.finalSubmissionAttempted === true
+    || result?.safety?.finalSubmissionCompleted === true) {
+    errors.push('The exploratory result must confirm zero final submissions.');
+  }
+
+  const runId = result?.run?.runId;
+  if (!runId) {
+    errors.push('The exploratory result has no run ID.');
+  } else {
+    for (const [name, contents] of Object.entries(narratives)) {
+      if (!String(contents).includes(runId)) {
+        errors.push(`${name} does not reference focused evidence run ${runId}.`);
       }
     }
   }

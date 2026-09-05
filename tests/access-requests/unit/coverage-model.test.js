@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { ACCESS_CASE_CATALOG } from '../support/case-catalog.js';
+import {
+  ACCESS_CASE_CATALOG,
+  EXPLORATORY_ACCESS_CASE_IDS,
+} from '../support/case-catalog.js';
 import {
   ACCESS_BROWSER_CASE_IDS,
   ACCESS_COVERAGE_RECORDS,
@@ -50,6 +53,10 @@ test('keeps browser, derived, decision, and planned states mutually exclusive', 
   assert.equal(ACCESS_BROWSER_CASE_IDS.length, 34);
   assert.equal(Object.keys(ACCESS_DERIVED_CASE_SOURCES).length, 9);
   assert.equal(ACCESS_DECISION_BLOCKERS.length, 5);
+  assert.equal(EXPLORATORY_ACCESS_CASE_IDS.length, 16);
+  for (const caseId of EXPLORATORY_ACCESS_CASE_IDS) {
+    assert.equal(coverageRecordForCase(caseId).automation, 'planned');
+  }
 });
 
 test('maps derived evidence to executable source cases without cycles', () => {
@@ -81,6 +88,7 @@ test('reports truthful matrix and evidence-state counts', () => {
     matrixCases: 64,
     classifiedCases: 64,
     automatedDeclarations: 3,
+    exploratoryProbes: 0,
     executableCases: 3,
     executedCases: 3,
     acceptancePasses: 1,
@@ -90,4 +98,22 @@ test('reports truthful matrix and evidence-state counts', () => {
     decisionBlockers: 5,
     plannedCases: 16,
   });
+});
+
+test('counts exploratory declarations without promoting planned rules or blocked measurements', () => {
+  const summary = summarizeCoverage({
+    declaredCaseIds: ['TC-AR-P01', 'TC-AR-C01', 'TC-AR-X01', 'TC-AR-X03'],
+    cases: [
+      { caseId: 'TC-AR-P01', resultType: 'Characterization', status: 'PASS', executed: true },
+      { caseId: 'TC-AR-C01', resultType: 'Decision', status: 'BLOCKED', executed: true },
+      { caseId: 'TC-AR-X01', resultType: 'Decision', status: 'BLOCKED', executed: true },
+      { caseId: 'TC-AR-X03', resultType: 'Efficiency', status: 'BLOCKED', executed: true },
+    ],
+  });
+
+  assert.equal(summary.automatedDeclarations, 4);
+  assert.equal(summary.exploratoryProbes, 4);
+  assert.equal(summary.executedCases, 4);
+  assert.equal(summary.measurements, 0);
+  assert.equal(summary.plannedCases, 16);
 });

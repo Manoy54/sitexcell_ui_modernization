@@ -84,11 +84,17 @@ Coverage is risk-based rather than a Cartesian product:
 | Approved business rule | Expected behavior approved by the responsible owner | Acceptance gate |
 | Live observation | Reproducible current behavior without owner approval | Characterization only |
 | Measurement contract | Defined counting or timing method | Reports a value; capture alone is not a product pass |
-| Missing decision | Required authority, rule, data source, or safe environment is unavailable | Decision blocker; do not execute a browser test |
+| Missing decision | Required authority, rule, data source, or safe environment is unavailable | Decision blocker; do not exercise the decision-dependent behavior |
 
 Characterization becomes acceptance only after the expected behavior and owner
 are recorded. A product `FAIL` requires a passed prerequisite and a violation of
 an approved oracle.
+
+An observation-only browser probe may inventory whether a visible capability or
+prerequisite exists for a decision-gated case. It must not select real records,
+infer hidden semantics, or exercise an unapproved source-target action. The
+decision-dependent result remains `BLOCKED`, records the responsible owner, and
+is counted separately as an exploratory probe rather than approved coverage.
 
 ## 6. Representative scenarios
 
