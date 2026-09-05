@@ -58,7 +58,7 @@ async function captureLaanFields(page) {
   const pageOne = await visibleFieldInventory(page, '#gform_page_1_1');
   const activity = page.getByLabel(/What type of activity does this LAAN relate to/i);
   const commencement = page.getByLabel(/Proposed Commencement Date/i);
-  const site = page.getByLabel(/^Site name\*?$/i);
+  const site = page.getByLabel('Site name*', { exact: true });
   const terms = page.getByLabel(/terms and conditions/i);
   const next = page.getByRole('button', { name: /next/i }).first();
   const requiredControls = [activity, commencement, site, terms, next];
@@ -141,7 +141,9 @@ test(accessProbeTitle('TC-AR-X02', 'checks whether both suites share one synthet
       payloadPattern: LAAN_FINAL_PAYLOAD,
     });
     await openLaanObservation(page);
-    const laanSiteLabels = await visibleOptionLabels(page.getByLabel(/^Site name\*?$/i));
+    const laanSiteLabels = await visibleOptionLabels(
+      page.getByLabel('Site name*', { exact: true }),
+    );
     const laanSiteObserved = laanSiteLabels.includes(LAAN_TEST_SITE);
     expect(finalSubmissionAttempted()).toBe(false);
 
