@@ -9,6 +9,23 @@ import { requireCapturedStepsFieldMap } from './field-map-gate.js';
 import { installFinalSubmissionGuard } from './safety-guards.js';
 import { connectToAuthenticatedContext } from './session.js';
 
+export function classifyLiveCaseError(error, { step = null } = {}) {
+  const message = String(error?.message ?? error);
+  const status = error instanceof AccessRequestBlockedError ? 'BLOCKED' : 'FAIL';
+  return {
+    status,
+    observed: status === 'BLOCKED'
+      ? error.blockerReason ?? message
+      : message,
+    firstFailure: message,
+    stoppingPoint: status === 'BLOCKED'
+      ? 'Execution prerequisite'
+      : `Step ${step ?? 'unknown'} assertion`,
+    blockerId: status === 'BLOCKED' ? error.blockerId ?? null : null,
+    blockerReason: status === 'BLOCKED' ? error.blockerReason ?? message : null,
+  };
+}
+
 export async function runLiveAccessCase(testInfo, {
   caseId,
   resultType,
@@ -102,31 +119,28 @@ export async function runLiveAccessCase(testInfo, {
       });
       return outcome;
     } catch (error) {
-      const status = error instanceof AccessRequestBlockedError ? 'BLOCKED' : 'FAIL';
-      testInfo.annotations.push({ type: 'result-status', description: status });
+      const classification = classifyLiveCaseError(error, { step });
+      testInfo.annotations.push({ type: 'result-status', description: classification.status });
       await attachCaseResult(testInfo, page, {
         caseId,
         resultType,
-        status,
+        status: classification.status,
         startedAt,
         expected,
-        observed: status === 'BLOCKED'
-          ? error.blockerReason
-          : 'The live Access Request behavior did not satisfy the case expectation.',
-        firstFailure: String(error?.message ?? error),
-        stoppingPoint: status === 'BLOCKED'
-          ? 'Execution prerequisite'
-          : `Step ${step ?? 'unknown'} assertion`,
+        observed: classification.observed,
+        firstFailure: classification.firstFailure,
+        stoppingPoint: classification.stoppingPoint,
         finalSubmissionAttempted: await wasFinalSubmissionAttempted(),
         suiteWave,
         step,
         branch,
-        blockerId: status === 'BLOCKED' ? error.blockerId : null,
-        blockerReason: status === 'BLOCKED' ? error.blockerReason : null,
+        blockerId: classification.blockerId,
+        blockerReason: classification.blockerReason,
         timings,
         coveredSteps: evidenceCoveredSteps,
         extra: { progress: await captureAccessProgress(page) },
       });
+      if (classification.status === 'BLOCKED') return classification;
       throw error;
     }
   } finally {
