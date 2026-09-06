@@ -37,6 +37,22 @@ export function validateAccessDocumentation({ result, fieldMap, fieldRuleLedger,
     errors.push('The field/rule ledger field count does not match its rows.');
   }
 
+  const resultFieldMap = result?.run?.fieldMap;
+  const resultLedger = result?.run?.fieldRuleLedger;
+  if (resultFieldMap?.schemaVersion !== fieldMap?.schemaVersion
+    || resultFieldMap?.capturedAt !== fieldMap?.capturedAt
+    || resultFieldMap?.steps !== fieldMap?.steps?.length
+    || resultFieldMap?.controls !== fieldRuleLedger?.summary?.controls
+    || resultFieldMap?.fields !== fieldRuleLedger?.summary?.fields) {
+    errors.push('The consolidated result field-map metadata is not synchronized to the current field map.');
+  }
+  if (resultLedger?.schemaVersion !== fieldRuleLedger?.schemaVersion
+    || resultLedger?.sourceFieldMapCapturedAt !== fieldRuleLedger?.sourceFieldMapCapturedAt
+    || resultLedger?.technicalInventoryOnly !== fieldRuleLedger?.summary?.technicalInventoryOnly
+    || resultLedger?.evidenceBackedFields !== fieldRuleLedger?.summary?.evidenceBackedFields) {
+    errors.push('The consolidated result field/rule metadata is not synchronized to the current ledger.');
+  }
+
   const expectedSummary = {
     matrixCases: 64,
     classifiedCases: 64,
@@ -53,6 +69,11 @@ export function validateAccessDocumentation({ result, fieldMap, fieldRuleLedger,
   if (result?.safety?.finalSubmissionAttempted === true
     || result?.safety?.finalSubmissionCompleted === true) {
     errors.push('A final submission attempt or completion invalidates the safe evidence baseline.');
+  }
+  for (const item of result?.cases ?? []) {
+    if (item.status === 'BLOCKED' && item.executed !== false && !item.owner) {
+      errors.push(`${item.caseId} is blocked without a responsible owner.`);
+    }
   }
 
   const runId = result?.run?.runId;

@@ -1,6 +1,6 @@
 # Access Requests Steps 5–8 Test Implementation Plan
 
-Status: Unified test implementation completed; integrated evidence run recorded on 2026-09-02<br>
+Status: Unified test implementation completed; integrated evidence run recorded on 2026-09-06<br>
 Decision date: 2026-08-29<br>
 Scope owner: SiteXcell Access Requests testing<br>
 Implementation boundary: Automated test cases, evidence, findings, and recommendations only
@@ -87,18 +87,19 @@ The following decisions are approved for this plan:
 ### Integrated evidence superseding the pre-implementation baseline
 
 The authenticated Steps 1–8 field map and the guarded integrated run are now
-available. The current matrix contains 64 approved cases: 34 browser
-declarations, 9 derived evidence records, 5 decision-gated records, and 16
-planning-only cases. The integrated run executed 33 browser cases plus one
-readiness setup; five browser cases were direct blockers and six direct cases
-failed. Step 8 review was reached where the path allowed it, and the final
-Submit control and final Step 8 POST remained untouched.
+available. The current matrix contains 64 approved cases and 50 executable
+browser declarations. The final integrated run executed all 50 browser cases
+plus authentication and one readiness setup; it recorded 3 direct failures, 20
+executed blockers, and 1 NOT APPLICABLE outcome. Step 8 review was reached where
+the path allowed it, and the final Submit control and final Step 8 POST remained
+untouched.
 
 The 392-control technical inventory is intentionally not treated as approved
 behavior: all 264 grouped field/rule rows remain owner-review items until their
 business oracle, input contract, and evidence case are approved.
 
-The current repository contains executable live coverage for four core cases:
+The current repository contains executable live coverage for all 50 selected cases,
+including these four core cases:
 
 | Case | Current executable boundary |
 | --- | --- |
@@ -107,9 +108,9 @@ The current repository contains executable live coverage for four core cases:
 | `TC-AR-003` | Site-derived building context during the Step 1 to Step 2 transition |
 | `TC-AR-004` | Empty Step 1 validation |
 
-The latest documented revalidation states that these four cases passed. Before
-Step 5–8 implementation, that baseline must be reconciled with the stale portions
-of `test-summary.md`, the dashboard, and the latest stored report artifacts.
+The final run records these four core cases as passing. Direct failures remain
+limited to U04, R03, and A01; decision and capability blockers remain explicitly
+classified and owner-linked.
 
 Known gaps before implementation:
 
@@ -925,14 +926,14 @@ Implementation must proceed in this order:
 - [x] Implement and unit-test the consolidated result contract.
 - [x] Implement shared deterministic fixtures and traversal helpers.
 - [x] Implement `TC-AR-006` through Step 8 review; execution evidence is
-  recorded with its review-integrity failure.
+  recorded with the no-submit guard intact.
 - [x] Implement Step 5 branch and stale-state cases.
 - [x] Implement Step 6 decision-table and stale-state cases.
 - [x] Implement Step 7 upload and recovery cases.
 - [x] Implement Step 8 validation and review-integrity cases.
 - [x] Implement accessibility and responsive cases.
-- [ ] Capture efficiency evidence without making unsupported usability claims.
-- [ ] Run focused suites and core regression after each wave.
+- [x] Capture efficiency evidence without making unsupported usability claims.
+- [x] Run focused suites and core regression after each wave.
 - [x] Run the complete consolidated suite; the result records executed,
   failed, blocked, and not-applicable cases without inflating coverage.
 - [x] Produce sanitized results, findings, and recommendations.

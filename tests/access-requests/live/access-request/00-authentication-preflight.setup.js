@@ -35,6 +35,7 @@ test(accessCaseTitle('TC-AR-001', 'opens the authenticated Access Request withou
       finalSubmissionAttempted: false,
       blockerId: 'AUTH-AR-01',
       blockerReason,
+      owner: 'security/privacy + QA/reviewer',
       timings: { contextSetupMs: Date.now() - contextStartedAt },
       extra: { testSite: TEST_SITE },
     });
@@ -70,6 +71,7 @@ test(accessCaseTitle('TC-AR-001', 'opens the authenticated Access Request withou
       });
       throw new AccessRequestBlockedError(
         `Access Request execution blocked: ${availability.reason} Refresh the approved authenticated test session.`,
+        { blockerId: 'AUTH-AR-01', blockerReason: availability.reason, owner: 'security/privacy + QA/reviewer' },
       );
     }
 

@@ -376,6 +376,7 @@ export function consolidatePlaywrightReport(report, {
   findings = [],
   recommendations = [],
   blockers = [],
+  fieldMapMetadata = null,
 } = {}) {
   const extractedCases = extractCaseResults(report);
   const prerequisiteResults = extractPrerequisiteResults(report);
@@ -471,8 +472,7 @@ export function consolidatePlaywrightReport(report, {
     });
   }
   const materializedCases = materializeCoverageResults(normalizedCases);
-  return buildConsolidatedResult({
-    run: {
+  const run = {
       runId: firstCase.runId ?? null,
       targetUrl: environment.url ?? null,
       commit: environment.commit ?? null,
@@ -484,7 +484,26 @@ export function consolidatePlaywrightReport(report, {
       startedAt,
       completedAt,
       fixtureVersion,
-    },
+    };
+  if (fieldMapMetadata?.fieldMap) {
+    run.fieldMap = {
+      schemaVersion: fieldMapMetadata.fieldMap.schemaVersion ?? null,
+      capturedAt: fieldMapMetadata.fieldMap.capturedAt ?? null,
+      steps: fieldMapMetadata.fieldMap.steps?.length ?? 0,
+      controls: fieldMapMetadata.fieldRuleLedger?.summary?.controls ?? null,
+      fields: fieldMapMetadata.fieldRuleLedger?.summary?.fields ?? null,
+    };
+  }
+  if (fieldMapMetadata?.fieldRuleLedger) {
+    run.fieldRuleLedger = {
+      schemaVersion: fieldMapMetadata.fieldRuleLedger.schemaVersion ?? null,
+      sourceFieldMapCapturedAt: fieldMapMetadata.fieldRuleLedger.sourceFieldMapCapturedAt ?? null,
+      technicalInventoryOnly: fieldMapMetadata.fieldRuleLedger.summary?.technicalInventoryOnly ?? null,
+      evidenceBackedFields: fieldMapMetadata.fieldRuleLedger.summary?.evidenceBackedFields ?? null,
+    };
+  }
+  return buildConsolidatedResult({
+    run,
     cases: materializedCases,
     selectedCases: plannedCases ?? (declaredCaseIds.size || normalizedCases.length),
     declaredCaseIds: [...declaredCaseIds],

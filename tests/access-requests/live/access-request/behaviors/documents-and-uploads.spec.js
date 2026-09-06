@@ -42,8 +42,9 @@ async function requiredUploads(page) {
     throw new AccessRequestBlockedError(
       'Step 7 upload execution blocked: no required upload field was present in the captured branch.',
       {
-        blockerId: 'UPLOAD-FIELD-AR-01',
-        blockerReason: 'No required Step 7 upload field was present in the captured branch.',
+          blockerId: 'UPLOAD-FIELD-AR-01',
+          blockerReason: 'No required Step 7 upload field was present in the captured branch.',
+          owner: 'product/business + operations/data + QA/reviewer',
       },
     );
   }
@@ -116,7 +117,11 @@ test(accessCaseTitle('TC-AR-U03', 'rejects a disallowed synthetic file type'), a
     if (!eligibleIds.length) {
       throw new AccessRequestBlockedError(
         'Upload type rejection cannot be asserted because the live field declares no incompatible type.',
-        { blockerId: 'UPLOAD-RULE-AR-01', blockerReason: 'The live accepted-type contract is unavailable.' },
+        {
+          blockerId: 'UPLOAD-RULE-AR-01',
+          blockerReason: 'The live accepted-type contract is unavailable.',
+          owner: 'product/business + operations/data + QA/reviewer',
+        },
       );
     }
     const observations = [];
@@ -141,6 +146,7 @@ test(accessCaseTitle('TC-AR-U03', 'rejects a disallowed synthetic file type'), a
       blockerReason: missingContracts.length
         ? `${missingContracts.length} required upload controls have no declared accepted-type contract.`
         : null,
+      owner: missingContracts.length ? 'product/business + operations/data + QA/reviewer' : null,
       extra: { observations, missingContracts },
     };
   });
@@ -166,7 +172,11 @@ test(accessCaseTitle('TC-AR-U04', 'enforces the declared upload size boundary'),
     if (!eligible.length) {
       throw new AccessRequestBlockedError(
         'Upload size-boundary execution requires a declared live maximum.',
-        { blockerId: 'UPLOAD-RULE-AR-02', blockerReason: 'The live upload size limit is unavailable.' },
+        {
+          blockerId: 'UPLOAD-RULE-AR-02',
+          blockerReason: 'The live upload size limit is unavailable.',
+          owner: 'product/business + operations/data + QA/reviewer',
+        },
       );
     }
     const unsupported = boundaryContracts.filter((item) => !item.maximumBytes
@@ -222,6 +232,7 @@ test(accessCaseTitle('TC-AR-U04', 'enforces the declared upload size boundary'),
       blockerReason: unsupported.length
         ? `${unsupported.length} required upload controls lack a safely executable declared size boundary.`
         : null,
+      owner: unsupported.length ? 'product/business + operations/data + QA/reviewer' : null,
       extra: { boundaryContracts, observations, unsupported },
     };
   });
@@ -267,6 +278,7 @@ test(accessCaseTitle('TC-AR-U05', 'replaces a reviewed file without retaining th
       blockerReason: unassociated.length
         ? `${unassociated.length} required uploads expose no field-local review confirmation association.`
         : null,
+      owner: unassociated.length ? 'product/business + operations/data + QA/reviewer' : null,
       extra: { observations, unassociated },
     };
   });
@@ -320,6 +332,9 @@ test(accessCaseTitle('TC-AR-U06', 'removes a reviewed file and invalidates relat
         : unassociated.length
           ? `${unassociated.length} required uploads expose no field-local review confirmation association.`
           : null,
+      owner: missingRemovalControls.length || unassociated.length
+        ? 'product/business + operations/data + QA/reviewer'
+        : null,
       extra: { observations, missingRemovalControls, unassociated },
     };
   });
@@ -340,6 +355,7 @@ test(accessCaseTitle('TC-AR-D04', 'characterizes request-specific supporting doc
       throw new AccessRequestBlockedError('No request-specific document field was identified in the captured branch.', {
         blockerId: 'DOCUMENT-UI-AR-01',
         blockerReason: 'The request-specific document UI is absent or not identified in the captured branch.',
+        owner: 'product/business + operations/data + QA/reviewer',
       });
     }
     const evidence = [];

@@ -77,6 +77,7 @@ test(accessCaseTitle('TC-AR-R03', 'preserves unrelated state while correcting la
           {
             blockerId: 'VALIDATION-TARGET-AR-01',
             blockerReason: `No safely clearable completed required control was found on Step ${step}.`,
+            owner: 'product/business + QA/reviewer',
           },
         );
       }

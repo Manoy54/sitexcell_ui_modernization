@@ -35,6 +35,14 @@ if (!Number.isInteger(fixtureVersion) || fixtureVersion < 1) {
 }
 
 const report = JSON.parse(await readFile(reportPath, 'utf8'));
+const fieldMap = JSON.parse(await readFile(
+  resolve('docs/testing/access-request/steps-1-8-field-map.json'),
+  'utf8',
+));
+const fieldRuleLedger = JSON.parse(await readFile(
+  resolve('docs/testing/access-request/field-rule-ledger.json'),
+  'utf8',
+));
 let previous = {};
 try {
   previous = JSON.parse(await readFile(committedOutputPath, 'utf8'));
@@ -47,6 +55,7 @@ const consolidated = consolidatePlaywrightReport(report, {
   fixtureVersion,
   findings: previous.findings ?? [],
   recommendations: previous.recommendations ?? [],
+  fieldMapMetadata: { fieldMap, fieldRuleLedger },
 });
 const sanitized = sanitizeForCommit(consolidated);
 
@@ -57,3 +66,7 @@ await writeFile(committedOutputPath, `${JSON.stringify(sanitized, null, 2)}\n`);
 
 console.log(`Consolidated result: ${localOutputPath}`);
 console.log(`Sanitized committed result: ${committedOutputPath}`);
+
+if (consolidated.summary.waveStatus === 'BLOCKED') {
+  process.exitCode = 2;
+}

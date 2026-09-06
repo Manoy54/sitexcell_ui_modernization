@@ -14,11 +14,13 @@ export class AccessRequestBlockedError extends Error {
   constructor(message, {
     blockerId = 'AUTH-AR-01',
     blockerReason = message,
+    owner = null,
   } = {}) {
     super(message);
     this.name = 'AccessRequestBlockedError';
     this.blockerId = blockerId;
     this.blockerReason = blockerReason;
+    this.owner = owner;
   }
 }
 
@@ -54,6 +56,7 @@ export async function openAccessRequestForm(page) {
   if (!availability.available) {
     throw new AccessRequestBlockedError(
       `Access Request execution blocked: ${availability.reason} Refresh the approved authenticated test session.`,
+      { owner: 'security/privacy + QA/reviewer' },
     );
   }
 

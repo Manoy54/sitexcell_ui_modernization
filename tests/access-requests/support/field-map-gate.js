@@ -40,6 +40,6 @@ export function requireCapturedStepsFieldMap() {
     ?? `The authenticated Steps 1–8 field map is incomplete; missing steps: ${validation.missingSteps.join(', ') || 'none'}; empty steps: ${validation.emptySteps.join(', ') || 'none'}.`;
   throw new AccessRequestBlockedError(
     `Steps 1–8 execution blocked: ${blockerReason}`,
-    { blockerId, blockerReason },
+    { blockerId, blockerReason, owner: 'QA/reviewer + developer' },
   );
 }

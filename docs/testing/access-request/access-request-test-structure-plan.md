@@ -36,7 +36,7 @@ Prototype UI work remains outside this scope.
    prerequisites remain explicit blockers. A blocked case is not a pass.
 9. Existing case IDs, result schema, safety behavior, and command compatibility
    are preserved during migration.
-10. The 34 currently implemented browser cases are migrated first. The complete
+10. The 50 currently implemented browser cases are migrated first. The complete
     catalog of 64 cases remains the coverage source of truth; unimplemented
     cases remain catalog-only until their behavior and prerequisites exist.
 
@@ -220,12 +220,12 @@ remain as compatibility aliases while the migration is adopted.
 7. Update result consolidation and dashboard inputs only where needed to retain
    the existing result schema and add the new capability metadata. **Complete.**
 8. Run the full unit suite and compare the discovered case inventory against the
-   34-case browser manifest plus derived/decision records. **Complete: 35 unit tests pass; Playwright lists 34 browser cases.**
+   50-case browser manifest plus derived/decision records. **Complete: 44 unit tests pass; Playwright lists 50 browser cases.**
 9. Run a no-submission structural smoke check. **Complete: final-submit guards remain covered by unit tests.**
 10. Refresh the approved session and recapture the Steps 5–8 field map before
-    attempting live Steps 5–8 execution. **Pending external authentication.**
+    attempting live Steps 5–8 execution. **Complete: field map and guarded session evidence are current.**
 11. Run the full live suite and inspect both the raw Playwright report and the
-    sanitized committed result. **Pending external authentication.**
+    sanitized committed result. **Complete: final run 000143 is recorded.**
 
 No migration step may remove a case merely because its live prerequisite is
 blocked. Blocked evidence remains visible and attributable to its blocker.
@@ -234,7 +234,7 @@ blocked. Blocked evidence remains visible and attributable to its blocker.
 
 The migration is acceptable only when all of the following are true:
 
-- All 34 browser case IDs are discovered exactly once; 48 cases are accounted for when derived and decision records are included.
+- All 50 browser case IDs are discovered exactly once; the 64-case catalog remains accounted for across executable, derived, decision, and planning states.
 - The 64-case catalog remains internally consistent.
 - Every implemented case has non-empty step coverage.
 - `TC-AR-006` is discoverable as the canonical Step 1→Step 8 journey.
@@ -278,8 +278,8 @@ results as historical artifacts. Do not reset unrelated working-tree changes.
 ## 13. Approval boundary
 
 Implementation of this plan was approved on 2026-08-29 and is now applied. The
-current synchronized baseline is run `test-The-CRM-Carpenters-000088-20260902T044916697Z`:
-34 browser declarations, 48 accounted cases including derived/decision records,
-16 planning-only cases, and 35 passing unit tests. Any
+current synchronized baseline is run `test-The-CRM-Carpenters-000143-20260906T033946832Z`:
+50 browser declarations, 64 cataloged cases across executable/derived/decision/
+planning states, 16 planning-only cases, and 44 passing unit tests. Any
 future structural changes require a new reviewable plan or an explicit update
 to this decision record.

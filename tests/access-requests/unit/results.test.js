@@ -276,6 +276,23 @@ test('consolidates Playwright evidence without treating a partial run as complet
   const result = consolidatePlaywrightReport(report, {
     plannedCases: 17,
     fixtureVersion: 1,
+    fieldMapMetadata: {
+      fieldMap: {
+        schemaVersion: 2,
+        capturedAt: '2026-08-29T00:00:00.000Z',
+        steps: [{ step: 1 }, { step: 2 }],
+      },
+      fieldRuleLedger: {
+        schemaVersion: 1,
+        sourceFieldMapCapturedAt: '2026-08-29T00:00:00.000Z',
+        summary: {
+          controls: 12,
+          fields: 8,
+          technicalInventoryOnly: 8,
+          evidenceBackedFields: 0,
+        },
+      },
+    },
   });
 
   assert.equal(result.run.runId, caseWithEnvironment.runId);
@@ -297,6 +314,19 @@ test('consolidates Playwright evidence without treating a partial run as complet
   );
   assert.deepEqual(result.cases[0].coveredSteps, [1, 2, 3, 4, 5, 6, 7, 8]);
   assert.equal(result.run.completedAt, '2026-08-29T00:01:00.000Z');
+  assert.deepEqual(result.run.fieldMap, {
+    schemaVersion: 2,
+    capturedAt: '2026-08-29T00:00:00.000Z',
+    steps: 2,
+    controls: 12,
+    fields: 8,
+  });
+  assert.deepEqual(result.run.fieldRuleLedger, {
+    schemaVersion: 1,
+    sourceFieldMapCapturedAt: '2026-08-29T00:00:00.000Z',
+    technicalInventoryOnly: 8,
+    evidenceBackedFields: 0,
+  });
   assert.equal(result.summary.matrixCases, 64);
   assert.equal(result.summary.selectedCases, 17);
   assert.equal(result.summary.implementedCases, 48);

@@ -10,7 +10,17 @@ import { EXPLORATORY_ACCESS_CASE_IDS } from '../support/case-catalog.js';
 const runId = 'test-The-CRM-Carpenters-000080-20260902T021521360Z';
 const result = {
   schemaVersion: 2,
-  run: { runId, completedAt: '2026-09-02T02:50:05.000Z' },
+  run: {
+    runId,
+    completedAt: '2026-09-02T02:50:05.000Z',
+    fieldMap: { schemaVersion: 2, capturedAt: '2026-09-02T02:00:00.000Z', steps: 8, controls: 8, fields: 8 },
+    fieldRuleLedger: {
+      schemaVersion: 1,
+      sourceFieldMapCapturedAt: '2026-09-02T02:00:00.000Z',
+      technicalInventoryOnly: 8,
+      evidenceBackedFields: 0,
+    },
+  },
   summary: {
     matrixCases: 64,
     classifiedCases: 64,
@@ -29,7 +39,7 @@ const fieldMap = {
 const fieldRuleLedger = {
   schemaVersion: 1,
   sourceFieldMapCapturedAt: fieldMap.capturedAt,
-  summary: { fields: 8, controls: 8 },
+  summary: { fields: 8, controls: 8, technicalInventoryOnly: 8, evidenceBackedFields: 0 },
   rows: fieldMap.steps.map(({ step }) => ({ fieldKey: `step-${step}:field_${step}` })),
 };
 

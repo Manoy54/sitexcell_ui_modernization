@@ -8,6 +8,7 @@ test('classifies intentional live-case blockers without treating them as asserti
   const error = new AccessRequestBlockedError('Upload contract is unavailable.', {
     blockerId: 'UPLOAD-RULE-AR-01',
     blockerReason: 'The live accepted-type contract is unavailable.',
+    owner: 'product/business + QA',
   });
 
   assert.deepEqual(classifyLiveCaseError(error, { step: 7 }), {
@@ -17,6 +18,7 @@ test('classifies intentional live-case blockers without treating them as asserti
     stoppingPoint: 'Execution prerequisite',
     blockerId: 'UPLOAD-RULE-AR-01',
     blockerReason: 'The live accepted-type contract is unavailable.',
+    owner: 'product/business + QA',
   });
 });
 
@@ -30,5 +32,6 @@ test('preserves the exact assertion error for a real live-case failure', () => {
     stoppingPoint: 'Step 7 assertion',
     blockerId: null,
     blockerReason: null,
+    owner: null,
   });
 });

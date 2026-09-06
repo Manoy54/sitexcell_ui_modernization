@@ -24,15 +24,14 @@ The current analysis identifies:
   locator and network guards prohibit final submission
 - Final submission: prohibited in all automated runs
 
-Current execution note (2026-09-02): the complete serial 34-declaration baseline
-is synchronized to `test-The-CRM-Carpenters-000088-20260902T044916697Z` and
-reports 33 executed cases, 10 acceptance passes, 11 characterizations, 3
-measurements, 6 failures, 5 blocked cases, and 3 NOT APPLICABLE outcomes. Zero
-final submissions were attempted. The earlier 37-declaration later-step suite is
-implemented, but the latest guarded run redirected the target URL to the Co-Siter
-home page without rendering `#gform_3`. `AUTH-AR-01` blocked the preflight and 36
-dependent declarations did not run. The 2026-08-26 4/4 core pass remains the
-latest successful behavior evidence, not the current session state.
+Current execution note (2026-09-06): the complete serial 50-declaration baseline
+is synchronized to `test-The-CRM-Carpenters-000143-20260906T033946832Z` and
+reports 50 executed cases, 7 acceptance passes, 27 characterizations, 3
+measurements, 3 direct failures, 20 blocked cases, and 1 NOT APPLICABLE outcome.
+Zero final submissions were attempted. U04 and R03 reproduce unrelated upload
+state loss, A01 reproduces two keyboard-reachability failures, and the remaining
+blocked cases retain explicit owner/decision prerequisites. The current evidence
+does not authorize prototype business rules.
 
 The eight observed areas are:
 

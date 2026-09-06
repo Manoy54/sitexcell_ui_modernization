@@ -23,6 +23,7 @@ export function classifyLiveCaseError(error, { step = null } = {}) {
       : `Step ${step ?? 'unknown'} assertion`,
     blockerId: status === 'BLOCKED' ? error.blockerId ?? null : null,
     blockerReason: status === 'BLOCKED' ? error.blockerReason ?? message : null,
+    owner: status === 'BLOCKED' ? error.owner ?? null : null,
   };
 }
 
@@ -55,6 +56,7 @@ export async function runLiveAccessCase(testInfo, {
       finalSubmissionAttempted: false,
       blockerId: 'AUTH-AR-01',
       blockerReason,
+      owner: 'security/privacy + QA/reviewer',
       timings: { contextSetupMs: Date.now() - contextStartedAt },
     });
     throw new AccessRequestBlockedError(`Access Request execution blocked: ${blockerReason}`, {
@@ -136,6 +138,7 @@ export async function runLiveAccessCase(testInfo, {
         branch,
         blockerId: classification.blockerId,
         blockerReason: classification.blockerReason,
+        owner: classification.owner,
         timings,
         coveredSteps: evidenceCoveredSteps,
         extra: { progress: await captureAccessProgress(page) },
