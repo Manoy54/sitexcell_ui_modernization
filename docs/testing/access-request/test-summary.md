@@ -14,7 +14,7 @@ Status: Unified Steps 1–8 baseline executed with truthful PASS, FAIL, BLOCKED,
 - Technical field inventory: 392 captured controls grouped into 264 field/rule rows across Steps 1–8.
 - Field/rule evidence-backed rows: 0; all rows are explicitly `technical-inventory-only` pending owner approval.
 - Final-submit attempts: 0.
-- Unit coverage: 42 tests pass.
+- Unit coverage: 44 tests pass.
 
 The 16 exploratory declarations do not promote the person, copy/reuse, or
 cross-workflow cases to approved implementation. They record visible behavior
@@ -23,27 +23,29 @@ as characterization evidence and unavailable or unapproved behavior as
 
 ## Latest live run
 
-Current evidence run: `test-The-CRM-Carpenters-000124-20260905T080659244Z`
+Current evidence run: `test-The-CRM-Carpenters-000143-20260906T033946832Z`
 
-- Run ID: `test-The-CRM-Carpenters-000124-20260905T080659244Z`.
-- Date: 2026-09-05.
-- Scope: Complete serial 34-case Steps 1–8 browser declaration set.
+- Run ID: `test-The-CRM-Carpenters-000143-20260906T033946832Z`.
+- Date: 2026-09-06.
+- Scope: Complete serial 50-case Steps 1–8 browser declaration set plus authentication and Step 5 readiness prerequisites (51 Playwright entries).
 - Target: `https://co-siter.com.au/access-requests/`.
-- Result: `FAIL` because U04 and R03 reproduced live upload-state loss; six browser cases were blocked and one was not applicable.
-- Executable declarations: 34.
-- Executed browser cases: 32.
+- Result: `FAIL` because U04, R03, and A01 reproduced direct live behavior failures; 20 executed browser cases were blocked and one was not applicable.
+- Executable declarations: 50.
+- Executed browser cases: 50.
 - Acceptance passes: 7.
-- Characterizations: 21.
+- Characterizations: 27.
 - Measurements: 3.
-- Direct product/behavior failures: 2.
-- Browser blockers: 6.
+- Direct product/behavior failures: 3.
+- Browser blockers: 20.
 - NOT APPLICABLE outcomes: 1.
 - Final submission attempts: 0; Step 8 remained the maximum boundary.
 
 The run proves the harness, authentication, field-map freshness, serial gating,
 and final-submit guard. It does not establish backend acceptance or a clean
-product baseline. U04 and R03 remain reproducible live failures; derived E06
-and E09 inherit R03's failure without extra browser execution. Blockers are not
+product baseline. U04 and R03 reproduce unrelated upload-state loss; A01
+reproduces unreachable keyboard controls. A02 passes on this full run after a
+separate focused rerun also passed. Derived E06, E08, and E09 inherit the
+corresponding direct failures without extra browser execution. Blockers are not
 converted to failures or passes.
 
 ## Focused exploratory run
@@ -85,9 +87,11 @@ final submission and writes a sanitized focused consolidated result.
   associated with individual uploads. U06 is blocked because no user-facing
   removal action is identifiable. D04 is blocked because no request-specific
   document field is present in the captured branch.
-- R03 still fails because validation clears unrelated uploads. TC-AR-005 and
-  TC-AR-006 pass after their test-oracle corrections; B05 passes after the DNS
-  recovery rerun. No recommendation is approved solely from automated timing.
+- R03 still fails because validation clears unrelated uploads. A01 fails because
+  two radio controls are not keyboard reachable. A02, A03, A04, and A05 pass in
+  the final run. TC-AR-005 and TC-AR-006 pass after their test-oracle
+  corrections; B05 and B08 remain branch observations/blockers in the final
+  run. No recommendation is approved solely from automated timing.
 - The field/rule ledger prevents the captured DOM from being mistaken for
   approved business coverage; every row names an owner and blocker.
 
@@ -108,7 +112,7 @@ the tests should not be weakened to make those cases green.
 ## Prototype gate
 
 - Technical inventory complete: Yes, Steps 1–8.
-- Automated declarations complete for Phase 1 scope: Yes, 34 browser cases.
+- Automated declarations complete for Phase 1 scope: Yes, 50 browser cases.
 - Clean acceptance baseline: No.
 - Business-rule overlay complete: No.
 - Upload contracts complete: No.
@@ -117,7 +121,8 @@ the tests should not be weakened to make those cases green.
 ## Required next actions
 
 1. Fix or explicitly approve the live upload-state behavior exposed by U04 and
-   R03, then rerun those two cases.
+   R03, and the keyboard reachability issue exposed by A01; then rerun those
+   cases.
 2. Obtain owner approval for requiredness, upload contracts, document sources,
    review mappings, and persistence rules; populate the field/rule ledger.
 3. Re-run the full suite after corrections and require two consecutive clean

@@ -38,21 +38,23 @@ following form:
 
 `test-The-CRM-Carpenters-000001-<UTC timestamp>`
 
-## Current evidence run — 2026-09-05
+## Current evidence run — 2026-09-06
 
-Current evidence run: `test-The-CRM-Carpenters-000124-20260905T080659244Z`
+Current evidence run: `test-The-CRM-Carpenters-000143-20260906T033946832Z`
 
-The complete serial 34-declaration baseline executed against the approved
-authenticated session. It produced 32 executed browser cases, 7 acceptance
-passes, 21 characterizations, 3 measurements, 2 direct failures, 6 browser
-blockers, and 1 NOT APPLICABLE outcome. No final submission was attempted. The full
-Steps 1–8 field map and field/rule ledger are synchronized to this run.
+The complete serial 50-declaration baseline executed against the approved
+authenticated session, with authentication and Step 5 readiness prerequisites.
+It produced 50 executed browser cases, 7 acceptance passes, 27
+characterizations, 3 measurements, 3 direct failures, 20 browser blockers, and
+1 NOT APPLICABLE outcome. No final submission was attempted. The full Steps 1–8
+field map and field/rule ledger remain synchronized to the evidence baseline.
 
-U04 and R03 retain reproducible upload/state-preservation failures. B05 and
-B08 are blocked because the current branch did not expose mapped controllers;
-U03, U05, U06, and D04 remain explicit contract/UI blockers rather than product
-failures. Derived E06 and E09 inherit R03's failure without another browser
-traversal.
+U04 and R03 retain reproducible upload/state-preservation failures. A01 also
+fails because two radio controls were not keyboard reachable. A02 passed in the
+final run after a focused rerun also passed. B05 and B08 remain blocked because
+the current branch did not expose mapped controllers; U03, U05, U06, and D04
+remain explicit contract/UI blockers rather than product failures. Derived E06,
+E08, and E09 inherit direct failures without another browser traversal.
 
 Focused reruns: B05 passed in `test-The-CRM-Carpenters-000108-20260904T100021457Z`;
 TC-AR-006 and TC-AR-005 passed in `test-The-CRM-Carpenters-000111-20260904T100339097Z`

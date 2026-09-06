@@ -19,11 +19,11 @@ pass.
 
 ## Current execution evidence
 
-Current evidence run: `test-The-CRM-Carpenters-000124-20260905T080659244Z`
+Current evidence run: `test-The-CRM-Carpenters-000143-20260906T033946832Z`
 
-The complete serial 34-declaration baseline produced 32 executed browser cases:
-7 acceptance passes, 21 characterizations, 3 measurements, 2 direct failures,
-6 blocked browser cases, and 1 NOT APPLICABLE outcome. Zero final submissions occurred.
+The complete serial 50-declaration baseline produced 50 executed browser cases:
+7 acceptance passes, 27 characterizations, 3 measurements, 3 direct failures,
+20 blocked browser cases, and 1 NOT APPLICABLE outcome. Zero final submissions occurred.
 The synchronized field map is Steps 1–8; the field/rule ledger contains 264
 technical-inventory-only rows awaiting owner-approved business rules.
 
@@ -57,10 +57,10 @@ authentication and the resulting empty field map are the current live blockers.
 | `TC-AR-B02` | 1 | Network/emergency information variants. | Only applicable emergency/network controls participate in validation. | `PASS` current run |
 | `TC-AR-B03` | 5 | Nature of work, isolation, authority, permit, and special-access variants. | Each answer exposes the correct dependent controls without stale required values. | `PASS` current run |
 | `TC-AR-B04` | 4 | Contractor-count variants. | The correct number of contractor identity, induction, and qualification groups appears. | `PASS` current run |
-| `TC-AR-B05` | 6 | After-hours and high-risk-work variants. | Required safety details change with the selected risk branch. | `PASS` focused rerun 000108 after DNS recovery |
+| `TC-AR-B05` | 6 | After-hours and high-risk-work variants. | Required safety details change with the selected risk branch. | `BLOCKED` current run; focused rerun 000108 passed after DNS recovery |
 | `TC-AR-B06` | 6 | Rooftop/structure-access variants. | Access-specific questions and confirmations appear only when applicable. | `PASS` current run |
 | `TC-AR-B07` | 2 | Site-specific document requirements and acknowledgement. | Requirements match the selected Site and must be acknowledged before progression. | `PASS` current run |
-| `TC-AR-B08` | 1–7 | Change a controlling answer after entering dependent values. | Hidden/irrelevant values cannot remain silently submittable; still-relevant values persist. | `NOT APPLICABLE` current branch |
+| `TC-AR-B08` | 1–7 | Change a controlling answer after entering dependent values. | Hidden/irrelevant values cannot remain silently submittable; still-relevant values persist. | `BLOCKED` current branch; no populated dependent control was identified |
 
 Exact option-level branch cases must be added after the authenticated field map
 is recaptured. The branch families above are not evidence that every option is
@@ -72,12 +72,12 @@ already covered.
 | --- | --- | --- | --- | --- |
 | `TC-AR-R01` | Acceptance | Step back/next after valid entry. | Values persist without duplicate lookup or entry. | Derived from `TC-AR-005`; `PASS` focused rerun 000114 |
 | `TC-AR-R02` | Characterization | Reload on each approved step. | Lost/preserved values and recovery effort are recorded per step. | `PASS` current run |
-| `TC-AR-R03` | Acceptance | Correct a validation error. | Unrelated valid values survive and focus returns to actionable feedback. | `FAIL` focused rerun 000118; live files were cleared |
+| `TC-AR-R03` | Acceptance | Correct a validation error. | Unrelated valid values survive and focus returns to actionable feedback. | `FAIL` current run; `input_3_44` was cleared |
 | `TC-AR-R04` | Decision | Save and Continue Later lifecycle. | Ownership, expiry, access, privacy, restore, and discard rules are approved before execution. | Implemented explicit blocker — `DECISION-AR-DRAFT` |
 | `TC-AR-U01` | Acceptance | Omit a required upload. | Progression is blocked with an exact, associated message. | `PASS` current run |
 | `TC-AR-U02` | Acceptance | Upload an allowed synthetic file. | File is accepted and other entered values persist. | `PASS` current run |
 | `TC-AR-U03` | Acceptance | Upload a disallowed file type. | File is rejected safely with a specific message. | `BLOCKED` — no accepted-type contract |
-| `TC-AR-U04` | Acceptance | Upload at and above the size limit. | Boundary is enforced without clearing unrelated values. | `FAIL` focused rerun 000116; unrelated files were cleared |
+| `TC-AR-U04` | Acceptance | Upload at and above the size limit. | Boundary is enforced without clearing unrelated values. | `FAIL` current run; `input_3_128` and `input_3_42` were cleared |
 | `TC-AR-U05` | Acceptance | Replace a reviewed/confirmed file. | Replacement invalidates any review or confirmation tied to the previous file. | `BLOCKED` — no field-local confirmation association |
 | `TC-AR-U06` | Acceptance | Remove a reviewed/confirmed file. | Removal clears or invalidates the related confirmation/readiness state. | `BLOCKED` — no identifiable removal action |
 | `TC-AR-U07` | Acceptance | Recover from a safe, controlled upload failure. | Retry is possible and unrelated state is preserved. | Implemented explicit blocker — staging controls required |
@@ -101,7 +101,7 @@ already covered.
 | `TC-AR-E04` | Repeated document handling. | Upload/reference actions and document validity context. | Derived from E02; `PASS` |
 | `TC-AR-E05` | Steps/screens and backtracking. | Transition log for the same approved path. | Derived from E02; `PASS` |
 | `TC-AR-E06` | Validation corrections. | First failure retained; retry outcome recorded separately. | Derived from R03; `FAIL` |
-| `TC-AR-E07` | Desktop versus mobile effort. | Same fixture on approved desktop/phone/tablet viewports. | `FAIL` current run |
+| `TC-AR-E07` | Desktop versus mobile effort. | Same fixture on approved desktop/phone/tablet viewports. | `PASS` current run; measurement only |
 | `TC-AR-E08` | Keyboard interaction/friction. | Focus order, unreachable controls, and user-equivalent key count. | Derived from A01; `FAIL` |
 | `TC-AR-E09` | Data preservation after error. | Before/after field snapshot and recovery effort. | Derived from R03; `FAIL` |
 | `TC-AR-E10` | Manual repeat entry versus one-click copy. | Approved source/target pair and at least three comparable human sessions. | Implemented explicit blocker — copy behavior/human protocol unavailable |
@@ -111,7 +111,7 @@ already covered.
 | ID | Scenario | Expected result | Current status |
 | --- | --- | --- | --- |
 | `TC-AR-A01` | Keyboard-only approved path. | All critical controls are reachable in logical order with visible focus. | `FAIL` current run |
-| `TC-AR-A02` | Labels, names, and error association. | Controls have usable accessible names and errors identify/focus the affected field. | `FAIL` current run |
+| `TC-AR-A02` | Labels, names, and error association. | Controls have usable accessible names and errors identify/focus the affected field. | `PASS` current run; prior failure was not reproduced |
 | `TC-AR-A03` | Phone viewport `390×844`. | No horizontal overflow or unreachable critical control through the approved boundary. | `PASS` current run |
 | `TC-AR-A04` | Tablet viewport `768×1024`. | Same quality gates as desktop through the approved boundary. | `PASS` current run |
 | `TC-AR-A05` | 200% zoom and reduced motion. | Content remains operable/readable; motion preferences are respected where animation exists. | `PASS` current run |

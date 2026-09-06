@@ -44,21 +44,22 @@ This is the canonical evidence-backed findings register. Do not add a recommenda
 - Keep raw reports and authenticated artifacts out of this file.
 - Sanitize screenshots, copied values, and notes before committing.
 
-## Current execution note — 2026-09-05
+## Current execution note — 2026-09-06
 
-Current evidence run: `test-The-CRM-Carpenters-000124-20260905T080659244Z`
+Current evidence run: `test-The-CRM-Carpenters-000143-20260906T033946832Z`
 
-The complete serial baseline declared 34 browser cases and executed 32. It
-recorded two direct failures, six browser blockers, and one not-applicable
-outcome. Focused reruns reproduced upload/state loss in U04 and R03 after
-test-side corrections cleared B05 and TC-AR-005/006. No final submission was
+The complete serial baseline declared 50 browser cases and executed 50. It
+recorded three direct failures, 20 browser blockers, and one not-applicable
+outcome. The full run reproduced upload/state loss in U04 and R03 and keyboard
+reachability loss in A01. A02 passed in the final run. No final submission was
 attempted.
 
 The remaining live behavior is not silently promoted to a product finding:
 U04 clears unrelated Step 7 files `input_3_128` and `input_3_42` after an
-oversized-file rejection, while R03 clears `field_3_444` and `input_3_44` after
-validation. Both require product-owner confirmation of the intended upload
-retention contract before a finding is opened.
+oversized-file rejection, R03 clears `input_3_44` after validation, and A01
+reports `choice_3_356_0` and `choice_3_54_1` as not keyboard reachable. These
+require product-owner confirmation of the intended upload-retention and
+accessibility contracts before findings are opened.
 
 The upload and document gaps are recorded as blockers in the consolidated
 report: accepted type and size contracts are absent, upload confirmations are
