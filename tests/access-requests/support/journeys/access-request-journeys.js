@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import path from 'node:path';
 
-import { advanceFromStep, completeBaselineThroughStep4 } from '../access-request-path.js';
+import { completeBaselineThroughStep4 } from '../access-request-path.js';
 import { completeStepAndAdvance, completeVisibleRequiredControls } from '../required-controls.js';
 import { STEP } from '../selectors.js';
 
@@ -9,8 +9,7 @@ const defaultUploadPath = path.resolve('tests/access-requests/fixtures/synthetic
 
 export async function startAtStep5(page, { uploadPath = defaultUploadPath } = {}) {
   const baseline = await completeBaselineThroughStep4(page, { qualificationPath: uploadPath });
-  await completeVisibleRequiredControls(page, 4, { uploadPath });
-  await advanceFromStep(page, 4);
+  await completeStepAndAdvance(page, 4, { uploadPath });
   return baseline;
 }
 
