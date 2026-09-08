@@ -19,7 +19,7 @@ pass.
 
 ## Current execution evidence
 
-Current evidence run: `test-The-CRM-Carpenters-000154-20260908T061810213Z`
+Current evidence run: `test-The-CRM-Carpenters-000157-20260908T093433695Z`
 
 The complete serial 50-declaration baseline produced 50 executed browser cases:
 49 raw Playwright passes and 2 raw failures; the classified result contains 7

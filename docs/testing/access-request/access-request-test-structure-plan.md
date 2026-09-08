@@ -225,7 +225,7 @@ remain as compatibility aliases while the migration is adopted.
 10. Refresh the approved session and recapture the Steps 5–8 field map before
     attempting live Steps 5–8 execution. **Complete: field map and guarded session evidence are current.**
 11. Run the full live suite and inspect both the raw Playwright report and the
-sanitized committed result. **Complete: final run 000154 is recorded.**
+    sanitized committed result. **Complete: final run 000157 is recorded.**
 
 No migration step may remove a case merely because its live prerequisite is
 blocked. Blocked evidence remains visible and attributable to its blocker.
@@ -278,7 +278,7 @@ results as historical artifacts. Do not reset unrelated working-tree changes.
 ## 13. Approval boundary
 
 Implementation of this plan was approved on 2026-08-29 and is now applied. The
-current synchronized baseline is run `test-The-CRM-Carpenters-000154-20260908T061810213Z`:
+current synchronized baseline is run `test-The-CRM-Carpenters-000157-20260908T093433695Z`:
 50 browser declarations, 64 cataloged cases across executable/derived/decision/
 planning states, 16 planning-only cases, and 47 passing unit tests. Any
 future structural changes require a new reviewable plan or an explicit update

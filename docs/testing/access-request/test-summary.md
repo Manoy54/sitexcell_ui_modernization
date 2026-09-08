@@ -14,7 +14,7 @@ Status: Unified Steps 1–8 baseline executed with truthful PASS, FAIL, BLOCKED,
 - Technical field inventory: 392 captured controls grouped into 264 field/rule rows across Steps 1–8.
 - Field/rule evidence-backed rows: 0; all rows are explicitly `technical-inventory-only` pending owner approval.
 - Final-submit attempts: 0.
-- Unit coverage: 46 tests pass.
+- Unit coverage: 47 tests pass.
 
 The 16 exploratory declarations do not promote the person, copy/reuse, or
 cross-workflow cases to approved implementation. They record visible behavior
@@ -23,9 +23,9 @@ as characterization evidence and unavailable or unapproved behavior as
 
 ## Latest live run
 
-Current evidence run: `test-The-CRM-Carpenters-000154-20260908T061810213Z`
+Current evidence run: `test-The-CRM-Carpenters-000157-20260908T093433695Z`
 
-- Run ID: `test-The-CRM-Carpenters-000154-20260908T061810213Z`.
+- Run ID: `test-The-CRM-Carpenters-000157-20260908T093433695Z`.
 - Date: 2026-09-08.
 - Scope: Complete serial 50-case Steps 1–8 browser declaration set plus authentication and Step 5 readiness prerequisites (51 Playwright entries).
 - Target: `https://co-siter.com.au/access-requests/`.

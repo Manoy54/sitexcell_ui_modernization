@@ -25,7 +25,7 @@ The current analysis identifies:
 - Final submission: prohibited in all automated runs
 
 Current execution note (2026-09-08): the complete serial 50-declaration baseline
-is synchronized to `test-The-CRM-Carpenters-000154-20260908T061810213Z` and
+is synchronized to `test-The-CRM-Carpenters-000157-20260908T093433695Z` and
 reports 50 executed cases, 7 acceptance passes, 27 characterizations, 3
 measurements, 2 direct failures, 20 blocked cases, and 1 NOT APPLICABLE outcome.
 Zero final submissions were attempted. U04 and R03 reproduce unrelated upload

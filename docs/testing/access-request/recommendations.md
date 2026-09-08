@@ -41,7 +41,7 @@ Prioritize correctness and safety first, then user/operational impact, evidence 
 
 ## Current execution note — 2026-09-08
 
-Current evidence run: `test-The-CRM-Carpenters-000154-20260908T061810213Z`
+Current evidence run: `test-The-CRM-Carpenters-000157-20260908T093433695Z`
 
 Focused evidence run: `test-The-CRM-Carpenters-000134-20260905T141421125Z`
 

@@ -46,7 +46,7 @@ This is the canonical evidence-backed findings register. Do not add a recommenda
 
 ## Current execution note — 2026-09-08
 
-Current evidence run: `test-The-CRM-Carpenters-000154-20260908T061810213Z`
+Current evidence run: `test-The-CRM-Carpenters-000157-20260908T093433695Z`
 
 The complete serial baseline declared 50 browser cases and executed 50. It
 recorded two direct failures, 20 browser blockers, and one not-applicable
