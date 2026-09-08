@@ -89,7 +89,7 @@ The following decisions are approved for this plan:
 The authenticated Steps 1–8 field map and the guarded integrated run are now
 available. The current matrix contains 64 approved cases and 50 executable
 browser declarations. The final integrated run executed all 50 browser cases
-plus authentication and one readiness setup; it recorded 3 direct failures, 20
+plus authentication and one readiness setup; it recorded 2 direct failures, 20
 executed blockers, and 1 NOT APPLICABLE outcome. Step 8 review was reached where
 the path allowed it, and the final Submit control and final Step 8 POST remained
 untouched.
@@ -109,7 +109,7 @@ including these four core cases:
 | `TC-AR-004` | Empty Step 1 validation |
 
 The final run records these four core cases as passing. Direct failures remain
-limited to U04, R03, and A01; decision and capability blockers remain explicitly
+limited to U04 and R03; R02 and A01 pass after test-harness refinements, while decision and capability blockers remain explicitly
 classified and owner-linked.
 
 Known gaps before implementation:

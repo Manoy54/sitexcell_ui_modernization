@@ -24,12 +24,12 @@ The current analysis identifies:
   locator and network guards prohibit final submission
 - Final submission: prohibited in all automated runs
 
-Current execution note (2026-09-06): the complete serial 50-declaration baseline
-is synchronized to `test-The-CRM-Carpenters-000143-20260906T033946832Z` and
+Current execution note (2026-09-08): the complete serial 50-declaration baseline
+is synchronized to `test-The-CRM-Carpenters-000154-20260908T061810213Z` and
 reports 50 executed cases, 7 acceptance passes, 27 characterizations, 3
-measurements, 3 direct failures, 20 blocked cases, and 1 NOT APPLICABLE outcome.
+measurements, 2 direct failures, 20 blocked cases, and 1 NOT APPLICABLE outcome.
 Zero final submissions were attempted. U04 and R03 reproduce unrelated upload
-state loss, A01 reproduces two keyboard-reachability failures, and the remaining
+state loss; R02 and A01 pass after test-harness refinements, and the remaining
 blocked cases retain explicit owner/decision prerequisites. The current evidence
 does not authorize prototype business rules.
 

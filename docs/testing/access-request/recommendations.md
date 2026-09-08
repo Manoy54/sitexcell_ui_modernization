@@ -39,17 +39,17 @@ Recommendations become prototype requirements only after evidence and business a
 
 Prioritize correctness and safety first, then user/operational impact, evidence confidence, effort, and dependency readiness. Do not approve a recommendation that silently changes a business rule or data owner.
 
-## Current execution note — 2026-09-06
+## Current execution note — 2026-09-08
 
-Current evidence run: `test-The-CRM-Carpenters-000143-20260906T033946832Z`
+Current evidence run: `test-The-CRM-Carpenters-000154-20260908T061810213Z`
 
 Focused evidence run: `test-The-CRM-Carpenters-000134-20260905T141421125Z`
 
 The baseline is synchronized and reproducible, but no recommendation is
 approved yet. The refined harness now records intentional blockers without
 turning them into unexpected Playwright failures. U04 and R03 still require
-product-owner triage for collateral upload loss after server-side validation;
-A01 requires accessibility triage for two unreachable radio controls. The
+product-owner triage for collateral upload loss after server-side validation.
+The A01 helper correction and R02 timeout refinement are validated. The
 field/rule ledger contains 264 technical-inventory-only rows awaiting owner
 decisions; recommendations must preserve required data, ownership, and the Step
 8 no-submit boundary.

@@ -220,12 +220,12 @@ remain as compatibility aliases while the migration is adopted.
 7. Update result consolidation and dashboard inputs only where needed to retain
    the existing result schema and add the new capability metadata. **Complete.**
 8. Run the full unit suite and compare the discovered case inventory against the
-   50-case browser manifest plus derived/decision records. **Complete: 44 unit tests pass; Playwright lists 50 browser cases.**
+50-case browser manifest plus derived/decision records. **Complete: 47 unit tests pass; Playwright lists 50 browser cases.**
 9. Run a no-submission structural smoke check. **Complete: final-submit guards remain covered by unit tests.**
 10. Refresh the approved session and recapture the Steps 5–8 field map before
     attempting live Steps 5–8 execution. **Complete: field map and guarded session evidence are current.**
 11. Run the full live suite and inspect both the raw Playwright report and the
-    sanitized committed result. **Complete: final run 000143 is recorded.**
+sanitized committed result. **Complete: final run 000154 is recorded.**
 
 No migration step may remove a case merely because its live prerequisite is
 blocked. Blocked evidence remains visible and attributable to its blocker.
@@ -278,8 +278,8 @@ results as historical artifacts. Do not reset unrelated working-tree changes.
 ## 13. Approval boundary
 
 Implementation of this plan was approved on 2026-08-29 and is now applied. The
-current synchronized baseline is run `test-The-CRM-Carpenters-000143-20260906T033946832Z`:
+current synchronized baseline is run `test-The-CRM-Carpenters-000154-20260908T061810213Z`:
 50 browser declarations, 64 cataloged cases across executable/derived/decision/
-planning states, 16 planning-only cases, and 44 passing unit tests. Any
+planning states, 16 planning-only cases, and 47 passing unit tests. Any
 future structural changes require a new reviewable plan or an explicit update
 to this decision record.

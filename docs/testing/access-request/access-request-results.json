@@ -1,9 +1,9 @@
 {
   "schemaVersion": 2,
   "run": {
-    "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+    "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
     "targetUrl": "https://co-siter.com.au/access-requests/",
-    "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+    "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
     "trackedWorktreeDirty": true,
     "configuration": "tests/access-requests/configs/playwright.access-request.config.js",
     "browser": "Microsoft Edge",
@@ -12,9 +12,22 @@
       "height": 720
     },
     "accountClassification": "approved authenticated session",
-    "startedAt": "2026-09-06T03:39:48.673Z",
-    "completedAt": "2026-09-06T04:27:11.249Z",
-    "fixtureVersion": 1
+    "startedAt": "2026-09-08T06:18:12.907Z",
+    "completedAt": "2026-09-08T07:17:39.735Z",
+    "fixtureVersion": 1,
+    "fieldMap": {
+      "schemaVersion": 2,
+      "capturedAt": "2026-09-02T03:55:10.624Z",
+      "steps": 8,
+      "controls": 392,
+      "fields": 264
+    },
+    "fieldRuleLedger": {
+      "schemaVersion": 1,
+      "sourceFieldMapCapturedAt": "2026-09-02T03:55:10.624Z",
+      "technicalInventoryOnly": 264,
+      "evidenceBackedFields": 0
+    }
   },
   "summary": {
     "matrixCases": 64,
@@ -32,8 +45,8 @@
     "derivedResults": 9,
     "decisionBlockers": 5,
     "plannedOnlyCases": 16,
-    "passed": 26,
-    "failed": 3,
+    "passed": 27,
+    "failed": 2,
     "blocked": 20,
     "inconclusive": 0,
     "notApplicable": 1,
@@ -66,7 +79,7 @@
         1
       ],
       "branch": null,
-      "durationMs": 8931,
+      "durationMs": 6324,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -74,7 +87,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -150,10 +163,10 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2480,
-        "availabilityCheckMs": 6144
+        "contextSetupMs": 642,
+        "availabilityCheckMs": 5177
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 1",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -164,9 +177,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:39:58.449Z",
+      "capturedAt": "2026-09-08T06:18:20.402Z",
       "testFile": "live/access-request/00-authentication-preflight.setup.js"
     },
     {
@@ -186,7 +199,7 @@
         3
       ],
       "branch": "copy-individual",
-      "durationMs": 21367,
+      "durationMs": 19341,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -194,7 +207,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -218,12 +231,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2470,
+        "contextSetupMs": 803,
         "prerequisiteCheckMs": 3,
-        "openFormMs": 5792,
-        "exerciseMs": 12970
+        "openFormMs": 5094,
+        "exerciseMs": 13093
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 copy-individual UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -234,9 +247,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:40:20.818Z",
+      "capturedAt": "2026-09-08T06:18:41.195Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -256,7 +269,7 @@
         3
       ],
       "branch": "copy-address",
-      "durationMs": 23973,
+      "durationMs": 18458,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -264,7 +277,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -288,12 +301,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2152,
+        "contextSetupMs": 249,
         "prerequisiteCheckMs": 2,
-        "openFormMs": 7828,
-        "exerciseMs": 13873
+        "openFormMs": 5131,
+        "exerciseMs": 12709
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 copy-address UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -304,9 +317,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:40:45.123Z",
+      "capturedAt": "2026-09-08T06:19:00.330Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -326,7 +339,7 @@
         3
       ],
       "branch": "copy-company-contact",
-      "durationMs": 18024,
+      "durationMs": 23101,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -334,7 +347,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -358,12 +371,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2180,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5706,
-        "exerciseMs": 10017
+        "contextSetupMs": 248,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5465,
+        "exerciseMs": 16464
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 copy-company-contact UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -374,9 +387,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:41:03.466Z",
+      "capturedAt": "2026-09-08T06:19:24.102Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -396,7 +409,7 @@
         3
       ],
       "branch": "copy-value-match",
-      "durationMs": 18609,
+      "durationMs": 18648,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -404,7 +417,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -428,12 +441,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2177,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5654,
-        "exerciseMs": 10659
+        "contextSetupMs": 292,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 4972,
+        "exerciseMs": 12497
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 copy-value-match UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -444,9 +457,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:41:22.384Z",
+      "capturedAt": "2026-09-08T06:19:43.351Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -466,7 +479,7 @@
         3
       ],
       "branch": "copy-editability",
-      "durationMs": 20539,
+      "durationMs": 22381,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -474,7 +487,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -498,12 +511,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2166,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6825,
-        "exerciseMs": 11428
+        "contextSetupMs": 254,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 8938,
+        "exerciseMs": 12166
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 copy-editability UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -514,9 +527,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:41:43.223Z",
+      "capturedAt": "2026-09-08T06:20:06.364Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -536,7 +549,7 @@
         3
       ],
       "branch": "copy-source-isolation",
-      "durationMs": 18462,
+      "durationMs": 18902,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -544,7 +557,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -568,12 +581,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2172,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5974,
-        "exerciseMs": 10196
+        "contextSetupMs": 262,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5891,
+        "exerciseMs": 11849
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 copy-source-isolation UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -584,9 +597,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:42:02.005Z",
+      "capturedAt": "2026-09-08T06:20:25.954Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -606,7 +619,7 @@
         3
       ],
       "branch": "copy-unrelated-preservation",
-      "durationMs": 22745,
+      "durationMs": 17513,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -614,7 +627,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -638,12 +651,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2150,
+        "contextSetupMs": 257,
         "prerequisiteCheckMs": 2,
-        "openFormMs": 7424,
-        "exerciseMs": 13035
+        "openFormMs": 5205,
+        "exerciseMs": 11836
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 copy-unrelated-preservation UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -654,9 +667,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:42:25.079Z",
+      "capturedAt": "2026-09-08T06:20:44.145Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -676,7 +689,7 @@
         3
       ],
       "branch": "copy-forbidden-reuse",
-      "durationMs": 19809,
+      "durationMs": 18439,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -684,7 +697,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -708,12 +721,12 @@
       "blockerReason": "No explicitly labelled copy or reuse control is visible on Step 3.",
       "owner": "product/business",
       "timings": {
-        "contextSetupMs": 2161,
-        "prerequisiteCheckMs": 1,
-        "openFormMs": 5863,
-        "exerciseMs": 11626
+        "contextSetupMs": 240,
+        "prerequisiteCheckMs": 2,
+        "openFormMs": 5179,
+        "exerciseMs": 12095
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 copy-forbidden-reuse UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -724,9 +737,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:42:45.184Z",
+      "capturedAt": "2026-09-08T06:21:03.705Z",
       "testFile": "live/access-request/behaviors/copy-and-reuse.spec.js"
     },
     {
@@ -746,7 +759,7 @@
         1
       ],
       "branch": "cross-workflow-semantic-candidates",
-      "durationMs": 12354,
+      "durationMs": 10166,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -754,7 +767,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/laan-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -965,12 +978,12 @@
       "blockerReason": "Candidate labels are externally observable, but authoritative semantic mappings and source ownership are not approved.",
       "owner": "product/business + operations/data",
       "timings": {
-        "contextSetupMs": 2158,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5362,
-        "exerciseMs": 4717
+        "contextSetupMs": 259,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5310,
+        "exerciseMs": 4389
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "LAAN Step 1 after cross-workflow field inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -981,9 +994,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:42:57.873Z",
+      "capturedAt": "2026-09-08T06:21:14.521Z",
       "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
     },
     {
@@ -1003,7 +1016,7 @@
         1
       ],
       "branch": "cross-workflow-site-context",
-      "durationMs": 12684,
+      "durationMs": 10380,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1011,7 +1024,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/laan-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1037,12 +1050,12 @@
       "blockerReason": "The visible Access Request and LAAN suites do not expose the same dedicated synthetic Site label.",
       "owner": "product/business + operations/data + QA",
       "timings": {
-        "contextSetupMs": 2149,
-        "prerequisiteCheckMs": 1,
-        "openFormMs": 5228,
-        "exerciseMs": 5194
+        "contextSetupMs": 265,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5344,
+        "exerciseMs": 4577
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "LAAN Step 1 after visible Site-label comparison",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1053,9 +1066,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:43:10.714Z",
+      "capturedAt": "2026-09-08T06:21:25.155Z",
       "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
     },
     {
@@ -1075,7 +1088,7 @@
         1
       ],
       "branch": "cross-workflow-duplicate-entry",
-      "durationMs": 13506,
+      "durationMs": 9848,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1083,7 +1096,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/laan-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1129,12 +1142,12 @@
       "blockerReason": "A shared fixture and approved comparable human-effort protocol are unavailable.",
       "owner": "product/business + operations/data + QA",
       "timings": {
-        "contextSetupMs": 2149,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6563,
-        "exerciseMs": 4675
+        "contextSetupMs": 287,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5015,
+        "exerciseMs": 4333
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "LAAN Step 1 after duplicate-entry candidate inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1145,9 +1158,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:43:24.377Z",
+      "capturedAt": "2026-09-08T06:21:35.285Z",
       "testFile": "live/access-request/behaviors/cross-workflow.spec.js"
     },
     {
@@ -1166,7 +1179,7 @@
         1
       ],
       "branch": "tenure-confirmation",
-      "durationMs": 19873,
+      "durationMs": 16476,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1174,7 +1187,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1197,12 +1210,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2158,
+        "contextSetupMs": 266,
         "prerequisiteCheckMs": 0,
-        "openFormMs": 6866,
-        "exerciseMs": 10720
+        "openFormMs": 4739,
+        "exerciseMs": 10520
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 2 after tenure branch validation",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1213,9 +1226,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:43:44.413Z",
+      "capturedAt": "2026-09-08T06:21:52.067Z",
       "testFile": "live/access-request/behaviors/early-conditional-branches.spec.js"
     },
     {
@@ -1234,7 +1247,7 @@
         1
       ],
       "branch": "emergency-network-information",
-      "durationMs": 9324,
+      "durationMs": 6882,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1242,7 +1255,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1280,12 +1293,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2164,
+        "contextSetupMs": 247,
         "prerequisiteCheckMs": 0,
-        "openFormMs": 6179,
-        "exerciseMs": 860
+        "openFormMs": 4999,
+        "exerciseMs": 1411
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 1 after both emergency/network variants",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1296,9 +1309,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:43:54.060Z",
+      "capturedAt": "2026-09-08T06:21:59.619Z",
       "testFile": "live/access-request/behaviors/early-conditional-branches.spec.js"
     },
     {
@@ -1317,7 +1330,7 @@
         2
       ],
       "branch": "site-document-requirements",
-      "durationMs": 25987,
+      "durationMs": 22138,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1325,7 +1338,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1346,12 +1359,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2164,
+        "contextSetupMs": 252,
         "prerequisiteCheckMs": 0,
-        "openFormMs": 8280,
-        "exerciseMs": 15414
+        "openFormMs": 5438,
+        "exerciseMs": 16233
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 after Site-specific requirement acknowledgement",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1362,9 +1375,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:44:20.209Z",
+      "capturedAt": "2026-09-08T06:22:22.087Z",
       "testFile": "live/access-request/behaviors/early-conditional-branches.spec.js"
     },
     {
@@ -1383,7 +1396,7 @@
         1
       ],
       "branch": null,
-      "durationMs": 13319,
+      "durationMs": 11278,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1391,7 +1404,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1415,7 +1428,7 @@
       "blockerReason": null,
       "owner": null,
       "timings": {},
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 1 after required-field validation",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1426,9 +1439,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:44:33.937Z",
+      "capturedAt": "2026-09-08T06:22:34.178Z",
       "testFile": "live/access-request/behaviors/entry-validation-and-context.spec.js"
     },
     {
@@ -1448,7 +1461,7 @@
         2
       ],
       "branch": null,
-      "durationMs": 16232,
+      "durationMs": 12061,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1456,7 +1469,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1479,7 +1492,7 @@
       "blockerReason": null,
       "owner": null,
       "timings": {},
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 2 after Step 1 transition",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1490,9 +1503,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:44:50.202Z",
+      "capturedAt": "2026-09-08T06:22:46.306Z",
       "testFile": "live/access-request/behaviors/entry-validation-and-context.spec.js"
     },
     {
@@ -1514,7 +1527,7 @@
         4
       ],
       "branch": null,
-      "durationMs": 28094,
+      "durationMs": 30077,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1522,13 +1535,13 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "site": "The CRM Carpenters Test",
       "buildingAddress": "The CRM Carpenters Test Building, Redbank, QLD, 4301",
-      "requiredUploadField": "html5_1k1qd41681f9q1qb42db7v6oai3",
+      "requiredUploadField": "html5_1k1vqulv7h701i3rafb1thjrg3",
       "qualificationFile": "synthetic-access-document.pdf",
       "contractor": {
         "name": "Contractor One",
@@ -1551,7 +1564,7 @@
       "blockerReason": null,
       "owner": null,
       "timings": {},
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 4 after contractor details and qualification upload",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1562,9 +1575,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:45:18.361Z",
+      "capturedAt": "2026-09-08T06:23:16.431Z",
       "testFile": "live/access-request/behaviors/entry-validation-and-context.spec.js"
     },
     {
@@ -1584,7 +1597,7 @@
         3
       ],
       "branch": "first-time-person-entry",
-      "durationMs": 20260,
+      "durationMs": 20125,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1592,7 +1605,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1619,12 +1632,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2212,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5489,
-        "exerciseMs": 12419
+        "contextSetupMs": 253,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 5199,
+        "exerciseMs": 14464
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 after synthetic first-time person entry",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1635,9 +1648,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:45:38.677Z",
+      "capturedAt": "2026-09-08T06:23:36.613Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1657,7 +1670,7 @@
         3
       ],
       "branch": "returning-person-source",
-      "durationMs": 20389,
+      "durationMs": 18429,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1665,7 +1678,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1689,12 +1702,12 @@
       "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
       "owner": "product/business + operations/data",
       "timings": {
-        "contextSetupMs": 2170,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5258,
-        "exerciseMs": 12834
+        "contextSetupMs": 294,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5522,
+        "exerciseMs": 12300
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 returning-person UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1705,9 +1718,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:45:59.407Z",
+      "capturedAt": "2026-09-08T06:23:55.773Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1727,7 +1740,7 @@
         3
       ],
       "branch": "known-person-details",
-      "durationMs": 19071,
+      "durationMs": 17809,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1735,7 +1748,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1759,12 +1772,12 @@
       "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
       "owner": "product/business + operations/data",
       "timings": {
-        "contextSetupMs": 2161,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5360,
-        "exerciseMs": 11392
+        "contextSetupMs": 280,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 4999,
+        "exerciseMs": 11638
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 known-person source inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1775,9 +1788,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:46:18.809Z",
+      "capturedAt": "2026-09-08T06:24:14.225Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1797,7 +1810,7 @@
         3
       ],
       "branch": "edit-person-details",
-      "durationMs": 20698,
+      "durationMs": 21200,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1805,7 +1818,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1829,12 +1842,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2167,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6226,
-        "exerciseMs": 12184
+        "contextSetupMs": 279,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5003,
+        "exerciseMs": 15706
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 after editing synthetic person details",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1845,9 +1858,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:46:39.821Z",
+      "capturedAt": "2026-09-08T06:24:36.013Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1867,7 +1880,7 @@
         3
       ],
       "branch": "same-person-role-reuse",
-      "durationMs": 17610,
+      "durationMs": 17639,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1875,7 +1888,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1899,12 +1912,12 @@
       "blockerReason": "No approved returning-person source, identity authority, freshness rule, or role-reuse contract is available.",
       "owner": "product/business + operations/data",
       "timings": {
-        "contextSetupMs": 2164,
+        "contextSetupMs": 281,
         "prerequisiteCheckMs": 3,
-        "openFormMs": 5208,
-        "exerciseMs": 10113
+        "openFormMs": 4904,
+        "exerciseMs": 12234
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 3 role-reuse UI inventory",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1915,9 +1928,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:46:57.789Z",
+      "capturedAt": "2026-09-08T06:24:54.317Z",
       "testFile": "live/access-request/behaviors/person-context.spec.js"
     },
     {
@@ -1936,7 +1949,7 @@
         1
       ],
       "branch": "site-partial-search",
-      "durationMs": 8889,
+      "durationMs": 6265,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -1944,7 +1957,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -1966,12 +1979,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2157,
+        "contextSetupMs": 300,
         "prerequisiteCheckMs": 0,
-        "openFormMs": 6357,
-        "exerciseMs": 256
+        "openFormMs": 5342,
+        "exerciseMs": 411
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 1 Site-control capability check",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -1982,9 +1995,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:47:07.104Z",
+      "capturedAt": "2026-09-08T06:25:01.212Z",
       "testFile": "live/access-request/behaviors/site-search.spec.js"
     },
     {
@@ -2003,7 +2016,7 @@
         1
       ],
       "branch": "site-similar-results",
-      "durationMs": 9769,
+      "durationMs": 6080,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -2011,7 +2024,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -2035,12 +2048,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2162,
+        "contextSetupMs": 265,
         "prerequisiteCheckMs": 0,
-        "openFormMs": 7172,
-        "exerciseMs": 298
+        "openFormMs": 4967,
+        "exerciseMs": 641
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 1 after exact similar-name selection",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -2051,9 +2064,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:47:16.993Z",
+      "capturedAt": "2026-09-08T06:25:07.504Z",
       "testFile": "live/access-request/behaviors/site-search.spec.js"
     },
     {
@@ -2072,7 +2085,7 @@
         1
       ],
       "branch": "site-keyboard-selection",
-      "durationMs": 9297,
+      "durationMs": 6499,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -2080,7 +2093,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -2108,12 +2121,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2154,
+        "contextSetupMs": 307,
         "prerequisiteCheckMs": 0,
-        "openFormMs": 6638,
-        "exerciseMs": 375
+        "openFormMs": 5162,
+        "exerciseMs": 844
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 1 after keyboard-only Site selection",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -2124,9 +2137,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:47:26.406Z",
+      "capturedAt": "2026-09-08T06:25:14.219Z",
       "testFile": "live/access-request/behaviors/site-search.spec.js"
     },
     {
@@ -2145,7 +2158,7 @@
         1
       ],
       "branch": "site-selection-effort",
-      "durationMs": 9010,
+      "durationMs": 5609,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -2153,18 +2166,18 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "optionCount": 299,
       "controlInteractions": 1,
       "typedCharacters": 0,
-      "elapsedMs": 113,
+      "elapsedMs": 295,
       "target": "The CRM Carpenters Test",
       "entryPoint": "Authenticated Access Request Step 1",
       "expected": "Site selection reports its option volume, interaction count, and elapsed browser time.",
-      "observed": "The dedicated Site was selected from 299 options in one control interaction (113 ms browser time).",
+      "observed": "The dedicated Site was selected from 299 options in one control interaction (295 ms browser time).",
       "startingPoint": "Authenticated Access Request Step 1",
       "firstFailure": null,
       "retryOutcome": null,
@@ -2177,12 +2190,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2159,
+        "contextSetupMs": 263,
         "prerequisiteCheckMs": 0,
-        "openFormMs": 6501,
-        "exerciseMs": 228
+        "openFormMs": 4640,
+        "exerciseMs": 512
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 1 after measured Site selection",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -2193,9 +2206,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:47:35.539Z",
+      "capturedAt": "2026-09-08T06:25:20.053Z",
       "testFile": "live/access-request/behaviors/site-search.spec.js"
     },
     {
@@ -2215,7 +2228,7 @@
         4
       ],
       "branch": "contractor-count",
-      "durationMs": 71304,
+      "durationMs": 100965,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -2223,7 +2236,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -3114,12 +3127,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2470,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6722,
-        "exerciseMs": 61965
+        "contextSetupMs": 706,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5910,
+        "exerciseMs": 94115
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 4 after contractor-count branch probes",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -3130,9 +3143,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:49:29.028Z",
+      "capturedAt": "2026-09-08T06:27:50.582Z",
       "testFile": "live/access-request/behaviors/conditional-branches.spec.js"
     },
     {
@@ -3152,7 +3165,7 @@
         5
       ],
       "branch": "work-isolation-authority-permit-special-access",
-      "durationMs": 52696,
+      "durationMs": 56914,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -3160,7 +3173,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -3172,168 +3185,12 @@
           "value": "Survey",
           "changedFields": [
             {
-              "id": "field_3_327",
-              "label": null,
-              "visible": false,
-              "required": false,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": false,
-              "previousEnabledControls": 0,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_354",
-              "label": "If yes, fire isolation requests will incur a fee and must be sent to the Owners ‘Buildings and Property Division’ (BPD) 72 hours/3 Working Days prior to commencing the works, allowing adequate time for the request forms to be lodged (email [REDACTED_EMAIL]).*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 1,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_355",
-              "label": "Will there be any noisy/disruptive works?*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 2,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_36",
-              "label": "Smoke Detector Isolation Required*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 2,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_37",
-              "label": "Electrical Isolations Required*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 2,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_38",
-              "label": "If Electrical Isolations required, have you also provided a scope of works detailing shutdown procedure and return to service procedure?*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 3,
-              "previousValuePresent": false
-            },
-            {
               "id": "field_3_397",
               "label": "Nature of Works*",
               "visible": true,
               "required": true,
               "enabledControls": 1,
               "valuePresent": true,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 1,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_409",
-              "label": "Network Access Permit Type*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": true,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 1,
-              "previousValuePresent": true
-            },
-            {
-              "id": "field_3_442",
-              "label": "Provide details of the Noisy or Disruptive Works required*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 1,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_444",
-              "label": "Owner Permits and Inductions(If applicable)",
-              "visible": true,
-              "required": false,
-              "enabledControls": 1,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": false,
-              "previousEnabledControls": 0,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_447",
-              "label": "If yes, fire isolation requests may incur a fee. If so, this must be paid directly to the owner.*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 1,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_548",
-              "label": null,
-              "visible": false,
-              "required": false,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": false,
-              "previousEnabledControls": 0,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_561",
-              "label": null,
-              "visible": false,
-              "required": false,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": false,
-              "previousEnabledControls": 0,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_566",
-              "label": "If upgrade of power is required, a Power Viability Audit must be performed. Urban Utilities may require upload of mains supply to ensure continued supply for operational purposes. Please acknowledge*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 0,
-              "valuePresent": false,
               "previousVisible": true,
               "previousRequired": true,
               "previousEnabledControls": 1,
@@ -3349,59 +3206,11 @@
           "value": "Maintenance",
           "changedFields": [
             {
-              "id": "field_3_327",
-              "label": null,
-              "visible": true,
-              "required": false,
-              "enabledControls": 0,
-              "valuePresent": false,
-              "previousVisible": false,
-              "previousRequired": false,
-              "previousEnabledControls": 0,
-              "previousValuePresent": false
-            },
-            {
               "id": "field_3_354",
               "label": "If yes, fire isolation requests will incur a fee and must be sent to the Owners ‘Buildings and Property Division’ (BPD) 72 hours/3 Working Days prior to commencing the works, allowing adequate time for the request forms to be lodged (email [REDACTED_EMAIL]).*",
               "visible": true,
               "required": true,
               "enabledControls": 1,
-              "valuePresent": false,
-              "previousVisible": false,
-              "previousRequired": true,
-              "previousEnabledControls": 0,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_355",
-              "label": "Will there be any noisy/disruptive works?*",
-              "visible": true,
-              "required": true,
-              "enabledControls": 2,
-              "valuePresent": false,
-              "previousVisible": false,
-              "previousRequired": true,
-              "previousEnabledControls": 0,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_36",
-              "label": "Smoke Detector Isolation Required*",
-              "visible": true,
-              "required": true,
-              "enabledControls": 2,
-              "valuePresent": false,
-              "previousVisible": false,
-              "previousRequired": true,
-              "previousEnabledControls": 0,
-              "previousValuePresent": false
-            },
-            {
-              "id": "field_3_37",
-              "label": "Electrical Isolations Required*",
-              "visible": true,
-              "required": true,
-              "enabledControls": 2,
               "valuePresent": false,
               "previousVisible": false,
               "previousRequired": true,
@@ -3486,27 +3295,6 @@
           "value": "Yes",
           "changedFields": [
             {
-              "id": "field_3_36",
-              "label": "Smoke Detector Isolation Required*",
-              "visible": true,
-              "required": true,
-              "enabledControls": 2,
-              "valuePresent": true,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 2,
-              "previousValuePresent": false
-            }
-          ],
-          "populatedFields": []
-        },
-        {
-          "controller": "input_36",
-          "label": "Smoke Detector Isolation Required*",
-          "option": "No",
-          "value": "No",
-          "changedFields": [
-            {
               "id": "field_3_354",
               "label": "If yes, fire isolation requests will incur a fee and must be sent to the Owners ‘Buildings and Property Division’ (BPD) 72 hours/3 Working Days prior to commencing the works, allowing adequate time for the request forms to be lodged (email [REDACTED_EMAIL]).*",
               "visible": false,
@@ -3516,6 +3304,18 @@
               "previousVisible": true,
               "previousRequired": true,
               "previousEnabledControls": 1,
+              "previousValuePresent": false
+            },
+            {
+              "id": "field_3_36",
+              "label": "Smoke Detector Isolation Required*",
+              "visible": true,
+              "required": true,
+              "enabledControls": 2,
+              "valuePresent": true,
+              "previousVisible": true,
+              "previousRequired": true,
+              "previousEnabledControls": 2,
               "previousValuePresent": false
             },
             {
@@ -3558,6 +3358,14 @@
           "populatedFields": []
         },
         {
+          "controller": "input_36",
+          "label": "Smoke Detector Isolation Required*",
+          "option": "No",
+          "value": "No",
+          "changedFields": [],
+          "populatedFields": []
+        },
+        {
           "controller": "input_37",
           "label": "Electrical Isolations Required*",
           "option": "Yes",
@@ -3586,35 +3394,6 @@
               "previousRequired": true,
               "previousEnabledControls": 3,
               "previousValuePresent": false
-            }
-          ],
-          "populatedFields": []
-        },
-        {
-          "controller": "input_37",
-          "label": "Electrical Isolations Required*",
-          "option": "No",
-          "value": "No",
-          "changedFields": [],
-          "populatedFields": []
-        },
-        {
-          "controller": "input_38",
-          "label": "If Electrical Isolations required, have you also provided a scope of works detailing shutdown procedure and return to service procedure?*",
-          "option": "Yes",
-          "value": "Yes",
-          "changedFields": [
-            {
-              "id": "field_3_38",
-              "label": "If Electrical Isolations required, have you also provided a scope of works detailing shutdown procedure and return to service procedure?*",
-              "visible": true,
-              "required": true,
-              "enabledControls": 3,
-              "valuePresent": true,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 3,
-              "previousValuePresent": false
             },
             {
               "id": "field_3_447",
@@ -3629,6 +3408,14 @@
               "previousValuePresent": false
             }
           ],
+          "populatedFields": []
+        },
+        {
+          "controller": "input_37",
+          "label": "Electrical Isolations Required*",
+          "option": "No",
+          "value": "No",
+          "changedFields": [],
           "populatedFields": []
         },
         {
@@ -3677,7 +3464,20 @@
           "label": "Special access requirements including Security, Parking, Goods Lift and Deliveries must be pre-arranged with the Site Contact.*",
           "option": "Unchecked",
           "value": false,
-          "changedFields": [],
+          "changedFields": [
+            {
+              "id": "field_3_442",
+              "label": "Provide details of the Noisy or Disruptive Works required*",
+              "visible": false,
+              "required": true,
+              "enabledControls": 1,
+              "valuePresent": false,
+              "previousVisible": true,
+              "previousRequired": true,
+              "previousEnabledControls": 1,
+              "previousValuePresent": false
+            }
+          ],
           "populatedFields": []
         },
         {
@@ -3697,18 +3497,6 @@
               "previousRequired": true,
               "previousEnabledControls": 1,
               "previousValuePresent": false
-            },
-            {
-              "id": "field_3_442",
-              "label": "Provide details of the Noisy or Disruptive Works required*",
-              "visible": false,
-              "required": true,
-              "enabledControls": 1,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 1,
-              "previousValuePresent": false
             }
           ],
           "populatedFields": []
@@ -3716,7 +3504,7 @@
       ],
       "entryPoint": "Authenticated Access Request Step 1",
       "expected": "Every Step 5 controlling option records its visibility, requiredness, and enabled-state effects.",
-      "observed": "12 behavior-changing option observations were captured on Step 5.",
+      "observed": "11 behavior-changing option observations were captured on Step 5.",
       "startingPoint": "Authenticated Access Request Step 1",
       "firstFailure": null,
       "retryOutcome": null,
@@ -3729,12 +3517,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2173,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6083,
-        "exerciseMs": 44316
+        "contextSetupMs": 256,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 5853,
+        "exerciseMs": 50589
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 5 conditional branch characterization",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -3745,9 +3533,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:50:26.247Z",
+      "capturedAt": "2026-09-08T06:28:57.793Z",
       "testFile": "live/access-request/behaviors/conditional-branches.spec.js"
     },
     {
@@ -3767,7 +3555,7 @@
         6
       ],
       "branch": "after-hours-high-risk",
-      "durationMs": 55103,
+      "durationMs": 63888,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -3775,7 +3563,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -3793,14 +3581,14 @@
       "recommendationIds": [],
       "blockerId": "BRANCH-MATCH-AR-01",
       "blockerReason": "No mapped Step 6 controller matched the after-hours-high-risk branch pattern; the branch cannot be classified safely.",
-      "owner": null,
+      "owner": "product/business + QA/reviewer",
       "timings": {
-        "contextSetupMs": 2159,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5169,
-        "exerciseMs": 47652
+        "contextSetupMs": 273,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 5970,
+        "exerciseMs": 57415
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 6 conditional branch identification",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -3811,9 +3599,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:51:22.247Z",
+      "capturedAt": "2026-09-08T06:30:03.432Z",
       "testFile": "live/access-request/behaviors/conditional-branches.spec.js"
     },
     {
@@ -3833,7 +3621,7 @@
         6
       ],
       "branch": "rooftop-structure-access",
-      "durationMs": 57314,
+      "durationMs": 72080,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -3841,7 +3629,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -3987,12 +3775,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2175,
-        "prerequisiteCheckMs": 3,
-        "openFormMs": 5653,
-        "exerciseMs": 49343
+        "contextSetupMs": 256,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 6212,
+        "exerciseMs": 65393
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 6 conditional branch characterization",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -4003,9 +3791,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:52:20.324Z",
+      "capturedAt": "2026-09-08T06:31:16.948Z",
       "testFile": "live/access-request/behaviors/conditional-branches.spec.js"
     },
     {
@@ -4027,7 +3815,7 @@
         7
       ],
       "branch": "controlling-answer-change",
-      "durationMs": 103294,
+      "durationMs": 131527,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -4035,7 +3823,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -4183,26 +3971,7 @@
           "option": "Install",
           "value": "Install",
           "changedFields": [],
-          "populatedFields": []
-        },
-        {
-          "controller": "input_3_435_1",
-          "label": "Special access requirements including Security, Parking, Goods Lift and Deliveries must be pre-arranged with the Site Contact.*",
-          "option": "Unchecked",
-          "value": false,
-          "changedFields": [
-            {
-              "id": "field_3_435",
-              "label": "Special access requirements including Security, Parking, Goods Lift and Deliveries must be pre-arranged with the Site Contact.*",
-              "visible": true,
-              "required": true,
-              "enabledControls": 1,
-              "valuePresent": false,
-              "previousVisible": true,
-              "previousRequired": true,
-              "previousEnabledControls": 1,
-              "previousValuePresent": true
-            },
+          "populatedFields": [
             {
               "id": "field_3_548",
               "label": null,
@@ -4215,14 +3984,13 @@
               "previousEnabledControls": 0,
               "previousValuePresent": false
             }
-          ],
-          "populatedFields": []
+          ]
         },
         {
           "controller": "input_3_435_1",
           "label": "Special access requirements including Security, Parking, Goods Lift and Deliveries must be pre-arranged with the Site Contact.*",
-          "option": "Checked",
-          "value": true,
+          "option": "Unchecked",
+          "value": false,
           "changedFields": [
             {
               "id": "field_3_354",
@@ -4254,11 +4022,11 @@
               "visible": true,
               "required": true,
               "enabledControls": 1,
-              "valuePresent": true,
+              "valuePresent": false,
               "previousVisible": true,
               "previousRequired": true,
               "previousEnabledControls": 1,
-              "previousValuePresent": false
+              "previousValuePresent": true
             },
             {
               "id": "field_3_442",
@@ -4291,6 +4059,27 @@
               "required": true,
               "enabledControls": 1,
               "valuePresent": false,
+              "previousVisible": true,
+              "previousRequired": true,
+              "previousEnabledControls": 1,
+              "previousValuePresent": false
+            }
+          ],
+          "populatedFields": []
+        },
+        {
+          "controller": "input_3_435_1",
+          "label": "Special access requirements including Security, Parking, Goods Lift and Deliveries must be pre-arranged with the Site Contact.*",
+          "option": "Checked",
+          "value": true,
+          "changedFields": [
+            {
+              "id": "field_3_435",
+              "label": "Special access requirements including Security, Parking, Goods Lift and Deliveries must be pre-arranged with the Site Contact.*",
+              "visible": true,
+              "required": true,
+              "enabledControls": 1,
+              "valuePresent": true,
               "previousVisible": true,
               "previousRequired": true,
               "previousEnabledControls": 1,
@@ -4792,14 +4581,14 @@
       "recommendationIds": [],
       "blockerId": "BRANCH-DEPENDENCY-AR-01",
       "blockerReason": "No populated dependent control became irrelevant during the mapped Step 5–6 transitions; stale-state behavior cannot be classified safely.",
-      "owner": null,
+      "owner": "product/business + QA/reviewer",
       "timings": {
-        "contextSetupMs": 1790,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 7243,
-        "exerciseMs": 94123
+        "contextSetupMs": 289,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 6630,
+        "exerciseMs": 124406
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 6 stale-state identification",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -4810,9 +4599,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:54:04.476Z",
+      "capturedAt": "2026-09-08T06:33:29.934Z",
       "testFile": "live/access-request/behaviors/conditional-branches.spec.js"
     },
     {
@@ -4833,7 +4622,7 @@
         7
       ],
       "branch": "missing-required-upload",
-      "durationMs": 94438,
+      "durationMs": 113172,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -4841,7 +4630,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -4870,12 +4659,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2174,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6523,
-        "exerciseMs": 85587
+        "contextSetupMs": 381,
+        "prerequisiteCheckMs": 5,
+        "openFormMs": 5405,
+        "exerciseMs": 107103
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 7 required-upload validation",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -4886,9 +4675,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:55:40.865Z",
+      "capturedAt": "2026-09-08T06:35:26.690Z",
       "testFile": "live/access-request/behaviors/documents-and-uploads.spec.js"
     },
     {
@@ -4909,7 +4698,7 @@
         7
       ],
       "branch": "valid-upload",
-      "durationMs": 79912,
+      "durationMs": 95863,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -4917,7 +4706,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -4953,12 +4742,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2165,
-        "prerequisiteCheckMs": 4,
-        "openFormMs": 6843,
-        "exerciseMs": 70779
+        "contextSetupMs": 489,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5836,
+        "exerciseMs": 89335
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 7 after valid synthetic uploads",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -4969,9 +4758,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:57:01.915Z",
+      "capturedAt": "2026-09-08T06:37:04.761Z",
       "testFile": "live/access-request/behaviors/documents-and-uploads.spec.js"
     },
     {
@@ -4992,7 +4781,7 @@
         7
       ],
       "branch": "invalid-upload-type",
-      "durationMs": 84885,
+      "durationMs": 96132,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -5000,7 +4789,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -5025,13 +4814,13 @@
       "recommendationIds": [],
       "blockerId": "UPLOAD-RULE-AR-01",
       "blockerReason": "The live accepted-type contract is unavailable.",
-      "owner": null,
+      "owner": "product/business + operations/data + QA/reviewer",
       "timings": {
-        "contextSetupMs": 2174,
-        "prerequisiteCheckMs": 1,
-        "openFormMs": 6367
+        "contextSetupMs": 280,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 6394
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Execution prerequisite",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -5042,9 +4831,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T03:58:27.773Z",
+      "capturedAt": "2026-09-08T06:38:42.856Z",
       "testFile": "live/access-request/behaviors/documents-and-uploads.spec.js"
     },
     {
@@ -5065,7 +4854,7 @@
         7
       ],
       "branch": "upload-size-boundary",
-      "durationMs": 134007,
+      "durationMs": 190159,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -5073,7 +4862,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -5082,7 +4871,7 @@
         "visibleSteps": [
           "gform_page_3_7"
         ],
-        "loadingVisible": true,
+        "loadingVisible": false,
         "visibleNextButtons": 1
       },
       "entryPoint": "Authenticated Access Request Step 1",
@@ -5100,11 +4889,11 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2184,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 7360
+        "contextSetupMs": 1285,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 6658
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 7 assertion",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -5115,9 +4904,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:00:42.766Z",
+      "capturedAt": "2026-09-08T06:41:55.007Z",
       "testFile": "live/access-request/behaviors/documents-and-uploads.spec.js"
     },
     {
@@ -5138,7 +4927,7 @@
         7
       ],
       "branch": "replace-upload",
-      "durationMs": 84302,
+      "durationMs": 102494,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -5146,7 +4935,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -5203,14 +4992,14 @@
       "recommendationIds": [],
       "blockerId": "UPLOAD-CONFIRMATION-AR-01",
       "blockerReason": "3 required uploads expose no field-local review confirmation association.",
-      "owner": null,
+      "owner": "product/business + operations/data + QA/reviewer",
       "timings": {
-        "contextSetupMs": 2738,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5805,
-        "exerciseMs": 75632
+        "contextSetupMs": 707,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5673,
+        "exerciseMs": 95827
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 7 after upload replacement",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -5221,9 +5010,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:02:11.604Z",
+      "capturedAt": "2026-09-08T06:43:46.237Z",
       "testFile": "live/access-request/behaviors/documents-and-uploads.spec.js"
     },
     {
@@ -5244,7 +5033,7 @@
         7
       ],
       "branch": "remove-upload",
-      "durationMs": 80631,
+      "durationMs": 109562,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -5252,7 +5041,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -5280,14 +5069,14 @@
       "recommendationIds": [],
       "blockerId": "UPLOAD-REMOVE-AR-01",
       "blockerReason": "3 required upload controls expose no identifiable removal action.",
-      "owner": null,
+      "owner": "product/business + operations/data + QA/reviewer",
       "timings": {
-        "contextSetupMs": 2163,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5091,
-        "exerciseMs": 73253
+        "contextSetupMs": 338,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 7123,
+        "exerciseMs": 101888
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 7 after upload removal",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -5298,9 +5087,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:03:33.272Z",
+      "capturedAt": "2026-09-08T06:45:37.909Z",
       "testFile": "live/access-request/behaviors/documents-and-uploads.spec.js"
     },
     {
@@ -5321,7 +5110,7 @@
         8
       ],
       "branch": "request-specific-document",
-      "durationMs": 94170,
+      "durationMs": 125266,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -5329,7 +5118,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -5338,7 +5127,7 @@
         "visibleSteps": [
           "gform_page_3_8"
         ],
-        "loadingVisible": true,
+        "loadingVisible": false,
         "visibleNextButtons": 0
       },
       "entryPoint": "Authenticated Access Request Step 1",
@@ -5354,13 +5143,13 @@
       "recommendationIds": [],
       "blockerId": "DOCUMENT-UI-AR-01",
       "blockerReason": "The request-specific document UI is absent or not identified in the captured branch.",
-      "owner": null,
+      "owner": "product/business + operations/data + QA/reviewer",
       "timings": {
-        "contextSetupMs": 2166,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5599
+        "contextSetupMs": 321,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5769
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Execution prerequisite",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -5371,9 +5160,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:05:08.471Z",
+      "capturedAt": "2026-09-08T06:47:45.243Z",
       "testFile": "live/access-request/behaviors/documents-and-uploads.spec.js"
     },
     {
@@ -5396,7 +5185,7 @@
         8
       ],
       "branch": "reload-recovery",
-      "durationMs": 310946,
+      "durationMs": 383700,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -5404,7 +5193,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -6451,7 +6240,7 @@
             {
               "id": "input_3_300",
               "type": "text",
-              "value": "20-09-2026"
+              "value": "22-09-2026"
             },
             {
               "id": "input_3_338",
@@ -6463,7 +6252,7 @@
             {
               "id": "input_3_342",
               "type": "text",
-              "value": "20-09-2026"
+              "value": "22-09-2026"
             },
             {
               "id": "input_3_343",
@@ -6925,12 +6714,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2159,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6061,
-        "exerciseMs": 302600
+        "contextSetupMs": 288,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 5337,
+        "exerciseMs": 377817
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Reload characterization complete",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -6941,9 +6730,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:10:20.595Z",
+      "capturedAt": "2026-09-08T06:54:11.194Z",
       "testFile": "live/access-request/behaviors/navigation-and-recovery.spec.js"
     },
     {
@@ -6963,7 +6752,7 @@
         7
       ],
       "branch": "validation-correction",
-      "durationMs": 53871,
+      "durationMs": 63264,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -6971,7 +6760,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -6998,11 +6787,11 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2176,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6017
+        "contextSetupMs": 300,
+        "prerequisiteCheckMs": 6,
+        "openFormMs": 5858
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 7 assertion",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -7013,9 +6802,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:11:18.537Z",
+      "capturedAt": "2026-09-08T06:55:21.977Z",
       "testFile": "live/access-request/behaviors/navigation-and-recovery.spec.js"
     },
     {
@@ -7042,7 +6831,7 @@
         8
       ],
       "branch": "valid-pre-submit",
-      "durationMs": 99131,
+      "durationMs": 125659,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -7050,14 +6839,14 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "fieldMapCapturedAt": "2026-09-02T03:55:10.624Z",
-      "qualificationFieldId": "html5_1k1qekjo1osr13i51oah1fagri23",
+      "qualificationFieldId": "html5_1k1vsqjfamif1hqghnh1v591m2v3",
       "reviewEvidence": {
-        "associatedLaanId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+        "associatedLaanId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
         "qualificationFile": "synthetic-access-document.pdf",
         "referencePresent": false,
         "qualificationPresent": false
@@ -7222,7 +7011,7 @@
               "label": "Workers Compensation Certificate of Currency Expiry Date*",
               "action": "fill",
               "type": "text",
-              "value": "20-09-2026"
+              "value": "22-09-2026"
             },
             {
               "id": "input_3_128",
@@ -7235,7 +7024,7 @@
               "label": "Public Liability Certificate of Currency Expiry Date*",
               "action": "fill",
               "type": "text",
-              "value": "20-09-2026"
+              "value": "22-09-2026"
             }
           ]
         },
@@ -7276,7 +7065,7 @@
             "disabled": false
           },
           {
-            "id": "html5_1k1qemn8t1eorbesrd9tk2rgo14",
+            "id": "html5_1k1vstc03t0k4uu1gdssga19nl14",
             "type": "file",
             "required": false,
             "disabled": false
@@ -7334,12 +7123,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2564,
-        "prerequisiteCheckMs": 3,
-        "openFormMs": 5891,
-        "exerciseMs": 90529
+        "contextSetupMs": 976,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 6206,
+        "exerciseMs": 118230
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 8 review before final Submit",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -7350,9 +7139,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:13:00.520Z",
+      "capturedAt": "2026-09-08T06:57:33.026Z",
       "testFile": "live/access-request/journeys/complete-review-path.spec.js"
     },
     {
@@ -7379,7 +7168,7 @@
         8
       ],
       "branch": "navigation-persistence",
-      "durationMs": 113539,
+      "durationMs": 157498,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -7387,7 +7176,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -7420,12 +7209,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2161,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6261,
-        "exerciseMs": 104984
+        "contextSetupMs": 313,
+        "prerequisiteCheckMs": 5,
+        "openFormMs": 5370,
+        "exerciseMs": 151572
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 8 after navigation persistence checks",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -7436,9 +7225,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:14:55.379Z",
+      "capturedAt": "2026-09-08T07:00:13.097Z",
       "testFile": "live/access-request/journeys/navigation-persistence.spec.js"
     },
     {
@@ -7452,7 +7241,7 @@
       ],
       "suiteWave": "Steps 1-8",
       "resultType": "Characterization",
-      "status": "FAIL",
+      "status": "PASS",
       "step": 8,
       "coveredSteps": [
         5,
@@ -7461,7 +7250,7 @@
         8
       ],
       "branch": "keyboard-only",
-      "durationMs": 55593,
+      "durationMs": 156884,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -7469,23 +7258,619 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
-      "progress": {
-        "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "visibleSteps": [
-          "gform_page_3_6"
-        ],
-        "loadingVisible": false,
-        "visibleNextButtons": 1
-      },
+      "sequences": [
+        {
+          "step": 5,
+          "expected": [
+            {
+              "id": "input_3_397",
+              "name": "input_397",
+              "type": null,
+              "role": "select"
+            },
+            {
+              "id": "input_3_35",
+              "name": "input_35",
+              "type": null,
+              "role": "textarea"
+            },
+            {
+              "id": "choice_3_36_0",
+              "name": "input_36",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "choice_3_37_0",
+              "name": "input_37",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "choice_3_355_0",
+              "name": "input_355",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "input_3_44",
+              "name": "input_44",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "gform_browse_button_3_444",
+              "name": null,
+              "type": "button",
+              "role": "button"
+            },
+            {
+              "id": "input_3_435_1",
+              "name": "input_435.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "gform_previous_button_3_419",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_next_button_3_419",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_save_3_6_link",
+              "name": null,
+              "type": "button",
+              "role": "a"
+            }
+          ],
+          "sequence": [
+            {
+              "id": "input_3_397",
+              "name": "input_397",
+              "type": null,
+              "role": "select"
+            },
+            {
+              "id": "input_3_35",
+              "name": "input_35",
+              "type": null,
+              "role": "textarea"
+            },
+            {
+              "id": "choice_3_36_0",
+              "name": "input_36",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "choice_3_37_0",
+              "name": "input_37",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "choice_3_355_0",
+              "name": "input_355",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "input_3_44",
+              "name": "input_44",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "gform_browse_button_3_444",
+              "name": null,
+              "type": "button",
+              "role": "button"
+            },
+            {
+              "id": "input_3_435_1",
+              "name": "input_435.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "gform_previous_button_3_419",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_next_button_3_419",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_save_3_6_link",
+              "name": null,
+              "type": "button",
+              "role": "a"
+            }
+          ],
+          "missing": []
+        },
+        {
+          "step": 6,
+          "expected": [
+            {
+              "id": "choice_3_54_0",
+              "name": "input_54",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "gform_previous_button_3_421",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_next_button_3_421",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_save_3_7_link",
+              "name": null,
+              "type": "button",
+              "role": "a"
+            }
+          ],
+          "sequence": [
+            {
+              "id": "choice_3_54_0",
+              "name": "input_54",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "gform_previous_button_3_421",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_next_button_3_421",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_save_3_7_link",
+              "name": null,
+              "type": "button",
+              "role": "a"
+            }
+          ],
+          "missing": []
+        },
+        {
+          "step": 7,
+          "expected": [
+            {
+              "id": "input_3_498_1",
+              "name": "input_498.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_502_1",
+              "name": "input_502.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_501_1",
+              "name": "input_501.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_500_1",
+              "name": "input_500.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_499_1",
+              "name": "input_499.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_503_1",
+              "name": "input_503.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_504_1",
+              "name": "input_504.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_497_1",
+              "name": "input_497.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_505_1",
+              "name": "input_505.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_508_1",
+              "name": "input_508.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_506_1",
+              "name": "input_506.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_507_1",
+              "name": "input_507.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_338",
+              "name": "input_338",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_124",
+              "name": "input_124",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_127",
+              "name": "input_127",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_42",
+              "name": "input_42",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_300",
+              "name": "input_300",
+              "type": "text",
+              "role": "input"
+            },
+            {
+              "id": "input_3_128",
+              "name": "input_128",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_342",
+              "name": "input_342",
+              "type": "text",
+              "role": "input"
+            },
+            {
+              "id": "input_3_129",
+              "name": "input_129",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_343",
+              "name": "input_343",
+              "type": "text",
+              "role": "input"
+            },
+            {
+              "id": "gform_previous_button_3_423",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_next_button_3_423",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_save_3_8_link",
+              "name": null,
+              "type": "button",
+              "role": "a"
+            }
+          ],
+          "sequence": [
+            {
+              "id": "input_3_498_1",
+              "name": "input_498.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_502_1",
+              "name": "input_502.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_501_1",
+              "name": "input_501.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_500_1",
+              "name": "input_500.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_499_1",
+              "name": "input_499.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_503_1",
+              "name": "input_503.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_504_1",
+              "name": "input_504.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_497_1",
+              "name": "input_497.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_505_1",
+              "name": "input_505.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_508_1",
+              "name": "input_508.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_506_1",
+              "name": "input_506.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_507_1",
+              "name": "input_507.1",
+              "type": "checkbox",
+              "role": "input"
+            },
+            {
+              "id": "input_3_338",
+              "name": "input_338",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_124",
+              "name": "input_124",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_127",
+              "name": "input_127",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_42",
+              "name": "input_42",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_300",
+              "name": "input_300",
+              "type": "text",
+              "role": "input"
+            },
+            {
+              "id": "input_3_128",
+              "name": "input_128",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_342",
+              "name": "input_342",
+              "type": "text",
+              "role": "input"
+            },
+            {
+              "id": "input_3_129",
+              "name": "input_129",
+              "type": "file",
+              "role": "input"
+            },
+            {
+              "id": "input_3_343",
+              "name": "input_343",
+              "type": "text",
+              "role": "input"
+            },
+            {
+              "id": "gform_previous_button_3_423",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_next_button_3_423",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_save_3_8_link",
+              "name": null,
+              "type": "button",
+              "role": "a"
+            }
+          ],
+          "missing": []
+        },
+        {
+          "step": 8,
+          "expected": [
+            {
+              "id": "gform_browse_button_3_494",
+              "name": null,
+              "type": "button",
+              "role": "button"
+            },
+            {
+              "id": "choice_3_547_0",
+              "name": "input_547",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "choice_3_310_0",
+              "name": "input_310",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "choice_3_357_0",
+              "name": "input_357",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "input_3_309",
+              "name": "input_309",
+              "type": null,
+              "role": "textarea"
+            },
+            {
+              "id": null,
+              "name": null,
+              "type": null,
+              "role": "a"
+            },
+            {
+              "id": "gform_previous_button_3",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_submit_button_3",
+              "name": null,
+              "type": "submit",
+              "role": "input"
+            }
+          ],
+          "sequence": [
+            {
+              "id": "input_3_309",
+              "name": "input_309",
+              "type": null,
+              "role": "textarea"
+            },
+            {
+              "id": null,
+              "name": null,
+              "type": null,
+              "role": "a"
+            },
+            {
+              "id": "gform_previous_button_3",
+              "name": null,
+              "type": "button",
+              "role": "input"
+            },
+            {
+              "id": "gform_submit_button_3",
+              "name": null,
+              "type": "submit",
+              "role": "input"
+            },
+            {
+              "id": "gform_save_3_footer_link",
+              "name": null,
+              "type": "button",
+              "role": "a"
+            },
+            {
+              "id": "gform_browse_button_3_494",
+              "name": null,
+              "type": "button",
+              "role": "button"
+            },
+            {
+              "id": "choice_3_547_0",
+              "name": "input_547",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "choice_3_310_0",
+              "name": "input_310",
+              "type": "radio",
+              "role": "input"
+            },
+            {
+              "id": "choice_3_357_0",
+              "name": "input_357",
+              "type": "radio",
+              "role": "input"
+            }
+          ],
+          "missing": []
+        }
+      ],
       "entryPoint": "Authenticated Access Request Step 1",
       "expected": "Critical Steps 5–8 controls can receive focus in DOM order.",
-      "observed": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 12\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"choice_3_356_0\",\u001b[39m\n\u001b[31m+     \"name\": \"input_356\",\u001b[39m\n\u001b[31m+     \"role\": \"input\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"choice_3_54_1\",\u001b[39m\n\u001b[31m+     \"name\": \"input_54\",\u001b[39m\n\u001b[31m+     \"role\": \"input\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+      "observed": "Every visible enabled critical control on Steps 5–8 accepted focus.",
       "startingPoint": "Authenticated Access Request Step 1",
-      "firstFailure": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 12\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"choice_3_356_0\",\u001b[39m\n\u001b[31m+     \"name\": \"input_356\",\u001b[39m\n\u001b[31m+     \"role\": \"input\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"choice_3_54_1\",\u001b[39m\n\u001b[31m+     \"name\": \"input_54\",\u001b[39m\n\u001b[31m+     \"role\": \"input\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+      "firstFailure": null,
       "retryOutcome": null,
       "evidence": [
         "TC-AR-A01.json"
@@ -7496,12 +7881,13 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2162,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5390
+        "contextSetupMs": 270,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 6052,
+        "exerciseMs": 150348
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
-      "stoppingPoint": "Step 8 assertion",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
+      "stoppingPoint": "Step 8 after keyboard reachability checks",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
       "finalSubmitClicked": false,
@@ -7511,9 +7897,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:15:52.574Z",
+      "capturedAt": "2026-09-08T07:02:53.172Z",
       "testFile": "live/access-request/quality/accessibility-and-responsive.spec.js"
     },
     {
@@ -7536,7 +7922,7 @@
         8
       ],
       "branch": "labels-errors-focus",
-      "durationMs": 104319,
+      "durationMs": 124239,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -7544,7 +7930,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -7564,12 +7950,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2297,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 7694,
-        "exerciseMs": 94161
+        "contextSetupMs": 273,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 6562,
+        "exerciseMs": 117144
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 8 after accessible-name checks",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -7580,9 +7966,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:17:40.516Z",
+      "capturedAt": "2026-09-08T07:05:00.424Z",
       "testFile": "live/access-request/quality/accessibility-and-responsive.spec.js"
     },
     {
@@ -7605,7 +7991,7 @@
         8
       ],
       "branch": "phone-responsive",
-      "durationMs": 100390,
+      "durationMs": 125414,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -7613,7 +7999,7 @@
           "height": 844
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -7664,12 +8050,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2165,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6195,
-        "exerciseMs": 91904
+        "contextSetupMs": 314,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5993,
+        "exerciseMs": 118882
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 8 at 390×844",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -7680,9 +8066,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:19:22.179Z",
+      "capturedAt": "2026-09-08T07:07:08.098Z",
       "testFile": "live/access-request/quality/accessibility-and-responsive.spec.js"
     },
     {
@@ -7705,7 +8091,7 @@
         8
       ],
       "branch": "tablet-responsive",
-      "durationMs": 97467,
+      "durationMs": 122225,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -7713,7 +8099,7 @@
           "height": 1024
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -7764,12 +8150,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2174,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5762,
-        "exerciseMs": 89406
+        "contextSetupMs": 277,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 5557,
+        "exerciseMs": 116157
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 8 at 768×1024",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -7780,9 +8166,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:21:00.830Z",
+      "capturedAt": "2026-09-08T07:09:12.263Z",
       "testFile": "live/access-request/quality/accessibility-and-responsive.spec.js"
     },
     {
@@ -7805,7 +8191,7 @@
         8
       ],
       "branch": "zoom-reduced-motion",
-      "durationMs": 97392,
+      "durationMs": 124422,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -7813,7 +8199,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -7839,12 +8225,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2172,
+        "contextSetupMs": 285,
         "prerequisiteCheckMs": 3,
-        "openFormMs": 5763,
-        "exerciseMs": 89317
+        "openFormMs": 5430,
+        "exerciseMs": 118472
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 8 at 200% equivalent layout width",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -7855,9 +8241,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:22:39.234Z",
+      "capturedAt": "2026-09-08T07:11:18.720Z",
       "testFile": "live/access-request/quality/accessibility-and-responsive.spec.js"
     },
     {
@@ -7881,7 +8267,7 @@
         8
       ],
       "branch": "instrumented-baseline",
-      "durationMs": 90966,
+      "durationMs": 125040,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -7889,7 +8275,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -8833,7 +9219,7 @@
               "label": "Workers Compensation Certificate of Currency Expiry Date*",
               "action": "fill",
               "type": "text",
-              "value": "20-09-2026"
+              "value": "22-09-2026"
             },
             {
               "id": "input_3_128",
@@ -8846,7 +9232,7 @@
               "label": "Public Liability Certificate of Currency Expiry Date*",
               "action": "fill",
               "type": "text",
-              "value": "20-09-2026"
+              "value": "22-09-2026"
             }
           ]
         }
@@ -9427,7 +9813,7 @@
             {
               "id": "input_3_300",
               "type": "text",
-              "value": "20-09-2026"
+              "value": "22-09-2026"
             },
             {
               "id": "input_3_338",
@@ -9439,7 +9825,7 @@
             {
               "id": "input_3_342",
               "type": "text",
-              "value": "20-09-2026"
+              "value": "22-09-2026"
             },
             {
               "id": "input_3_343",
@@ -9630,7 +10016,7 @@
           ]
         },
         {
-          "value": "20-09-2026",
+          "value": "22-09-2026",
           "ids": [
             "input_3_300",
             "input_3_342"
@@ -9716,12 +10102,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2170,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 6061,
-        "exerciseMs": 82606
+        "contextSetupMs": 317,
+        "prerequisiteCheckMs": 3,
+        "openFormMs": 6823,
+        "exerciseMs": 117671
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Step 8 after instrumented baseline capture",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -9732,9 +10118,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:24:11.130Z",
+      "capturedAt": "2026-09-08T07:13:25.456Z",
       "testFile": "live/access-request/quality/efficiency.spec.js"
     },
     {
@@ -9758,7 +10144,7 @@
         8
       ],
       "branch": "responsive-effort",
-      "durationMs": 176405,
+      "durationMs": 245525,
       "environment": {
         "browser": "Microsoft Edge",
         "viewport": {
@@ -9766,7 +10152,7 @@
           "height": 844
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -9799,12 +10185,12 @@
       "blockerReason": null,
       "owner": null,
       "timings": {
-        "contextSetupMs": 2178,
-        "prerequisiteCheckMs": 2,
-        "openFormMs": 5658,
-        "exerciseMs": 168444
+        "contextSetupMs": 285,
+        "prerequisiteCheckMs": 4,
+        "openFormMs": 5934,
+        "exerciseMs": 239101
       },
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "stoppingPoint": "Phone Step 8 after comparable effort measurement",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
@@ -9815,9 +10201,9 @@
       "fixture": {
         "version": 1,
         "profile": "synthetic-access-request",
-        "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z"
+        "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z"
       },
-      "capturedAt": "2026-09-06T04:27:08.671Z",
+      "capturedAt": "2026-09-08T07:17:33.124Z",
       "testFile": "live/access-request/quality/efficiency.spec.js"
     },
     {
@@ -9847,7 +10233,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -9860,7 +10246,7 @@
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
       "stoppingPoint": "Step 8 after navigation persistence checks",
       "locatorGuardInstalled": true,
@@ -9869,7 +10255,7 @@
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:14:55.379Z",
+      "capturedAt": "2026-09-08T07:00:13.097Z",
       "sourceCaseIds": [
         "TC-AR-005"
       ],
@@ -9881,7 +10267,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-005",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "navigation-persistence",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -9916,7 +10302,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -9929,7 +10315,7 @@
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
       "stoppingPoint": "Step 7 after upload replacement",
       "locatorGuardInstalled": true,
@@ -9938,7 +10324,7 @@
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:02:11.604Z",
+      "capturedAt": "2026-09-08T06:43:46.237Z",
       "sourceCaseIds": [
         "TC-AR-U05"
       ],
@@ -9950,7 +10336,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-U05",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "replace-upload",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -9988,7 +10374,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -10001,7 +10387,7 @@
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
       "stoppingPoint": "Step 8 after instrumented baseline capture",
       "locatorGuardInstalled": true,
@@ -10010,7 +10396,7 @@
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:24:11.130Z",
+      "capturedAt": "2026-09-08T07:13:25.456Z",
       "sourceCaseIds": [
         "TC-AR-E02"
       ],
@@ -10022,7 +10408,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-E02",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "instrumented-baseline",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -10060,7 +10446,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -10073,7 +10459,7 @@
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
       "stoppingPoint": "Step 8 after instrumented baseline capture",
       "locatorGuardInstalled": true,
@@ -10082,7 +10468,7 @@
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:24:11.130Z",
+      "capturedAt": "2026-09-08T07:13:25.456Z",
       "sourceCaseIds": [
         "TC-AR-E02"
       ],
@@ -10094,7 +10480,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-E02",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "instrumented-baseline",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -10129,7 +10515,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -10142,7 +10528,7 @@
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
       "stoppingPoint": "Step 8 after instrumented baseline capture",
       "locatorGuardInstalled": true,
@@ -10151,7 +10537,7 @@
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:24:11.130Z",
+      "capturedAt": "2026-09-08T07:13:25.456Z",
       "sourceCaseIds": [
         "TC-AR-E02"
       ],
@@ -10163,7 +10549,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-E02",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "instrumented-baseline",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -10201,7 +10587,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -10214,7 +10600,7 @@
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
       "stoppingPoint": "Step 8 after instrumented baseline capture",
       "locatorGuardInstalled": true,
@@ -10223,7 +10609,7 @@
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:24:11.130Z",
+      "capturedAt": "2026-09-08T07:13:25.456Z",
       "sourceCaseIds": [
         "TC-AR-E02"
       ],
@@ -10235,7 +10621,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-E02",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "instrumented-baseline",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -10270,7 +10656,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -10283,7 +10669,7 @@
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
       "stoppingPoint": "Step 7 assertion",
       "locatorGuardInstalled": true,
@@ -10292,7 +10678,7 @@
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:11:18.537Z",
+      "capturedAt": "2026-09-08T06:55:21.977Z",
       "sourceCaseIds": [
         "TC-AR-R03"
       ],
@@ -10304,7 +10690,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-R03",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "validation-correction",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -10326,7 +10712,7 @@
       "testFile": null,
       "suiteWave": "Steps 1-8",
       "resultType": "Derived evidence",
-      "status": "FAIL",
+      "status": "PASS",
       "coveredSteps": [
         5,
         6,
@@ -10342,29 +10728,29 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
       "expected": "The TC-AR-E08 result is derived from compatible source evidence.",
       "observed": "Derived from TC-AR-A01 without another browser traversal.",
-      "firstFailure": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 12\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"choice_3_356_0\",\u001b[39m\n\u001b[31m+     \"name\": \"input_356\",\u001b[39m\n\u001b[31m+     \"role\": \"input\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"id\": \"choice_3_54_1\",\u001b[39m\n\u001b[31m+     \"name\": \"input_54\",\u001b[39m\n\u001b[31m+     \"role\": \"input\",\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+      "firstFailure": null,
       "retryOutcome": null,
       "evidence": [
         "TC-AR-A01.json"
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
-      "stoppingPoint": "Step 8 assertion",
+      "stoppingPoint": "Step 8 after keyboard reachability checks",
       "locatorGuardInstalled": true,
       "networkGuardInstalled": true,
       "finalSubmitClicked": false,
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:15:52.574Z",
+      "capturedAt": "2026-09-08T07:02:53.172Z",
       "sourceCaseIds": [
         "TC-AR-A01"
       ],
@@ -10376,7 +10762,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-A01",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "keyboard-only",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -10413,7 +10799,7 @@
           "height": 720
         },
         "url": "https://co-siter.com.au/access-requests/#gf_3",
-        "commit": "cbd2c946ffada8530a680244b0659f0256321367",
+        "commit": "753f60cb941f462a6f570de938e7e7ffc6d4f39a",
         "trackedWorktreeDirty": true,
         "configuration": "tests/access-requests/configs/playwright.access-request.config.js"
       },
@@ -10426,7 +10812,7 @@
       ],
       "findingIds": [],
       "recommendationIds": [],
-      "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+      "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
       "startingPoint": "Authenticated Access Request Step 1",
       "stoppingPoint": "Step 7 assertion",
       "locatorGuardInstalled": true,
@@ -10435,7 +10821,7 @@
       "finalSubmissionAttempted": false,
       "finalSubmissionCompleted": false,
       "syntheticDataPolicySatisfied": true,
-      "capturedAt": "2026-09-06T04:11:18.537Z",
+      "capturedAt": "2026-09-08T06:55:21.977Z",
       "sourceCaseIds": [
         "TC-AR-R03"
       ],
@@ -10447,7 +10833,7 @@
       "sourceProvenance": [
         {
           "caseId": "TC-AR-R03",
-          "runId": "test-The-CRM-Carpenters-000143-20260906T033946832Z",
+          "runId": "test-The-CRM-Carpenters-000154-20260908T061810213Z",
           "branch": "validation-correction",
           "fixtureVersion": 1,
           "measurementMethod": null
@@ -10720,42 +11106,48 @@
       "reason": "No mapped Step 6 controller matched the after-hours-high-risk branch pattern; the branch cannot be classified safely.",
       "caseIds": [
         "TC-AR-B05"
-      ]
+      ],
+      "owner": "product/business + QA/reviewer"
     },
     {
       "id": "BRANCH-DEPENDENCY-AR-01",
       "reason": "No populated dependent control became irrelevant during the mapped Step 5–6 transitions; stale-state behavior cannot be classified safely.",
       "caseIds": [
         "TC-AR-B08"
-      ]
+      ],
+      "owner": "product/business + QA/reviewer"
     },
     {
       "id": "UPLOAD-RULE-AR-01",
       "reason": "The live accepted-type contract is unavailable.",
       "caseIds": [
         "TC-AR-U03"
-      ]
+      ],
+      "owner": "product/business + operations/data + QA/reviewer"
     },
     {
       "id": "UPLOAD-CONFIRMATION-AR-01",
       "reason": "3 required uploads expose no field-local review confirmation association.",
       "caseIds": [
         "TC-AR-U05"
-      ]
+      ],
+      "owner": "product/business + operations/data + QA/reviewer"
     },
     {
       "id": "UPLOAD-REMOVE-AR-01",
       "reason": "3 required upload controls expose no identifiable removal action.",
       "caseIds": [
         "TC-AR-U06"
-      ]
+      ],
+      "owner": "product/business + operations/data + QA/reviewer"
     },
     {
       "id": "DOCUMENT-UI-AR-01",
       "reason": "The request-specific document UI is absent or not identified in the captured branch.",
       "caseIds": [
         "TC-AR-D04"
-      ]
+      ],
+      "owner": "product/business + operations/data + QA/reviewer"
     },
     {
       "id": "DOCUMENT-SOURCE-AR-01",
@@ -10806,7 +11198,7 @@
       "blockerId": null,
       "blockerReason": null,
       "fieldMapCapturedAt": "2026-09-02T03:55:10.624Z",
-      "durationMs": 39414,
+      "durationMs": 45031,
       "finalSubmissionAttempted": false,
       "executed": true
     }

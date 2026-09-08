@@ -38,20 +38,22 @@ following form:
 
 `test-The-CRM-Carpenters-000001-<UTC timestamp>`
 
-## Current evidence run — 2026-09-06
+## Current evidence run — 2026-09-08
 
-Current evidence run: `test-The-CRM-Carpenters-000143-20260906T033946832Z`
+Current evidence run: `test-The-CRM-Carpenters-000154-20260908T061810213Z`
 
 The complete serial 50-declaration baseline executed against the approved
 authenticated session, with authentication and Step 5 readiness prerequisites.
-It produced 50 executed browser cases, 7 acceptance passes, 27
-characterizations, 3 measurements, 3 direct failures, 20 browser blockers, and
-1 NOT APPLICABLE outcome. No final submission was attempted. The full Steps 1–8
-field map and field/rule ledger remain synchronized to the evidence baseline.
+It produced 50 executed browser cases, 49 raw Playwright passes, 2 raw failures,
+7 acceptance passes, 27 characterizations, 3 measurements, 2 direct failures,
+20 browser blockers, and 1 NOT APPLICABLE outcome. No final submission was
+attempted. The full Steps 1–8 field map and field/rule ledger remain
+synchronized to the evidence baseline.
 
-U04 and R03 retain reproducible upload/state-preservation failures. A01 also
-fails because two radio controls were not keyboard reachable. A02 passed in the
-final run after a focused rerun also passed. B05 and B08 remain blocked because
+U04 and R03 retain reproducible upload/state-preservation failures. R02 passes
+after the characterization timeout was extended, and A01 passes after the
+keyboard helper was corrected to match reachable radio groups by name. B05 and
+B08 remain blocked because
 the current branch did not expose mapped controllers; U03, U05, U06, and D04
 remain explicit contract/UI blockers rather than product failures. Derived E06,
 E08, and E09 inherit direct failures without another browser traversal.
@@ -59,9 +61,11 @@ E08, and E09 inherit direct failures without another browser traversal.
 Focused reruns: B05 passed in `test-The-CRM-Carpenters-000108-20260904T100021457Z`;
 TC-AR-006 and TC-AR-005 passed in `test-The-CRM-Carpenters-000111-20260904T100339097Z`
 and `test-The-CRM-Carpenters-000114-20260904T103046340Z`; U04 failed with
-unrelated files cleared in `test-The-CRM-Carpenters-000116-20260904T103935027Z`;
+unrelated files cleared in `test-The-CRM-Carpenters-000150-20260908T060003045Z`;
 R03 failed with unrelated files cleared in
-`test-The-CRM-Carpenters-000118-20260904T120742537Z`.
+`test-The-CRM-Carpenters-000152-20260908T060816134Z`; A01 passed in
+`test-The-CRM-Carpenters-000151-20260908T060426927Z`, and R02 passed in
+`test-The-CRM-Carpenters-000153-20260908T061035097Z`.
 
 Focused exploratory run
 `test-The-CRM-Carpenters-000134-20260905T141421125Z` executed all 16 new

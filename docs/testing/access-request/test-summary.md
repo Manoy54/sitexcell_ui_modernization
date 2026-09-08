@@ -14,7 +14,7 @@ Status: Unified Steps 1–8 baseline executed with truthful PASS, FAIL, BLOCKED,
 - Technical field inventory: 392 captured controls grouped into 264 field/rule rows across Steps 1–8.
 - Field/rule evidence-backed rows: 0; all rows are explicitly `technical-inventory-only` pending owner approval.
 - Final-submit attempts: 0.
-- Unit coverage: 44 tests pass.
+- Unit coverage: 46 tests pass.
 
 The 16 exploratory declarations do not promote the person, copy/reuse, or
 cross-workflow cases to approved implementation. They record visible behavior
@@ -23,29 +23,29 @@ as characterization evidence and unavailable or unapproved behavior as
 
 ## Latest live run
 
-Current evidence run: `test-The-CRM-Carpenters-000143-20260906T033946832Z`
+Current evidence run: `test-The-CRM-Carpenters-000154-20260908T061810213Z`
 
-- Run ID: `test-The-CRM-Carpenters-000143-20260906T033946832Z`.
-- Date: 2026-09-06.
+- Run ID: `test-The-CRM-Carpenters-000154-20260908T061810213Z`.
+- Date: 2026-09-08.
 - Scope: Complete serial 50-case Steps 1–8 browser declaration set plus authentication and Step 5 readiness prerequisites (51 Playwright entries).
 - Target: `https://co-siter.com.au/access-requests/`.
-- Result: `FAIL` because U04, R03, and A01 reproduced direct live behavior failures; 20 executed browser cases were blocked and one was not applicable.
+- Result: `FAIL` because U04 and R03 reproduced direct live behavior failures; A01 and R02 passed after test-harness refinement; 20 executed browser cases were blocked and one was not applicable.
 - Executable declarations: 50.
 - Executed browser cases: 50.
 - Acceptance passes: 7.
 - Characterizations: 27.
 - Measurements: 3.
-- Direct product/behavior failures: 3.
+- Raw Playwright result: 49 passed, 2 failed.
+- Direct product/behavior failures: 2.
 - Browser blockers: 20.
 - NOT APPLICABLE outcomes: 1.
 - Final submission attempts: 0; Step 8 remained the maximum boundary.
 
 The run proves the harness, authentication, field-map freshness, serial gating,
 and final-submit guard. It does not establish backend acceptance or a clean
-product baseline. U04 and R03 reproduce unrelated upload-state loss; A01
-reproduces unreachable keyboard controls. A02 passes on this full run after a
-separate focused rerun also passed. Derived E06, E08, and E09 inherit the
-corresponding direct failures without extra browser execution. Blockers are not
+product baseline. U04 and R03 reproduce unrelated upload-state loss. R02 and
+A01 pass after the reload-timeout and radio-group matching refinements. Derived
+E06 and E09 inherit the R03 failure; E08 is now passing. Blockers are not
 converted to failures or passes.
 
 ## Focused exploratory run
@@ -87,9 +87,11 @@ final submission and writes a sanitized focused consolidated result.
   associated with individual uploads. U06 is blocked because no user-facing
   removal action is identifiable. D04 is blocked because no request-specific
   document field is present in the captured branch.
-- R03 still fails because validation clears unrelated uploads. A01 fails because
-  two radio controls are not keyboard reachable. A02, A03, A04, and A05 pass in
-  the final run. TC-AR-005 and TC-AR-006 pass after their test-oracle
+- R02 passes after the characterization timeout was increased to accommodate the
+  four-step live reload journey. R03 still fails because validation clears
+  unrelated uploads. A01 passes after the keyboard helper was corrected to
+  match radio groups by name. A02, A03, A04, and A05 pass in the final run.
+  TC-AR-005 and TC-AR-006 pass after their test-oracle
   corrections; B05 and B08 remain branch observations/blockers in the final
   run. No recommendation is approved solely from automated timing.
 - The field/rule ledger prevents the captured DOM from being mistaken for
@@ -102,8 +104,10 @@ final submission and writes a sanitized focused consolidated result.
 | `TC-AR-B05` | Transient DNS failure in baseline | `PASS` in focused run 000108 after confirming DNS/live reachability |
 | `TC-AR-006` | Review text did not contain an unapproved run-ID/file-string oracle | `PASS` in focused run 000111; review values remain observational |
 | `TC-AR-005` | Snapshot included conditional controls not entered by the harness | `PASS` in focused run 000114 after entered-control filtering |
-| `TC-AR-U04` | Live validation clears unrelated Step 7 uploads | `FAIL` in focused run 000116; files `input_3_128` and `input_3_42` were cleared |
-| `TC-AR-R03` | Live validation clears unrelated Step 5 uploads | `FAIL` in focused run 000118; files `field_3_444` and `input_3_44` were cleared |
+| `TC-AR-U04` | Live validation clears unrelated Step 7 uploads | `FAIL` in focused run 000150; files `input_3_128` and `input_3_42` were cleared |
+| `TC-AR-R03` | Live validation clears unrelated Step 5 uploads | `FAIL` in focused run 000152; file `input_3_44` was cleared |
+| `TC-AR-R02` | Reload characterization exceeded the former timeout | `PASS` in focused run 000153 after the test timeout was extended |
+| `TC-AR-A01` | Radio-group keyboard matching was too strict | `PASS` in focused run 000151 after matching the reachable group by name |
 
 The focused evidence separates corrected harness issues from live upload-state
 loss. U04 and R03 require a live-form fix or an owner-approved contract change;
@@ -121,8 +125,7 @@ the tests should not be weakened to make those cases green.
 ## Required next actions
 
 1. Fix or explicitly approve the live upload-state behavior exposed by U04 and
-   R03, and the keyboard reachability issue exposed by A01; then rerun those
-   cases.
+   R03, then rerun those cases.
 2. Obtain owner approval for requiredness, upload contracts, document sources,
    review mappings, and persistence rules; populate the field/rule ledger.
 3. Re-run the full suite after corrections and require two consecutive clean

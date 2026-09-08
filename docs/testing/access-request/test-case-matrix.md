@@ -19,10 +19,11 @@ pass.
 
 ## Current execution evidence
 
-Current evidence run: `test-The-CRM-Carpenters-000143-20260906T033946832Z`
+Current evidence run: `test-The-CRM-Carpenters-000154-20260908T061810213Z`
 
 The complete serial 50-declaration baseline produced 50 executed browser cases:
-7 acceptance passes, 27 characterizations, 3 measurements, 3 direct failures,
+49 raw Playwright passes and 2 raw failures; the classified result contains 7
+acceptance passes, 27 characterizations, 3 measurements, 2 direct failures,
 20 blocked browser cases, and 1 NOT APPLICABLE outcome. Zero final submissions occurred.
 The synchronized field map is Steps 1–8; the field/rule ledger contains 264
 technical-inventory-only rows awaiting owner-approved business rules.
@@ -71,7 +72,7 @@ already covered.
 | ID | Type | Scenario | Expected result | Current status |
 | --- | --- | --- | --- | --- |
 | `TC-AR-R01` | Acceptance | Step back/next after valid entry. | Values persist without duplicate lookup or entry. | Derived from `TC-AR-005`; `PASS` focused rerun 000114 |
-| `TC-AR-R02` | Characterization | Reload on each approved step. | Lost/preserved values and recovery effort are recorded per step. | `PASS` current run |
+| `TC-AR-R02` | Characterization | Reload on each approved step. | Lost/preserved values and recovery effort are recorded per step. | `PASS` current run after timeout refinement |
 | `TC-AR-R03` | Acceptance | Correct a validation error. | Unrelated valid values survive and focus returns to actionable feedback. | `FAIL` current run; `input_3_44` was cleared |
 | `TC-AR-R04` | Decision | Save and Continue Later lifecycle. | Ownership, expiry, access, privacy, restore, and discard rules are approved before execution. | Implemented explicit blocker — `DECISION-AR-DRAFT` |
 | `TC-AR-U01` | Acceptance | Omit a required upload. | Progression is blocked with an exact, associated message. | `PASS` current run |
@@ -102,7 +103,7 @@ already covered.
 | `TC-AR-E05` | Steps/screens and backtracking. | Transition log for the same approved path. | Derived from E02; `PASS` |
 | `TC-AR-E06` | Validation corrections. | First failure retained; retry outcome recorded separately. | Derived from R03; `FAIL` |
 | `TC-AR-E07` | Desktop versus mobile effort. | Same fixture on approved desktop/phone/tablet viewports. | `PASS` current run; measurement only |
-| `TC-AR-E08` | Keyboard interaction/friction. | Focus order, unreachable controls, and user-equivalent key count. | Derived from A01; `FAIL` |
+| `TC-AR-E08` | Keyboard interaction/friction. | Focus order, unreachable controls, and user-equivalent key count. | Derived from A01; `PASS` |
 | `TC-AR-E09` | Data preservation after error. | Before/after field snapshot and recovery effort. | Derived from R03; `FAIL` |
 | `TC-AR-E10` | Manual repeat entry versus one-click copy. | Approved source/target pair and at least three comparable human sessions. | Implemented explicit blocker — copy behavior/human protocol unavailable |
 
@@ -110,7 +111,7 @@ already covered.
 
 | ID | Scenario | Expected result | Current status |
 | --- | --- | --- | --- |
-| `TC-AR-A01` | Keyboard-only approved path. | All critical controls are reachable in logical order with visible focus. | `FAIL` current run |
+| `TC-AR-A01` | Keyboard-only approved path. | All critical controls are reachable in logical order with visible focus. | `PASS` current run after radio-group matching refinement |
 | `TC-AR-A02` | Labels, names, and error association. | Controls have usable accessible names and errors identify/focus the affected field. | `PASS` current run; prior failure was not reproduced |
 | `TC-AR-A03` | Phone viewport `390×844`. | No horizontal overflow or unreachable critical control through the approved boundary. | `PASS` current run |
 | `TC-AR-A04` | Tablet viewport `768×1024`. | Same quality gates as desktop through the approved boundary. | `PASS` current run |

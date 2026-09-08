@@ -9,9 +9,9 @@ The approved matrix contains 64 cases. The current catalog contains 50 browser
 declarations, 9 derived results, 5 decision blockers, and 16 planning-only cases.
 Declaration, execution, and coverage are different states and must not be
 reported as interchangeable. The current full run is
-`test-The-CRM-Carpenters-000143-20260906T033946832Z`.
+`test-The-CRM-Carpenters-000154-20260908T061810213Z`.
 
-That run executed all 50 selected browser cases and recorded 3 direct failures,
+That run executed all 50 selected browser cases and recorded 2 direct failures,
 20 executed blockers, 1 NOT APPLICABLE outcome, and zero final submissions.
 
 The generated Steps 1–8 field map contains 392 controls grouped into 264

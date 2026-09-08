@@ -27,7 +27,9 @@ import { reachStep } from '../../../support/journeys/access-request-journeys.js'
 const uploadPath = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 
 test(accessCaseTitle('TC-AR-R02', 'characterizes reload state on every approved later step'), async ({}, testInfo) => {
-  test.setTimeout(420_000);
+  // This characterization intentionally reloads four later steps. The live
+  // provider can spend several minutes rebuilding each step after navigation.
+  test.setTimeout(900_000);
   await runLiveAccessCase(testInfo, {
     caseId: 'TC-AR-R02',
     resultType: 'Characterization',

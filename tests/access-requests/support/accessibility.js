@@ -1,5 +1,14 @@
 import { STEP } from './selectors.js';
 
+export function keyboardTargetMatches(expected, focused) {
+  if (expected.type === 'radio' && focused.type === 'radio' && expected.name && focused.name) {
+    return expected.name === focused.name;
+  }
+  return expected.id
+    ? expected.id === focused.id
+    : expected.name === focused.name && expected.role === focused.role;
+}
+
 export async function keyboardReachability(page, stepNumber) {
   const controls = page.locator(`${STEP[stepNumber]} a[href]:visible:not(#gform_save_3_footer_link), ${STEP[stepNumber]} button:visible, ${STEP[stepNumber]} input:visible, ${STEP[stepNumber]} select:visible, ${STEP[stepNumber]} textarea:visible`);
   const expected = [];
@@ -16,6 +25,7 @@ export async function keyboardReachability(page, stepNumber) {
     expected.push({
       id: await control.getAttribute('id'),
       name: await control.getAttribute('name'),
+      type: await control.getAttribute('type'),
       role: await control.getAttribute('role') ?? await control.evaluate((element) => element.tagName.toLowerCase()),
     });
   }
@@ -35,14 +45,13 @@ export async function keyboardReachability(page, stepNumber) {
       return {
         id: element.id || null,
         name: element.getAttribute('name'),
+        type: element.getAttribute('type'),
         role: element.getAttribute('role') ?? element.tagName.toLowerCase(),
       };
     }, STEP[stepNumber]);
     if (!focused) continue;
     sequence.push(focused);
-    const match = expected.findIndex((item) => item.id
-      ? item.id === focused.id
-      : item.name === focused.name && item.role === focused.role);
+    const match = expected.findIndex((item) => keyboardTargetMatches(item, focused));
     if (match >= 0) reached.add(match);
   }
 
