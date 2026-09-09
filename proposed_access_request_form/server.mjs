@@ -13,7 +13,14 @@ const contentTypes = {
 
 createServer((request, response) => {
     const requestUrl = new URL(request.url ?? '/', `http://${request.headers.host ?? 'localhost'}`);
-    const relativePath = requestUrl.pathname === '/' ? 'index.html' : decodeURIComponent(requestUrl.pathname.slice(1));
+    let relativePath;
+    try {
+        relativePath = requestUrl.pathname === '/' ? 'index.html' : decodeURIComponent(requestUrl.pathname.slice(1));
+    } catch {
+        response.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+        response.end('Malformed prototype URL.');
+        return;
+    }
     const resolvedPath = resolve(prototypeRoot, normalize(relativePath));
     const isInside = resolvedPath === resolvedRoot || resolvedPath.startsWith(`${resolvedRoot}${sep}`);
     if (!isInside || !existsSync(resolvedPath) || statSync(resolvedPath).isDirectory()) {
@@ -23,7 +30,7 @@ createServer((request, response) => {
     }
     response.writeHead(200, {
         'Cache-Control': 'no-store',
-        'Content-Security-Policy': "default-src 'self'; style-src 'self'; img-src 'self' data:; script-src 'self'; connect-src 'self'",
+        'Content-Security-Policy': "default-src 'self'; style-src 'self' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net data:; img-src 'self' data:; script-src 'self'; connect-src 'self'",
         'Content-Type': contentTypes[extname(resolvedPath)] ?? 'application/octet-stream',
         'X-Content-Type-Options': 'nosniff',
     });

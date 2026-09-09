@@ -32,7 +32,7 @@ export function createCompleteDemoState() {
         projectReference: 'SX-PROTOTYPE-104', tenantCompany: 'Example Mobile Networks', tenantContactName: 'Taylor Chen', tenantContactPhone: '0400 200 300', tenantLocation: 'Roof and Level 14', accessAreas: 'Loading bay, goods lift and rooftop plant area',
         carrierName: 'Fictional Carrier Australia', carrierContactName: 'Jordan Lee', carrierContactPhone: '0400 555 019', carrierAddress: '50 Sample Way, Melbourne VIC 3000', accessDate: '18-09-2026', accessStart: '09:00', accessFinish: '15:00', numberOfDays: '1',
         requesterName: 'Alex Morgan', requesterCompany: 'Signal Works Pty Ltd', requesterJobTitle: 'Project coordinator', requesterPhone: '0400 123 456', requesterEmail: 'alex.morgan@example.test', requesterAddress: '24 Demonstration Drive, Richmond VIC 3121',
-        natureOfWorks: 'Inspection and minor maintenance', permitType: 'Standard access permit', worksDescription: 'Inspect rooftop equipment and complete non-invasive maintenance.', noisyWorks: 'no', disruptiveWorks: 'no', specialAccessAcknowledged: true,
+        natureOfWorks: 'maintenance', permitType: 'standard', worksDescription: 'Inspect rooftop equipment and complete non-invasive maintenance.', noisyWorks: 'no', disruptiveWorks: 'no', specialAccessAcknowledged: true,
         permitAgreed: true, ownerPermitAgreed: true, worksAtHeight: 'no', asbestosRisk: 'no', fireIsolation: 'no',
         technicalChange: 'not-applicable', roofAccess: 'no', powerRequired: 'no', ceilingAccess: 'no', riserAccess: 'no', coreDrilling: 'no', certifierRequired: 'no',
         technicalRulesAgreed: true, cablingAgreed: true, penetrationsAgreed: true, cleanupAgreed: true,

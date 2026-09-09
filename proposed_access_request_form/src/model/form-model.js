@@ -1,13 +1,13 @@
 export const STATE_VERSION = 1;
 
 export const DOCUMENT_RULES = Object.freeze({
-    qualification: { label: 'Qualifications & training', originalId: 'input_3_445', required: true, maxBytes: 10_000_000, confirmation: 'qualificationReviewed' },
-    authority: { label: 'Letter of Authority', originalId: 'input_3_44', required: true, maxBytes: 10_000_000, confirmation: 'authorityReviewed' },
-    swms: { label: "Signed 'Site Specific' SWMS", originalId: 'input_3_338', required: true, maxBytes: 10_000_000, confirmation: 'swmsReviewed' },
-    workersComp: { label: 'Workers Compensation Certificate', originalId: 'input_3_42', required: true, maxBytes: 10_000_000, confirmation: 'workersCompReviewed' },
-    liability: { label: 'Public Liability Certificate', originalId: 'input_3_128', required: true, maxBytes: 10_000_000, confirmation: 'liabilityReviewed' },
-    roofPermit: { label: 'Roof or Tower Access Permit', originalId: 'input_3_46', required: false, maxBytes: 10_000_000, confirmation: 'roofPermitReviewed' },
-    supporting: { label: 'Additional Documentation', originalId: 'input_3_494', required: false, maxBytes: 10_000_000, confirmation: 'supportingReviewed' },
+    qualification: { label: 'Qualifications & training', originalId: 'input_3_445', required: true, maxBytes: 15_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'qualificationReviewed', source: 'prototype assumption' },
+    authority: { label: 'Letter of Authority', originalId: 'input_3_44', required: true, maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'authorityReviewed', source: 'U04 executable size scenario; type is a prototype assumption' },
+    swms: { label: "Signed 'Site Specific' SWMS", originalId: 'input_3_338', required: true, maxBytes: 20_000_000, acceptedTypes: ['application/pdf'], confirmation: 'swmsReviewed', source: 'prototype assumption' },
+    workersComp: { label: 'Workers Compensation Certificate', originalId: 'input_3_42', required: true, maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'workersCompReviewed', source: 'prototype assumption' },
+    liability: { label: 'Public Liability Certificate', originalId: 'input_3_128', required: true, maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'liabilityReviewed', source: 'prototype assumption' },
+    roofPermit: { label: 'Roof or Tower Access Permit', originalId: 'input_3_46', required: false, maxBytes: 15_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'roofPermitReviewed', source: 'prototype assumption' },
+    supporting: { label: 'Additional Documentation', originalId: 'input_3_494', required: false, maxBytes: 25_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'supportingReviewed', source: 'prototype assumption' },
 });
 
 const DEFAULT_FIELDS = Object.freeze({
@@ -61,6 +61,7 @@ const emptyDocument = () => ({
     version: 0,
     error: '',
     simulatedFailure: false,
+    pendingOperation: null,
 });
 
 const emptyContractor = (id = 'contractor-1') => ({
@@ -121,6 +122,22 @@ export function changeSite(state, site) {
     return next;
 }
 
+export function setSiteQuery(state, query) {
+    let next = setField(state, 'siteQuery', query);
+    if (next.selectedSite && query !== next.selectedSite.name) {
+        next.selectedSite = null;
+        next.confirmations.siteRequirements = '';
+        next.fields.requirementsRead = false;
+    }
+    return next;
+}
+
+export function setSiteRequirementsReviewed(state, reviewed) {
+    const next = setField(state, 'requirementsRead', reviewed);
+    next.confirmations.siteRequirements = reviewed ? next.selectedSite?.slug ?? '' : '';
+    return next;
+}
+
 export function setBranchActive(state, branch, active) {
     const controlledFields = BRANCH_FIELDS[branch];
     if (!controlledFields) throw new Error(`Unknown Access Request branch: ${branch}`);
@@ -176,11 +193,11 @@ export function selectDocument(state, documentKey, file, { simulateFailure = fal
     const current = next.documents[documentKey];
 
     if (file.size > rule.maxBytes) {
-        current.error = 'File must be 10 MB or smaller.';
+        current.error = `File must be ${rule.maxBytes / 1_000_000} MB or smaller.`;
         return next;
     }
-    if (file.type && !['application/pdf', 'image/jpeg', 'image/png'].includes(file.type)) {
-        current.error = 'Use a PDF, JPG or PNG file for this prototype scenario.';
+    if (file.type && !rule.acceptedTypes.includes(file.type)) {
+        current.error = `Use ${rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(' or ')} for this prototype scenario.`;
         return next;
     }
     if (simulateFailure) {
@@ -195,8 +212,27 @@ export function selectDocument(state, documentKey, file, { simulateFailure = fal
     current.version += 1;
     current.error = '';
     current.simulatedFailure = false;
+    current.pendingOperation = null;
     next.confirmations[rule.confirmation] = 0;
     return next;
+}
+
+let operationSequence = 0;
+
+export function beginDocumentSelection(state, documentKey, file) {
+    if (!DOCUMENT_RULES[documentKey]) throw new Error(`Unknown document field: ${documentKey}`);
+    const next = changed(state);
+    const operationId = `${documentKey}-${operationSequence += 1}`;
+    next.documents[documentKey].pendingOperation = { operationId, file: { name: file.name, size: file.size, type: file.type } };
+    return { state: next, operationId };
+}
+
+export function resolveDocumentSelection(state, documentKey, operationId, { failed = false } = {}) {
+    const pending = state.documents[documentKey]?.pendingOperation;
+    if (!pending || pending.operationId !== operationId) return state;
+    const next = clone(state);
+    next.documents[documentKey].pendingOperation = null;
+    return selectDocument(next, documentKey, pending.file, { simulateFailure: failed });
 }
 
 export function removeDocument(state, documentKey) {
@@ -254,6 +290,10 @@ const required = (errors, fields, key, message) => {
     if (fields[key] === '' || fields[key] === false || fields[key] == null) errors[key] = message;
 };
 
+const allowedValue = (errors, fields, key, values, message) => {
+    if (!values.includes(fields[key])) errors[key] = message;
+};
+
 const documentReady = (state, key) => {
     const rule = DOCUMENT_RULES[key];
     const document = state.documents[key];
@@ -285,8 +325,8 @@ export function validateStage(state, stage) {
         if (!documentReady(next, 'qualification')) errors.qualification = 'Select and review the qualification document.';
     }
     if (stage === 5) {
-        required(errors, fields, 'natureOfWorks', 'Choose the nature of works.');
-        required(errors, fields, 'permitType', 'Choose the network access permit type.');
+        allowedValue(errors, fields, 'natureOfWorks', ['inspection', 'maintenance', 'installation', 'removal'], 'Choose the nature of works.');
+        allowedValue(errors, fields, 'permitType', ['standard', 'after-hours', 'isolation'], 'Choose the network access permit type.');
         required(errors, fields, 'worksDescription', 'Describe the works to be completed.');
         if (next.branches.noisyWorks) required(errors, fields, 'noisyDetails', 'Describe the noisy or disruptive works.');
         required(errors, fields, 'specialAccessAcknowledged', 'Acknowledge the special access requirements.');
@@ -345,15 +385,32 @@ export function goToStage(state, stage, { validateCurrent = false } = {}) {
 }
 
 export function reviewSections(state) {
+    const display = (value) => typeof value === 'boolean' ? (value ? 'Confirmed' : '') : value;
+    const values = (pairs) => pairs.map(([label, key]) => [label, display(state.fields[key])]).filter(([, value]) => value !== '' && value != null);
+    const contractorValues = state.contractors.flatMap((person, index) => [
+        [`Contractor ${index + 1} · Full name`, person.name], [`Contractor ${index + 1} · Company`, person.company],
+        [`Contractor ${index + 1} · Phone`, person.phone], [`Contractor ${index + 1} · Driver licence`, person.licence],
+        [`Contractor ${index + 1} · White Card`, person.whiteCard], [`Contractor ${index + 1} · Induction`, person.induction],
+        [`Contractor ${index + 1} · Induction expiry`, person.inductionExpiry],
+    ]).filter(([, value]) => value);
+    const documentValues = Object.entries(DOCUMENT_RULES)
+        .filter(([key, rule]) => rule.required || state.documents[key].status !== 'missing')
+        .map(([key, rule]) => {
+            const document = state.documents[key];
+            const reviewed = state.confirmations[rule.confirmation] === document.version && document.status === 'selected';
+            const identity = document.status === 'selected' ? document.file?.name : document.status;
+            return [`${rule.label} status`, `${identity} · ${reviewed ? 'reviewed' : 'review required'} · version ${document.version}`];
+        });
     return [
-        { stage: 1, title: 'Request context', values: [['Site', state.selectedSite?.name], ['Owner', state.fields.ownerName], ['Linked LAAN', state.fields.linkedLaan]] },
-        { stage: 3, title: 'Request details', values: [['Project reference', state.fields.projectReference], ['Tenant', state.fields.tenantCompany], ['Carrier', state.fields.carrierName], ['Access date', state.fields.accessDate]] },
-        { stage: 4, title: 'Contractors', values: state.contractors.map((person, index) => [`Contractor ${index + 1}`, [person.name, person.company].filter(Boolean).join(' · ')]) },
-        { stage: 5, title: 'Works', values: [['Nature of works', state.fields.natureOfWorks], ['Description', state.fields.worksDescription], ...(state.branches.noisyWorks ? [['Noisy works', state.fields.noisyDetails]] : [])] },
-        { stage: 6, title: 'Technical details', values: [['Change', state.fields.technicalChange], ...(state.branches.technicalWork ? [['Details', state.fields.technicalDetails]] : [])] },
-        { stage: 7, title: 'Documents', values: Object.entries(DOCUMENT_RULES).filter(([key, rule]) => rule.required || state.documents[key].status !== 'missing').map(([key, rule]) => [rule.label, state.documents[key].status === 'selected' ? state.documents[key].file?.name : state.documents[key].status]) },
-        { stage: 8, title: 'Declarations', values: [['Invoice details', state.fields.invoiceDetails], ['Additional notes', state.fields.additionalNotes]] },
-    ].map((section) => ({ ...section, values: section.values.filter(([, value]) => value) }));
+        { stage: 1, title: 'Request context', values: [['Site', state.selectedSite?.name], ...values([['Linked LAAN', 'linkedLaan'], ['Owner', 'ownerName'], ['Tenure', 'tenureConfirmed'], ['Network access', 'networkRequired'], ['Terms', 'termsAccepted']])] },
+        { stage: 2, title: 'Site requirements', values: values([['Access type', 'emergencyAccess'], ['Building address', 'buildingAddress'], ['Requirements reviewed', 'requirementsRead']]) },
+        { stage: 3, title: 'Request details', values: values([['Project reference', 'projectReference'], ['Tenant company', 'tenantCompany'], ['Tenant contact', 'tenantContactName'], ['Tenant phone', 'tenantContactPhone'], ['Tenant location', 'tenantLocation'], ['Access areas', 'accessAreas'], ['Carrier', 'carrierName'], ['Carrier contact', 'carrierContactName'], ['Carrier phone', 'carrierContactPhone'], ['Carrier address', 'carrierAddress'], ['Access date', 'accessDate'], ['Start time', 'accessStart'], ['Finish time', 'accessFinish'], ['Number of days', 'numberOfDays'], ['Requester', 'requesterName'], ['Requester company', 'requesterCompany'], ['Requester role', 'requesterJobTitle'], ['Requester phone', 'requesterPhone'], ['Requester email', 'requesterEmail'], ['Requester address', 'requesterAddress']]) },
+        { stage: 4, title: 'Contractors', values: contractorValues },
+        { stage: 5, title: 'Works & permits', values: values([['Nature of works', 'natureOfWorks'], ['Permit type', 'permitType'], ['Works description', 'worksDescription'], ['Noisy works', 'noisyWorks'], ...(state.branches.noisyWorks ? [['Noisy works details', 'noisyDetails']] : []), ['Special access', 'specialAccessAcknowledged'], ['Network permit', 'permitAgreed'], ['Owner permits', 'ownerPermitAgreed'], ['Working at heights', 'worksAtHeight'], ['Asbestos risk', 'asbestosRisk'], ['Fire isolation', 'fireIsolation']]) },
+        { stage: 6, title: 'Technical details', values: values([['Technical change', 'technicalChange'], ...(state.branches.technicalWork ? [['Technical details', 'technicalDetails'], ['Cable run start', 'cableStart'], ['Cable run end', 'cableEnd'], ['Riser', 'riser'], ['Cable capacity', 'cableCapacity']] : []), ['Roof access', 'roofAccess'], ...(state.branches.roofAccess ? [['Roof areas', 'roofAreas']] : []), ['Power required', 'powerRequired'], ...(state.branches.powerRequired ? [['Power details', 'powerDetails'], ['Billing arrangement', 'billingArrangement']] : []), ['Ceiling access', 'ceilingAccess'], ['Riser access', 'riserAccess'], ['Core drilling', 'coreDrilling'], ['Certifier required', 'certifierRequired'], ...(state.branches.certifierRequired ? [['Certifier', 'certifierName']] : []), ['Technical requirements', 'technicalRulesAgreed'], ['Cabling', 'cablingAgreed'], ['Penetrations', 'penetrationsAgreed'], ['Clean-up', 'cleanupAgreed']]) },
+        { stage: 7, title: 'Safety & evidence', values: [...values([['SASSI registration', 'sassiNumber'], ['Workers Compensation expiry', 'workersCompExpiry'], ['Public Liability expiry', 'liabilityExpiry'], ...Array.from({ length: 12 }, (_, index) => [`SWMS review ${index + 1}`, `swms${index + 1}`]), ['Documentation declaration', 'documentsConfirmed']]), ...documentValues] },
+        { stage: 8, title: 'Declarations', values: values([['Site declaration', 'siteDeclaration'], ['Safety declaration', 'safetyDeclaration'], ['Invoice details', 'invoiceDetails'], ['Final declaration', 'finalDeclaration'], ['Additional notes', 'additionalNotes']]) },
+    ];
 }
 
 export function serializeSession(state) {
@@ -370,7 +427,22 @@ export function restoreSession(serialized) {
         throw new Error('The saved prototype session is unreadable. Reset it to continue.');
     }
     if (parsed.version !== STATE_VERSION) throw new Error('The saved prototype session is from an incompatible version.');
-    const restored = { ...createInitialState(), ...parsed };
+    const isRecord = (value) => value && typeof value === 'object' && !Array.isArray(value);
+    const initial = createInitialState();
+    const documentKeys = Object.keys(DOCUMENT_RULES);
+    const validShape = isRecord(parsed) && isRecord(parsed.fields) && isRecord(parsed.documents)
+        && isRecord(parsed.confirmations) && isRecord(parsed.branches) && Array.isArray(parsed.contractors)
+        && Object.keys(parsed.documents).every((key) => documentKeys.includes(key))
+        && documentKeys.every((key) => isRecord(parsed.documents[key]));
+    if (!validShape) throw new Error('The saved prototype session is unreadable. Reset it to continue.');
+    const restored = {
+        ...initial,
+        ...parsed,
+        fields: { ...initial.fields, ...parsed.fields },
+        documents: Object.fromEntries(documentKeys.map((key) => [key, { ...initial.documents[key], ...parsed.documents[key] }])),
+        confirmations: { ...initial.confirmations, ...parsed.confirmations },
+        branches: { ...initial.branches, ...parsed.branches },
+    };
     for (const [key, document] of Object.entries(restored.documents)) {
         if (document.status === 'selected' || document.rememberedName) {
             document.status = 'needs-reselection';

@@ -49,9 +49,9 @@ Result on 2026-09-09:
 
 | Suite | Result | Public seam |
 | --- | ---: | --- |
-| State model | 10 passed | preservation, branch, copy, contractor and recovery contracts |
-| Browser workflow | 6 passed | visible workflow, focus, Site keyboard use, review, uploads and phone reflow |
-| Total local declarations | 16 passed | grouped evidence for mapped Access Request concerns |
+| State model | 13 passed | preservation, branch, copy, contractor, field-specific documents, stale-file and recovery contracts |
+| Browser workflow | 11 passed | visible workflow, focus, Site keyboard use, review, uploads, malformed URLs and responsive reflow |
+| Total local declarations | 24 passed | grouped evidence for mapped Access Request concerns |
 
 The browser pass uses the machine's existing local Chromium build because the
 installed Playwright package expects a newer optional browser bundle. This is
@@ -59,24 +59,29 @@ isolated in the prototype Playwright configuration and does not alter the live
 Access Request suite.
 
 Syntax checks passed for the application, state model, fixtures and local
-server. Visual captures were inspected at 1440×900, 1361×636 and 390×844. The
-phone browser check also verified no unintended horizontal overflow.
+server. Visual captures were inspected at 1440×900, 1361×636 and 390×844.
+Automated reflow checks cover 320, 390, 768 and 1024px without unintended
+horizontal overflow.
 
 ## Coverage accounting
 
 The source inventory remains 264 field rows and 392 captured controls in
 [`field-disposition-plan.json`](./field-disposition-plan.json). The prototype
-source directly retains 89 unique original input identities on semantic
-controls. Remaining inventory rows are still accounted for by the disposition
-register and include repeated contractor variants, widget auxiliaries, hidden
-transport values, duplicate navigation/submission controls, inactive branch
-variants and production-rule details that cannot honestly become local
-business truth.
+source directly retains 89 unique original input identities. The synchronized
+register classifies 56 rows as direct semantic controls and 80 repeated rows as
+implemented through the contractor component (136 implemented rows total), 31
+as provider-only exclusions, and 97 as mapped production deferrals. Those
+remaining rows include widget auxiliaries, hidden transport values, duplicate
+navigation/submission controls, inactive branch variants and production-rule
+details that cannot honestly become local business truth.
 
 The 64 live catalog IDs remain mapped once each in
 [`test-case-plan.json`](./test-case-plan.json). They are concerns, not a demand
-for 64 duplicate local executions. The 16 local declarations deliberately
-group equivalent public behaviors. Decision-gated and measurement entries keep
+for 64 duplicate local executions. The 24 local declarations deliberately
+group equivalent public behaviors. The synchronized register records 32 main
+concerns as implemented or partially covered by shared checks, 20 as available
+guided demonstrations, and 12 as measurement methods that remain unrun.
+Decision-gated and measurement entries keep
 their external deferrals; a local demonstration does not rewrite their live
 PASS, FAIL, BLOCKED or NOT APPLICABLE classifications.
 

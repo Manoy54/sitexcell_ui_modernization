@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.route('https://cdn.jsdelivr.net/**', (route) => route.abort());
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => sessionStorage.clear());
     await page.reload();
 });
@@ -39,6 +40,28 @@ test('PA-005/006 complete scenario reaches review and cannot submit', async ({ p
     await expect(page.getByText('Ready for prototype review', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Submit access request' })).toBeDisabled();
     await expect(page.locator('.review-section').first().getByText('Southbank Exchange', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: /Stage 5/ }).click();
+    await expect(page.getByLabel('Nature of works')).toHaveValue('maintenance');
+    await expect(page.getByLabel('Network access permit type')).toHaveValue('standard');
+});
+
+test('PA-X02 linked LAAN demonstration preserves a conflicting selected Site', async ({ page }) => {
+    const search = page.getByLabel('Search Site by name or address');
+    await search.fill('collins');
+    await search.press('ArrowDown');
+    await search.press('Enter');
+    const reviewer = page.getByText('Reviewer demonstrations');
+    await reviewer.click();
+    await page.getByRole('button', { name: 'Apply linked LAAN context' }).click();
+
+    await expect(page.getByTestId('selected-site')).toContainText('Collins Exchange');
+    await expect(page.getByRole('status')).toContainText('preserved');
+});
+
+test('malformed URL encoding returns 400 and leaves the local server healthy', async ({ request }) => {
+    const malformed = await request.get('/%');
+    expect(malformed.status()).toBe(400);
+    expect((await request.get('/')).status()).toBe(200);
 });
 
 test('PA-U04 invalid replacement preserves the previous file and another document', async ({ page }) => {
@@ -65,3 +88,11 @@ test('PA-A03 phone layout has no horizontal document overflow', async ({ page })
     expect(overflow).toBeLessThanOrEqual(1);
     await expect(page.getByRole('button', { name: 'Show request summary' })).toBeVisible();
 });
+
+for (const width of [320, 768, 1024]) {
+    test(`PA-A03-A05 reflows without horizontal overflow at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 800 });
+        await page.reload();
+        expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+    });
+}

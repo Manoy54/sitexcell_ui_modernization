@@ -3,10 +3,13 @@ import assert from 'node:assert/strict';
 
 import {
     applyCopy,
+    beginDocumentSelection,
     changeSite,
     createInitialState,
     removeDocument,
+    reviewSections,
     restoreSession,
+    resolveDocumentSelection,
     selectDocument,
     serializeSession,
     setBranchActive,
@@ -142,4 +145,42 @@ test('PA-C08 forbidden copy pair is rejected in state logic', () => {
 test('PA-R04 corrupt and incompatible sessions never restore a false ready state', () => {
     assert.throws(() => restoreSession('{broken'), /unreadable/);
     assert.throws(() => restoreSession(JSON.stringify({ version: 99 })), /incompatible/);
+    assert.throws(() => restoreSession(JSON.stringify({ version: 1, documents: null })), /unreadable/);
+    assert.throws(() => restoreSession(JSON.stringify({ version: 1, documents: { unknown: {} } })), /unreadable/);
+});
+
+test('PA-006 review contains every active field, contractor attribute and document status', () => {
+    let state = createInitialState();
+    state = setField(state, 'projectReference', 'SX-REVIEW-1');
+    state = setField(state, 'requirementsRead', true);
+    state = setContractorField(state, 'contractor-1', 'name', 'Sam Rivera');
+    state = setContractorField(state, 'contractor-1', 'licence', 'VIC-DEMO-1');
+
+    const sections = reviewSections(state);
+    assert.deepEqual(sections.map(({ stage }) => stage), [1, 2, 3, 4, 5, 6, 7, 8]);
+    assert.ok(sections.find(({ stage }) => stage === 3).values.some(([label]) => label === 'Project reference'));
+    assert.ok(sections.find(({ stage }) => stage === 4).values.some(([label]) => label === 'Contractor 1 · Driver licence'));
+    assert.ok(sections.find(({ stage }) => stage === 7).values.some(([label]) => label === 'Letter of Authority status'));
+});
+
+test('PA-U07 a stale delayed file result cannot replace a newer selection', () => {
+    let state = createInitialState();
+    const first = beginDocumentSelection(state, 'authority', pdf('authority-a.pdf'));
+    const second = beginDocumentSelection(first.state, 'authority', pdf('authority-b.pdf'));
+    state = resolveDocumentSelection(second.state, 'authority', second.operationId, { failed: false });
+    state = resolveDocumentSelection(state, 'authority', first.operationId, { failed: true });
+
+    assert.equal(state.documents.authority.file.name, 'authority-b.pdf');
+    assert.equal(state.documents.authority.error, '');
+});
+
+test('PA-U03 document contracts are field-specific prototype assumptions', () => {
+    let state = createInitialState();
+    state = selectDocument(state, 'authority', { name: 'authority.jpg', size: 100_000, type: 'image/jpeg' });
+    assert.match(state.documents.authority.error, /PDF/);
+
+    state = selectDocument(state, 'qualification', { name: 'qualification.jpg', size: 100_000, type: 'image/jpeg' });
+    assert.equal(state.documents.qualification.status, 'selected');
+    state = selectDocument(state, 'qualification', pdf('large-qualification.pdf', 12_000_000));
+    assert.equal(state.documents.qualification.status, 'selected');
 });

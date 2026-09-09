@@ -16,6 +16,8 @@ import {
     setContractorCount,
     setContractorField,
     setField,
+    setSiteQuery,
+    setSiteRequirementsReviewed,
     undoLastCopy,
     validateStage,
 } from './model/form-model.js';
@@ -155,9 +157,10 @@ function documentCard(key) {
         <div class="document-heading"><span class="document-icon">${icon('document')}</span><div><h3>${escapeHtml(rule.label)}${rule.required ? '<span aria-hidden="true">*</span>' : ''}</h3><p>${escapeHtml(statusCopy)}</p></div></div>
         ${documentState.error ? `<p class="field-error" role="status">${escapeHtml(documentState.error)}</p>` : ''}
         <div class="document-actions">
-            <label class="file-button">${icon('upload')}<span>${documentState.status === 'selected' ? 'Replace' : 'Choose file'}</span><input class="sr-only" type="file" data-document="${key}" aria-label="Choose ${escapeHtml(rule.label)} file" accept=".pdf,.jpg,.jpeg,.png"></label>
+            <label class="file-button">${icon('upload')}<span>${documentState.status === 'selected' ? 'Replace' : 'Choose file'}</span><input class="sr-only" type="file" data-document="${key}" aria-label="Choose ${escapeHtml(rule.label)} file" accept="${rule.acceptedTypes.join(',')}"></label>
             ${documentState.status !== 'missing' ? `<button type="button" class="button-link" data-remove-document="${key}">Remove</button>` : ''}
         </div>
+        <p class="document-contract">${rule.maxBytes / 1_000_000} MB maximum · ${escapeHtml(rule.source)}</p>
         ${documentState.status === 'selected' ? `<label class="check-line document-confirm"><input type="checkbox" data-confirm-document="${key}"${checked(isConfirmed)}> <span>I reviewed this selected file</span></label>` : ''}
     </article>`;
 }
@@ -359,14 +362,13 @@ function render() {
 function updateFieldFromControl(control) {
     const key = control.dataset.field;
     const value = control.type === 'checkbox' ? control.checked : control.value;
-    state = setField(state, key, value);
+    state = key === 'requirementsRead' ? setSiteRequirementsReviewed(state, value) : setField(state, key, value);
     if (key === 'noisyWorks') state = setBranchActive(state, 'noisyWorks', value === 'yes');
     if (key === 'technicalChange') state = setBranchActive(state, 'technicalWork', value !== 'not-applicable' && value !== '');
     if (key === 'roofAccess') state = setBranchActive(state, 'roofAccess', value === 'yes');
     if (key === 'powerRequired') state = setBranchActive(state, 'powerRequired', value === 'yes');
     if (key === 'certifierRequired') state = setBranchActive(state, 'certifierRequired', value === 'yes');
     if (key === 'contractorCount') state = setContractorCount(state, value);
-    if (key === 'requirementsRead') state.confirmations.siteRequirements = value ? state.selectedSite?.slug ?? '' : '';
 }
 
 root.addEventListener('input', (event) => {
@@ -379,8 +381,7 @@ root.addEventListener('input', (event) => {
     const control = event.target.closest('[data-field]');
     if (!control || control.matches('[type="radio"], [type="checkbox"], select')) return;
     if (control.hasAttribute('data-site-query')) {
-        state = setField(state, 'siteQuery', control.value);
-        if (state.selectedSite && control.value !== state.selectedSite.name) state.selectedSite = null;
+        state = setSiteQuery(state, control.value);
         siteMenuOpen = true;
         activeSiteIndex = -1;
         saveState();
@@ -484,10 +485,14 @@ root.addEventListener('click', (event) => {
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-load-laan')) {
+        const linkedSite = SITES.find((candidate) => candidate.id === LINKED_LAAN.siteId);
+        if (state.selectedSite && state.selectedSite.id !== linkedSite.id) {
+            state.notices.push(`Linked LAAN Site conflict detected. ${state.selectedSite.name} was preserved; no LAAN values were merged.`);
+            saveState(); render(); return;
+        }
         state = setField(state, 'linkedLaan', LINKED_LAAN.id);
         if (!state.fields.projectReference) state = setField(state, 'projectReference', LINKED_LAAN.projectReference);
-        const site = SITES.find((candidate) => candidate.id === LINKED_LAAN.siteId);
-        state = changeSite(state, site);
+        state = changeSite(state, linkedSite);
         state.notices.push(state.fields.projectReference === LINKED_LAAN.projectReference ? 'Mapped fictional LAAN context applied.' : 'Linked LAAN recorded; the populated project reference was preserved for review.');
         saveState(); render(); return;
     }
