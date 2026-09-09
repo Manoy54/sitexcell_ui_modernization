@@ -1,13 +1,19 @@
 import { createCompleteDemoState, LINKED_LAAN, RETURNING_PEOPLE, SITES } from '../fixtures/prototype-fixtures.js';
 import {
     DOCUMENT_RULES,
+    addNotice,
+    advanceFromCurrentStage,
     applyCopy,
+    beginDocumentSelection,
+    beginReviewEdit,
     changeSite,
     confirmDocument,
     createInitialState,
     formIsReady,
     goToStage,
     removeDocument,
+    recordValidationCorrection,
+    resolveDocumentSelection,
     restoreSession,
     reviewSections,
     selectDocument,
@@ -19,6 +25,7 @@ import {
     setSiteQuery,
     setSiteRequirementsReviewed,
     undoLastCopy,
+    useSavedDocument,
     validateStage,
 } from './model/form-model.js';
 
@@ -49,9 +56,7 @@ function loadState() {
     try {
         return restoreSession(saved);
     } catch (error) {
-        const clean = createInitialState();
-        clean.notices.push(error.message);
-        return clean;
+        return addNotice(createInitialState(), error.message);
     }
 }
 
@@ -149,18 +154,20 @@ function documentCard(key) {
     const rule = DOCUMENT_RULES[key];
     const documentState = state.documents[key];
     const confirmationKey = rule.confirmation;
-    const isConfirmed = state.confirmations[confirmationKey] === documentState.version && documentState.status === 'selected';
-    const statusCopy = documentState.status === 'selected'
-        ? `${documentState.file?.name} · ${(documentState.file?.size / 1_000).toFixed(0)} KB`
+    const isConfirmed = state.confirmations[confirmationKey] === documentState.version && documentState.status === 'selected' && documentState.availability === 'available';
+    const fileSize = documentState.file?.size ? ` · ${(documentState.file.size / 1_000).toFixed(0)} KB` : '';
+    const statusCopy = documentState.file
+        ? `${documentState.file.name}${fileSize} · ${documentState.availability}`
         : documentState.status === 'needs-reselection' ? `${documentState.rememberedName} · reselection required` : 'No file selected';
     return `<article class="document-card ${documentState.error ? 'document-error' : ''}" data-testid="document-${key}" data-original-id="${rule.originalId}">
         <div class="document-heading"><span class="document-icon">${icon('document')}</span><div><h3>${escapeHtml(rule.label)}${rule.required ? '<span aria-hidden="true">*</span>' : ''}</h3><p>${escapeHtml(statusCopy)}</p></div></div>
+        ${documentState.file ? `<p class="document-provenance">Owner: ${escapeHtml(documentState.owner)} · Source: ${escapeHtml(documentState.source)}</p>` : ''}
         ${documentState.error ? `<p class="field-error" role="status">${escapeHtml(documentState.error)}</p>` : ''}
         <div class="document-actions">
             <label class="file-button">${icon('upload')}<span>${documentState.status === 'selected' ? 'Replace' : 'Choose file'}</span><input class="sr-only" type="file" data-document="${key}" aria-label="Choose ${escapeHtml(rule.label)} file" accept="${rule.acceptedTypes.join(',')}"></label>
             ${documentState.status !== 'missing' ? `<button type="button" class="button-link" data-remove-document="${key}">Remove</button>` : ''}
         </div>
-        <p class="document-contract">${rule.maxBytes / 1_000_000} MB maximum · ${escapeHtml(rule.source)}</p>
+        <p class="document-contract">One file · ${rule.maxBytes / 1_000_000} MB maximum · ${escapeHtml(rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(', '))}${rule.expiryField ? ' · current expiry required' : ''} · ${escapeHtml(rule.source)}</p>
         ${documentState.status === 'selected' ? `<label class="check-line document-confirm"><input type="checkbox" data-confirm-document="${key}"${checked(isConfirmed)}> <span>I reviewed this selected file</span></label>` : ''}
     </article>`;
 }
@@ -334,7 +341,7 @@ function workspace() {
         <div class="workspace-inner">
             <section class="workspace-context"><h2>Request summary</h2><div class="context-id">SAR · PROTOTYPE</div><dl><div><dt>Site</dt><dd>${escapeHtml(state.selectedSite?.name ?? 'Not selected')}</dd></div><div><dt>Project</dt><dd>${escapeHtml(state.fields.projectReference || 'Not entered')}</dd></div><div><dt>Documents</dt><dd>${selectedDocs} selected</dd></div></dl></section>
             <section class="workspace-progress"><div class="progress-copy"><h2>Progress</h2><span>${completed} of 8 ready</span></div><div class="progress-track progress-${completed}" aria-hidden="true"><span></span></div>${stageNavigation()}</section>
-            <details class="reviewer-tools"><summary>Reviewer demonstrations</summary><div class="reviewer-body"><p>All records are fictional. These tools demonstrate proposed behavior where live business rules remain unresolved.</p><div class="reviewer-actions"><button type="button" class="button-secondary full" data-load-demo>Load complete scenario</button><button type="button" class="button-secondary full" data-load-person>Use returning person</button><button type="button" class="button-secondary full" data-load-laan>Apply linked LAAN context</button><button type="button" class="button-secondary full" data-simulate-failure>Simulate authority failure</button><button type="button" class="button-link full" data-retry-authority>Retry authority demo</button></div><dl class="evidence-list"><div><dt>Live baseline</dt><dd>27 pass · 2 fail · 20 blocked · 1 N/A</dd></div><div><dt>Field inventory</dt><dd>264 rows · 392 controls mapped</dd></div><div><dt>Submission</dt><dd>Disabled by design</dd></div></dl><p class="source-note">Linked LAAN demo: ${LINKED_LAAN.id}<br>${escapeHtml(LINKED_LAAN.source)}</p></div></details>
+            <details class="reviewer-tools"><summary>Reviewer demonstrations</summary><div class="reviewer-body"><p>All records are fictional. These tools demonstrate proposed behavior where live business rules remain unresolved.</p><div class="reviewer-actions"><button type="button" class="button-secondary full" data-load-demo>Load complete scenario</button><button type="button" class="button-secondary full" data-load-person>Use returning person</button><button type="button" class="button-secondary full" data-load-laan>Apply linked LAAN context</button><button type="button" class="button-secondary full" data-load-saved-current>Use current saved certificate</button><button type="button" class="button-secondary full" data-load-saved-expired>Use expired saved certificate</button><button type="button" class="button-secondary full" data-simulate-failure>Simulate authority failure</button><button type="button" class="button-link full" data-retry-authority>Retry authority demo</button></div><dl class="evidence-list"><div><dt>Live baseline</dt><dd>27 pass · 2 fail · 20 blocked · 1 N/A</dd></div><div><dt>Field inventory</dt><dd>264 rows · 392 controls mapped</dd></div><div><dt>Submission</dt><dd>Disabled by design</dd></div></dl><p class="source-note">Linked LAAN demo: ${LINKED_LAAN.id}<br>${escapeHtml(LINKED_LAAN.source)}</p></div></details>
         </div>
     </aside>`;
 }
@@ -399,9 +406,18 @@ root.addEventListener('change', (event) => {
     const fileInput = event.target.closest('[data-document]');
     if (fileInput) {
         const file = fileInput.files?.[0];
-        if (file) state = selectDocument(state, fileInput.dataset.document, file);
-        statusMessage = state.documents[fileInput.dataset.document].error || `${file?.name} selected.`;
-        saveState(); render(); return;
+        if (!file) return;
+        const documentKey = fileInput.dataset.document;
+        const pending = beginDocumentSelection(state, documentKey, file);
+        state = pending.state;
+        statusMessage = `${file.name} is being checked.`;
+        saveState(); render();
+        setTimeout(() => {
+            state = resolveDocumentSelection(state, documentKey, pending.operationId);
+            statusMessage = state.documents[documentKey].error || `${file.name} selected.`;
+            saveState(); render();
+        }, 20);
+        return;
     }
     const confirmation = event.target.closest('[data-confirm-document]');
     if (confirmation) {
@@ -446,15 +462,13 @@ root.addEventListener('click', (event) => {
         const result = validateStage(state, state.currentStage);
         state = result.state;
         if (!result.valid) {
-            state.metrics.validationCorrections += 1;
+            state = recordValidationCorrection(state);
             render();
             const firstKey = Object.keys(result.errors)[0];
             requestAnimationFrame(() => (root.querySelector(`[data-field="${CSS.escape(firstKey)}"]`) || root.querySelector(`[data-testid="document-${CSS.escape(firstKey)}"] input`) || root.querySelector('.error-summary'))?.focus());
             return;
         }
-        const destination = state.reviewReturnStage ? 8 : state.currentStage + 1;
-        state.reviewReturnStage = null;
-        state = goToStage(state, destination).state;
+        state = advanceFromCurrentStage(state);
         saveState(); render(); root.querySelector('.form-column')?.scrollTo(0, 0); return;
     }
     if (target.hasAttribute('data-back')) {
@@ -464,7 +478,7 @@ root.addEventListener('click', (event) => {
         state = goToStage(state, Number(target.dataset.stage)).state; saveState(); render(); return;
     }
     if (target.dataset.editStage) {
-        state.reviewReturnStage = Number(target.dataset.editStage); state = goToStage(state, Number(target.dataset.editStage)).state; saveState(); render(); return;
+        state = beginReviewEdit(state, Number(target.dataset.editStage)); saveState(); render(); return;
     }
     if (target.dataset.focusError) {
         const key = target.dataset.focusError;
@@ -481,29 +495,39 @@ root.addEventListener('click', (event) => {
             if (state.fields[key] && state.fields[key] !== value) skipped.push(key);
             else state = setField(state, key, value);
         }
-        state.notices.push(skipped.length ? `Returning person loaded without replacing ${skipped.length} populated field(s).` : `Returning person loaded: ${person.name} · ${person.freshness}.`);
+        state = addNotice(state, skipped.length ? `Returning person loaded without replacing ${skipped.length} populated field(s).` : `Returning person loaded: ${person.name} · ${person.freshness}.`);
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-load-laan')) {
         const linkedSite = SITES.find((candidate) => candidate.id === LINKED_LAAN.siteId);
         if (state.selectedSite && state.selectedSite.id !== linkedSite.id) {
-            state.notices.push(`Linked LAAN Site conflict detected. ${state.selectedSite.name} was preserved; no LAAN values were merged.`);
+            state = addNotice(state, `Linked LAAN Site conflict detected. ${state.selectedSite.name} was preserved; no LAAN values were merged.`);
             saveState(); render(); return;
         }
         state = setField(state, 'linkedLaan', LINKED_LAAN.id);
         if (!state.fields.projectReference) state = setField(state, 'projectReference', LINKED_LAAN.projectReference);
         state = changeSite(state, linkedSite);
-        state.notices.push(state.fields.projectReference === LINKED_LAAN.projectReference ? 'Mapped fictional LAAN context applied.' : 'Linked LAAN recorded; the populated project reference was preserved for review.');
+        state = addNotice(state, state.fields.projectReference === LINKED_LAAN.projectReference ? 'Mapped fictional LAAN context applied.' : 'Linked LAAN recorded; the populated project reference was preserved for review.');
+        saveState(); render(); return;
+    }
+    if (target.hasAttribute('data-load-saved-current')) {
+        state = useSavedDocument(state, 'liability', { name: 'saved-liability-current.pdf', availability: 'available', expiresOn: '31-12-2026', owner: 'Example Billing Pty Ltd', source: 'Fictional Document Library' });
+        state = addNotice(state, 'Current saved certificate selected. Review this version before it contributes to readiness.');
+        saveState(); render(); return;
+    }
+    if (target.hasAttribute('data-load-saved-expired')) {
+        state = useSavedDocument(state, 'liability', { name: 'saved-liability-expired.pdf', availability: 'expired', expiresOn: '01-01-2025', owner: 'Example Billing Pty Ltd', source: 'Fictional Document Library' });
+        state = addNotice(state, 'Expired saved certificate shown for review; it cannot satisfy readiness.');
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-simulate-failure')) {
         state = selectDocument(state, 'authority', { name: 'authority-retry-demo.pdf', size: 320_000, type: 'application/pdf' }, { simulateFailure: true });
-        state.notices.push('Simulated authority upload failed; any previous valid selection was preserved.');
+        state = addNotice(state, 'Simulated authority upload failed; any previous valid selection was preserved.');
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-retry-authority')) {
         state = selectDocument(state, 'authority', { name: 'authority-retry-demo.pdf', size: 320_000, type: 'application/pdf' });
-        state.notices.push('Simulated authority retry succeeded. Review its new version before readiness.');
+        state = addNotice(state, 'Simulated authority retry succeeded. Review its new version before readiness.');
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-reset')) { resetPending = true; pendingCopy = null; render(); return; }

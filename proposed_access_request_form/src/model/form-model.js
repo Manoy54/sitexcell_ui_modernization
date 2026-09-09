@@ -1,13 +1,14 @@
 export const STATE_VERSION = 1;
+export const PROTOTYPE_TODAY = '2026-09-09';
 
 export const DOCUMENT_RULES = Object.freeze({
-    qualification: { label: 'Qualifications & training', originalId: 'input_3_445', required: true, maxBytes: 15_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'qualificationReviewed', source: 'prototype assumption' },
-    authority: { label: 'Letter of Authority', originalId: 'input_3_44', required: true, maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'authorityReviewed', source: 'U04 executable size scenario; type is a prototype assumption' },
-    swms: { label: "Signed 'Site Specific' SWMS", originalId: 'input_3_338', required: true, maxBytes: 20_000_000, acceptedTypes: ['application/pdf'], confirmation: 'swmsReviewed', source: 'prototype assumption' },
-    workersComp: { label: 'Workers Compensation Certificate', originalId: 'input_3_42', required: true, maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'workersCompReviewed', source: 'prototype assumption' },
-    liability: { label: 'Public Liability Certificate', originalId: 'input_3_128', required: true, maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'liabilityReviewed', source: 'prototype assumption' },
-    roofPermit: { label: 'Roof or Tower Access Permit', originalId: 'input_3_46', required: false, maxBytes: 15_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'roofPermitReviewed', source: 'prototype assumption' },
-    supporting: { label: 'Additional Documentation', originalId: 'input_3_494', required: false, maxBytes: 25_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'supportingReviewed', source: 'prototype assumption' },
+    qualification: { label: 'Qualifications & training', originalId: 'input_3_445', required: true, multiple: false, expiryField: null, maxBytes: 15_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'qualificationReviewed', source: 'prototype assumption' },
+    authority: { label: 'Letter of Authority', originalId: 'input_3_44', required: true, multiple: false, expiryField: null, maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'authorityReviewed', source: 'U04 executable size scenario; type is a prototype assumption' },
+    swms: { label: "Signed 'Site Specific' SWMS", originalId: 'input_3_338', required: true, multiple: false, expiryField: null, maxBytes: 20_000_000, acceptedTypes: ['application/pdf'], confirmation: 'swmsReviewed', source: 'prototype assumption' },
+    workersComp: { label: 'Workers Compensation Certificate', originalId: 'input_3_42', required: true, multiple: false, expiryField: 'workersCompExpiry', maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'workersCompReviewed', source: 'prototype assumption' },
+    liability: { label: 'Public Liability Certificate', originalId: 'input_3_128', required: true, multiple: false, expiryField: 'liabilityExpiry', maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'liabilityReviewed', source: 'prototype assumption' },
+    roofPermit: { label: 'Roof or Tower Access Permit', originalId: 'input_3_46', required: false, multiple: false, expiryField: null, maxBytes: 15_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'roofPermitReviewed', source: 'prototype assumption' },
+    supporting: { label: 'Additional Documentation', originalId: 'input_3_494', required: false, multiple: false, expiryField: null, maxBytes: 25_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'supportingReviewed', source: 'prototype assumption' },
 });
 
 const DEFAULT_FIELDS = Object.freeze({
@@ -62,6 +63,11 @@ const emptyDocument = () => ({
     error: '',
     simulatedFailure: false,
     pendingOperation: null,
+    origin: 'local-selection',
+    availability: 'missing',
+    expiresOn: '',
+    owner: '',
+    source: '',
 });
 
 const emptyContractor = (id = 'contractor-1') => ({
@@ -158,6 +164,12 @@ export function setBranchActive(state, branch, active) {
     }
 
     if (next.restoredFields.length) next.notices.push('Previous branch values were restored. Please review them.');
+    if (branch === 'roofAccess' && next.documents.roofPermit.status !== 'missing') {
+        next.confirmations.roofPermitReviewed = 0;
+        next.notices.push(active
+            ? 'Roof evidence was restored. Review the selected permit again before continuing.'
+            : 'Roof evidence was retained outside the active request and removed from readiness and review.');
+    }
     return next;
 }
 
@@ -213,6 +225,11 @@ export function selectDocument(state, documentKey, file, { simulateFailure = fal
     current.error = '';
     current.simulatedFailure = false;
     current.pendingOperation = null;
+    current.origin = 'local-selection';
+    current.availability = 'available';
+    current.expiresOn = rule.expiryField ? next.fields[rule.expiryField] : '';
+    current.owner = 'Prototype requester';
+    current.source = 'Local file selection';
     next.confirmations[rule.confirmation] = 0;
     return next;
 }
@@ -249,7 +266,32 @@ export function confirmDocument(state, documentKey, checked) {
     if (!rule) throw new Error(`Unknown document field: ${documentKey}`);
     const next = changed(state);
     const document = next.documents[documentKey];
-    next.confirmations[rule.confirmation] = checked && document.status === 'selected' ? document.version : 0;
+    next.confirmations[rule.confirmation] = checked && document.status === 'selected' && document.availability === 'available' ? document.version : 0;
+    return next;
+}
+
+export function useSavedDocument(state, documentKey, { name, availability, expiresOn = '', owner = 'Unknown fictional owner', source = 'Fictional saved-document source' }) {
+    const rule = DOCUMENT_RULES[documentKey];
+    if (!rule) throw new Error(`Unknown document field: ${documentKey}`);
+    if (!['available', 'expired', 'unavailable'].includes(availability)) throw new Error('Unknown saved document availability.');
+    const next = changed(state);
+    const current = next.documents[documentKey];
+    current.file = { name, size: 0, type: 'application/pdf' };
+    current.rememberedName = name;
+    current.status = availability === 'available' ? 'selected' : 'invalid';
+    current.version += 1;
+    current.error = availability === 'expired'
+        ? 'This saved document is expired and cannot satisfy readiness.'
+        : availability === 'unavailable' ? 'This saved document is unavailable and cannot satisfy readiness.' : '';
+    current.simulatedFailure = false;
+    current.pendingOperation = null;
+    current.origin = 'saved-demo';
+    current.availability = availability;
+    current.expiresOn = expiresOn;
+    current.owner = owner;
+    current.source = source;
+    if (rule.expiryField && expiresOn) next.fields[rule.expiryField] = expiresOn;
+    next.confirmations[rule.confirmation] = 0;
     return next;
 }
 
@@ -294,10 +336,24 @@ const allowedValue = (errors, fields, key, values, message) => {
     if (!values.includes(fields[key])) errors[key] = message;
 };
 
-const documentReady = (state, key) => {
+export const documentIsReady = (state, key) => {
     const rule = DOCUMENT_RULES[key];
     const document = state.documents[key];
-    return document.status === 'selected' && state.confirmations[rule.confirmation] === document.version;
+    const effectiveExpiry = document.origin === 'saved-demo' ? document.expiresOn : state.fields[rule.expiryField];
+    const expiryIsReady = !rule.expiryField || dateIsCurrent(effectiveExpiry);
+    return document.status === 'selected' && document.availability === 'available' && document.version > 0
+        && Boolean(document.file) && expiryIsReady && state.confirmations[rule.confirmation] === document.version;
+};
+
+const dateIsCurrent = (value) => {
+    const match = /^(\d{2})-(\d{2})-(\d{4})$/.exec(value);
+    if (!match) return false;
+    const [, day, month, year] = match;
+    const normalized = `${year}-${month}-${day}`;
+    const parsed = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+    const calendarDateExists = parsed.getUTCFullYear() === Number(year)
+        && parsed.getUTCMonth() === Number(month) - 1 && parsed.getUTCDate() === Number(day);
+    return calendarDateExists && normalized >= PROTOTYPE_TODAY;
 };
 
 export function validateStage(state, stage) {
@@ -322,7 +378,7 @@ export function validateStage(state, stage) {
                 if (!contractor[key]) errors[`${contractor.id}.${key}`] = 'Complete this contractor detail.';
             }
         });
-        if (!documentReady(next, 'qualification')) errors.qualification = 'Select and review the qualification document.';
+        if (!documentIsReady(next, 'qualification')) errors.qualification = 'Select and review the qualification document.';
     }
     if (stage === 5) {
         allowedValue(errors, fields, 'natureOfWorks', ['inspection', 'maintenance', 'installation', 'removal'], 'Choose the nature of works.');
@@ -331,7 +387,7 @@ export function validateStage(state, stage) {
         if (next.branches.noisyWorks) required(errors, fields, 'noisyDetails', 'Describe the noisy or disruptive works.');
         required(errors, fields, 'specialAccessAcknowledged', 'Acknowledge the special access requirements.');
         for (const key of ['permitAgreed', 'ownerPermitAgreed', 'worksAtHeight', 'asbestosRisk', 'fireIsolation']) required(errors, fields, key, 'Complete this works and permit declaration.');
-        if (!documentReady(next, 'authority')) errors.authority = 'Select and review the Letter of Authority.';
+        if (!documentIsReady(next, 'authority')) errors.authority = 'Select and review the Letter of Authority.';
     }
     if (stage === 6) {
         required(errors, fields, 'technicalChange', 'Choose the technical change type.');
@@ -339,6 +395,7 @@ export function validateStage(state, stage) {
             for (const key of ['technicalDetails', 'cableStart', 'cableEnd', 'riser', 'cableCapacity']) required(errors, fields, key, 'Complete this technical detail.');
         }
         if (next.branches.roofAccess) required(errors, fields, 'roofAreas', 'Describe the roof or structure areas.');
+        if (next.branches.roofAccess && !documentIsReady(next, 'roofPermit')) errors.roofPermit = 'Select and review the roof or tower access permit.';
         for (const key of ['powerRequired', 'ceilingAccess', 'riserAccess', 'coreDrilling', 'certifierRequired', 'technicalRulesAgreed', 'cablingAgreed', 'penetrationsAgreed', 'cleanupAgreed']) required(errors, fields, key, 'Complete this technical access item.');
         if (next.branches.powerRequired) {
             required(errors, fields, 'powerDetails', 'Describe the new or upgraded power source.');
@@ -350,7 +407,9 @@ export function validateStage(state, stage) {
         required(errors, fields, 'sassiNumber', 'Enter the SASSI registration number.');
         required(errors, fields, 'workersCompExpiry', 'Enter the Workers Compensation expiry date.');
         required(errors, fields, 'liabilityExpiry', 'Enter the Public Liability expiry date.');
-        for (const key of ['swms', 'workersComp', 'liability']) if (!documentReady(next, key)) errors[key] = `Select and review ${DOCUMENT_RULES[key].label}.`;
+        if (fields.workersCompExpiry && !dateIsCurrent(fields.workersCompExpiry)) errors.workersCompExpiry = `Use a current date in DD-MM-YYYY format (prototype date ${PROTOTYPE_TODAY}).`;
+        if (fields.liabilityExpiry && !dateIsCurrent(fields.liabilityExpiry)) errors.liabilityExpiry = `Use a current date in DD-MM-YYYY format (prototype date ${PROTOTYPE_TODAY}).`;
+        for (const key of ['swms', 'workersComp', 'liability']) if (!documentIsReady(next, key)) errors[key] = `Select and review ${DOCUMENT_RULES[key].label}.`;
         for (let index = 1; index <= 12; index += 1) required(errors, fields, `swms${index}`, 'Confirm this SWMS review item.');
         required(errors, fields, 'documentsConfirmed', 'Confirm the documentation has been provided.');
     }
@@ -384,6 +443,31 @@ export function goToStage(state, stage, { validateCurrent = false } = {}) {
     return { state: next, moved: true };
 }
 
+export function addNotice(state, message) {
+    const next = clone(state);
+    next.notices.push(message);
+    return next;
+}
+
+export function recordValidationCorrection(state) {
+    const next = clone(state);
+    next.metrics.validationCorrections += 1;
+    return next;
+}
+
+export function advanceFromCurrentStage(state) {
+    const destination = state.reviewReturnStage ? 8 : state.currentStage + 1;
+    const next = clone(state);
+    next.reviewReturnStage = null;
+    return goToStage(next, destination).state;
+}
+
+export function beginReviewEdit(state, stage) {
+    const next = clone(state);
+    next.reviewReturnStage = stage;
+    return goToStage(next, stage).state;
+}
+
 export function reviewSections(state) {
     const display = (value) => typeof value === 'boolean' ? (value ? 'Confirmed' : '') : value;
     const values = (pairs) => pairs.map(([label, key]) => [label, display(state.fields[key])]).filter(([, value]) => value !== '' && value != null);
@@ -394,12 +478,12 @@ export function reviewSections(state) {
         [`Contractor ${index + 1} · Induction expiry`, person.inductionExpiry],
     ]).filter(([, value]) => value);
     const documentValues = Object.entries(DOCUMENT_RULES)
-        .filter(([key, rule]) => rule.required || state.documents[key].status !== 'missing')
+        .filter(([key, rule]) => (key !== 'roofPermit' || state.branches.roofAccess) && (rule.required || state.documents[key].status !== 'missing'))
         .map(([key, rule]) => {
             const document = state.documents[key];
-            const reviewed = state.confirmations[rule.confirmation] === document.version && document.status === 'selected';
-            const identity = document.status === 'selected' ? document.file?.name : document.status;
-            return [`${rule.label} status`, `${identity} · ${reviewed ? 'reviewed' : 'review required'} · version ${document.version}`];
+            const reviewed = documentIsReady(state, key);
+            const identity = document.file?.name ?? document.status;
+            return [`${rule.label} status`, `${identity} · ${document.owner || 'no owner'} · ${document.source || document.origin} · ${document.availability} · ${reviewed ? 'reviewed' : 'review required'} · version ${document.version}`];
         });
     return [
         { stage: 1, title: 'Request context', values: [['Site', state.selectedSite?.name], ...values([['Linked LAAN', 'linkedLaan'], ['Owner', 'ownerName'], ['Tenure', 'tenureConfirmed'], ['Network access', 'networkRequired'], ['Terms', 'termsAccepted']])] },
@@ -415,7 +499,10 @@ export function reviewSections(state) {
 
 export function serializeSession(state) {
     const persisted = clone(state);
-    for (const document of Object.values(persisted.documents)) document.file = null;
+    for (const document of Object.values(persisted.documents)) {
+        document.pendingOperation = null;
+        if (document.origin === 'local-selection') document.file = null;
+    }
     return JSON.stringify(persisted);
 }
 
@@ -430,10 +517,61 @@ export function restoreSession(serialized) {
     const isRecord = (value) => value && typeof value === 'object' && !Array.isArray(value);
     const initial = createInitialState();
     const documentKeys = Object.keys(DOCUMENT_RULES);
+    const samePrimitiveShape = (candidate, baseline) => isRecord(candidate)
+        && Object.keys(candidate).every((key) => Object.hasOwn(baseline, key))
+        && Object.entries(baseline).every(([key, value]) => typeof candidate[key] === typeof value);
+    const validContractor = (candidate) => samePrimitiveShape(candidate, emptyContractor())
+        && /^contractor-[1-9]\d*$/.test(candidate.id);
+    const validFile = (file) => file === null || (isRecord(file) && typeof file.name === 'string'
+        && Number.isFinite(file.size) && file.size >= 0 && typeof file.type === 'string');
+    const validDocument = (document, key) => isRecord(document)
+        && ['missing', 'selected', 'needs-reselection', 'invalid'].includes(document.status)
+        && validFile(document.file) && typeof document.rememberedName === 'string'
+        && Number.isInteger(document.version) && document.version >= 0 && typeof document.error === 'string'
+        && typeof document.simulatedFailure === 'boolean' && document.pendingOperation === null
+        && ['local-selection', 'saved-demo'].includes(document.origin)
+        && ['missing', 'available', 'expired', 'unavailable'].includes(document.availability)
+        && typeof document.expiresOn === 'string' && typeof document.owner === 'string'
+        && typeof document.source === 'string'
+        && !(document.origin === 'saved-demo' && document.status !== 'missing' && document.file === null)
+        && !(document.status === 'selected' && (document.version === 0 || document.availability !== 'available'))
+        && !(document.origin === 'saved-demo' && document.status === 'selected'
+            && (!document.file.name.trim() || document.file.size > DOCUMENT_RULES[key].maxBytes
+                || !DOCUMENT_RULES[key].acceptedTypes.includes(document.file.type)))
+        && !(document.origin === 'saved-demo' && document.status === 'selected' && DOCUMENT_RULES[key].expiryField
+            && !dateIsCurrent(document.expiresOn));
+    const validCopyTransaction = (transaction) => {
+        if (!isRecord(transaction) || typeof transaction.source !== 'string' || typeof transaction.target !== 'string'
+            || !isRecord(transaction.before) || !isRecord(transaction.copied)) return false;
+        const pairs = COPY_MAPS[`${transaction.source}:${transaction.target}`];
+        if (!pairs) return false;
+        const targetKeys = pairs.map(([, targetKey]) => targetKey).sort();
+        const beforeKeys = Object.keys(transaction.before).sort();
+        const copiedKeys = Object.keys(transaction.copied).sort();
+        if (JSON.stringify(beforeKeys) !== JSON.stringify(targetKeys) || JSON.stringify(copiedKeys) !== JSON.stringify(targetKeys)) return false;
+        return targetKeys.every((key) => typeof transaction.before[key] === typeof initial.fields[key]
+            && typeof transaction.copied[key] === typeof initial.fields[key]);
+    };
     const validShape = isRecord(parsed) && isRecord(parsed.fields) && isRecord(parsed.documents)
         && isRecord(parsed.confirmations) && isRecord(parsed.branches) && Array.isArray(parsed.contractors)
+        && Number.isInteger(parsed.currentStage) && parsed.currentStage >= 1 && parsed.currentStage <= 8
+        && Array.isArray(parsed.completedStages) && parsed.completedStages.every((stage) => Number.isInteger(stage) && stage >= 1 && stage <= 8)
+        && (parsed.reviewReturnStage === null || (Number.isInteger(parsed.reviewReturnStage) && parsed.reviewReturnStage >= 1 && parsed.reviewReturnStage <= 8))
+        && samePrimitiveShape(parsed.fields, initial.fields)
+        && parsed.contractors.length >= 1 && parsed.contractors.length <= 10 && parsed.contractors.every(validContractor)
+        && new Set(parsed.contractors.map(({ id }) => id)).size === parsed.contractors.length
         && Object.keys(parsed.documents).every((key) => documentKeys.includes(key))
-        && documentKeys.every((key) => isRecord(parsed.documents[key]));
+        && documentKeys.every((key) => validDocument(parsed.documents[key], key))
+        && samePrimitiveShape(parsed.confirmations, initial.confirmations)
+        && samePrimitiveShape(parsed.branches, initial.branches)
+        && isRecord(parsed.contractorStash) && Object.values(parsed.contractorStash).every(validContractor)
+        && isRecord(parsed.stashedFields) && Object.values(parsed.stashedFields).every((value) => typeof value === 'string')
+        && Array.isArray(parsed.restoredFields) && parsed.restoredFields.every((key) => typeof key === 'string' && Object.hasOwn(initial.fields, key))
+        && isRecord(parsed.errors) && Object.values(parsed.errors).every((value) => typeof value === 'string')
+        && Array.isArray(parsed.notices) && parsed.notices.every((value) => typeof value === 'string')
+        && Array.isArray(parsed.copyHistory) && parsed.copyHistory.every(validCopyTransaction)
+        && samePrimitiveShape(parsed.metrics, initial.metrics)
+        && (parsed.selectedSite === null || (isRecord(parsed.selectedSite) && typeof parsed.selectedSite.id === 'string' && typeof parsed.selectedSite.name === 'string'));
     if (!validShape) throw new Error('The saved prototype session is unreadable. Reset it to continue.');
     const restored = {
         ...initial,
@@ -444,7 +582,7 @@ export function restoreSession(serialized) {
         branches: { ...initial.branches, ...parsed.branches },
     };
     for (const [key, document] of Object.entries(restored.documents)) {
-        if (document.status === 'selected' || document.rememberedName) {
+        if (document.origin === 'local-selection' && (document.status === 'selected' || document.rememberedName)) {
             document.status = 'needs-reselection';
             document.file = null;
             document.error = 'Reselect this file after reload; browsers do not restore file bytes.';

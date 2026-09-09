@@ -20,9 +20,11 @@ review state without entering every synthetic field.
 npm.cmd run test:prototype:access
 ```
 
-The unit suite covers the state model and live-regression proposals. The
-browser suite covers the public workflow, keyboard Site selection, validation
-focus, non-submission, document replacement preservation, and phone reflow.
+The unit suite covers the state model, hostile session/request rejection and
+live-regression proposals. The browser suite covers the public workflow,
+keyboard Site selection, validation focus, non-submission, local and saved
+document states, replacement preservation, responsive reflow and a 200% zoom
+equivalent.
 
 ## Evidence boundary
 
@@ -31,4 +33,6 @@ focus, non-submission, document replacement preservation, and phone reflow.
 - The full 264-row / 392-control source inventory remains in
   `docs/testing/access-request/prototype/field-disposition-plan.json`.
 - Prototype rules are demonstrations, not approved production business rules.
+- A recorded prototype PASS requires an explicit named automated check;
+  available demonstrations and unrun measurements remain visibly distinct.
 - A local pass does not change the recorded live results for U04 or R03.

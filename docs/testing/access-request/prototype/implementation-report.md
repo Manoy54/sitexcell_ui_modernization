@@ -26,7 +26,8 @@ Implemented behavior includes:
   source/target pairs;
 - conditional value stashing/restoration, inactive-value exclusion, and a
   visible review reminder;
-- independent document identity, 10 MB demonstration limits, type checks,
+- independent document identity, field-specific size/type/single-file contracts,
+  current-expiry checks, current/expired saved-document demonstrations,
   prior-valid and unrelated-file preservation, related-confirmation
   invalidation, removal, simulated failure/retry, and reload reselection;
 - fictional returning-person and linked-LAAN demonstrations that preserve
@@ -49,9 +50,9 @@ Result on 2026-09-09:
 
 | Suite | Result | Public seam |
 | --- | ---: | --- |
-| State model | 13 passed | preservation, branch, copy, contractor, field-specific documents, stale-file and recovery contracts |
-| Browser workflow | 11 passed | visible workflow, focus, Site keyboard use, review, uploads, malformed URLs and responsive reflow |
-| Total local declarations | 24 passed | grouped evidence for mapped Access Request concerns |
+| State model and server | 16 passed | preservation, branch, copy, contractor, saved/local documents, hostile session rejection, stale-file, recovery and malformed-request contracts |
+| Browser workflow | 14 passed | visible workflow, focus, Site keyboard use, review, saved/local uploads, malformed paths, responsive reflow and accessibility preference layouts |
+| Total local declarations | 30 passed | grouped evidence for explicitly named Access Request concerns |
 
 The browser pass uses the machine's existing local Chromium build because the
 installed Playwright package expects a newer optional browser bundle. This is
@@ -60,27 +61,34 @@ Access Request suite.
 
 Syntax checks passed for the application, state model, fixtures and local
 server. Visual captures were inspected at 1440×900, 1361×636 and 390×844.
-Automated reflow checks cover 320, 390, 768 and 1024px without unintended
-horizontal overflow.
+Automated reflow checks cover 320, 390, 640, 768 and 1024px without unintended
+horizontal overflow; 640px is the automated reflow equivalent of a 1280px
+viewport at 200% zoom. Actual browser-chrome zoom remains a manual review item
+and is not represented as a full PA-A05 pass.
 
 ## Coverage accounting
 
 The source inventory remains 264 field rows and 392 captured controls in
 [`field-disposition-plan.json`](./field-disposition-plan.json). The prototype
-source directly retains 89 unique original input identities. The synchronized
-register classifies 56 rows as direct semantic controls and 80 repeated rows as
-implemented through the contractor component (136 implemented rows total), 31
-as provider-only exclusions, and 97 as mapped production deferrals. Those
-remaining rows include widget auxiliaries, hidden transport values, duplicate
+source directly retains 89 unique original input identities. Exact-ID matching
+in the synchronized register classifies 48 rows as direct semantic controls
+and 80 repeated rows as implemented through the contractor component (128
+implemented rows total), 31 as provider-only exclusions, and 105 as mapped
+production deferrals. These are implementation dispositions, not 264
+individual field executions: all 128 present rows still identify their
+field-level checks as NOT-RUN. The remaining rows include widget auxiliaries,
+hidden transport values, duplicate
 navigation/submission controls, inactive branch variants and production-rule
 details that cannot honestly become local business truth.
 
 The 64 live catalog IDs remain mapped once each in
 [`test-case-plan.json`](./test-case-plan.json). They are concerns, not a demand
-for 64 duplicate local executions. The 24 local declarations deliberately
-group equivalent public behaviors. The synchronized register records 32 main
-concerns as implemented or partially covered by shared checks, 20 as available
-guided demonstrations, and 12 as measurement methods that remain unrun.
+for 64 duplicate local executions. The 30 local declarations deliberately
+group equivalent public behaviors. Evidence is not inferred from family or
+scope: five concerns have a full automated PASS, 28 have narrower automated
+PARTIAL-PASS evidence, five are available but unexecuted guided demonstrations,
+14 are implemented only partially and remain NOT-RUN, and 12 are measurement
+methods that remain NOT-RUN.
 Decision-gated and measurement entries keep
 their external deferrals; a local demonstration does not rewrite their live
 PASS, FAIL, BLOCKED or NOT APPLICABLE classifications.

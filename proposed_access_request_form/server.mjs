@@ -1,7 +1,7 @@
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, normalize, resolve, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const prototypeRoot = fileURLToPath(new URL('.', import.meta.url));
 const resolvedRoot = resolve(prototypeRoot);
@@ -11,30 +11,42 @@ const contentTypes = {
     '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8',
 };
 
-createServer((request, response) => {
-    const requestUrl = new URL(request.url ?? '/', `http://${request.headers.host ?? 'localhost'}`);
-    let relativePath;
+export function parseRequestPath(requestTarget, host) {
     try {
-        relativePath = requestUrl.pathname === '/' ? 'index.html' : decodeURIComponent(requestUrl.pathname.slice(1));
+        const requestUrl = new URL(requestTarget ?? '/', `http://${host ?? 'localhost'}`);
+        return { ok: true, relativePath: requestUrl.pathname === '/' ? 'index.html' : decodeURIComponent(requestUrl.pathname.slice(1)) };
     } catch {
-        response.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-        response.end('Malformed prototype URL.');
-        return;
+        return { ok: false, status: 400 };
     }
-    const resolvedPath = resolve(prototypeRoot, normalize(relativePath));
-    const isInside = resolvedPath === resolvedRoot || resolvedPath.startsWith(`${resolvedRoot}${sep}`);
-    if (!isInside || !existsSync(resolvedPath) || statSync(resolvedPath).isDirectory()) {
-        response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-        response.end('Prototype file not found.');
-        return;
-    }
-    response.writeHead(200, {
-        'Cache-Control': 'no-store',
-        'Content-Security-Policy': "default-src 'self'; style-src 'self' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net data:; img-src 'self' data:; script-src 'self'; connect-src 'self'",
-        'Content-Type': contentTypes[extname(resolvedPath)] ?? 'application/octet-stream',
-        'X-Content-Type-Options': 'nosniff',
+}
+
+export function createPrototypeServer() {
+    return createServer((request, response) => {
+        const parsedPath = parseRequestPath(request.url, request.headers.host);
+        if (!parsedPath.ok) {
+            response.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+            response.end('Malformed prototype URL.');
+            return;
+        }
+        const resolvedPath = resolve(prototypeRoot, normalize(parsedPath.relativePath));
+        const isInside = resolvedPath === resolvedRoot || resolvedPath.startsWith(`${resolvedRoot}${sep}`);
+        if (!isInside || !existsSync(resolvedPath) || statSync(resolvedPath).isDirectory()) {
+            response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+            response.end('Prototype file not found.');
+            return;
+        }
+        response.writeHead(200, {
+            'Cache-Control': 'no-store',
+            'Content-Security-Policy': "default-src 'self'; style-src 'self' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net data:; img-src 'self' data:; script-src 'self'; connect-src 'self'",
+            'Content-Type': contentTypes[extname(resolvedPath)] ?? 'application/octet-stream',
+            'X-Content-Type-Options': 'nosniff',
+        });
+        createReadStream(resolvedPath).pipe(response);
     });
-    createReadStream(resolvedPath).pipe(response);
-}).listen(port, '127.0.0.1', () => {
-    console.log(`Access Request prototype running at http://127.0.0.1:${port}`);
-});
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+    createPrototypeServer().listen(port, '127.0.0.1', () => {
+        console.log(`Access Request prototype running at http://127.0.0.1:${port}`);
+    });
+}

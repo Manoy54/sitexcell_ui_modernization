@@ -57,7 +57,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .portal-topbar h1 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 16px; font-weight: 720; letter-spacing: -.02em; }
 .portal-topbar h1::before { width: 4px; height: 22px; border-radius: 4px; background: var(--portal-red); box-shadow: 0 3px 8px rgba(0, 0, 0, .18); content: ""; }
 .topbar-actions { display: flex; gap: 8px; }
-.topbar-button { min-height: 32px; padding: 0 13px; border: 1px solid #5b6171; border-radius: 5px; background: #353a4b; color: #fff; font-size: 12px; font-weight: 640; }
+.topbar-button { min-height: 44px; padding: 0 13px; border: 1px solid #5b6171; border-radius: 5px; background: #353a4b; color: #fff; font-size: 12px; font-weight: 640; }
 .topbar-button:hover { background: #414758; }
 .prototype-banner { display: flex; min-height: 38px; align-items: center; gap: 9px; padding: 8px 20px; border-bottom: 1px solid #edcad1; background: #fff5f7; color: #6f2433; font-size: 12px; }
 .prototype-banner span { color: #82535d; }
@@ -128,9 +128,11 @@ form { padding: 0 7vw; }
 .document-heading p { margin-top: 4px; overflow-wrap: anywhere; color: var(--portal-muted); font-size: 11px; }
 .document-actions { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
 .document-contract { margin: 10px 0 0; color: var(--portal-muted); font-size: 10px; }
+.document-provenance { margin: 9px 0 0; color: #4f5968; font-size: 10px; overflow-wrap: anywhere; }
 .file-button { display: inline-flex !important; min-height: 44px; align-items: center; gap: 7px; margin: 0 !important; padding: 0 12px; border: 1px solid #bdc4cd; border-radius: 5px; background: #fff; color: #303744; font-size: 11px !important; font-weight: 670 !important; }
 .file-button:hover { border-color: #8f98a5; background: #fcfcfd; }
-.document-confirm { min-height: 40px; margin-top: 12px !important; background: #fff; font-size: 11px !important; }
+.file-button:focus-within { border-color: var(--portal-red); box-shadow: 0 0 0 3px rgba(245, 40, 77, .11); outline: 2px solid var(--portal-red); outline-offset: 2px; }
+.document-confirm { min-height: 44px; margin-top: 12px !important; background: #fff; font-size: 11px !important; }
 .document-error { background: var(--portal-error-soft); }
 
 .inline-actions { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -142,7 +144,7 @@ form { padding: 0 7vw; }
 .button-secondary:hover:not(:disabled) { border-color: #9fa7b2; background: #f8f9fa; }
 .button-secondary:disabled { border-color: #d5d9de; background: #f1f3f5; color: #7b838f; opacity: 1; }
 .button-danger { padding: 0 14px; border: 1px solid #9d1730; background: var(--portal-error); color: #fff; }
-.button-link { min-height: 32px; padding: 0 4px; border: 0; background: transparent; color: #176d98; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.button-link { min-height: 44px; padding: 0 4px; border: 0; background: transparent; color: #176d98; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .full { width: 100%; }
 
 .notice, .inline-confirm, .error-summary { margin: 18px 7vw 0; border-radius: 7px; }
@@ -235,7 +237,7 @@ form { padding: 0 7vw; }
     .portal-stage { display: block; }
     .portal-topbar { position: sticky; z-index: 30; top: 0; height: var(--topbar-height); padding-inline: 14px 10px; }
     .portal-topbar h1 { font-size: 14px; }
-    .topbar-button { min-height: 38px; padding-inline: 9px; font-size: 10px; }
+    .topbar-button { min-height: 44px; padding-inline: 9px; font-size: 10px; }
     .topbar-actions .topbar-button:first-child { display: none; }
     .prototype-banner { align-items: flex-start; flex-wrap: wrap; padding: 9px 13px; }
     .prototype-banner span { width: 100%; padding-left: 26px; }

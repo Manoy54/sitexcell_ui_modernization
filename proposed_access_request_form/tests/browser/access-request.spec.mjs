@@ -81,12 +81,34 @@ test('PA-U04 invalid replacement preserves the previous file and another documen
     await expect(page.getByTestId('document-workersComp')).toContainText('workers-comp-demo.pdf');
 });
 
+test('PA-D01/D02 saved certificate demonstration blocks expired evidence', async ({ page }) => {
+    await page.getByRole('button', { name: 'Load complete scenario' }).click();
+    await page.getByRole('button', { name: /Stage 7/ }).click();
+    await page.getByText('Reviewer demonstrations').click();
+    await page.getByRole('button', { name: 'Use expired saved certificate' }).click();
+
+    await expect(page.getByTestId('document-liability')).toContainText('saved-liability-expired.pdf');
+    await expect(page.getByTestId('document-liability')).toContainText('Example Billing Pty Ltd');
+    await expect(page.getByTestId('document-liability')).toContainText('Fictional Document Library');
+    await expect(page.getByTestId('document-liability')).toContainText('expired and cannot satisfy readiness');
+    await page.getByRole('button', { name: 'Continue to Review & declarations' }).click();
+    await expect(page.getByRole('alert')).toContainText('Public Liability');
+
+    await page.getByText('Reviewer demonstrations').click();
+    await page.getByRole('button', { name: 'Use current saved certificate' }).click();
+    await expect(page.getByTestId('document-liability')).toContainText('saved-liability-current.pdf');
+    await expect(page.getByLabel('I reviewed this selected file').last()).toBeVisible();
+});
+
 test('PA-A03 phone layout has no horizontal document overflow', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(1);
-    await expect(page.getByRole('button', { name: 'Show request summary' })).toBeVisible();
+    const summaryButton = page.getByRole('button', { name: 'Show request summary' });
+    await expect(summaryButton).toBeVisible();
+    expect((await summaryButton.boundingBox()).height).toBeGreaterThanOrEqual(44);
+    expect((await page.getByRole('button', { name: 'Reset' }).boundingBox()).height).toBeGreaterThanOrEqual(44);
 });
 
 for (const width of [320, 768, 1024]) {
@@ -96,3 +118,29 @@ for (const width of [320, 768, 1024]) {
         expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
     });
 }
+
+test('PA-A04 keeps the form, workspace and stage navigation usable at tablet width', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.reload();
+    await expect(page.locator('.form-column')).toBeVisible();
+    await expect(page.locator('.workspace')).toBeVisible();
+    await page.getByRole('button', { name: 'Load complete scenario' }).click();
+    await expect(page.getByRole('heading', { name: 'Review & declarations' })).toBeVisible();
+});
+
+test('PA-A05 supports 200 percent zoom-equivalent, text spacing and user media preferences', async ({ page }) => {
+    await page.setViewportSize({ width: 640, height: 450 });
+    await page.reload();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+    await expect(page.getByRole('button', { name: 'Show request summary' })).toBeVisible();
+
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.locator('body').evaluate((body) => {
+        body.style.lineHeight = '1.5';
+        body.style.letterSpacing = '.12em';
+        body.style.wordSpacing = '.16em';
+    });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+    await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
+    await expect(page.getByRole('heading', { name: 'Request context' })).toBeVisible();
+});

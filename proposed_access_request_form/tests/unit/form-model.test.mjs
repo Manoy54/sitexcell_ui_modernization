@@ -5,7 +5,9 @@ import {
     applyCopy,
     beginDocumentSelection,
     changeSite,
+    confirmDocument,
     createInitialState,
+    documentIsReady,
     removeDocument,
     reviewSections,
     restoreSession,
@@ -17,6 +19,7 @@ import {
     setContractorField,
     setField,
     undoLastCopy,
+    useSavedDocument,
     validateStage,
 } from '../../src/model/form-model.js';
 
@@ -147,6 +150,39 @@ test('PA-R04 corrupt and incompatible sessions never restore a false ready state
     assert.throws(() => restoreSession(JSON.stringify({ version: 99 })), /incompatible/);
     assert.throws(() => restoreSession(JSON.stringify({ version: 1, documents: null })), /unreadable/);
     assert.throws(() => restoreSession(JSON.stringify({ version: 1, documents: { unknown: {} } })), /unreadable/);
+    assert.throws(() => restoreSession(JSON.stringify({ ...createInitialState(), currentStage: 99 })), /unreadable/);
+    assert.throws(() => restoreSession(JSON.stringify({ ...createInitialState(), fields: { ...createInitialState().fields, siteQuery: {} } })), /unreadable/);
+    assert.throws(() => restoreSession(JSON.stringify({ ...createInitialState(), metrics: null })), /unreadable/);
+    assert.throws(() => restoreSession(JSON.stringify({ ...createInitialState(), contractors: [null] })), /unreadable/);
+    const missingSavedFile = createInitialState();
+    missingSavedFile.documents.liability = {
+        ...missingSavedFile.documents.liability,
+        status: 'selected', origin: 'saved-demo', availability: 'available', file: null, version: 1,
+    };
+    missingSavedFile.confirmations.liabilityReviewed = 1;
+    assert.throws(() => restoreSession(JSON.stringify(missingSavedFile)), /unreadable/);
+    const invalidSavedFile = createInitialState();
+    invalidSavedFile.documents.authority = {
+        ...invalidSavedFile.documents.authority,
+        status: 'selected', origin: 'saved-demo', availability: 'available', version: 1,
+        file: { name: 'payload.exe', size: 50_000_000, type: 'application/x-msdownload' },
+    };
+    invalidSavedFile.confirmations.authorityReviewed = 1;
+    assert.throws(() => restoreSession(JSON.stringify(invalidSavedFile)), /unreadable/);
+    invalidSavedFile.documents.authority.file = { name: '', size: 1, type: 'application/pdf' };
+    assert.throws(() => restoreSession(JSON.stringify(invalidSavedFile)), /unreadable/);
+    const zeroVersionSavedFile = createInitialState();
+    zeroVersionSavedFile.documents.liability = {
+        ...zeroVersionSavedFile.documents.liability,
+        status: 'selected', origin: 'saved-demo', availability: 'available', version: 0,
+        expiresOn: '31-12-2026', file: { name: 'saved.pdf', size: 1, type: 'application/pdf' },
+    };
+    assert.throws(() => restoreSession(JSON.stringify(zeroVersionSavedFile)), /unreadable/);
+    zeroVersionSavedFile.documents.liability.version = 1;
+    zeroVersionSavedFile.documents.liability.expiresOn = '01-01-2025';
+    zeroVersionSavedFile.confirmations.liabilityReviewed = 1;
+    assert.throws(() => restoreSession(JSON.stringify(zeroVersionSavedFile)), /unreadable/);
+    assert.throws(() => restoreSession(JSON.stringify({ ...createInitialState(), copyHistory: [{}] })), /unreadable/);
 });
 
 test('PA-006 review contains every active field, contractor attribute and document status', () => {
@@ -183,4 +219,49 @@ test('PA-U03 document contracts are field-specific prototype assumptions', () =>
     assert.equal(state.documents.qualification.status, 'selected');
     state = selectDocument(state, 'qualification', pdf('large-qualification.pdf', 12_000_000));
     assert.equal(state.documents.qualification.status, 'selected');
+});
+
+test('PA-D01/D02 saved-document demos distinguish available and expired evidence', () => {
+    let state = createInitialState();
+    state = useSavedDocument(state, 'liability', {
+        name: 'saved-liability-current.pdf',
+        availability: 'available',
+        expiresOn: '31-12-2026',
+        owner: 'Example Billing Pty Ltd',
+        source: 'Fictional Document Library',
+    });
+    assert.equal(state.documents.liability.origin, 'saved-demo');
+    assert.equal(state.documents.liability.status, 'selected');
+    assert.equal(state.documents.liability.owner, 'Example Billing Pty Ltd');
+    assert.equal(state.documents.liability.source, 'Fictional Document Library');
+    state = confirmDocument(state, 'liability', true);
+    assert.equal(documentIsReady(state, 'liability'), true);
+
+    state = useSavedDocument(state, 'liability', {
+        name: 'saved-liability-expired.pdf',
+        availability: 'expired',
+        expiresOn: '01-01-2025',
+    });
+    state = confirmDocument(state, 'liability', true);
+    assert.equal(state.documents.liability.status, 'invalid');
+    assert.equal(documentIsReady(state, 'liability'), false);
+    assert.match(state.documents.liability.error, /expired/i);
+});
+
+test('PA-B08 inactive roof evidence is excluded from review and restored when reactivated', () => {
+    let state = createInitialState();
+    state = setBranchActive(state, 'roofAccess', true);
+    state = selectDocument(state, 'roofPermit', pdf('roof-permit.pdf'));
+    state = confirmDocument(state, 'roofPermit', true);
+    assert.ok(reviewSections(state).find(({ stage }) => stage === 7).values.some(([label]) => label === 'Roof or Tower Access Permit status'));
+
+    state = setBranchActive(state, 'roofAccess', false);
+    assert.equal(reviewSections(state).find(({ stage }) => stage === 7).values.some(([label]) => label === 'Roof or Tower Access Permit status'), false);
+    assert.equal(state.confirmations.roofPermitReviewed, 0);
+
+    state = setBranchActive(state, 'roofAccess', true);
+    assert.ok(reviewSections(state).find(({ stage }) => stage === 7).values.some(([label]) => label === 'Roof or Tower Access Permit status'));
+    assert.equal(state.documents.roofPermit.file.name, 'roof-permit.pdf');
+    assert.match(state.notices.at(-1), /roof.*review/i);
+    assert.ok(validateStage(state, 6).errors.roofPermit);
 });

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "status": "implementation-accounted-with-production-deferrals",
   "baselineRun": "test-The-CRM-Carpenters-000157-20260908T093433695Z",
-  "countingNote": "All 64 source concerns retain one mapping. Local checks are intentionally grouped; guided demonstrations and unrun measurements are not promoted to automated passes.",
+  "countingNote": "All 64 source concerns retain one mapping. PASS requires an explicitly named local automated check; guided demonstrations, partial implementations and measurements are not promoted to passes.",
   "localIdPolicy": "PA-<source suffix>; parameterized partitions append a readable scenario suffix.",
   "cases": [
     {
@@ -16,8 +16,8 @@
       "plannedScope": "main",
       "localAcceptance": "Open the isolated form at Stage 1 with a fictional user context and no authentication requirement.",
       "deferredExternalClaim": "External authentication remains a live-suite prerequisite.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated",
+      "executionStatus": "PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
@@ -33,11 +33,9 @@
       "plannedScope": "main",
       "localAcceptance": "Complete mapped required inputs and reach the relevant subsequent stages with synthetic values.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-003",
@@ -50,11 +48,9 @@
       "plannedScope": "main",
       "localAcceptance": "Select a fictional Site and show its correct derived context; do not interpret this legacy title as complete branch coverage.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-004",
@@ -67,8 +63,8 @@
       "plannedScope": "main",
       "localAcceptance": "Omit each applicable required field; identify the field, preserve unrelated state, and progress after correction.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
@@ -84,8 +80,8 @@
       "plannedScope": "main",
       "localAcceptance": "Traverse all eight stages, revisit completed stages, and preserve active entered values and selected files.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
@@ -101,8 +97,8 @@
       "plannedScope": "main",
       "localAcceptance": "Reach review with exact active-value/document mapping, Edit-and-return, and a non-submitting ready state.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
@@ -118,12 +114,9 @@
       "plannedScope": "main",
       "localAcceptance": "Preserve tenure wording and validate the captured confirmation for the mapped scenario.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/src/app.js"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-B02",
@@ -136,12 +129,9 @@
       "plannedScope": "main",
       "localAcceptance": "Exercise emergency/network options and each evidenced or explicitly assumed dependency.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/src/app.js"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-B03",
@@ -154,12 +144,9 @@
       "plannedScope": "main",
       "localAcceptance": "Exercise each mapped Step 5 work/permit option from reset state and verify its dependencies.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/src/app.js"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-B04",
@@ -172,11 +159,10 @@
       "plannedScope": "main",
       "localAcceptance": "Exercise minimum, multiple, maximum captured groups, count reduction, restoration, and the above-ten branch without inventing extra groups.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/src/app.js"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -190,12 +176,9 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Show after-hours/high-risk effects only through an explicit synthetic dependency table.",
       "deferredExternalClaim": "Live controller mapping remains unresolved.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
-      "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/src/app.js"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-B06",
@@ -208,12 +191,9 @@
       "plannedScope": "main",
       "localAcceptance": "Exercise mapped technical option transitions and associated requirements for each fixture.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/src/app.js"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-B07",
@@ -226,11 +206,10 @@
       "plannedScope": "main",
       "localAcceptance": "Show Site-specific synthetic requirements; changing Site invalidates its acknowledgement and preserves unrelated entries.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/src/app.js"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -244,11 +223,10 @@
       "plannedScope": "main",
       "localAcceptance": "Deactivate populated branches, exclude inactive values from readiness/review, then restore with a review reminder.",
       "deferredExternalClaim": "Unknown live dependencies remain explicit prototype assumptions.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/src/app.js"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -262,12 +240,9 @@
       "plannedScope": "main",
       "localAcceptance": "Use the canonical navigation journey to verify recovery and preservation; reuse evidence without double-counting.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-R02",
@@ -280,11 +255,10 @@
       "plannedScope": "main",
       "localAcceptance": "Refresh each stage; restore session text/selections and require file reselection with accurate readiness.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -298,11 +272,10 @@
       "plannedScope": "main",
       "localAcceptance": "Correct validation at Stages 5, 6, and 7 and representative early stages; retain unrelated file/value state and focus the error.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -316,11 +289,10 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Demonstrate same-tab restore/reset and an optional fictional persistent-draft scenario.",
       "deferredExternalClaim": "Production draft expiry, cross-device, cross-user and document storage remain deferred.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -334,12 +306,9 @@
       "plannedScope": "main",
       "localAcceptance": "Require each mapped mandatory document; display field-specific feedback and retain unrelated input.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-U02",
@@ -352,12 +321,9 @@
       "plannedScope": "main",
       "localAcceptance": "Accept the valid synthetic document for each applicable upload and show its selected status.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-U03",
@@ -370,11 +336,10 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Reject invalid type using an explicit per-field demonstration contract; retain prior valid and unrelated files.",
       "deferredExternalClaim": "Live accepted-type contract is unavailable; no common production allowlist is inferred.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -388,8 +353,8 @@
       "plannedScope": "main",
       "localAcceptance": "Accept exact limit and reject one byte over for each mapped limit; keep unrelated files and any prior valid replacement target.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs",
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
@@ -406,11 +371,10 @@
       "plannedScope": "main",
       "localAcceptance": "Replace a document successfully; update identity and invalidate only confirmations mapped to that document version.",
       "deferredExternalClaim": "Confirmation associations are prototype assumptions until approved externally.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -424,11 +388,10 @@
       "plannedScope": "main",
       "localAcceptance": "Remove the selected document, revoke readiness and related confirmation, and preserve other documents.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -442,11 +405,10 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Simulate local upload failure/retry and verify per-file isolation and retry outcome.",
       "deferredExternalClaim": "No real upload transport or external fault injection.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/unit/form-model.test.mjs",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
     {
@@ -460,11 +422,9 @@
       "plannedScope": "main",
       "localAcceptance": "Enter synthetic person details manually and retain the complete record.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/src/app.js"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-P02",
@@ -478,7 +438,7 @@
       "localAcceptance": "Select a fictional returning person by stable identity with disambiguating details.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "executionStatus": "AVAILABLE-NOT-EXECUTED",
       "localEvidence": [
         "proposed_access_request_form/src/app.js"
       ]
@@ -495,7 +455,7 @@
       "localAcceptance": "Reuse only allowed, current fields from the fictional person record; mark freshness and exclusions.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "executionStatus": "AVAILABLE-NOT-EXECUTED",
       "localEvidence": [
         "proposed_access_request_form/src/app.js"
       ]
@@ -511,8 +471,8 @@
       "plannedScope": "main",
       "localAcceptance": "Edit person details and verify correct review values; demonstration edits do not mutate the fixture source.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-guided-demonstration",
+      "executionStatus": "AVAILABLE-NOT-EXECUTED",
       "localEvidence": [
         "proposed_access_request_form/src/app.js"
       ]
@@ -528,11 +488,9 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Explicitly reuse allowed personal details for a second role; require separate role/qualification review.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
-      "localEvidence": [
-        "proposed_access_request_form/src/app.js"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-D01",
@@ -545,11 +503,11 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Select a fictional reusable document with source, owner and simulated availability visible.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated",
+      "executionStatus": "PASS",
       "localEvidence": [
-        "proposed_access_request_form/src/app.js",
-        "proposed_access_request_form/tests/unit/form-model.test.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs",
+        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
     },
     {
@@ -563,11 +521,11 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Flag expired or stale fictional documents and prevent them satisfying demonstration readiness.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated",
+      "executionStatus": "PASS",
       "localEvidence": [
-        "proposed_access_request_form/src/app.js",
-        "proposed_access_request_form/tests/unit/form-model.test.mjs"
+        "proposed_access_request_form/tests/unit/form-model.test.mjs",
+        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
     },
     {
@@ -581,10 +539,9 @@
       "plannedScope": "main",
       "localAcceptance": "Use document replacement evidence from U05 while retaining this source case's traceability.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/src/app.js",
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
     },
@@ -600,10 +557,9 @@
       "localAcceptance": "Demonstrate a request-specific supporting document only in the declared scenario.",
       "deferredExternalClaim": "External request-specific field was absent or unidentified.",
       "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "executionStatus": "AVAILABLE-NOT-EXECUTED",
       "localEvidence": [
-        "proposed_access_request_form/src/app.js",
-        "proposed_access_request_form/tests/unit/form-model.test.mjs"
+        "proposed_access_request_form/src/app.js"
       ]
     },
     {
@@ -617,8 +573,8 @@
       "plannedScope": "main",
       "localAcceptance": "Search fictional Sites by partial name/address; handle empty query and no results.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
@@ -634,8 +590,8 @@
       "plannedScope": "main",
       "localAcceptance": "Disambiguate similarly named Sites and commit the correct canonical fictional Site ID.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
@@ -651,8 +607,8 @@
       "plannedScope": "main",
       "localAcceptance": "Operate the Site combobox by keyboard; preserve focus and select a canonical option.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
@@ -670,9 +626,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-C01",
@@ -685,8 +639,8 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Copy permitted individual details explicitly from a named current-form source.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
@@ -702,8 +656,8 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Copy only the mapped address fields from the chosen source.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
@@ -719,8 +673,8 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Copy mapped company/contact fields without assuming different business entities are equivalent.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
@@ -736,8 +690,8 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Verify each copied target equals its selected source at copy time.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
@@ -753,8 +707,8 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Edit a copied target independently and recalculate its validation/review.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
@@ -770,8 +724,8 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Verify target edits and Undo never mutate source values.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
@@ -787,8 +741,8 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Preserve unrelated values; test overwrite confirmation, cancel, safe Undo, and intervening edits.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
@@ -804,8 +758,8 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Disable forbidden synthetic role/source pairs and reject the action in state logic as well as UI.",
       "deferredExternalClaim": "Actual production role restrictions remain unresolved.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
         "proposed_access_request_form/tests/unit/form-model.test.mjs"
       ]
@@ -823,9 +777,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E02",
@@ -840,9 +792,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E03",
@@ -857,9 +807,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E04",
@@ -874,9 +822,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E05",
@@ -891,9 +837,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E06",
@@ -908,9 +852,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E07",
@@ -925,9 +867,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E08",
@@ -942,9 +882,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E09",
@@ -959,9 +897,7 @@
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-E10",
@@ -976,9 +912,7 @@
       "deferredExternalClaim": "Human completion-time/efficiency claims await comparable participant sessions.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "docs/testing/access-request/prototype/implementation-report.md"
-      ]
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-A01",
@@ -991,12 +925,9 @@
       "plannedScope": "main",
       "localAcceptance": "Verify real Tab/Shift+Tab order, radio arrows, combobox operation and error-focus recovery across all stages.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs",
-        "proposed_access_request_form/src/styles/access-request.css"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-A02",
@@ -1009,12 +940,9 @@
       "plannedScope": "main",
       "localAcceptance": "Verify accessible names, descriptions, group legends, error associations and status announcements.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
-      "localEvidence": [
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs",
-        "proposed_access_request_form/src/styles/access-request.css"
-      ]
+      "implementationStatus": "implemented-partial-unverified",
+      "executionStatus": "NOT-RUN",
+      "localEvidence": []
     },
     {
       "sourceCaseId": "TC-AR-A03",
@@ -1027,11 +955,10 @@
       "plannedScope": "main",
       "localAcceptance": "Verify phone layout, touch targets, reading order and no unintended horizontal overflow.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs",
-        "proposed_access_request_form/src/styles/access-request.css"
+        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
     },
     {
@@ -1045,11 +972,10 @@
       "plannedScope": "main",
       "localAcceptance": "Verify tablet layout, form/workspace arrangement and usable navigation.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated",
+      "executionStatus": "PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs",
-        "proposed_access_request_form/src/styles/access-request.css"
+        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
     },
     {
@@ -1063,11 +989,10 @@
       "plannedScope": "main",
       "localAcceptance": "Verify 200% zoom, 320px reflow, text spacing, forced colors and reduced motion.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-or-partially-covered-by-shared-check",
-      "executionStatus": "SEE-LOCAL-EVIDENCE",
+      "implementationStatus": "implemented-automated-partial",
+      "executionStatus": "PARTIAL-PASS",
       "localEvidence": [
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs",
-        "proposed_access_request_form/src/styles/access-request.css"
+        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
     },
     {
@@ -1082,10 +1007,9 @@
       "localAcceptance": "Map an explicit allowlist of fictional LAAN-to-Access fields with source attribution and exclusions.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
       "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "executionStatus": "AVAILABLE-NOT-EXECUTED",
       "localEvidence": [
-        "proposed_access_request_form/src/app.js",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
+        "proposed_access_request_form/src/app.js"
       ]
     },
     {
@@ -1099,10 +1023,9 @@
       "plannedScope": "demonstration",
       "localAcceptance": "Use one shared fictional Site identity; block implicit merging of mismatched/conflicting contexts.",
       "deferredExternalClaim": "Local prototype evidence does not approve production rules or change the live case result.",
-      "implementationStatus": "implemented-guided-demonstration",
-      "executionStatus": "AVAILABLE-NOT-AUTOMATED",
+      "implementationStatus": "implemented-automated",
+      "executionStatus": "PASS",
       "localEvidence": [
-        "proposed_access_request_form/src/app.js",
         "proposed_access_request_form/tests/browser/access-request.spec.mjs"
       ]
     },
@@ -1119,15 +1042,14 @@
       "deferredExternalClaim": "No claim of live LAAN integration or human time savings without matching evidence.",
       "implementationStatus": "method-retained-measurement-pending",
       "executionStatus": "NOT-RUN",
-      "localEvidence": [
-        "proposed_access_request_form/src/app.js",
-        "proposed_access_request_form/tests/browser/access-request.spec.mjs"
-      ]
+      "localEvidence": []
     }
   ],
   "implementationSummary": {
-    "implemented-or-partially-covered-by-shared-check": 32,
-    "implemented-guided-demonstration": 20,
+    "implemented-automated": 5,
+    "implemented-partial-unverified": 14,
+    "implemented-automated-partial": 28,
+    "implemented-guided-demonstration": 5,
     "method-retained-measurement-pending": 12
   }
 }

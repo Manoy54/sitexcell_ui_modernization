@@ -37,7 +37,8 @@ review before implementation begins.
 The accepted prototype decisions control this isolated study when older
 documents would defer all experimentation until business approval. Every such
 experiment remains an explicit prototype assumption. Production decisions in
-the original registers remain unresolved.
+the original registers remain unresolved. This approved plan has now been
+implemented; the report linked above is the execution record.
 
 ## 2. Evidence baseline and limitations
 
@@ -390,8 +391,9 @@ proposed_access_request_form/
 Use vanilla ES modules and the existing Node/Playwright dependencies. Keep the
 local server on loopback, with a dedicated configurable port selected after
 checking availability. Package commands will cover serve, static checks, unit,
-smoke, full local browser tests and measurements. These commands are planned;
-do not present them as available until implemented.
+smoke and full local browser tests. Those commands are now available through
+the package scripts documented in the implementation report. Human timing and
+efficiency measurements remain methods, not completed results.
 
 The prototype must not import production submission handlers, write WordPress
 records, send notifications, or call live form endpoints. Local browser tests
