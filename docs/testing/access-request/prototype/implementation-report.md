@@ -26,10 +26,14 @@ Implemented behavior includes:
   source/target pairs;
 - conditional value stashing/restoration, inactive-value exclusion, and a
   visible review reminder;
-- independent document identity, field-specific size/type/single-file contracts,
+- independent document identity, field-specific size/type/multiplicity contracts,
   current-expiry checks, current/expired saved-document demonstrations,
   prior-valid and unrelated-file preservation, related-confirmation
   invalidation, removal, simulated failure/retry, and reload reselection;
+- notes-guided multi-file qualification uploads with per-file status, compact
+  red validation copy, explicit per-file Remove actions, driver-licence
+  rejection, valid-file preservation, picker cancellation feedback and honest
+  reload reselection messaging;
 - fictional returning-person and linked-LAAN demonstrations that preserve
   populated conflicting values instead of silently overwriting them;
 - a separate reviewer panel, synthetic complete scenario, live-baseline facts,
@@ -50,9 +54,9 @@ Result on 2026-09-09:
 
 | Suite | Result | Public seam |
 | --- | ---: | --- |
-| State model and server | 16 passed | preservation, branch, copy, contractor, saved/local documents, hostile session rejection, stale-file, recovery and malformed-request contracts |
-| Browser workflow | 14 passed | visible workflow, focus, Site keyboard use, review, saved/local uploads, malformed paths, responsive reflow and accessibility preference layouts |
-| Total local declarations | 30 passed | grouped evidence for explicitly named Access Request concerns |
+| State model and server | 17 passed | preservation, branch, copy, contractor, saved/local documents, multi-file upload states, hostile session rejection, stale-file, recovery and malformed-request contracts |
+| Browser workflow | 16 passed | visible workflow, focus, Site keyboard use, review, notes-guided upload feedback, cancellation/reselection, saved/local uploads, malformed paths, responsive reflow and accessibility preference layouts |
+| Total local declarations | 33 passed | grouped evidence for explicitly named Access Request concerns |
 
 The browser pass uses the machine's existing local Chromium build because the
 installed Playwright package expects a newer optional browser bundle. This is

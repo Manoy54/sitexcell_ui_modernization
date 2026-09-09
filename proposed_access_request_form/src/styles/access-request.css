@@ -129,6 +129,14 @@ form { padding: 0 7vw; }
 .document-actions { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
 .document-contract { margin: 10px 0 0; color: var(--portal-muted); font-size: 10px; }
 .document-provenance { margin: 9px 0 0; color: #4f5968; font-size: 10px; overflow-wrap: anywhere; }
+.document-file-list { display: grid; gap: 7px; margin: 12px 0 0; padding: 0; list-style: none; }
+.document-file { display: flex; min-width: 0; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 9px 10px; border: 1px solid var(--portal-border); border-radius: 6px; background: #fff; }
+.document-file-invalid { border-color: var(--portal-error); background: var(--portal-error-soft); }
+.document-file-main { min-width: 0; }
+.document-file-name { display: block; overflow-wrap: anywhere; color: #303744; font-size: 12px; font-weight: 650; }
+.document-file-meta { display: block; margin-top: 3px; color: var(--portal-muted); font-size: 12px; }
+.document-file-error { margin: 5px 0 0; color: var(--portal-error); font-size: 12px; line-height: 1.35; }
+.document-file-remove { flex: 0 0 auto; }
 .file-button { display: inline-flex !important; min-height: 44px; align-items: center; gap: 7px; margin: 0 !important; padding: 0 12px; border: 1px solid #bdc4cd; border-radius: 5px; background: #fff; color: #303744; font-size: 11px !important; font-weight: 670 !important; }
 .file-button:hover { border-color: #8f98a5; background: #fcfcfd; }
 .file-button:focus-within { border-color: var(--portal-red); box-shadow: 0 0 0 3px rgba(245, 40, 77, .11); outline: 2px solid var(--portal-red); outline-offset: 2px; }

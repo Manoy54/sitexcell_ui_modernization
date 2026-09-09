@@ -32,6 +32,7 @@ review before implementation begins.
 | [Selected LAAN direction](../../../../proposed_laan_form/docs/selected-direction.md) and [reference measurements](../../../../proposed_laan_form/docs/reference-analysis.md) | Application layout and visual fidelity |
 | [LAAN application styles](../../../../assets/css/laan-request.css) and [application code](../../../../assets/js/laan-request.js) | Current visual/component reference; production submission logic is outside this prototype |
 | [General visual standard](../../../DESIGN_INTERFACE_HANDOFF.md) | Accessibility, states, spacing discipline, and secondary guidance |
+| [Upload guidance notes](../../../notes/access-request-upload-guidance.md) and annotated screenshots | Per-file validation, cancellation, removal, and error-copy treatment for qualification uploads |
 | [WordPress handoff](../../../WORDPRESS_HANDOFF_READINESS.md) and [project context](../../../../CONTEXT.md) | Distinction between isolated prototype and future production implementation |
 
 The accepted prototype decisions control this isolated study when older

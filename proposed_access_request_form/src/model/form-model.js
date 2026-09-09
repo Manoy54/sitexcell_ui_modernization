@@ -2,7 +2,7 @@ export const STATE_VERSION = 1;
 export const PROTOTYPE_TODAY = '2026-09-09';
 
 export const DOCUMENT_RULES = Object.freeze({
-    qualification: { label: 'Qualifications & training', originalId: 'input_3_445', required: true, multiple: false, expiryField: null, maxBytes: 15_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], confirmation: 'qualificationReviewed', source: 'prototype assumption' },
+    qualification: { label: 'Qualifications & training', originalId: 'input_3_445', required: true, multiple: true, expiryField: null, maxBytes: 15_000_000, acceptedTypes: ['application/pdf', 'image/jpeg', 'image/png'], rejectedNamePatterns: [/licen[cs]e/i], rejectedNameMessage: 'Driver licence-related files are not permitted in this field. Upload qualification or training documents only.', confirmation: 'qualificationReviewed', source: 'notes image guidance; prototype assumption' },
     authority: { label: 'Letter of Authority', originalId: 'input_3_44', required: true, multiple: false, expiryField: null, maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'authorityReviewed', source: 'U04 executable size scenario; type is a prototype assumption' },
     swms: { label: "Signed 'Site Specific' SWMS", originalId: 'input_3_338', required: true, multiple: false, expiryField: null, maxBytes: 20_000_000, acceptedTypes: ['application/pdf'], confirmation: 'swmsReviewed', source: 'prototype assumption' },
     workersComp: { label: 'Workers Compensation Certificate', originalId: 'input_3_42', required: true, multiple: false, expiryField: 'workersCompExpiry', maxBytes: 10_000_000, acceptedTypes: ['application/pdf'], confirmation: 'workersCompReviewed', source: 'prototype assumption' },
@@ -58,6 +58,7 @@ const clone = (value) => structuredClone(value);
 const emptyDocument = () => ({
     status: 'missing',
     file: null,
+    files: [],
     rememberedName: '',
     version: 0,
     error: '',
@@ -74,6 +75,13 @@ const emptyContractor = (id = 'contractor-1') => ({
     id,
     name: '', company: '', phone: '', licence: '', whiteCard: '', induction: 'no', inductionExpiry: '',
 });
+
+const copyFile = (file) => ({ name: file.name, size: file.size, type: file.type || 'application/octet-stream' });
+const documentFiles = (document) => document.files?.length
+    ? document.files
+    : document.file ? [{ id: 'legacy-file', file: document.file, rememberedName: document.file.name, status: 'selected', error: '' }] : [];
+export const documentFileEntries = documentFiles;
+const nextFileId = (documentKey, document) => `${documentKey}-file-${document.version + documentFiles(document).length + 1}`;
 
 export function createInitialState() {
     return {
@@ -203,22 +211,37 @@ export function selectDocument(state, documentKey, file, { simulateFailure = fal
     const next = changed(state);
     next.metrics.fileSelections += 1;
     const current = next.documents[documentKey];
+    const existingFiles = documentFiles(current);
+    const id = nextFileId(documentKey, current);
+    const addInvalidFile = (error) => {
+        current.files = [...existingFiles, { id, file: copyFile(file), rememberedName: file.name, status: 'invalid', error }];
+        current.error = error;
+        current.simulatedFailure = simulateFailure;
+        if (!existingFiles.some((entry) => entry.status === 'selected')) {
+            current.file = null;
+            current.status = 'invalid';
+            current.rememberedName = file.name;
+        }
+        return next;
+    };
 
     if (file.size > rule.maxBytes) {
-        current.error = `File must be ${rule.maxBytes / 1_000_000} MB or smaller.`;
-        return next;
+        return addInvalidFile(`File must be ${rule.maxBytes / 1_000_000} MB or smaller.`);
+    }
+    if (rule.rejectedNamePatterns?.some((pattern) => pattern.test(file.name))) {
+        return addInvalidFile(rule.rejectedNameMessage);
     }
     if (file.type && !rule.acceptedTypes.includes(file.type)) {
-        current.error = `Use ${rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(' or ')} for this prototype scenario.`;
-        return next;
+        return addInvalidFile(`Use ${rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(', ')} for this prototype scenario.`);
     }
     if (simulateFailure) {
-        current.error = 'The simulated upload failed. Retry this document.';
-        current.simulatedFailure = true;
-        return next;
+        return addInvalidFile('The simulated upload failed. Retry this document.');
     }
 
-    current.file = { name: file.name, size: file.size, type: file.type || 'application/octet-stream' };
+    const selectedEntry = { id, file: copyFile(file), rememberedName: file.name, status: 'selected', error: '' };
+    const retainedFiles = rule.multiple ? existingFiles : existingFiles.filter((entry) => entry.status === 'invalid');
+    current.files = [...retainedFiles, selectedEntry];
+    current.file = selectedEntry.file;
     current.rememberedName = file.name;
     current.status = 'selected';
     current.version += 1;
@@ -261,12 +284,34 @@ export function removeDocument(state, documentKey) {
     return next;
 }
 
+export function removeDocumentFile(state, documentKey, fileId) {
+    const rule = DOCUMENT_RULES[documentKey];
+    if (!rule) throw new Error(`Unknown document field: ${documentKey}`);
+    const next = changed(state);
+    const current = next.documents[documentKey];
+    const existingFiles = documentFiles(current);
+    const removed = existingFiles.find((entry) => entry.id === fileId);
+    if (!removed) return next;
+    current.files = existingFiles.filter((entry) => entry.id !== fileId);
+    const selected = current.files.filter((entry) => entry.status === 'selected');
+    const failed = current.files.find((entry) => entry.status === 'invalid');
+    current.file = selected.at(-1)?.file ?? null;
+    current.status = selected.length ? 'selected' : failed ? 'invalid' : 'missing';
+    current.error = failed?.error ?? '';
+    current.rememberedName = current.file?.name ?? failed?.file.name ?? '';
+    if (removed.status === 'selected') {
+        current.version += 1;
+        next.confirmations[rule.confirmation] = 0;
+    }
+    return next;
+}
+
 export function confirmDocument(state, documentKey, checked) {
     const rule = DOCUMENT_RULES[documentKey];
     if (!rule) throw new Error(`Unknown document field: ${documentKey}`);
     const next = changed(state);
     const document = next.documents[documentKey];
-    next.confirmations[rule.confirmation] = checked && document.status === 'selected' && document.availability === 'available' ? document.version : 0;
+    next.confirmations[rule.confirmation] = checked && documentFiles(document).some((entry) => entry.status === 'selected') && document.availability === 'available' ? document.version : 0;
     return next;
 }
 
@@ -277,6 +322,7 @@ export function useSavedDocument(state, documentKey, { name, availability, expir
     const next = changed(state);
     const current = next.documents[documentKey];
     current.file = { name, size: 0, type: 'application/pdf' };
+    current.files = [{ id: `${documentKey}-saved-${current.version + 1}`, file: current.file, rememberedName: name, status: availability === 'available' ? 'selected' : 'invalid', error: availability === 'available' ? '' : `This saved document is ${availability} and cannot satisfy readiness.` }];
     current.rememberedName = name;
     current.status = availability === 'available' ? 'selected' : 'invalid';
     current.version += 1;
@@ -342,7 +388,7 @@ export const documentIsReady = (state, key) => {
     const effectiveExpiry = document.origin === 'saved-demo' ? document.expiresOn : state.fields[rule.expiryField];
     const expiryIsReady = !rule.expiryField || dateIsCurrent(effectiveExpiry);
     return document.status === 'selected' && document.availability === 'available' && document.version > 0
-        && Boolean(document.file) && expiryIsReady && state.confirmations[rule.confirmation] === document.version;
+        && documentFiles(document).some((entry) => entry.status === 'selected') && expiryIsReady && state.confirmations[rule.confirmation] === document.version;
 };
 
 const dateIsCurrent = (value) => {
@@ -482,7 +528,7 @@ export function reviewSections(state) {
         .map(([key, rule]) => {
             const document = state.documents[key];
             const reviewed = documentIsReady(state, key);
-            const identity = document.file?.name ?? document.status;
+            const identity = documentFiles(document).map((entry) => `${entry.file?.name ?? entry.status} · ${entry.status}`).join(', ') || document.status;
             return [`${rule.label} status`, `${identity} · ${document.owner || 'no owner'} · ${document.source || document.origin} · ${document.availability} · ${reviewed ? 'reviewed' : 'review required'} · version ${document.version}`];
         });
     return [
@@ -501,7 +547,16 @@ export function serializeSession(state) {
     const persisted = clone(state);
     for (const document of Object.values(persisted.documents)) {
         document.pendingOperation = null;
-        if (document.origin === 'local-selection') document.file = null;
+        if (document.origin === 'local-selection') {
+            document.file = null;
+            document.files = document.files.map((entry) => ({
+                ...entry,
+                file: null,
+                rememberedName: entry.rememberedName ?? entry.file?.name ?? document.rememberedName,
+                status: 'needs-reselection',
+                error: 'Reselect this file after reload; browsers do not restore file bytes.',
+            }));
+        }
     }
     return JSON.stringify(persisted);
 }
@@ -524,6 +579,10 @@ export function restoreSession(serialized) {
         && /^contractor-[1-9]\d*$/.test(candidate.id);
     const validFile = (file) => file === null || (isRecord(file) && typeof file.name === 'string'
         && Number.isFinite(file.size) && file.size >= 0 && typeof file.type === 'string');
+    const validStoredEntry = (entry) => isRecord(entry) && typeof entry.id === 'string'
+        && ['selected', 'invalid', 'needs-reselection'].includes(entry.status)
+        && validFile(entry.file) && (entry.rememberedName === undefined || typeof entry.rememberedName === 'string')
+        && typeof entry.error === 'string';
     const validDocument = (document, key) => isRecord(document)
         && ['missing', 'selected', 'needs-reselection', 'invalid'].includes(document.status)
         && validFile(document.file) && typeof document.rememberedName === 'string'
@@ -533,6 +592,7 @@ export function restoreSession(serialized) {
         && ['missing', 'available', 'expired', 'unavailable'].includes(document.availability)
         && typeof document.expiresOn === 'string' && typeof document.owner === 'string'
         && typeof document.source === 'string'
+        && (document.files === undefined || (Array.isArray(document.files) && document.files.every(validStoredEntry)))
         && !(document.origin === 'saved-demo' && document.status !== 'missing' && document.file === null)
         && !(document.status === 'selected' && (document.version === 0 || document.availability !== 'available'))
         && !(document.origin === 'saved-demo' && document.status === 'selected'
@@ -582,7 +642,10 @@ export function restoreSession(serialized) {
         branches: { ...initial.branches, ...parsed.branches },
     };
     for (const [key, document] of Object.entries(restored.documents)) {
+        if (!Array.isArray(document.files)) document.files = [];
+        if (!document.files.length && document.file) document.files = [{ id: `${key}-legacy-${document.version}`, file: document.file, rememberedName: document.file.name, status: document.status === 'selected' ? 'selected' : 'invalid', error: document.error }];
         if (document.origin === 'local-selection' && (document.status === 'selected' || document.rememberedName)) {
+            document.files = document.files.map((entry) => ({ ...entry, status: 'needs-reselection', file: null }));
             document.status = 'needs-reselection';
             document.file = null;
             document.error = 'Reselect this file after reload; browsers do not restore file bytes.';

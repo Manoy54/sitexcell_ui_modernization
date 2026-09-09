@@ -12,6 +12,7 @@ import {
     formIsReady,
     goToStage,
     removeDocument,
+    removeDocumentFile,
     recordValidationCorrection,
     resolveDocumentSelection,
     restoreSession,
@@ -26,11 +27,14 @@ import {
     setSiteRequirementsReviewed,
     undoLastCopy,
     useSavedDocument,
+    documentFileEntries,
     validateStage,
 } from './model/form-model.js';
 
 const root = document.querySelector('#prototype-root');
 const STORAGE_KEY = 'sitexcell-access-request-prototype-v1';
+const DOCUMENT_CHECK_DELAY_MS = 20;
+const DOCUMENT_FILE_QUEUE_INTERVAL_MS = 50;
 const STAGES = [
     ['Request context', 'Choose the Site and establish the request context.'],
     ['Site requirements', 'Review Site-specific access requirements.'],
@@ -155,19 +159,38 @@ function documentCard(key) {
     const documentState = state.documents[key];
     const confirmationKey = rule.confirmation;
     const isConfirmed = state.confirmations[confirmationKey] === documentState.version && documentState.status === 'selected' && documentState.availability === 'available';
-    const fileSize = documentState.file?.size ? ` · ${(documentState.file.size / 1_000).toFixed(0)} KB` : '';
-    const statusCopy = documentState.file
-        ? `${documentState.file.name}${fileSize} · ${documentState.availability}`
-        : documentState.status === 'needs-reselection' ? `${documentState.rememberedName} · reselection required` : 'No file selected';
-    return `<article class="document-card ${documentState.error ? 'document-error' : ''}" data-testid="document-${key}" data-original-id="${rule.originalId}">
+    const files = documentFileEntries(documentState);
+    const selectedCount = files.filter((entry) => entry.status === 'selected').length;
+    const invalidCount = files.filter((entry) => entry.status === 'invalid').length;
+    const reselectionCount = files.filter((entry) => entry.status === 'needs-reselection').length;
+    const statusCopy = reselectionCount
+        ? `${reselectionCount} file${reselectionCount === 1 ? '' : 's'} need reselection after reload`
+        : selectedCount
+            ? `${files.length} file${files.length === 1 ? '' : 's'} listed · ${documentState.availability}`
+            : invalidCount
+                ? `${invalidCount} file${invalidCount === 1 ? '' : 's'} need attention`
+                : 'No file selected';
+    const fileErrorId = (entry) => `document-${key}-file-${entry.id.replace(/[^a-zA-Z0-9_-]/g, '-')}-error`;
+    const fileRows = files.map((entry) => {
+        const name = entry.file?.name ?? entry.rememberedName ?? 'Unnamed file';
+        const message = entry.error || (entry.status === 'needs-reselection' ? 'Reselect this file after reload; browsers do not restore file bytes.' : '');
+        const meta = entry.status === 'needs-reselection'
+            ? 'Reselect this file after reload'
+            : entry.file?.size ? `${(entry.file.size / 1_000).toFixed(0)} KB · ${entry.status}` : `Saved document · ${entry.status}`;
+        return `<li class="document-file ${entry.status === 'invalid' ? 'document-file-invalid' : ''} ${entry.status === 'needs-reselection' ? 'document-file-reselection' : ''}" data-file-id="${escapeHtml(entry.id)}"><div class="document-file-main"><span class="document-file-name">${escapeHtml(name)}</span><span class="document-file-meta">${escapeHtml(meta)}</span>${message ? `<p id="${escapeHtml(fileErrorId(entry))}" class="document-file-error" role="${entry.status === 'invalid' ? 'alert' : 'status'}">${escapeHtml(message)}</p>` : ''}</div><button type="button" class="button-link document-file-remove" data-remove-document-file="${key}" data-file-id="${escapeHtml(entry.id)}" aria-label="Remove ${escapeHtml(name)}">Remove</button></li>`;
+    }).join('');
+    const describedBy = files.filter((entry) => entry.error || entry.status === 'needs-reselection').map(fileErrorId).join(' ');
+    const inputState = describedBy ? ` aria-invalid="true" aria-describedby="${escapeHtml(describedBy)}"` : '';
+    return `<article class="document-card ${documentState.error && !files.length ? 'document-error' : ''}" data-testid="document-${key}" data-original-id="${rule.originalId}">
         <div class="document-heading"><span class="document-icon">${icon('document')}</span><div><h3>${escapeHtml(rule.label)}${rule.required ? '<span aria-hidden="true">*</span>' : ''}</h3><p>${escapeHtml(statusCopy)}</p></div></div>
         ${documentState.file ? `<p class="document-provenance">Owner: ${escapeHtml(documentState.owner)} · Source: ${escapeHtml(documentState.source)}</p>` : ''}
-        ${documentState.error ? `<p class="field-error" role="status">${escapeHtml(documentState.error)}</p>` : ''}
+        ${documentState.error && (!files.length || documentState.status === 'needs-reselection') && !invalidCount ? `<p class="field-error" role="status">${escapeHtml(documentState.error)}</p>` : ''}
+        ${files.length ? `<ul class="document-file-list" aria-label="${escapeHtml(rule.label)} files">${fileRows}</ul>` : ''}
         <div class="document-actions">
-            <label class="file-button">${icon('upload')}<span>${documentState.status === 'selected' ? 'Replace' : 'Choose file'}</span><input class="sr-only" type="file" data-document="${key}" aria-label="Choose ${escapeHtml(rule.label)} file" accept="${rule.acceptedTypes.join(',')}"></label>
-            ${documentState.status !== 'missing' ? `<button type="button" class="button-link" data-remove-document="${key}">Remove</button>` : ''}
+            <label class="file-button">${icon('upload')}<span>${documentState.status === 'selected' ? (rule.multiple ? 'Add files' : 'Replace') : 'Choose file'}</span><input class="sr-only" type="file" data-document="${key}" ${rule.multiple ? 'multiple' : ''} aria-label="Choose ${escapeHtml(rule.label)} file" accept="${rule.acceptedTypes.join(',')}"${inputState}></label>
+            ${documentState.status !== 'missing' && !files.length ? `<button type="button" class="button-link" data-remove-document="${key}">Remove</button>` : ''}
         </div>
-        <p class="document-contract">One file · ${rule.maxBytes / 1_000_000} MB maximum · ${escapeHtml(rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(', '))}${rule.expiryField ? ' · current expiry required' : ''} · ${escapeHtml(rule.source)}</p>
+        <p class="document-contract">${rule.multiple ? 'Multiple files allowed · each file' : 'One file ·'} ${rule.maxBytes / 1_000_000} MB maximum · ${escapeHtml(rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(', '))}${rule.expiryField ? ' · current expiry required' : ''} · ${escapeHtml(rule.source)}</p>
         ${documentState.status === 'selected' ? `<label class="check-line document-confirm"><input type="checkbox" data-confirm-document="${key}"${checked(isConfirmed)}> <span>I reviewed this selected file</span></label>` : ''}
     </article>`;
 }
@@ -232,7 +255,7 @@ function renderStage4() {
         `${selectField('contractorCount', 'Number of contractors', Array.from({ length: 10 }, (_, index) => [String(index + 1), String(index + 1)]), { required: true, originalId: 'input_3_158' })}
         <p class="field-hint field-wide">For more than ten contractors, the production rule remains unresolved; this prototype does not invent an eleventh repeated group.</p>`)
         + state.contractors.map(contractorFields).join('')
-        + section('Qualifications and training', 'The file stays selected through navigation and validation. Reload requires reselection.', documentCard('qualification'));
+        + section('Qualifications and training', 'Add each relevant qualification or training document. Failed files stay visible until removed; reload requires reselection.', documentCard('qualification'));
 }
 
 function renderStage5() {
@@ -405,18 +428,25 @@ root.addEventListener('input', (event) => {
 root.addEventListener('change', (event) => {
     const fileInput = event.target.closest('[data-document]');
     if (fileInput) {
-        const file = fileInput.files?.[0];
-        if (!file) return;
+        const files = Array.from(fileInput.files ?? []);
+        if (!files.length) {
+            statusMessage = 'File selection canceled. Existing files were kept.';
+            render();
+            return;
+        }
         const documentKey = fileInput.dataset.document;
-        const pending = beginDocumentSelection(state, documentKey, file);
-        state = pending.state;
-        statusMessage = `${file.name} is being checked.`;
+        statusMessage = `${files.length} file${files.length === 1 ? '' : 's'} are being checked.`;
         saveState(); render();
-        setTimeout(() => {
-            state = resolveDocumentSelection(state, documentKey, pending.operationId);
-            statusMessage = state.documents[documentKey].error || `${file.name} selected.`;
+        files.forEach((file, index) => setTimeout(() => {
+            const pending = beginDocumentSelection(state, documentKey, file);
+            state = pending.state;
             saveState(); render();
-        }, 20);
+            setTimeout(() => {
+                state = resolveDocumentSelection(state, documentKey, pending.operationId);
+                statusMessage = state.documents[documentKey].error || `${file.name} checked.`;
+                saveState(); render();
+            }, DOCUMENT_CHECK_DELAY_MS);
+        }, index * DOCUMENT_FILE_QUEUE_INTERVAL_MS));
         return;
     }
     const confirmation = event.target.closest('[data-confirm-document]');
@@ -545,6 +575,7 @@ root.addEventListener('click', (event) => {
     }
     if (target.hasAttribute('data-cancel-copy')) { pendingCopy = null; render(); return; }
     if (target.hasAttribute('data-undo-copy')) { state = undoLastCopy(state); saveState(); render(); return; }
+    if (target.dataset.removeDocumentFile) { state = removeDocumentFile(state, target.dataset.removeDocumentFile, target.dataset.fileId); saveState(); render(); return; }
     if (target.dataset.removeDocument) { state = removeDocument(state, target.dataset.removeDocument); saveState(); render(); return; }
     if (target.hasAttribute('data-summary-toggle')) { summaryOpen = !summaryOpen; render(); return; }
 });

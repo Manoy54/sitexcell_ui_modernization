@@ -81,6 +81,39 @@ test('PA-U04 invalid replacement preserves the previous file and another documen
     await expect(page.getByTestId('document-workersComp')).toContainText('workers-comp-demo.pdf');
 });
 
+test('PA-NOTES qualification upload list separates valid and invalid files', async ({ page }) => {
+    await page.getByRole('button', { name: 'Load complete scenario' }).click();
+    await page.getByRole('button', { name: /Stage 4/ }).click();
+    await page.getByLabel('Choose Qualifications & training file').setInputFiles([
+        { name: 'valid-training.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(100_000) },
+        { name: 'drivers-licence.jpg', mimeType: 'image/jpeg', buffer: Buffer.alloc(100_000) },
+    ]);
+
+    await expect(page.getByTestId('document-qualification')).toContainText('valid-training.pdf');
+    await expect(page.getByTestId('document-qualification')).toContainText('drivers-licence.jpg');
+    await expect(page.getByTestId('document-qualification')).toContainText('Driver licence-related files are not permitted');
+    await expect(page.getByTestId('document-qualification').getByRole('button', { name: 'Remove drivers-licence.jpg' })).toBeVisible();
+
+    await page.getByLabel('Choose Qualifications & training file').setInputFiles([]);
+    await expect(page.locator('[aria-live="polite"]')).toContainText('File selection canceled');
+    await expect(page.getByTestId('document-qualification')).toContainText('valid-training.pdf');
+});
+
+test('PA-NOTES reload keeps qualification filenames visible and asks for reselection', async ({ page }) => {
+    await page.getByRole('button', { name: 'Load complete scenario' }).click();
+    await page.getByRole('button', { name: /Stage 4/ }).click();
+    await page.getByLabel('Choose Qualifications & training file').setInputFiles({
+        name: 'reload-training.pdf',
+        mimeType: 'application/pdf',
+        buffer: Buffer.alloc(100_000),
+    });
+    await page.reload();
+
+    await expect(page.getByTestId('document-qualification')).toContainText('reload-training.pdf');
+    await expect(page.getByTestId('document-qualification')).toContainText('Reselect this file after reload');
+    await expect(page.getByLabel('Choose Qualifications & training file')).toHaveAttribute('aria-invalid', 'true');
+});
+
 test('PA-D01/D02 saved certificate demonstration blocks expired evidence', async ({ page }) => {
     await page.getByRole('button', { name: 'Load complete scenario' }).click();
     await page.getByRole('button', { name: /Stage 7/ }).click();
@@ -92,7 +125,7 @@ test('PA-D01/D02 saved certificate demonstration blocks expired evidence', async
     await expect(page.getByTestId('document-liability')).toContainText('Fictional Document Library');
     await expect(page.getByTestId('document-liability')).toContainText('expired and cannot satisfy readiness');
     await page.getByRole('button', { name: 'Continue to Review & declarations' }).click();
-    await expect(page.getByRole('alert')).toContainText('Public Liability');
+    await expect(page.locator('.error-summary')).toContainText('Public Liability');
 
     await page.getByText('Reviewer demonstrations').click();
     await page.getByRole('button', { name: 'Use current saved certificate' }).click();

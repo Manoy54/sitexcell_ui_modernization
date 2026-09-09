@@ -9,6 +9,7 @@ import {
     createInitialState,
     documentIsReady,
     removeDocument,
+    removeDocumentFile,
     reviewSections,
     restoreSession,
     resolveDocumentSelection,
@@ -219,6 +220,30 @@ test('PA-U03 document contracts are field-specific prototype assumptions', () =>
     assert.equal(state.documents.qualification.status, 'selected');
     state = selectDocument(state, 'qualification', pdf('large-qualification.pdf', 12_000_000));
     assert.equal(state.documents.qualification.status, 'selected');
+});
+
+test('PA-NOTES qualification uploads keep valid files and failed files independently visible', () => {
+    let state = createInitialState();
+    state = selectDocument(state, 'qualification', { name: 'valid-training.pdf', size: 100_000, type: 'application/pdf' });
+    state = selectDocument(state, 'qualification', { name: 'drivers-licence.jpg', size: 100_000, type: 'image/jpeg' });
+    state = selectDocument(state, 'qualification', { name: 'slightly-over-limit.pdf', size: 15_000_001, type: 'application/pdf' });
+
+    assert.deepEqual(state.documents.qualification.files.map(({ file, status }) => [file.name, status]), [
+        ['valid-training.pdf', 'selected'],
+        ['drivers-licence.jpg', 'invalid'],
+        ['slightly-over-limit.pdf', 'invalid'],
+    ]);
+    assert.equal(state.documents.qualification.file.name, 'valid-training.pdf');
+    assert.match(state.documents.qualification.files[1].error, /Driver licence-related/);
+    assert.match(state.documents.qualification.files[2].error, /15 MB/);
+
+    const invalidId = state.documents.qualification.files[1].id;
+    state = removeDocumentFile(state, 'qualification', invalidId);
+    assert.deepEqual(state.documents.qualification.files.map(({ file }) => file.name), ['valid-training.pdf', 'slightly-over-limit.pdf']);
+    assert.equal(state.documents.qualification.status, 'selected');
+
+    const restored = restoreSession(serializeSession(state));
+    assert.ok(restored.documents.qualification.files.every(({ status, file }) => status === 'needs-reselection' && file === null));
 });
 
 test('PA-D01/D02 saved-document demos distinguish available and expired evidence', () => {
