@@ -19,6 +19,9 @@ Implemented behavior includes:
   recalculated readiness;
 - searchable fictional Site selection by name, address and canonical ID with
   arrow-key/Enter/Escape operation and Site-specific acknowledgement reset;
+- complete captured Step 1 Owner and Site dropdown label inventories mapped into
+  searchable synthetic comboboxes, without provider IDs or production directory
+  authority;
 - stable contractor identities, one-to-ten groups, count reduction and
   restoration without transferring one contractor's values to another;
 - explicit allowlisted copy, populated-target confirmation, independent target
@@ -50,13 +53,13 @@ Command:
 npm.cmd run test:prototype:access
 ```
 
-Result on 2026-09-09:
+Result on 2026-09-11:
 
 | Suite | Result | Public seam |
 | --- | ---: | --- |
-| State model and server | 17 passed | preservation, branch, copy, contractor, saved/local documents, multi-file upload states, hostile session rejection, stale-file, recovery and malformed-request contracts |
-| Browser workflow | 16 passed | visible workflow, focus, Site keyboard use, review, notes-guided upload feedback, cancellation/reselection, saved/local uploads, malformed paths, responsive reflow and accessibility preference layouts |
-| Total local declarations | 33 passed | grouped evidence for explicitly named Access Request concerns |
+| State model and server | 18 passed | preservation, branch, copy, contractor, saved/local documents, complete Owner/Site option mapping, multi-file upload states, hostile session rejection, stale-file, recovery and malformed-request contracts |
+| Browser workflow | 17 passed | visible workflow, focus, Owner/Site keyboard use, complete captured option lookup, review, notes-guided upload feedback, cancellation/reselection, saved/local uploads, malformed paths, responsive reflow and accessibility preference layouts |
+| Total local declarations | 35 passed | grouped evidence for explicitly named Access Request concerns |
 
 The browser pass uses the machine's existing local Chromium build because the
 installed Playwright package expects a newer optional browser bundle. This is
@@ -87,7 +90,7 @@ details that cannot honestly become local business truth.
 
 The 64 live catalog IDs remain mapped once each in
 [`test-case-plan.json`](./test-case-plan.json). They are concerns, not a demand
-for 64 duplicate local executions. The 30 local declarations deliberately
+for 64 duplicate local executions. The 35 local declarations deliberately
 group equivalent public behaviors. Evidence is not inferred from family or
 scope: five concerns have a full automated PASS, 28 have narrower automated
 PARTIAL-PASS evidence, five are available but unexecuted guided demonstrations,

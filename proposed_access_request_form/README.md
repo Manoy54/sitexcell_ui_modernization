@@ -21,11 +21,11 @@ npm.cmd run test:prototype:access
 ```
 
 The unit suite covers the state model, hostile session/request rejection and
-live-regression proposals, including the notes-guided multi-file qualification
-upload state. The browser suite covers the public workflow,
-keyboard Site selection, validation focus, non-submission, local and saved
-document states, replacement preservation, responsive reflow and a 200% zoom
-equivalent.
+live-regression proposals, including the complete captured Owner/Site option
+map and notes-guided multi-file qualification upload state. The browser suite
+covers the public workflow, keyboard Owner/Site selection, validation focus,
+non-submission, local and saved document states, replacement preservation,
+responsive reflow and a 200% zoom equivalent.
 
 ## Evidence boundary
 

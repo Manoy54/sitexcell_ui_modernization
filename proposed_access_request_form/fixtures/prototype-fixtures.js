@@ -1,10 +1,25 @@
 import { createInitialState, selectDocument } from '../src/model/form-model.js';
+import { CAPTURED_OWNER_OPTIONS, CAPTURED_SITE_OPTIONS } from './captured-access-options.js';
 
-export const SITES = Object.freeze([
+const syntheticSites = [
     { id: 'SITE-1001', slug: 'site-southbank', name: 'Southbank Exchange', address: '18 Fiction Lane, Southbank VIC 3006', owner: 'Harbour Property Group', requirement: 'Goods lift bookings require two business days notice.' },
     { id: 'SITE-1002', slug: 'site-southbank-north', name: 'Southbank North Exchange', address: '81 Sample Street, Southbank VIC 3006', owner: 'Northbank Assets', requirement: 'After-hours access requires a fictional security escort.' },
     { id: 'SITE-2041', slug: 'site-collins', name: 'Collins Exchange', address: '410 Example Road, Melbourne VIC 3000', owner: 'Collins Example Holdings', requirement: 'Use the loading bay entrance and contact the Site representative on arrival.' },
     { id: 'SITE-3108', slug: 'site-monash', name: 'Monash Research Exchange', address: '7 Prototype Avenue, Clayton VIC 3168', owner: 'Monash Sample Estates', requirement: 'Current local induction evidence is required for each contractor.' },
+];
+
+const capturedSites = CAPTURED_SITE_OPTIONS.slice(1).map((name, index) => ({
+    id: `CAPTURED-SITE-${String(index + 1).padStart(3, '0')}`,
+    slug: `captured-site-${index + 1}`,
+    name,
+    address: '',
+    owner: '',
+    requirement: 'Site-specific requirements are not mapped in this prototype fixture.',
+}));
+
+export const SITES = Object.freeze([...syntheticSites, ...capturedSites]);
+export const OWNER_OPTIONS = Object.freeze([
+    ...new Set([...CAPTURED_OWNER_OPTIONS.slice(1), ...syntheticSites.map((site) => site.owner)]),
 ]);
 
 export const RETURNING_PEOPLE = Object.freeze([

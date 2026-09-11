@@ -33,6 +33,20 @@ test('PA-S01-S03 Site search supports keyboard selection and canonical identity'
     await expect(page.getByTestId('selected-site')).toContainText('SITE-1001');
 });
 
+test('PA-S04 owner and Site comboboxes expose the complete captured option map', async ({ page }) => {
+    const owner = page.getByLabel('Owner name (optional)');
+    await owner.fill('Woolworth Group');
+    await expect(page.getByRole('option', { name: /Woolworth Group/ })).toBeVisible();
+    await page.getByRole('option', { name: /Woolworth Group/ }).click();
+    await expect(owner).toHaveValue('Woolworth Group');
+
+    const site = page.getByLabel('Search Site by name or address');
+    await site.fill('Workplace6');
+    await expect(page.getByRole('option', { name: /Workplace6/ })).toBeVisible();
+    await page.getByRole('option', { name: /Workplace6/ }).click();
+    await expect(page.getByTestId('selected-site')).toContainText('Workplace6');
+});
+
 test('PA-005/006 complete scenario reaches review and cannot submit', async ({ page }) => {
     await page.getByRole('button', { name: 'Load complete scenario' }).click();
 

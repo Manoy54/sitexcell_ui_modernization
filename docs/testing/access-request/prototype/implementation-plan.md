@@ -150,11 +150,13 @@ For each field, complete the ledger with:
 - invalid/boundary partitions, local test IDs and current test outcome;
 - linked live evidence/finding and owner for eventual business confirmation.
 
-Reuse captured domain options when appropriate; replace operational Site,
-person, company, request, and document records with fictional fixtures. Do not
-ship the captured Site directory or authentication artifacts as application
-data. Preserve existing declaration wording from its source; record unresolved
-copy where unavailable instead of inventing legal wording.
+Reuse captured domain labels when appropriate; replace operational Site,
+person, company, request, and document records with fictional fixtures. The
+Step 1 Owner and Site label maps are retained for dropdown-coverage review, but
+are assigned synthetic prototype IDs and carry no provider IDs, authentication
+artifacts, or production authority. Preserve existing declaration wording from
+its source; record unresolved copy where unavailable instead of inventing legal
+wording.
 
 ## 5. LAAN visual and layout contract
 

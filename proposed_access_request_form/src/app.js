@@ -1,4 +1,4 @@
-import { createCompleteDemoState, LINKED_LAAN, RETURNING_PEOPLE, SITES } from '../fixtures/prototype-fixtures.js';
+import { createCompleteDemoState, LINKED_LAAN, OWNER_OPTIONS, RETURNING_PEOPLE, SITES } from '../fixtures/prototype-fixtures.js';
 import {
     DOCUMENT_RULES,
     addNotice,
@@ -49,6 +49,8 @@ const STAGES = [
 let state = loadState();
 let siteMenuOpen = false;
 let activeSiteIndex = -1;
+let ownerMenuOpen = false;
+let activeOwnerIndex = -1;
 let pendingCopy = null;
 let resetPending = false;
 let summaryOpen = false;
@@ -139,6 +141,26 @@ function filteredSites() {
     return SITES.filter((site) => `${site.name} ${site.address} ${site.id}`.toLowerCase().includes(query));
 }
 
+function filteredOwners() {
+    const query = state.fields.ownerName.trim().toLowerCase();
+    if (!query) return OWNER_OPTIONS;
+    return OWNER_OPTIONS.filter((owner) => owner.toLowerCase().includes(query));
+}
+
+function ownerCombobox() {
+    const matches = filteredOwners();
+    const error = state.errors.ownerName;
+    const options = ownerMenuOpen ? `<div id="owner-options" class="combobox-options" role="listbox">
+        ${matches.length ? matches.map((owner, index) => `<button type="button" role="option" id="owner-option-${index}" data-select-owner="${escapeHtml(owner)}" aria-selected="${index === activeOwnerIndex}" class="combobox-option ${index === activeOwnerIndex ? 'active' : ''}"><strong>${escapeHtml(owner)}</strong><span>Owner dropdown option</span></button>`).join('') : '<p class="combobox-empty">No captured or synthetic Owners match that search.</p>'}
+    </div>` : '';
+    return `<div class="field combobox ${error ? 'field-invalid' : ''}">
+        <label for="field-ownerName">Owner name (optional)</label>
+        <p class="field-hint" id="hint-ownerName">Search the captured Owner list or enter a fictional prototype value.</p>
+        <input id="field-ownerName" data-owner-query data-field="ownerName" data-original-id="input_3_406" role="combobox" autocomplete="off" aria-autocomplete="list" aria-controls="owner-options" aria-expanded="${ownerMenuOpen}" aria-activedescendant="${activeOwnerIndex >= 0 ? `owner-option-${activeOwnerIndex}` : ''}" value="${escapeHtml(state.fields.ownerName)}" ${error ? `aria-invalid="true" aria-describedby="hint-ownerName ${errorId('ownerName')}"` : 'aria-describedby="hint-ownerName"'}>
+        ${options}${fieldError('ownerName')}
+    </div>`;
+}
+
 function siteCombobox() {
     const matches = filteredSites();
     const error = state.errors.siteQuery;
@@ -150,7 +172,7 @@ function siteCombobox() {
         <p class="field-hint" id="hint-siteQuery">Search uses fictional records only. Free text is not a selected Site.</p>
         <input id="field-siteQuery" data-site-query data-field="siteQuery" data-original-id="input_3_407" role="combobox" autocomplete="off" aria-autocomplete="list" aria-controls="site-options" aria-expanded="${siteMenuOpen}" aria-activedescendant="${activeSiteIndex >= 0 ? `site-option-${activeSiteIndex}` : ''}" value="${escapeHtml(state.fields.siteQuery)}" ${error ? `aria-invalid="true" aria-describedby="hint-siteQuery ${errorId('siteQuery')}"` : 'aria-describedby="hint-siteQuery"'}>
         ${options}${fieldError('siteQuery')}
-        ${state.selectedSite ? `<div class="selected-site" data-testid="selected-site">${icon('check')}<div><strong>${escapeHtml(state.selectedSite.name)}</strong><span>${escapeHtml(state.selectedSite.address)} · ${escapeHtml(state.selectedSite.id)}</span></div></div>` : ''}
+        ${state.selectedSite ? `<div class="selected-site" data-testid="selected-site">${icon('check')}<div><strong>${escapeHtml(state.selectedSite.name)}</strong>${state.selectedSite.address ? `<span>${escapeHtml(state.selectedSite.address)} · ${escapeHtml(state.selectedSite.id)}</span>` : `<span>${escapeHtml(state.selectedSite.id)}</span>`}</div></div>` : ''}
     </div>`;
 }
 
@@ -198,7 +220,7 @@ function documentCard(key) {
 function renderStage1() {
     return section('Site and request link', 'Start with the telecommunications property this request concerns.',
         `${selectField('linkedLaan', 'Linked LAAN request (optional)', [['LAAN-DEMO-204', 'LAAN-DEMO-204 · Southbank Exchange']], { originalId: 'input_3_346' })}
-        ${textField('ownerName', 'Owner name (optional)', { originalId: 'input_3_406' })}${siteCombobox()}`)
+        ${ownerCombobox()}${siteCombobox()}`)
         + section('Authority and terms', 'These declarations retain the observed Access Request wording.',
             `${radios('tenureConfirmed', 'I confirm tenure via a Licence or LAAN is in place.', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_528' })}
             ${radios('networkRequired', 'Is network access required?', [['yes', 'Yes'], ['no', 'No']], { originalId: 'input_3_532' })}
@@ -409,10 +431,25 @@ root.addEventListener('input', (event) => {
     }
     const control = event.target.closest('[data-field]');
     if (!control || control.matches('[type="radio"], [type="checkbox"], select')) return;
+    if (control.hasAttribute('data-owner-query')) {
+        state = setField(state, 'ownerName', control.value);
+        ownerMenuOpen = true;
+        activeOwnerIndex = -1;
+        siteMenuOpen = false;
+        activeSiteIndex = -1;
+        saveState();
+        render();
+        const ownerQuery = root.querySelector('[data-owner-query]');
+        ownerQuery?.focus();
+        ownerQuery?.setSelectionRange(ownerQuery.value.length, ownerQuery.value.length);
+        return;
+    }
     if (control.hasAttribute('data-site-query')) {
         state = setSiteQuery(state, control.value);
         siteMenuOpen = true;
         activeSiteIndex = -1;
+        ownerMenuOpen = false;
+        activeOwnerIndex = -1;
         saveState();
         render();
         const query = root.querySelector('[data-site-query]');
@@ -467,22 +504,37 @@ root.addEventListener('change', (event) => {
 });
 
 root.addEventListener('keydown', (event) => {
-    if (!event.target.hasAttribute('data-site-query')) return;
-    const matches = filteredSites();
+    const isSite = event.target.hasAttribute('data-site-query');
+    const isOwner = event.target.hasAttribute('data-owner-query');
+    if (!isSite && !isOwner) return;
+    const matches = isSite ? filteredSites() : filteredOwners();
+    const menuState = isSite ? { open: siteMenuOpen, index: activeSiteIndex } : { open: ownerMenuOpen, index: activeOwnerIndex };
+    const setMenuState = (open, index) => {
+        if (isSite) { siteMenuOpen = open; activeSiteIndex = index; }
+        else { ownerMenuOpen = open; activeOwnerIndex = index; }
+    };
     if (event.key === 'ArrowDown') {
-        event.preventDefault(); siteMenuOpen = true; activeSiteIndex = Math.min(activeSiteIndex + 1, matches.length - 1); render(); root.querySelector('[data-site-query]')?.focus();
+        event.preventDefault(); setMenuState(true, Math.min(menuState.index + 1, matches.length - 1)); render(); root.querySelector(isSite ? '[data-site-query]' : '[data-owner-query]')?.focus();
     } else if (event.key === 'ArrowUp') {
-        event.preventDefault(); activeSiteIndex = Math.max(activeSiteIndex - 1, 0); render(); root.querySelector('[data-site-query]')?.focus();
-    } else if (event.key === 'Enter' && activeSiteIndex >= 0 && matches[activeSiteIndex]) {
-        event.preventDefault(); state = changeSite(state, matches[activeSiteIndex]); siteMenuOpen = false; activeSiteIndex = -1; saveState(); render(); root.querySelector('[data-site-query]')?.focus();
+        event.preventDefault(); setMenuState(true, Math.max(menuState.index - 1, 0)); render(); root.querySelector(isSite ? '[data-site-query]' : '[data-owner-query]')?.focus();
+    } else if (event.key === 'Enter' && menuState.index >= 0 && matches[menuState.index]) {
+        event.preventDefault();
+        if (isSite) state = changeSite(state, matches[menuState.index]);
+        else state = setField(state, 'ownerName', matches[menuState.index]);
+        setMenuState(false, -1);
+        saveState(); render(); root.querySelector(isSite ? '[data-site-query]' : '[data-owner-query]')?.focus();
     } else if (event.key === 'Escape') {
-        siteMenuOpen = false; activeSiteIndex = -1; render(); root.querySelector('[data-site-query]')?.focus();
+        event.preventDefault(); setMenuState(false, -1); render(); root.querySelector(isSite ? '[data-site-query]' : '[data-owner-query]')?.focus();
     }
 });
 
 root.addEventListener('click', (event) => {
-    const target = event.target.closest('button, [data-select-site]');
+    const target = event.target.closest('button, [data-select-site], [data-select-owner]');
     if (!target) return;
+    if (target.dataset.selectOwner) {
+        state = setField(state, 'ownerName', target.dataset.selectOwner);
+        ownerMenuOpen = false; activeOwnerIndex = -1; saveState(); render(); return;
+    }
     if (target.dataset.selectSite) {
         const site = SITES.find((candidate) => candidate.id === target.dataset.selectSite);
         state = changeSite(state, site); siteMenuOpen = false; activeSiteIndex = -1; saveState(); render(); return;

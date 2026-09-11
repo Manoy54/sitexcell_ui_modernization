@@ -23,8 +23,17 @@ import {
     useSavedDocument,
     validateStage,
 } from '../../src/model/form-model.js';
+import { CAPTURED_OWNER_OPTIONS, CAPTURED_SITE_OPTIONS } from '../../fixtures/captured-access-options.js';
+import { OWNER_OPTIONS, SITES } from '../../fixtures/prototype-fixtures.js';
 
 const pdf = (name, size = 1_024) => ({ name, size, type: 'application/pdf' });
+
+test('PA-S04 captured Owner and Site dropdown inventories are mapped into prototype options', () => {
+    assert.equal(CAPTURED_OWNER_OPTIONS.length, 53);
+    assert.equal(CAPTURED_SITE_OPTIONS.length, 299);
+    for (const owner of CAPTURED_OWNER_OPTIONS.slice(1)) assert.ok(OWNER_OPTIONS.includes(owner), `Missing Owner option: ${owner}`);
+    for (const site of CAPTURED_SITE_OPTIONS.slice(1)) assert.ok(SITES.some((candidate) => candidate.name === site), `Missing Site option: ${site}`);
+});
 
 test('PA-U04 rejected replacement preserves its prior valid file and unrelated files', () => {
     let state = createInitialState();
