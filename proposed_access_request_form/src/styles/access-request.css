@@ -52,16 +52,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .portal-user strong { font-size: 13px; }
 .portal-user div span { margin-top: 2px; color: #89919e; font-size: 10px; }
 
-.portal-stage { display: grid; min-width: 0; min-height: 0; grid-template-rows: var(--topbar-height) auto minmax(0, 1fr); overflow: hidden; background: #fff; }
+.portal-stage { display: grid; min-width: 0; min-height: 0; grid-template-rows: var(--topbar-height) minmax(0, 1fr); overflow: hidden; background: #fff; }
 .portal-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 16px 0 40px; border-bottom: 2px solid var(--portal-red-rule); background: var(--portal-navy); color: #fff; }
 .portal-topbar h1 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 16px; font-weight: 720; letter-spacing: -.02em; }
 .portal-topbar h1::before { width: 4px; height: 22px; border-radius: 4px; background: var(--portal-red); box-shadow: 0 3px 8px rgba(0, 0, 0, .18); content: ""; }
 .topbar-actions { display: flex; gap: 8px; }
 .topbar-button { min-height: 44px; padding: 0 13px; border: 1px solid #5b6171; border-radius: 5px; background: #353a4b; color: #fff; font-size: 12px; font-weight: 640; }
 .topbar-button:hover { background: #414758; }
-.prototype-banner { display: flex; min-height: 38px; align-items: center; gap: 9px; padding: 8px 20px; border-bottom: 1px solid #edcad1; background: #fff5f7; color: #6f2433; font-size: 12px; }
-.prototype-banner span { color: #82535d; }
-
 .request-layout { display: grid; min-width: 0; min-height: 0; grid-template-columns: minmax(0, 1fr) var(--workspace-width); overflow: hidden; }
 .form-column { min-width: 0; overflow-y: auto; scrollbar-color: #c5cad1 transparent; scrollbar-width: thin; background: #fff; scroll-padding-block: 120px; }
 .stage-header { padding: 36px 7vw 26px; border-bottom: 1px solid var(--portal-border-soft); }
@@ -247,8 +244,6 @@ form { padding: 0 7vw; }
     .portal-topbar h1 { font-size: 14px; }
     .topbar-button { min-height: 44px; padding-inline: 9px; font-size: 10px; }
     .topbar-actions .topbar-button:first-child { display: none; }
-    .prototype-banner { align-items: flex-start; flex-wrap: wrap; padding: 9px 13px; }
-    .prototype-banner span { width: 100%; padding-left: 26px; }
     .request-layout { display: flex; flex-direction: column; overflow: visible; }
     .workspace { order: -1; overflow: visible; border-bottom: 1px solid var(--portal-border); border-left: 0; }
     .summary-toggle { display: flex; width: 100%; min-height: 46px; align-items: center; justify-content: space-between; padding: 0 15px; border: 0; background: var(--portal-canvas); color: #353b47; font-weight: 700; }

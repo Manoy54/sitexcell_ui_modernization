@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test('PA-001 opens the isolated eight-stage Access Request at Request context', async ({ page }) => {
     await expect(page).toHaveTitle(/Access Request Prototype/);
     await expect(page.getByRole('heading', { name: 'Request context' })).toBeVisible();
-    await expect(page.getByText('Prototype only — no request will be submitted.')).toBeVisible();
+    await expect(page.locator('.prototype-banner')).toHaveCount(0);
     await expect(page.getByRole('button', { name: /Stage 8/ })).toBeVisible();
 });
 
