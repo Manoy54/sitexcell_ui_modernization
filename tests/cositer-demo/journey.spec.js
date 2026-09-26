@@ -35,7 +35,8 @@ test('shared navigation exposes demo sections without sending contact data', asy
     await expect(page.getByRole('heading', { name: 'Settings', exact: true })).toBeVisible();
     await page.getByRole('navigation', { name: 'Co-Siter navigation' }).getByRole('link', { name: 'Contact Us' }).click();
     await expect(page.getByRole('heading', { name: 'Contact Us', exact: true })).toBeVisible();
-    await expect(page.locator('form')).not.toHaveAttribute('action');
+    await expect(page.locator('[data-demo-contact-form]')).toBeVisible();
+    await expect(page.locator('form')).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'Submit' })).toHaveCount(0);
     await page.getByRole('button', { name: 'Preview only' }).click();
     await expect(page.getByLabel('First name *')).toBeFocused();
@@ -52,6 +53,15 @@ test('both forms use the shared shell, start blank, and keep existing recovery',
     await page.getByRole('link', { name: 'Back to Requests' }).click();
     await page.getByRole('link', { name: 'Access Request' }).click();
     await expect(page.getByLabel('Owner name (optional)')).toHaveValue('Fictional Owner');
+
+    await page.getByRole('button', { name: 'Reset Access form' }).click();
+    await expect(page.getByText('Reset this prototype session?')).toBeVisible();
+    await page.getByRole('button', { name: 'Keep working' }).click();
+    await expect(page.getByLabel('Owner name (optional)')).toHaveValue('Fictional Owner');
+    await page.getByRole('button', { name: 'Reset Access form' }).click();
+    await page.getByRole('button', { name: 'Reset session' }).click();
+    await expect(page.getByLabel('Owner name (optional)')).toHaveValue('');
+    await page.getByLabel('Owner name (optional)').fill('Second fictional owner');
 
     await page.getByRole('link', { name: 'Exit demo' }).click();
     await expect(page.getByRole('heading', { name: 'Explore the Co-Siter demo' })).toBeVisible();

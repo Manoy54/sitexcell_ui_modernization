@@ -62,12 +62,12 @@ if (userRows.length) {
     filterUsers();
 }
 
-document.querySelector('[data-demo-contact-form]')?.addEventListener('submit', (event) => {
-    event.preventDefault();
-});
-
 document.querySelector('[data-demo-contact-preview]')?.addEventListener('click', (event) => {
-    const form = event.currentTarget.closest('form');
-    if (!form.reportValidity()) return;
-    form.querySelector('[data-demo-contact-status]').textContent = 'Preview complete. No message was sent or stored.';
+    const fields = event.currentTarget.closest('[data-demo-contact-form]');
+    const invalidControl = [...fields.querySelectorAll('input, textarea')].find((control) => !control.checkValidity());
+    if (invalidControl) {
+        invalidControl.reportValidity();
+        return;
+    }
+    fields.querySelector('[data-demo-contact-status]').textContent = 'Preview complete. No message was sent or stored.';
 });

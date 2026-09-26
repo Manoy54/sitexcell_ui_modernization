@@ -1,4 +1,4 @@
-:root {
+body.sx-cositer-demo {
     --demo-red: #f5284d;
     --demo-navy: #2c3141;
     --demo-text: #242935;
@@ -9,7 +9,7 @@
     --demo-topbar-height: 58px;
 }
 
-html { height: 100%; overflow: hidden; }
+html:has(body.sx-cositer-demo) { height: 100%; overflow: hidden; }
 body.sx-cositer-demo {
     position: static;
     inset: auto;
@@ -55,6 +55,8 @@ body.sx-cositer-demo [hidden] { display: none !important; }
 .demo-button-primary:hover { background: #d91c40; }
 .demo-button-secondary { border-color: #838b9b; background: #3c4252; color: #fff !important; }
 .demo-button-secondary:hover { background: #4c5364; }
+.demo-button-subtle { border-color: #c9d0d9; background: #fff; color: var(--demo-text) !important; }
+.demo-button-subtle:hover { background: #f5f7f9; }
 .demo-main { min-width: 0; min-height: 0; overflow: auto; padding: clamp(22px, 3vw, 42px); background: var(--demo-canvas); }
 .demo-page-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
 .demo-page-heading h1 { margin: 2px 0 5px; font-size: clamp(27px, 3vw, 36px); line-height: 1.15; letter-spacing: -.035em; }
@@ -99,7 +101,7 @@ body.sx-cositer-demo [hidden] { display: none !important; }
 .demo-placeholder { max-width: 620px; text-align: center; }
 .demo-placeholder > .demo-icon { width: 30px; height: 30px; color: #b62b49; }
 .demo-contact-panel { max-width: 720px; }
-.demo-contact-panel form { display: grid; gap: 14px; padding: 0; }
+.demo-contact-fields { display: grid; gap: 14px; padding: 0; }
 .demo-field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .demo-contact-panel textarea { resize: vertical; }
 .demo-contact-panel button { justify-self: start; }
@@ -114,13 +116,14 @@ body.sx-cositer-demo [hidden] { display: none !important; }
 .demo-login-back { display: block; margin-top: 17px; color: var(--demo-muted) !important; font-size: 12px; text-align: center; }
 .demo-main-form { display: flex; flex-direction: column; overflow: hidden; padding: 0; background: #fff; }
 .demo-form-disclosure { flex: 0 0 auto; margin: 0; padding: 7px 18px; border-bottom: 1px solid #ead3d9; background: #fff5f7; color: #7f2740; font-size: 11px; font-weight: 650; }
+.demo-access-toolbar { display: flex; justify-content: flex-end; padding: 6px 18px; border-bottom: 1px solid var(--demo-border); background: #fff; }
 .sx-cositer-demo #prototype-root { width: 100%; height: auto; min-height: 0; flex: 1 1 auto; overflow: hidden; }
 .sx-cositer-demo #prototype-root > .page-layout, .sx-cositer-demo #prototype-root > .request-layout { height: 100%; min-height: 0; }
 body.admin-bar .demo-shell { height: calc(100dvh - 32px); }
 body.admin-bar .demo-login { min-height: calc(100dvh - 32px); }
 
 @media (max-width: 900px) {
-    html { height: auto; overflow: auto; }
+    html:has(body.sx-cositer-demo) { height: auto; overflow: auto; }
     body.sx-cositer-demo { height: auto; overflow-x: hidden; overflow-y: auto; }
     .demo-shell { display: block; height: auto; min-height: 100dvh; }
     .demo-sidebar { display: block; border-right: 0; border-bottom: 1px solid var(--demo-border); }

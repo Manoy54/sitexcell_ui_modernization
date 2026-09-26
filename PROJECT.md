@@ -35,7 +35,7 @@ The repository currently contains:
 - seven local image assets in `assets/images/`: one logo, two Home hero/banner images, one About hero image, one Industry Experts image, and two leadership portraits;
 - one shared browser runtime in `assets/js/app.js`;
 - one Tailwind source stylesheet and one generated runtime stylesheet;
-- one standalone Co-Siter portal HTML prototype;
+- one WordPress-rendered Co-Siter demo journey plus a retained standalone portal HTML design reference;
 - nine throwaway HTML explorations under `.scratch/`;
 - thirteen content/page placeholders under `pages/advisory/`, `pages/agency/`, `pages/clients/`, and `pages/insights/`;
 - npm metadata and a locked Tailwind dependency graph;
@@ -118,7 +118,7 @@ The following terms are canonical for this repository.
 | Shared component | A PHP view used by more than one page or intended to provide a stable visual primitive, such as Navbar, Footer, Badge, or Feature Card. |
 | Prototype surface | Any route or page fragment intended for visual evaluation rather than production operation. |
 | Scratch exploration | A throwaway HTML experiment under .scratch/ used to compare variants or answer a design question. |
-| Portal prototype | The Co-Siter requests dashboard mockup at pages/access-portal-page/prototype-ui.html. It presents sample request records and layout variants only. |
+| Portal prototype | The WordPress-rendered Co-Siter journey in `pages/cositer-demo/`. It presents fictional records and non-submitting form prototypes. The earlier HTML variants in `pages/access-portal-page/` remain a design reference. |
 | Request | In the portal UI, a sample access-related record such as an SAR or LAAN item. In this repository it is display data, not a domain entity backed by storage. |
 | SAR | The sample portal label for a site access request. The prototype does not define or enforce its production workflow. |
 | LAAN | Land Access Activity Notice. The website describes advisory and handling capability; the portal mockup displays sample LAAN requests. |
@@ -180,7 +180,8 @@ The repository should make it easy to inspect a section, identify the intended c
 | Browser interaction | assets/js/app.js | Handles scroll state, admin-bar hiding, mobile menu, Escape dismissal, focus restoration, breakpoint reset, and fallback form feedback. |
 | Design-token CSS | src/css/input.css | Defines Tailwind theme values, SiteXcell colors, typography, shared patterns, focus states, provider styling, and reduced-motion behavior. |
 | Generated runtime CSS | assets/css/style.css | Minified CSS output consumed by WordPress. |
-| Portal request dashboard concept | pages/access-portal-page/prototype-ui.html | Shows three switchable requests-table variants with sample data and a review drawer concept. |
+| Co-Siter demo journey | pages/cositer-demo/ | Serves one shared dashboard shell and fictional Requests, Users, Documents, Settings, Contact, LAAN, and Access views through WordPress. |
+| Original portal layout reference | pages/access-portal-page/prototype-ui.html | Retains three static table variants for design comparison; no longer serves the portal route. |
 
 ### Partially prepared capabilities
 
@@ -212,7 +213,8 @@ The plugin detects prototype routes using WordPress page checks first and URI su
 | sitexcell-insights-prototype | insights | .scratch/insights-prototype/prototype-ui.html | Insights and statistics comparison. |
 | sitexcell-contact-prototype | contact | .scratch/contact-prototype/prototype-ui.html | Contact experience comparison. |
 | sitexcell-transitions-prototype | transitions | .scratch/section-transitions/prototype-ui.html | Section-transition comparison. |
-| sitexcell-portal-requests-prototype | portal-requests | pages/access-portal-page/prototype-ui.html | Co-Siter request-register UI comparison. |
+| sitexcell-cositer-login-prototype | portal-login | pages/cositer-demo/template.php | Placeholder Co-Siter demo entry. |
+| sitexcell-portal-requests-prototype | portal-requests | pages/cositer-demo/template.php | Shared Co-Siter demo shell and views. |
 
 ### Current routing and integration configuration
 
@@ -231,7 +233,7 @@ Route detection follows this order:
 2. The request URI is read from `$_SERVER['REQUEST_URI']`, stripped of its query string with `strtok()`, and checked for known slug substrings.
 3. If no prototype route matches, the plugin checks whether the current singular post contains `[sitexcell_about]` or `[sitexcell_home]`.
 
-The Home and About route keys receive custom standalone templates that explicitly clear the WordPress 404 flag and send HTTP 200. The scratch and portal route keys return their HTML files through `template_include`, but those files are self-contained documents and do not use the shared PHP navbar/footer shell.
+The Home, About, and Co-Siter demo route keys receive custom standalone PHP templates that explicitly clear the WordPress 404 flag and send HTTP 200. Scratch route keys return self-contained HTML files through `template_include`. The Co-Siter demo owns its own shared PHP sidebar/top bar instead of using the marketing navbar/footer.
 
 The plugin does not register activation hooks, admin pages, custom post types, REST routes, AJAX handlers, database tables, cron jobs, widgets, blocks, or settings pages.
 
@@ -393,9 +395,9 @@ The fallback form fields are:
 
 The adapter is dormant by default because `sitexcell_ui_contact_form_id()` applies the `sitexcell_ui_contact_form_id` filter with a default of `0`. A host can return a positive ID, for example `3`, to activate Gravity Forms. The adapter then calls `gravity_form()` with AJAX enabled, and the enqueue hook calls `gravity_form_enqueue_scripts()` when that function is available. A positive ID without the Gravity Forms plugin still leaves the visual-only fallback active.
 
-### Portal UI structures
+### Original portal HTML reference (historical)
 
-The portal prototype is a standalone HTML page rather than a PHP component tree. It contains:
+The retained `pages/access-portal-page/prototype-ui.html` is a standalone HTML design reference rather than the current WordPress dashboard. It contains:
 
 - a Co-Siter-branded application shell;
 - a sidebar with Requests, Users, Documents, Settings, and Contact us;
@@ -415,7 +417,7 @@ These are screen and interaction hypotheses. Buttons and table data are not conn
 
 `pages/access-portal-page/prototype-ui.html` is a self-contained HTML document with its own inline CSS, inline SVG icon symbols, Geist Sans CDN link, `noindex,nofollow` robots metadata, and inline JavaScript. It does not use the WordPress body class, the shared marketing CSS contract, the shared navbar/footer, or the WordPress lifecycle hooks.
 
-The portal shell currently models:
+That reference models:
 
 - a 290px desktop sidebar, reduced to 230px below 1180px;
 - a Co-Siter wordmark with the tagline "Telco Site Access Portal" and "by siteXcell" attribution;
@@ -555,7 +557,7 @@ When the plugin is installed and the relevant WordPress requests are available, 
 5. Prototype assets loaded only on recognized prototype routes or singular posts containing the supported Home/About shortcode.
 6. A browser-only fallback enquiry flow that checks required fields and email format, displays a status message, and explicitly states that no information was sent or stored.
 7. A provider-backed Gravity Forms layout only when the host supplies a positive form ID and the Gravity Forms functions exist.
-8. A static Co-Siter requests dashboard concept for the portal route, with three selectable visual variants and clearly disclosed sample data.
+8. A WordPress-rendered Co-Siter demo journey with shared navigation, fictional register data, and both existing non-submitting form prototypes. The three original visual variants remain a file-level design reference.
 9. Scratch routes that expose their own local variant controls when their registered slug is used; unregistered scratch files remain file-level experiments rather than WordPress routes.
 
 The expected output is presentational. A successful render must not be interpreted as successful submission, authentication, authorization, request creation, document access, status transition, notification, or CRM synchronization.
@@ -687,7 +689,8 @@ The current prototype status message is safe only because the form is intentiona
     ├── pages/
     │   ├── home/                           # Structured Home composition
     │   ├── about/                          # Structured About composition
-    │   ├── access-portal-page/             # Standalone portal prototype
+    │   ├── access-portal-page/             # Retained static portal design reference
+    │   ├── cositer-demo/                   # WordPress Co-Siter demo template and views
     │   ├── advisory/                       # Advisory page content stubs
     │   ├── agency/                         # Agency page content stub
     │   ├── clients/                        # Client page content stubs
@@ -828,13 +831,13 @@ The Home page is more exploratory than the About page. Several utility-heavy sec
 | `pages/about/sections/contact/form-adapter.php` | Provider switch. Chooses Gravity Forms when a positive configured form ID and `gravity_form()` function are available; otherwise includes the fallback form. |
 | `pages/about/sections/contact/prototype-form.php` | Visual-only fallback enquiry form with visible labels, browser validation, provider disclosure, and a status region. |
 
-### `pages/access-portal-page/` - standalone Co-Siter portal prototype
+### `pages/access-portal-page/` - retained Co-Siter layout reference
 
 | File | Function |
 | --- | --- |
 | `pages/access-portal-page/prototype-ui.html` | Complete standalone HTML/CSS/JavaScript portal concept. Defines the Co-Siter shell, sidebar, account bar, Requests page, request table, status summary, review drawer, sample request rows, inline SVG icons, responsive breakpoints, reduced-motion rules, and three switchable layout variants. |
 
-This directory intentionally contains one self-contained HTML file rather than PHP components because it is a disposable application-interface exploration. It has no WordPress database access, authentication, API calls, or real actions.
+This directory intentionally contains one self-contained HTML file for the earlier disposable design exploration. It is no longer routed by WordPress. The current PHP dashboard lives in `pages/cositer-demo/` and is documented in [`docs/COSITER_WORDPRESS_PROTOTYPE.md`](docs/COSITER_WORDPRESS_PROTOTYPE.md).
 
 ### `pages/advisory/` - advisory information architecture placeholders
 
@@ -1122,7 +1125,8 @@ Variants are kept as local experiments until a design direction is selected. Abs
 | What design tokens and shared CSS patterns exist? | src/css/input.css |
 | What CSS does WordPress serve? | assets/css/style.css |
 | What npm dependencies and commands exist? | package.json and package-lock.json |
-| What the portal screen renders and how its variants work? | pages/access-portal-page/prototype-ui.html |
+| What the current Co-Siter dashboard renders? | pages/cositer-demo/template.php and views/ |
+| What the original portal layout variants looked like? | pages/access-portal-page/prototype-ui.html |
 | What scratch explorations exist? | .scratch/ |
 | What terms and domain boundaries are canonical? | CONTEXT.md |
 | What are the visual standards? | docs/DESIGN_INTERFACE_HANDOFF.md |

@@ -18,6 +18,7 @@ export default defineConfig({
         cwd: process.cwd(),
         url: 'http://127.0.0.1:4179/sitexcell-cositer-login-prototype/',
         reuseExistingServer: true,
+        stderr: 'ignore',
         timeout: 20_000,
     },
 });

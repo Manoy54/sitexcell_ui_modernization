@@ -14,11 +14,11 @@ The intended path is SiteXcell Home or About → footer **Co-Siter demo login** 
 | `?view=users` | `views/users.php` | Fictional users with local search |
 | `?view=documents` | `views/documents.php` | Fictional Access/LAAN document index |
 | `?view=settings` | `views/settings.php` | Non-operational settings view |
-| `?view=contact` | `views/contact.php` | Form preview; no send or storage |
+| `?view=contact` | `views/contact.php` | Labelled field preview without a submit-capable form; no send or storage |
 | `?view=laan` | Existing `proposed_laan_form` browser module | LAAN form inside shared shell |
 | `?view=access` | Existing `proposed_access_request_form` browser module | Access form inside shared shell |
 
-The sidebar reflects the real Co-Siter navigation structure: Requests, Users, Documents, Settings, Contact Us. The top bar exposes LAAN Request and Access Request on dashboard pages, and Back to Requests on form pages. The PHP shell owns that navigation; the form modules omit only their standalone shells when mounted under `#prototype-root[data-portal-embedded]`. Their standalone servers still render their original shells.
+The sidebar reflects the real Co-Siter navigation structure: Requests, Users, Documents, Settings, Contact Us. The top bar exposes LAAN Request and Access Request on dashboard pages, and Back to Requests on form pages. The embedded Access form also retains its Reset action above the form. The PHP shell owns navigation; the form modules omit only their standalone shells when mounted under `#prototype-root[data-portal-embedded]`. Their standalone servers still render their original shells.
 
 ## Ownership and boundaries
 

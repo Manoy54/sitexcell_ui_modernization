@@ -79,7 +79,7 @@ sitexcell-ui-prototype/
 
 `node_modules/` is a generated local development dependency directory. It is not application source and can be recreated with `npm install`.
 
-The Co-Siter access portal UI prototype is kept at `pages/access-portal-page/prototype-ui.html` because it is being reviewed as a page-level dashboard prototype. It remains throwaway, read-only sample-data UI and is served only through the `/sitexcell-portal-requests-prototype/` prototype route.
+The original Co-Siter dashboard layout reference remains at `pages/access-portal-page/prototype-ui.html` for historical comparison. The `/sitexcell-portal-requests-prototype/` route now renders the shared PHP demo shell from `pages/cositer-demo/template.php`, with fictional data and non-submitting form prototypes. See [`COSITER_WORDPRESS_PROTOTYPE.md`](COSITER_WORDPRESS_PROTOTYPE.md) for the current route map and boundaries.
 
 ## Files Removed
 
