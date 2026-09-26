@@ -22,7 +22,7 @@ Native WordPress AJAX handler
         └── wp_mail notifications
 ```
 
-The `proposed_laan_form/` directory remains a visual and interaction reference. The production page uses the copied, WordPress-enqueued assets under `assets/`; the prototype server and fixtures must never be treated as a production submission endpoint.
+The `co-siter_dashboard/proposed_laan_form/` directory remains a visual and interaction reference. The production page uses the copied, WordPress-enqueued assets under `assets/`; the prototype server and fixtures must never be treated as a production submission endpoint.
 
 ## WordPress entry points
 
@@ -62,7 +62,7 @@ The importer is intentionally explicit. It must not silently turn a production-d
 ### Form behavior
 
 - Keep the two-stage LAAN flow unless the business owner approves a workflow change.
-- Keep the canonical field map in `proposed_laan_form/docs/field-and-rule-matrix.md` up to date.
+- Keep the canonical field map in `co-siter_dashboard/proposed_laan_form/docs/field-and-rule-matrix.md` up to date.
 - Validate every required field on the server, even when JavaScript already validates it.
 - Reject impossible dates using the approved `DD-MM-YYYY` rule.
 - A selected Site must resolve to a published LAAN Site record; never trust a display label alone.
@@ -107,7 +107,7 @@ The importer is intentionally explicit. It must not silently turn a production-d
 - `php -l includes/laan-request.php`
 - `php -l pages/laan-request/laan-request.php`
 - `node --check assets/js/laan-request.js`
-- `node --check proposed_laan_form/src/scripts/prototype.js`
+- `node --check co-siter_dashboard/proposed_laan_form/src/scripts/prototype.js`
 - `git diff --check`
 - Browser verification of Page 1 and Page 2 at desktop and narrow widths
 - Site lookup verification for a site with notes, a site with formatted links, and a site without notes
@@ -117,7 +117,7 @@ The importer is intentionally explicit. It must not silently turn a production-d
 
 ## Current limitations
 
-- The safe example Site snapshot is imported manually from `proposed_laan_form/fixtures/` through LAAN Settings. Real Site Notes to Carriers belong in WordPress-managed Site records and must not be committed as a production-derived fixture.
+- The safe example Site snapshot is imported manually from `co-siter_dashboard/proposed_laan_form/fixtures/` through LAAN Settings. Real Site Notes to Carriers belong in WordPress-managed Site records and must not be committed as a production-derived fixture.
 - Business-specific conditional fields remain intentionally conservative until the field/rule matrix is approved.
 - The native handler is the current local implementation; Gravity Forms compatibility is an adapter goal, not an active dependency.
 - Production deployment still requires a WordPress environment review, mail configuration, private-directory web-server verification, and security review.

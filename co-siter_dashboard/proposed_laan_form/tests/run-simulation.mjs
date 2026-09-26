@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 
 const port = process.env.LAAN_PROTOTYPE_PORT ?? '4177';
 const baseUrl = `http://127.0.0.1:${port}`;
-const root = resolve('proposed_laan_form');
+const root = resolve('co-siter_dashboard/proposed_laan_form');
 let server = null;
 
 const serverIsReady = async () => {
@@ -47,7 +47,7 @@ try {
   const child = spawn(process.execPath, [
     cli,
     'test',
-    '--config=proposed_laan_form/playwright.config.js',
+    '--config=co-siter_dashboard/proposed_laan_form/playwright.config.js',
   ], {
     cwd: resolve('.'),
     env: { ...process.env, PROTOTYPE_EXTERNAL_SERVER: '1', PROTOTYPE_BASE_URL: baseUrl },

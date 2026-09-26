@@ -361,7 +361,7 @@ function sitexcell_ui_laan_import_snapshot(): void
 
     check_admin_referer('sitexcell_ui_laan_import_snapshot');
 
-    $fixtures = SITEXCELL_UI_PATH . 'proposed_laan_form/fixtures/';
+    $fixtures = SITEXCELL_UI_PATH . 'co-siter_dashboard/proposed_laan_form/fixtures/';
     $sites = sitexcell_ui_laan_extract_fixture_json($fixtures . 'laan-fixtures.js', 'sites');
     $contexts = sitexcell_ui_laan_extract_fixture_json($fixtures . 'site-context.example.js', 'siteContextById');
     $imported = 0;

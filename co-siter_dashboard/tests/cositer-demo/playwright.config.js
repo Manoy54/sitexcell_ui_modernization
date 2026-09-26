@@ -14,7 +14,7 @@ export default defineConfig({
         trace: 'retain-on-failure',
     },
     webServer: {
-        command: 'php -S 127.0.0.1:4179 -t . tests/cositer-demo/router.php',
+        command: 'php -S 127.0.0.1:4179 -t . co-siter_dashboard/tests/cositer-demo/router.php',
         cwd: process.cwd(),
         url: 'http://127.0.0.1:4179/sitexcell-cositer-login-prototype/',
         reuseExistingServer: true,

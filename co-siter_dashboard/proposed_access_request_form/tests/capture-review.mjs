@@ -10,7 +10,7 @@ const output = resolve('.impeccable', 'review');
 mkdirSync(output, { recursive: true });
 
 const server = spawn(process.execPath, ['server.mjs'], {
-    cwd: resolve('proposed_access_request_form'),
+    cwd: resolve('co-siter_dashboard/proposed_access_request_form'),
     env: { ...process.env, ACCESS_PROTOTYPE_PORT: port },
     stdio: 'ignore',
 });

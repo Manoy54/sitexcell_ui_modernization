@@ -8,24 +8,26 @@ The intended path is SiteXcell Home or About → footer **Co-Siter demo login** 
 
 | URL | PHP view | Purpose |
 | --- | --- | --- |
-| `/sitexcell-cositer-login-prototype/` | `pages/cositer-demo/template.php` login branch | Placeholder entry and disclosure |
-| `/sitexcell-portal-requests-prototype/` | `views/requests.php` | Fictional request register, search, status/type filters |
-| `?view=request&id=DEMO-SAR-001` | `views/request.php` | Read-only details and related document names |
-| `?view=users` | `views/users.php` | Fictional users with local search |
-| `?view=documents` | `views/documents.php` | Fictional Access/LAAN document index |
-| `?view=settings` | `views/settings.php` | Non-operational settings view |
-| `?view=contact` | `views/contact.php` | Labelled field preview without a submit-capable form; no send or storage |
-| `?view=laan` | Existing `proposed_laan_form` browser module | LAAN form inside shared shell |
-| `?view=access` | Existing `proposed_access_request_form` browser module | Access form inside shared shell |
+| `/sitexcell-cositer-login-prototype/` | `co-siter_dashboard/pages/cositer-demo/template.php` login branch | Placeholder entry and disclosure |
+| `/sitexcell-portal-requests-prototype/` | `co-siter_dashboard/pages/cositer-demo/views/requests.php` | Fictional request register, search, status/type filters |
+| `?view=request&id=DEMO-SAR-001` | `co-siter_dashboard/pages/cositer-demo/views/request.php` | Read-only details and related document names |
+| `?view=users` | `co-siter_dashboard/pages/cositer-demo/views/users.php` | Fictional users with local search |
+| `?view=documents` | `co-siter_dashboard/pages/cositer-demo/views/documents.php` | Fictional Access/LAAN document index |
+| `?view=settings` | `co-siter_dashboard/pages/cositer-demo/views/settings.php` | Non-operational settings view |
+| `?view=contact` | `co-siter_dashboard/pages/cositer-demo/views/contact.php` | Labelled field preview without a submit-capable form; no send or storage |
+| `?view=laan` | Existing `co-siter_dashboard/proposed_laan_form` browser module | LAAN form inside shared shell |
+| `?view=access` | Existing `co-siter_dashboard/proposed_access_request_form` browser module | Access form inside shared shell |
 
 The sidebar reflects the real Co-Siter navigation structure: Requests, Users, Documents, Settings, Contact Us. The top bar exposes LAAN Request and Access Request on dashboard pages, and Back to Requests on form pages. The embedded Access form also retains its Reset action above the form. The PHP shell owns navigation; the form modules omit only their standalone shells when mounted under `#prototype-root[data-portal-embedded]`. Their standalone servers still render their original shells.
 
+All dashboard-owned files now live together in [`co-siter_dashboard/`](../co-siter_dashboard/README.md). It contains `assets/`, `includes/`, `pages/`, `tests/`, and both form prototype folders.
+
 ## Ownership and boundaries
 
-- `includes/cositer-demo.php` matches the two local routes exactly, allowlists views, and builds links using `home_url()`.
+- `co-siter_dashboard/includes/cositer-demo.php` matches the two local routes exactly, allowlists views, and builds links using `home_url()`.
 - `sitexcell-ui-prototype.php` selects the PHP template and conditionally enqueues dashboard assets and the appropriate form assets. It does not load the native LAAN submission script or handler on the demo route.
-- `pages/cositer-demo/` owns the WordPress document, shared shell, view partials, SVG symbols, and explicitly fictional register fixtures.
-- `assets/css/cositer-demo.css` and `assets/js/cositer-demo.js` own shell presentation and local register/contact interaction.
+- `co-siter_dashboard/pages/cositer-demo/` owns the WordPress document, shared shell, view partials, SVG symbols, and explicitly fictional register fixtures.
+- `co-siter_dashboard/assets/css/cositer-demo.css` and `co-siter_dashboard/assets/js/cositer-demo.js` own shell presentation and local register/contact interaction.
 - The existing form modules own their fields, stages, validation, upload simulation, and recovery behavior. They start with blank fields in the dashboard. Back to Requests leaves recoverable browser-tab state intact; Exit demo clears the known prototype form session keys after reaching the entry page.
 - `pages/access-portal-page/prototype-ui.html` remains a design reference and is not the served dashboard.
 - `/laan-request/` is the separate native WordPress LAAN implementation. It can persist and notify under its own contract in [`LAAN_WORDPRESS_READINESS.md`](LAAN_WORDPRESS_READINESS.md); it is not part of this demo journey.
@@ -44,7 +46,7 @@ npm.cmd run test:prototype:access
 npm.cmd run test:prototype:playwright
 ```
 
-The Co-Siter browser suite uses a test-only PHP shim in `tests/cositer-demo/` because it needs a PHP render while remaining independent of a local WordPress database. It exercises the route journey, shared navigation, blank form entry, and session recovery. This shim is not part of the runtime. Also lint changed PHP with `php -l`, check changed JavaScript with `node --check`, and run `git diff --check`.
+The Co-Siter browser suite uses a test-only PHP shim in `co-siter_dashboard/tests/cositer-demo/` because it needs a PHP render while remaining independent of a local WordPress database. It exercises the route journey, shared navigation, blank form entry, and session recovery. This shim is not part of the runtime. Also lint changed PHP with `php -l`, check changed JavaScript with `node --check`, and run `git diff --check`.
 
 ## Handoff limits
 

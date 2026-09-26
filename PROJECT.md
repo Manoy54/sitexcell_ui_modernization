@@ -118,7 +118,7 @@ The following terms are canonical for this repository.
 | Shared component | A PHP view used by more than one page or intended to provide a stable visual primitive, such as Navbar, Footer, Badge, or Feature Card. |
 | Prototype surface | Any route or page fragment intended for visual evaluation rather than production operation. |
 | Scratch exploration | A throwaway HTML experiment under .scratch/ used to compare variants or answer a design question. |
-| Portal prototype | The WordPress-rendered Co-Siter journey in `pages/cositer-demo/`. It presents fictional records and non-submitting form prototypes. The earlier HTML variants in `pages/access-portal-page/` remain a design reference. |
+| Portal prototype | The WordPress-rendered Co-Siter journey in `co-siter_dashboard/pages/cositer-demo/`. It presents fictional records and non-submitting form prototypes. The earlier HTML variants in `pages/access-portal-page/` remain a design reference. |
 | Request | In the portal UI, a sample access-related record such as an SAR or LAAN item. In this repository it is display data, not a domain entity backed by storage. |
 | SAR | The sample portal label for a site access request. The prototype does not define or enforce its production workflow. |
 | LAAN | Land Access Activity Notice. The website describes advisory and handling capability; the portal mockup displays sample LAAN requests. |
@@ -180,7 +180,7 @@ The repository should make it easy to inspect a section, identify the intended c
 | Browser interaction | assets/js/app.js | Handles scroll state, admin-bar hiding, mobile menu, Escape dismissal, focus restoration, breakpoint reset, and fallback form feedback. |
 | Design-token CSS | src/css/input.css | Defines Tailwind theme values, SiteXcell colors, typography, shared patterns, focus states, provider styling, and reduced-motion behavior. |
 | Generated runtime CSS | assets/css/style.css | Minified CSS output consumed by WordPress. |
-| Co-Siter demo journey | pages/cositer-demo/ | Serves one shared dashboard shell and fictional Requests, Users, Documents, Settings, Contact, LAAN, and Access views through WordPress. |
+| Co-Siter demo journey | co-siter_dashboard/pages/cositer-demo/ | Serves one shared dashboard shell and fictional Requests, Users, Documents, Settings, Contact, LAAN, and Access views through WordPress. |
 | Original portal layout reference | pages/access-portal-page/prototype-ui.html | Retains three static table variants for design comparison; no longer serves the portal route. |
 
 ### Partially prepared capabilities
@@ -213,8 +213,8 @@ The plugin detects prototype routes using WordPress page checks first and URI su
 | sitexcell-insights-prototype | insights | .scratch/insights-prototype/prototype-ui.html | Insights and statistics comparison. |
 | sitexcell-contact-prototype | contact | .scratch/contact-prototype/prototype-ui.html | Contact experience comparison. |
 | sitexcell-transitions-prototype | transitions | .scratch/section-transitions/prototype-ui.html | Section-transition comparison. |
-| sitexcell-cositer-login-prototype | portal-login | pages/cositer-demo/template.php | Placeholder Co-Siter demo entry. |
-| sitexcell-portal-requests-prototype | portal-requests | pages/cositer-demo/template.php | Shared Co-Siter demo shell and views. |
+| sitexcell-cositer-login-prototype | portal-login | co-siter_dashboard/pages/cositer-demo/template.php | Placeholder Co-Siter demo entry. |
+| sitexcell-portal-requests-prototype | portal-requests | co-siter_dashboard/pages/cositer-demo/template.php | Shared Co-Siter demo shell and views. |
 
 ### Current routing and integration configuration
 
@@ -686,11 +686,17 @@ The current prototype status message is safe only because the form is intentiona
     │   └── ui/
     │       ├── badge/badge.php
     │       └── feature-card/feature-card.php
+    ├── co-siter_dashboard/                # Co-Siter shell, forms, assets, and tests
+    │   ├── assets/{css,js}/
+    │   ├── includes/cositer-demo.php
+    │   ├── pages/cositer-demo/            # Template, fixtures, icons, and view components
+    │   ├── proposed_access_request_form/
+    │   ├── proposed_laan_form/
+    │   └── tests/cositer-demo/
     ├── pages/
     │   ├── home/                           # Structured Home composition
     │   ├── about/                          # Structured About composition
     │   ├── access-portal-page/             # Retained static portal design reference
-    │   ├── cositer-demo/                   # WordPress Co-Siter demo template and views
     │   ├── advisory/                       # Advisory page content stubs
     │   ├── agency/                         # Agency page content stub
     │   ├── clients/                        # Client page content stubs
@@ -837,7 +843,7 @@ The Home page is more exploratory than the About page. Several utility-heavy sec
 | --- | --- |
 | `pages/access-portal-page/prototype-ui.html` | Complete standalone HTML/CSS/JavaScript portal concept. Defines the Co-Siter shell, sidebar, account bar, Requests page, request table, status summary, review drawer, sample request rows, inline SVG icons, responsive breakpoints, reduced-motion rules, and three switchable layout variants. |
 
-This directory intentionally contains one self-contained HTML file for the earlier disposable design exploration. It is no longer routed by WordPress. The current PHP dashboard lives in `pages/cositer-demo/` and is documented in [`docs/COSITER_WORDPRESS_PROTOTYPE.md`](docs/COSITER_WORDPRESS_PROTOTYPE.md).
+This directory intentionally contains one self-contained HTML file for the earlier disposable design exploration. It is no longer routed by WordPress. The current PHP dashboard lives in `co-siter_dashboard/pages/cositer-demo/` and is documented in [`docs/COSITER_WORDPRESS_PROTOTYPE.md`](docs/COSITER_WORDPRESS_PROTOTYPE.md).
 
 ### `pages/advisory/` - advisory information architecture placeholders
 
@@ -1125,7 +1131,7 @@ Variants are kept as local experiments until a design direction is selected. Abs
 | What design tokens and shared CSS patterns exist? | src/css/input.css |
 | What CSS does WordPress serve? | assets/css/style.css |
 | What npm dependencies and commands exist? | package.json and package-lock.json |
-| What the current Co-Siter dashboard renders? | pages/cositer-demo/template.php and views/ |
+| What the current Co-Siter dashboard renders? | co-siter_dashboard/pages/cositer-demo/template.php and views/ |
 | What the original portal layout variants looked like? | pages/access-portal-page/prototype-ui.html |
 | What scratch explorations exist? | .scratch/ |
 | What terms and domain boundaries are canonical? | CONTEXT.md |
@@ -1161,7 +1167,7 @@ The live test helpers retain explicit mappings to the external Gravity Forms ide
 
 ### Safety and rollout contract
 
-The native LAAN implementation is owned by `includes/laan-request.php`, `pages/laan-request/`, and the production assets under `assets/`. The standalone `proposed_laan_form/` server remains isolated and non-submitting. Live tests are opt-in and retain a final-submission guard. Generated Playwright reports, traces, screenshots, videos, authentication state, and run history are ignored under `.test-artifacts/`; only sanitized findings and curated evidence are committed under `docs/testing/laan-request/`.
+The native LAAN implementation is owned by `includes/laan-request.php`, `pages/laan-request/`, and the production assets under `assets/`. The standalone `co-siter_dashboard/proposed_laan_form/` server remains isolated and non-submitting. Live tests are opt-in and retain a final-submission guard. Generated Playwright reports, traces, screenshots, videos, authentication state, and run history are ignored under `.test-artifacts/`; only sanitized findings and curated evidence are committed under `docs/testing/laan-request/`.
 
 The permanent WordPress compatibility contract is [`docs/LAAN_WORDPRESS_READINESS.md`](docs/LAAN_WORDPRESS_READINESS.md). Future LAAN changes must satisfy that contract before they are considered implementation-ready.
 

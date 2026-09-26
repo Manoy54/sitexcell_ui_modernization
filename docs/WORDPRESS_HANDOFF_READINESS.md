@@ -143,7 +143,7 @@ Forms that store personal data must document collection purpose, access control,
 - Runtime CDN dependencies and remote scripts require explicit approval, integrity controls where available, and a fallback or documented operational dependency.
 - Assets MUST be conditionally enqueued only on the pages that use them.
 
-The current LAAN production sources are under `assets/`. The isolated `proposed_laan_form/` server remains a prototype boundary and must not become a runtime dependency.
+The current LAAN production sources are under `assets/`. The isolated `co-siter_dashboard/proposed_laan_form/` server remains a prototype boundary and must not become a runtime dependency.
 
 ## 10. Accessibility, compatibility, and performance
 
@@ -179,7 +179,7 @@ php -l sitexcell-ui-prototype.php
 php -l includes/laan-request.php
 php -l pages/laan-request/laan-request.php
 node --check assets/js/laan-request.js
-node --check proposed_laan_form/src/scripts/prototype.js
+node --check co-siter_dashboard/proposed_laan_form/src/scripts/prototype.js
 git diff --check
 ```
 
@@ -246,7 +246,7 @@ The author MUST confirm:
 
 ### Isolated areas
 
-- `proposed_laan_form/` is a visual and interaction prototype boundary.
+- `co-siter_dashboard/proposed_laan_form/` is a visual and interaction prototype boundary.
 - `tests/laan-request/` contains external characterization and live-session tooling.
 - Prototype servers, browser fixtures, authentication state, reports, traces, screenshots, and videos are not production dependencies.
 

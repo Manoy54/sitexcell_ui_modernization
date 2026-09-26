@@ -29,7 +29,7 @@ const stopServer = () => {
 try {
     if (!await serverIsReady()) {
         server = spawn(process.execPath, ['server.mjs'], {
-            cwd: resolve('proposed_access_request_form'),
+            cwd: resolve('co-siter_dashboard/proposed_access_request_form'),
             env: { ...process.env, ACCESS_PROTOTYPE_PORT: port },
             stdio: 'inherit',
         });
@@ -44,7 +44,7 @@ try {
     const child = spawn(process.execPath, [
         resolve('node_modules/@playwright/test/cli.js'),
         'test',
-        '--config=proposed_access_request_form/playwright.config.js',
+        '--config=co-siter_dashboard/proposed_access_request_form/playwright.config.js',
     ], { cwd: resolve('.'), env: { ...process.env, ACCESS_PROTOTYPE_PORT: port }, stdio: 'inherit' });
 
     process.exitCode = await new Promise((resolveExit, reject) => {

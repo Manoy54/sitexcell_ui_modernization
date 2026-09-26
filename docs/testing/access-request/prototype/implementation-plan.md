@@ -29,7 +29,7 @@ review before implementation begins.
 | [Canonical full result](../access-request-results.json) | Facts from full run 000157 |
 | [Findings](../findings.md) and [recommendations](../recommendations.md) | Existing F-AR-001–003 and R-AR-001–003, with their authority limitations |
 | [Captured field map](../steps-1-8-field-map.json) and [field/rule ledger](../field-rule-ledger.json) | Original identities, labels, controls, constraints, and unresolved rules |
-| [Selected LAAN direction](../../../../proposed_laan_form/docs/selected-direction.md) and [reference measurements](../../../../proposed_laan_form/docs/reference-analysis.md) | Application layout and visual fidelity |
+| [Selected LAAN direction](../../../../co-siter_dashboard/proposed_laan_form/docs/selected-direction.md) and [reference measurements](../../../../co-siter_dashboard/proposed_laan_form/docs/reference-analysis.md) | Application layout and visual fidelity |
 | [LAAN application styles](../../../../assets/css/laan-request.css) and [application code](../../../../assets/js/laan-request.js) | Current visual/component reference; production submission logic is outside this prototype |
 | [General visual standard](../../../DESIGN_INTERFACE_HANDOFF.md) | Accessibility, states, spacing discipline, and secondary guidance |
 | [Upload guidance notes](../../../notes/access-request-upload-guidance.md) and annotated screenshots | Per-file validation, cancellation, removal, and error-copy treatment for qualification uploads |
@@ -96,7 +96,7 @@ do not rewrite historical results as prototype success.
 
 | Decision | Accepted direction |
 | --- | --- |
-| Q1 | Isolated `proposed_access_request_form/`; synthetic data; eight stages through review |
+| Q1 | Isolated `co-siter_dashboard/proposed_access_request_form/`; synthetic data; eight stages through review |
 | Q2 | Preserve stage count, observed field order, labels, and declarations; improve grouping and feedback |
 | Q3 | Match the existing LAAN application shell and appearance; correct accessibility issues where necessary |
 | Q4 | Main observed flow plus optional demonstrations with explicit synthetic assumptions |
@@ -374,7 +374,7 @@ overwrite the external report or turn its blocked cases green through simulation
 ## 9. Proposed implementation structure
 
 ```text
-proposed_access_request_form/
+co-siter_dashboard/proposed_access_request_form/
   index.html
   server.mjs
   src/

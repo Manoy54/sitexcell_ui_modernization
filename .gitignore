@@ -22,7 +22,7 @@ test-results/
 *.log
 
 # Production-derived LAAN snapshots
-proposed_laan_form/fixtures/site-context.js
+co-siter_dashboard/proposed_laan_form/fixtures/site-context.js
 
 # Operating-system/editor noise
 w.DS_Store

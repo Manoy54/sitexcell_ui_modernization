@@ -4,8 +4,8 @@ import { resolve } from 'node:path';
 const root = resolve('.');
 const fieldPath = resolve(root, 'docs/testing/access-request/prototype/field-disposition-plan.json');
 const casePath = resolve(root, 'docs/testing/access-request/prototype/test-case-plan.json');
-const appPath = 'proposed_access_request_form/src/app.js';
-const modelPath = 'proposed_access_request_form/src/model/form-model.js';
+const appPath = 'co-siter_dashboard/proposed_access_request_form/src/app.js';
+const modelPath = 'co-siter_dashboard/proposed_access_request_form/src/model/form-model.js';
 const appSource = readFileSync(resolve(root, appPath), 'utf8');
 const modelSource = readFileSync(resolve(root, modelPath), 'utf8');
 const implementationSource = `${appSource}\n${modelSource}`;
@@ -23,8 +23,8 @@ const contractorLabels = new Set([
 
 const automatedEvidence = new Map();
 const addAutomated = (ids, evidence) => ids.forEach((id) => automatedEvidence.set(id, evidence));
-const unitEvidence = 'proposed_access_request_form/tests/unit/form-model.test.mjs';
-const browserEvidence = 'proposed_access_request_form/tests/browser/access-request.spec.mjs';
+const unitEvidence = 'co-siter_dashboard/proposed_access_request_form/tests/unit/form-model.test.mjs';
+const browserEvidence = 'co-siter_dashboard/proposed_access_request_form/tests/browser/access-request.spec.mjs';
 addAutomated(['PA-001', 'PA-004', 'PA-005', 'PA-006'], browserEvidence);
 addAutomated(['PA-B04', 'PA-B07', 'PA-B08', 'PA-R02', 'PA-R03', 'PA-R04', 'PA-U03', 'PA-U05', 'PA-U06', 'PA-U07', 'PA-D03'], unitEvidence);
 addAutomated(['PA-U04'], `${unitEvidence}; ${browserEvidence}`);
@@ -54,7 +54,7 @@ function buildFieldPlan(plan) {
         ]);
         const implementationLocation = direct
             ? [...new Set(exactLocations)].join('; ')
-            : grouped ? 'proposed_access_request_form/src/app.js#contractorFields'
+            : grouped ? 'co-siter_dashboard/proposed_access_request_form/src/app.js#contractorFields'
                 : providerOnly ? 'docs/testing/access-request/prototype/implementation-report.md#explicitly-not-implemented'
                     : 'docs/testing/access-request/prototype/field-disposition-plan.json';
         const testStatus = implementationStatus.startsWith('implemented')
@@ -91,7 +91,7 @@ function buildCasePlan(plan) {
         } else if (guidedDemonstrations.has(entry.localCheckId)) {
             implementationStatus = 'implemented-guided-demonstration';
             executionStatus = 'AVAILABLE-NOT-EXECUTED';
-            localEvidence = ['proposed_access_request_form/src/app.js'];
+            localEvidence = ['co-siter_dashboard/proposed_access_request_form/src/app.js'];
         }
         counts[implementationStatus] = (counts[implementationStatus] ?? 0) + 1;
         return { ...entry, implementationStatus, executionStatus, localEvidence };

@@ -18,7 +18,7 @@ define('SITEXCELL_UI_HOME_SLUG', 'sitexcell-home-prototype');
 define('SITEXCELL_UI_LAAN_SLUG', 'laan-request');
 
 require_once SITEXCELL_UI_PATH . 'includes/laan-request.php';
-require_once SITEXCELL_UI_PATH . 'includes/cositer-demo.php';
+require_once SITEXCELL_UI_PATH . 'co-siter_dashboard/includes/cositer-demo.php';
 
 /**
  * Helper to check current URI for prototype slugs.
@@ -128,8 +128,8 @@ function sitexcell_ui_enqueue_assets(): void
 
         if ($view === 'laan' || $view === 'access') {
             $form_style = $view === 'laan'
-                ? 'proposed_laan_form/src/styles/prototype.css'
-                : 'proposed_access_request_form/src/styles/access-request.css';
+                ? 'co-siter_dashboard/proposed_laan_form/src/styles/prototype.css'
+                : 'co-siter_dashboard/proposed_access_request_form/src/styles/access-request.css';
             wp_enqueue_style(
                 'sitexcell-ui-cositer-form',
                 SITEXCELL_UI_URL . $form_style,
@@ -141,23 +141,23 @@ function sitexcell_ui_enqueue_assets(): void
 
         wp_enqueue_style(
             'sitexcell-ui-cositer-demo',
-            SITEXCELL_UI_URL . 'assets/css/cositer-demo.css',
+            SITEXCELL_UI_URL . 'co-siter_dashboard/assets/css/cositer-demo.css',
             $style_dependencies,
-            (string) filemtime(SITEXCELL_UI_PATH . 'assets/css/cositer-demo.css')
+            (string) filemtime(SITEXCELL_UI_PATH . 'co-siter_dashboard/assets/css/cositer-demo.css')
         );
 
         wp_enqueue_script(
             'sitexcell-ui-cositer-demo',
-            SITEXCELL_UI_URL . 'assets/js/cositer-demo.js',
+            SITEXCELL_UI_URL . 'co-siter_dashboard/assets/js/cositer-demo.js',
             [],
-            (string) filemtime(SITEXCELL_UI_PATH . 'assets/js/cositer-demo.js'),
+            (string) filemtime(SITEXCELL_UI_PATH . 'co-siter_dashboard/assets/js/cositer-demo.js'),
             true
         );
 
         if ($view === 'laan' || $view === 'access') {
             $form_script = $view === 'laan'
-                ? 'proposed_laan_form/src/scripts/prototype.js'
-                : 'proposed_access_request_form/src/app.js';
+                ? 'co-siter_dashboard/proposed_laan_form/src/scripts/prototype.js'
+                : 'co-siter_dashboard/proposed_access_request_form/src/app.js';
             wp_enqueue_script(
                 'sitexcell-ui-cositer-form',
                 SITEXCELL_UI_URL . $form_script,
@@ -398,7 +398,7 @@ function sitexcell_ui_template_include(string $template): string
     }
 
     if ($prototype === 'portal-login' || $prototype === 'portal-requests') {
-        $custom_template = SITEXCELL_UI_PATH . 'pages/cositer-demo/template.php';
+        $custom_template = SITEXCELL_UI_PATH . 'co-siter_dashboard/pages/cositer-demo/template.php';
 
         if (file_exists($custom_template)) {
             global $wp_query;

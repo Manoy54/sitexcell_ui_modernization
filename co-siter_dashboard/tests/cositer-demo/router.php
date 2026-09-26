@@ -3,7 +3,7 @@
  * Test-only WordPress function shim for browser checks when Local is stopped.
  */
 
-$root = dirname(__DIR__, 2);
+$root = dirname(__DIR__, 3);
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $asset = realpath($root . $path);
 if ($asset && str_starts_with($asset, $root . DIRECTORY_SEPARATOR) && is_file($asset)) {
@@ -34,28 +34,28 @@ function wp_head(): void
 {
     $view = sitexcell_ui_cositer_demo_view();
     if ($view === 'laan') {
-        echo '<link rel="stylesheet" href="/proposed_laan_form/src/styles/prototype.css">';
+        echo '<link rel="stylesheet" href="/co-siter_dashboard/proposed_laan_form/src/styles/prototype.css">';
     } elseif ($view === 'access') {
-        echo '<link rel="stylesheet" href="/proposed_access_request_form/src/styles/access-request.css">';
+        echo '<link rel="stylesheet" href="/co-siter_dashboard/proposed_access_request_form/src/styles/access-request.css">';
     }
-    echo '<link rel="stylesheet" href="/assets/css/cositer-demo.css">';
+    echo '<link rel="stylesheet" href="/co-siter_dashboard/assets/css/cositer-demo.css">';
 }
 function wp_footer(): void
 {
-    echo '<script src="/assets/js/cositer-demo.js"></script>';
+    echo '<script src="/co-siter_dashboard/assets/js/cositer-demo.js"></script>';
     $view = sitexcell_ui_cositer_demo_view();
     if ($view === 'laan') {
-        echo '<script type="module" src="/proposed_laan_form/src/scripts/prototype.js"></script>';
+        echo '<script type="module" src="/co-siter_dashboard/proposed_laan_form/src/scripts/prototype.js"></script>';
     } elseif ($view === 'access') {
-        echo '<script type="module" src="/proposed_access_request_form/src/app.js"></script>';
+        echo '<script type="module" src="/co-siter_dashboard/proposed_access_request_form/src/app.js"></script>';
     }
 }
 
-require_once $root . '/includes/cositer-demo.php';
+require_once $root . '/co-siter_dashboard/includes/cositer-demo.php';
 if (sitexcell_ui_cositer_demo_route() === '') {
     http_response_code(404);
     echo 'Not found';
     return;
 }
 
-require $root . '/pages/cositer-demo/template.php';
+require $root . '/co-siter_dashboard/pages/cositer-demo/template.php';

@@ -1,7 +1,7 @@
 # Access Request prototype implementation report
 
 Status: Implemented and locally verified on 2026-09-09.  
-Artifact: [`proposed_access_request_form/`](../../../../proposed_access_request_form/)  
+Artifact: [`co-siter_dashboard/proposed_access_request_form/`](../../../../co-siter_dashboard/proposed_access_request_form/)
 Authority: Isolated prototype behavior only; no production business-rule approval.
 
 ## Delivered outcome

@@ -14,7 +14,7 @@ npm.cmd run prototype:access
 Open `http://127.0.0.1:4178/`. Use **Load complete scenario** to inspect the
 review state without entering every synthetic field.
 
-The same form also renders inside the shared Co-Siter WordPress demo shell at `/sitexcell-portal-requests-prototype/?view=access`. That route begins blank, retains the existing stages and field behavior, and does not submit. See [`docs/COSITER_WORDPRESS_PROTOTYPE.md`](../docs/COSITER_WORDPRESS_PROTOTYPE.md).
+The same form also renders inside the shared Co-Siter WordPress demo shell at `/sitexcell-portal-requests-prototype/?view=access`. That route begins blank, retains the existing stages and field behavior, and does not submit. See [`COSITER_WORDPRESS_PROTOTYPE.md`](../../docs/COSITER_WORDPRESS_PROTOTYPE.md).
 
 ## Verify
 

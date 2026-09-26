@@ -12,7 +12,7 @@ Improve the current LAAN request flow so users can complete it with approximatel
 
 This is a throwaway, isolated, non-submitting prototype. It must not add a WordPress route, call the production form handler, create records, send notifications, or use real personal, company, site, or document data.
 
-The target location is the repository-local `proposed_laan_form/` directory.
+The target location is the repository-local `co-siter_dashboard/proposed_laan_form/` directory.
 
 `?step=2` opens the selected Page 2 direction with synthetic request context.
 

@@ -14,7 +14,7 @@ npm run test:prototype:playwright
 ```
 
 The suite is serial by design and writes its sanitized Playwright report to
-`proposed_laan_form/.test-artifacts/proposed-laan-results.json`. The existing
+`co-siter_dashboard/proposed_laan_form/.test-artifacts/proposed-laan-results.json`. The existing
 live LAAN suite under `tests/laan-request/live/` remains the regression source
 of truth for the external form. Boundary simulations can provide validated
 `minDate` and `maxDate` query parameters in `DD-MM-YYYY` format.
