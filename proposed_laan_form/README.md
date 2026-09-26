@@ -16,6 +16,8 @@ npm run prototype:laan
 
 Then open `http://127.0.0.1:4177/`.
 
+The same non-submitting prototype can also render inside the shared Co-Siter WordPress demo shell at `/sitexcell-portal-requests-prototype/?view=laan`. That route uses the existing fields and stages, begins blank, and does not use the native `/laan-request/` submission handler. See [`docs/COSITER_WORDPRESS_PROTOTYPE.md`](../docs/COSITER_WORDPRESS_PROTOTYPE.md).
+
 Open Page 2 directly at `http://127.0.0.1:4177/?step=2`. The selected layout uses the original vertical form flow and preserves the Request workspace on the right.
 
 ## Compatibility promise

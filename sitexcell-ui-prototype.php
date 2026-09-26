@@ -18,12 +18,19 @@ define('SITEXCELL_UI_HOME_SLUG', 'sitexcell-home-prototype');
 define('SITEXCELL_UI_LAAN_SLUG', 'laan-request');
 
 require_once SITEXCELL_UI_PATH . 'includes/laan-request.php';
+require_once SITEXCELL_UI_PATH . 'includes/cositer-demo.php';
 
 /**
  * Helper to check current URI for prototype slugs.
  */
 function sitexcell_ui_get_current_prototype(): string
 {
+    $portal_demo_route = sitexcell_ui_cositer_demo_route();
+
+    if ($portal_demo_route !== '') {
+        return $portal_demo_route;
+    }
+
     if (is_page(SITEXCELL_UI_LAAN_SLUG)) {
         return 'laan-request';
     }
@@ -60,10 +67,6 @@ function sitexcell_ui_get_current_prototype(): string
 
     if (strpos($uri, 'sitexcell-transitions-prototype') !== false) {
         return 'transitions';
-    }
-
-    if (strpos($uri, 'sitexcell-portal-requests-prototype') !== false) {
-        return 'portal-requests';
     }
 
     if (strpos($uri, 'laan-request') !== false) {
@@ -116,6 +119,56 @@ function sitexcell_ui_enqueue_assets(): void
         [],
         null
     );
+
+    $prototype = sitexcell_ui_get_current_prototype();
+
+    if ($prototype === 'portal-login' || $prototype === 'portal-requests') {
+        $view = sitexcell_ui_cositer_demo_view();
+        $style_dependencies = ['sitexcell-ui-fonts'];
+
+        if ($view === 'laan' || $view === 'access') {
+            $form_style = $view === 'laan'
+                ? 'proposed_laan_form/src/styles/prototype.css'
+                : 'proposed_access_request_form/src/styles/access-request.css';
+            wp_enqueue_style(
+                'sitexcell-ui-cositer-form',
+                SITEXCELL_UI_URL . $form_style,
+                ['sitexcell-ui-fonts'],
+                (string) filemtime(SITEXCELL_UI_PATH . $form_style)
+            );
+            $style_dependencies[] = 'sitexcell-ui-cositer-form';
+        }
+
+        wp_enqueue_style(
+            'sitexcell-ui-cositer-demo',
+            SITEXCELL_UI_URL . 'assets/css/cositer-demo.css',
+            $style_dependencies,
+            (string) filemtime(SITEXCELL_UI_PATH . 'assets/css/cositer-demo.css')
+        );
+
+        wp_enqueue_script(
+            'sitexcell-ui-cositer-demo',
+            SITEXCELL_UI_URL . 'assets/js/cositer-demo.js',
+            [],
+            (string) filemtime(SITEXCELL_UI_PATH . 'assets/js/cositer-demo.js'),
+            true
+        );
+
+        if ($view === 'laan' || $view === 'access') {
+            $form_script = $view === 'laan'
+                ? 'proposed_laan_form/src/scripts/prototype.js'
+                : 'proposed_access_request_form/src/app.js';
+            wp_enqueue_script(
+                'sitexcell-ui-cositer-form',
+                SITEXCELL_UI_URL . $form_script,
+                [],
+                (string) filemtime(SITEXCELL_UI_PATH . $form_script),
+                true
+            );
+        }
+
+        return;
+    }
 
     if (function_exists('sitexcell_ui_is_laan_request') && sitexcell_ui_is_laan_request()) {
         wp_enqueue_style(
@@ -171,7 +224,7 @@ add_action('wp_enqueue_scripts', 'sitexcell_ui_enqueue_assets');
  */
 function sitexcell_ui_laan_module_script(string $tag, string $handle, string $src): string
 {
-    if ($handle !== 'sitexcell-ui-laan-request') {
+    if (!in_array($handle, ['sitexcell-ui-laan-request', 'sitexcell-ui-cositer-form'], true)) {
         return $tag;
     }
 
@@ -344,8 +397,8 @@ function sitexcell_ui_template_include(string $template): string
         }
     }
 
-    if ($prototype === 'portal-requests') {
-        $custom_template = SITEXCELL_UI_PATH . 'pages/access-portal-page/prototype-ui.html';
+    if ($prototype === 'portal-login' || $prototype === 'portal-requests') {
+        $custom_template = SITEXCELL_UI_PATH . 'pages/cositer-demo/template.php';
 
         if (file_exists($custom_template)) {
             global $wp_query;

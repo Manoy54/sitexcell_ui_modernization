@@ -2,6 +2,7 @@ import { activities, owners, sites, uploadRules as prototypeUploadRules } from '
 import { siteContextById } from '../../fixtures/site-context.example.js';
 
 const root = document.querySelector('#prototype-root');
+const embeddedInPortal = root.dataset.portalEmbedded === 'true';
 const nativeConfig = window.SitexcellLaanConfig ?? {};
 const isNativeWordPress = Boolean(nativeConfig.native);
 
@@ -775,7 +776,8 @@ const renderWorkspace = () => {
 
 const renderApplication = () => {
     const overflowState = Object.keys(state.errors).length || state.completionShown ? ' has-overflow-state' : '';
-    return `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}<div class="page-layout${state.step === 2 ? ` is-stage-two${overflowState}` : ''}"><div class="form-surface">${renderForm()}</div>${renderWorkspace()}</div></section></main>`;
+    const formLayout = `<div class="page-layout${state.step === 2 ? ` is-stage-two${overflowState}` : ''}"><div class="form-surface">${renderForm()}</div>${renderWorkspace()}</div>`;
+    return embeddedInPortal ? formLayout : `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}${formLayout}</section></main>`;
 };
 
 const render = ({ focusSite = false, focusError = false, scrollTop = false } = {}) => {
@@ -786,7 +788,7 @@ const render = ({ focusSite = false, focusError = false, scrollTop = false } = {
         inspector.textContent = JSON.stringify(serializableState(), null, 2);
     }
 
-    document.title = isNativeWordPress ? 'LAAN Request' : 'Reference dashboard · LAAN Request Prototype';
+    document.title = embeddedInPortal ? 'LAAN Request · Co-Siter demo' : isNativeWordPress ? 'LAAN Request' : 'Reference dashboard · LAAN Request Prototype';
 
     if (focusSite) {
         requestAnimationFrame(() => {
@@ -1349,6 +1351,11 @@ root.addEventListener('click', (event) => {
 window.addEventListener('beforeunload', (event) => {
     const hasUnsavedInput = Object.values(state.fields).some(Boolean) || state.files.required || state.files.additional.length;
     const explicitDraft = sessionStorage.getItem(draftKey);
+    const hasUnrecoverableFiles = pendingFiles.required || pendingFiles.additional.length;
+
+    if (embeddedInPortal && !hasUnrecoverableFiles && sessionStorage.getItem(sessionKey)) {
+        return;
+    }
 
     if (hasUnsavedInput && !explicitDraft) {
         event.preventDefault();

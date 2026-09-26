@@ -32,6 +32,7 @@ import {
 } from './model/form-model.js';
 
 const root = document.querySelector('#prototype-root');
+const embeddedInPortal = root.dataset.portalEmbedded === 'true';
 const STORAGE_KEY = 'sitexcell-access-request-prototype-v1';
 const DOCUMENT_CHECK_DELAY_MS = 20;
 const DOCUMENT_FILE_QUEUE_INTERVAL_MS = 50;
@@ -399,15 +400,16 @@ function pendingAction() {
 
 function render() {
     const [stageTitle, stageIntro] = STAGES[state.currentStage - 1];
-    root.innerHTML = `<div class="portal-app">
-        <aside class="portal-sidebar"><div class="portal-brand"><span class="cositer-wordmark"><span>co-</span>siter<sup>™</sup></span><small>Property access coordination</small></div><nav class="portal-nav" aria-label="Co-Siter"><button aria-current="page">${icon('request')} Access requests</button><button disabled>${icon('users')} Contacts</button><button disabled>${icon('document')} Documents</button></nav><div class="portal-user"><span class="portal-avatar">AM</span><div><strong>Alex Morgan</strong><span>Prototype reviewer</span></div></div></aside>
-        <main class="portal-stage"><header class="portal-topbar"><h1>${icon('request')} Access Request</h1><div class="topbar-actions"><button type="button" class="topbar-button" data-load-demo>Load complete scenario</button><button type="button" class="topbar-button" data-reset>Reset</button></div></header>
-            <div class="request-layout"><div class="form-column"><div class="stage-header"><p>Stage ${state.currentStage} of 8</p><h1>${escapeHtml(stageTitle)}</h1><span>${escapeHtml(stageIntro)}</span></div>${pendingAction()}${errorSummary()}${state.notices.slice(-1).map((notice) => `<div class="notice" role="status">${icon('info')}<span>${escapeHtml(notice)}</span></div>`).join('')}<form novalidate>${stageRenderers[state.currentStage - 1]()}</form>
+    const requestLayout = `<div class="request-layout"><div class="form-column"><div class="stage-header"><p>Stage ${state.currentStage} of 8</p><h1>${escapeHtml(stageTitle)}</h1><span>${escapeHtml(stageIntro)}</span></div>${pendingAction()}${errorSummary()}${state.notices.slice(-1).map((notice) => `<div class="notice" role="status">${icon('info')}<span>${escapeHtml(notice)}</span></div>`).join('')}<form novalidate>${stageRenderers[state.currentStage - 1]()}</form>
                 <footer class="form-actions"><button type="button" class="button-secondary" data-back ${state.currentStage === 1 ? 'disabled' : ''}>Back</button><span class="save-status">Saved in this tab</span>${state.currentStage < 8 ? `<button type="button" class="button-primary" data-continue>Continue to ${escapeHtml(STAGES[state.currentStage][0])}</button>` : '<button type="button" class="button-primary" disabled aria-describedby="submit-note">Submit access request</button><span id="submit-note" class="sr-only">Submission is disabled in this prototype.</span>'}</footer>
-            </div>${workspace()}</div>
-        </main>
-        <div class="sr-only" aria-live="polite">${escapeHtml(statusMessage)}</div>
-    </div>`;
+            </div>${workspace()}</div>`;
+    root.innerHTML = embeddedInPortal
+        ? `${requestLayout}<div class="sr-only" aria-live="polite">${escapeHtml(statusMessage)}</div>`
+        : `<div class="portal-app">
+            <aside class="portal-sidebar"><div class="portal-brand"><span class="cositer-wordmark"><span>co-</span>siter<sup>™</sup></span><small>Property access coordination</small></div><nav class="portal-nav" aria-label="Co-Siter"><button aria-current="page">${icon('request')} Access requests</button><button disabled>${icon('users')} Contacts</button><button disabled>${icon('document')} Documents</button></nav><div class="portal-user"><span class="portal-avatar">AM</span><div><strong>Alex Morgan</strong><span>Prototype reviewer</span></div></div></aside>
+            <main class="portal-stage"><header class="portal-topbar"><h1>${icon('request')} Access Request</h1><div class="topbar-actions"><button type="button" class="topbar-button" data-load-demo>Load complete scenario</button><button type="button" class="topbar-button" data-reset>Reset</button></div></header>${requestLayout}</main>
+            <div class="sr-only" aria-live="polite">${escapeHtml(statusMessage)}</div>
+        </div>`;
 }
 
 function updateFieldFromControl(control) {

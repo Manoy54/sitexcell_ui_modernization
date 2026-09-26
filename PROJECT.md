@@ -2,6 +2,12 @@
 
 > Comprehensive project description, domain model, architecture reference, and delivery guide.
 
+## Current Co-Siter prototype (September 2026)
+
+The integrated Co-Siter journey now uses WordPress-owned PHP routes, templates, and conditional asset enqueues. Start at `/sitexcell-home-prototype/`, follow the footer's Co-Siter demo link to `/sitexcell-cositer-login-prototype/`, then enter `/sitexcell-portal-requests-prototype/`. The dashboard's `view` parameter selects Requests, read-only request details, Users, Documents, Settings, Contact Us, LAAN Request, or Access Request. All dashboard views share one PHP sidebar and top bar; the two existing form prototypes render their content inside that shell and retain their own field and validation behavior. The login is a placeholder, all register data is fictional, the contact page does not send, and the forms do not submit. The separate native `/laan-request/` WordPress workflow is unchanged and can write real records.
+
+See [Co-Siter WordPress prototype](docs/COSITER_WORDPRESS_PROTOTYPE.md) for the current route and ownership map. Older descriptions below of `pages/access-portal-page/prototype-ui.html` and its three variants describe the retained design reference, which is no longer the route served by WordPress.
+
 ## 1. Project identity
 
 | Attribute | Definition |

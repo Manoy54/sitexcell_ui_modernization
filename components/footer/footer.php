@@ -42,7 +42,7 @@ $asset_url = SITEXCELL_UI_URL . 'assets/images/';
             <p>&copy; <?php echo esc_html(wp_date('Y')); ?> SiteXcell. UI modernization prototype.</p>
             <div class="flex flex-wrap gap-x-6 gap-y-3">
                 <a class="hover:text-sx-charcoal" href="#about">About</a>
-                <a class="hover:text-sx-charcoal" href="https://co-siter.com.au/" target="_blank" rel="noopener">co-siter login</a>
+                <a class="hover:text-sx-charcoal" href="<?php echo esc_url(home_url('/' . SITEXCELL_UI_COSITER_LOGIN_SLUG . '/')); ?>">Co-Siter demo login</a>
                 <a class="hover:text-sx-charcoal" href="https://www.sitexcell.com.au/disclaimer/">Disclaimer</a>
                 <a class="hover:text-sx-charcoal" href="https://www.sitexcell.com.au/privacy-policy/">Privacy Policy</a>
             </div>

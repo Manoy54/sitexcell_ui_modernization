@@ -4,6 +4,8 @@ This is the repository-wide contract for keeping SiteXcell UI modernization work
 
 Feature-specific documents may add requirements. They must not weaken this standard. The LAAN-specific contract is [`LAAN_WORDPRESS_READINESS.md`](LAAN_WORDPRESS_READINESS.md).
 
+The current Co-Siter dashboard journey is documented in [`COSITER_WORDPRESS_PROTOTYPE.md`](COSITER_WORDPRESS_PROTOTYPE.md). It uses WordPress routing, templates, and enqueues but remains **Prototype** level: its login does not authenticate, its records are fictional, and its forms do not submit. The native `/laan-request/` workflow is a separate surface governed by the LAAN-specific contract.
+
 ## 1. Readiness levels
 
 Every surface must declare its current level:

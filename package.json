@@ -9,6 +9,7 @@
     "watch:css": "tailwindcss -i ./src/css/input.css -o ./assets/css/style.css --watch",
     "prototype:laan": "node proposed_laan_form/server.mjs",
     "prototype:access": "node proposed_access_request_form/server.mjs",
+    "test:prototype:cositer": "playwright test -c tests/cositer-demo/playwright.config.js",
     "prototype:access:evidence": "node proposed_access_request_form/tests/sync-evidence.mjs --write",
     "test:prototype:access:unit": "node --test proposed_access_request_form/tests/unit/*.test.mjs",
     "test:prototype:access:browser": "node proposed_access_request_form/tests/run-browser.mjs",
