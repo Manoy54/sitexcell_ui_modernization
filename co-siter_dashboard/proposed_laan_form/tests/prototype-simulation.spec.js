@@ -145,6 +145,23 @@ test('offers every captured LAAN owner and Site in the prototype', async ({ page
   await expect(page.getByTestId('site-search')).toHaveValue(sites.at(-1).name);
 });
 
+test('preserves the chosen label when captured owners share an ID', async ({ page }) => {
+  const duplicateOwners = owners.filter((owner, index) => owner.value && owners.findIndex(({ value }) => value === owner.value) !== index);
+  expect(duplicateOwners).toHaveLength(2);
+
+  for (const owner of duplicateOwners) {
+    await page.getByTestId('owner-control').click();
+    await page.getByRole('listbox', { name: 'Owner Name' }).getByRole('option', { name: owner.label, exact: true }).click();
+    await expect(page.getByTestId('owner-control')).toContainText(owner.label);
+    await page.getByTestId('owner-control').click();
+    await expect(page.getByRole('listbox', { name: 'Owner Name' }).locator('[aria-selected="true"]')).toHaveCount(1);
+    await page.getByTestId('owner-control').click();
+  }
+
+  await page.reload();
+  await expect(page.getByTestId('owner-control')).toContainText(duplicateOwners.at(-1).label);
+});
+
 test('searches and selects a canonical Site with keyboard input', async ({ page }) => {
   const site = page.getByTestId('site-search');
   await site.fill('1 Denison Street');

@@ -10,11 +10,11 @@ Improve the current LAAN request flow so users can complete it with approximatel
 
 ## Prototype boundary
 
-This is a throwaway, isolated, non-submitting prototype. It must not add a WordPress route, call the production form handler, create records, send notifications, or use real personal, company, site, or document data.
+This is a throwaway, isolated, non-submitting prototype. It must not add a WordPress route, call the production form handler, create records, or send notifications. The user-approved captured LAAN owner and Site choices are included for dropdown evaluation; real personal data, Site notes, and documents remain outside the prototype.
 
 The target location is the repository-local `co-siter_dashboard/proposed_laan_form/` directory.
 
-`?step=2` opens the selected Page 2 direction with synthetic request context.
+`?step=2` opens the selected Page 2 direction with synthetic request details and a captured Site choice.
 
 ## Compatibility requirements
 

@@ -25,6 +25,7 @@ const defaultState = {
         activity: '',
         commencementDate: '',
         owner: '',
+        ownerLabel: '',
         siteQuery: '',
         siteId: '',
         termsAccepted: false,
@@ -343,7 +344,9 @@ const renderErrorSummary = () => {
 const renderDropdown = ({ name, id, label, placeholder, options }) => {
     const open = state.openDropdown === name;
     const selectedValue = state.fields[name];
-    const selectedLabel = options.find(({ value }) => value === selectedValue)?.label ?? placeholder;
+    const selectedLabel = (name === 'owner' && state.fields.ownerLabel)
+        || options.find(({ value }) => value === selectedValue)?.label
+        || placeholder;
     const menuId = `${name}-options`;
 
     return `<div class="control-shell dropdown-shell">
@@ -352,7 +355,10 @@ const renderDropdown = ({ name, id, label, placeholder, options }) => {
             ${icon('chevron', `icon-small dropdown-chevron${open ? ' is-open' : ''}`)}
         </button>
         ${open ? `<div class="dropdown-menu" id="${menuId}" role="listbox" aria-label="${escapeHtml(label)}">
-            ${options.map(({ value, label: optionLabel }) => `<button class="dropdown-option${selectedValue === value ? ' is-selected' : ''}" type="button" role="option" aria-selected="${selectedValue === value}" data-action="select-dropdown-option" data-dropdown="${name}" data-dropdown-value="${escapeHtml(value)}">${escapeHtml(optionLabel)}</button>`).join('')}
+            ${options.map(({ value, label: optionLabel }) => {
+                const isSelected = selectedValue === value && selectedLabel === optionLabel;
+                return `<button class="dropdown-option${isSelected ? ' is-selected' : ''}" type="button" role="option" aria-selected="${isSelected}" data-action="select-dropdown-option" data-dropdown="${name}" data-dropdown-value="${escapeHtml(value)}">${escapeHtml(optionLabel)}</button>`;
+            }).join('')}
         </div>` : ''}
     </div>`;
 };
@@ -1175,6 +1181,9 @@ root.addEventListener('click', (event) => {
         const name = control.dataset.dropdown;
         const previousActivity = state.fields.activity;
         state.fields[name] = control.dataset.dropdownValue;
+        if (name === 'owner') {
+            state.fields.ownerLabel = state.fields.owner ? control.textContent.trim() : '';
+        }
         state.openDropdown = '';
         state.draftMessage = '';
         state.completionShown = false;
