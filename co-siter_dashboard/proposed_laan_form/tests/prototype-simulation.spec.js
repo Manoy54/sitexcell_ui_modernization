@@ -134,7 +134,7 @@ test('offers every captured LAAN owner and Site in the prototype', async ({ page
   await expect(ownerOptions).toHaveCount(owners.length);
   await expect(ownerOptions.last()).toHaveText(owners.at(-1).label);
   await page.getByRole('option', { name: 'Urban Utilities', exact: true }).click();
-  await expect(page.getByTestId('owner-control')).toContainText('Urban Utilities');
+  await expect(page.getByTestId('owner-control')).toHaveValue('Urban Utilities');
 
   await page.getByTestId('owner-control').click();
   await page.getByRole('option', { name: 'Choose company name', exact: true }).click();
@@ -155,14 +155,33 @@ test('keeps current owner IDs distinct and retains the chosen label', async ({ p
   for (const owner of formerlyDuplicatedOwners) {
     await page.getByTestId('owner-control').click();
     await page.getByRole('listbox', { name: 'Owner Name' }).getByRole('option', { name: owner.label, exact: true }).click();
-    await expect(page.getByTestId('owner-control')).toContainText(owner.label);
+    await expect(page.getByTestId('owner-control')).toHaveValue(owner.label);
     await page.getByTestId('owner-control').click();
     await expect(page.getByRole('listbox', { name: 'Owner Name' }).locator('[aria-selected="true"]')).toHaveCount(1);
     await page.getByTestId('owner-control').click();
   }
 
   await page.reload();
-  await expect(page.getByTestId('owner-control')).toContainText(formerlyDuplicatedOwners.at(-1).label);
+  await expect(page.getByTestId('owner-control')).toHaveValue(formerlyDuplicatedOwners.at(-1).label);
+});
+
+test('searches owners by typing and applies the filter only after selection', async ({ page }) => {
+  const ownerSearch = page.getByTestId('owner-control');
+  await ownerSearch.fill('urban util');
+  await expect(page.getByRole('listbox', { name: 'Owner Name' }).getByRole('option')).toHaveCount(1);
+  await ownerSearch.press('Enter');
+  await expect(ownerSearch).toHaveValue('Urban Utilities');
+
+  await page.getByRole('button', { name: 'Open complete Site list' }).click();
+  await expect(page.getByTestId('site-result')).toHaveCount(42);
+
+  await ownerSearch.click();
+  await ownerSearch.press('G');
+  await expect(ownerSearch).toHaveValue('G');
+  await ownerSearch.fill('no matching owner');
+  await expect(page.getByText('No owners match this search.')).toBeVisible();
+  await page.getByRole('button', { name: 'Open complete Site list' }).click();
+  await expect(page.getByTestId('site-result')).toHaveCount(sites.length);
 });
 
 test('filters Sites by the selected owner and clears an incompatible Site', async ({ page }) => {

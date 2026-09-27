@@ -53,6 +53,7 @@ const defaultState = {
     },
     errors: {},
     openDropdown: '',
+    ownerQuery: '',
     siteMenuOpen: false,
     calendarOpen: false,
     calendarMenu: '',
@@ -272,6 +273,7 @@ const renderReadinessContent = (ready) => `<div><strong>${ready ? 'Request detai
 const serializableState = () => ({
     step: state.step,
     fields: state.fields,
+    ownerQuery: state.ownerQuery,
     files: state.files,
     confirmations: state.confirmations,
     completionShown: state.completionShown,
@@ -374,13 +376,28 @@ const renderActivityDropdown = () => renderDropdown({
     options: [{ value: '', label: 'Please Select' }, ...activities],
 });
 
-const renderOwnerDropdown = () => renderDropdown({
-    name: 'owner',
-    id: 'input_1_40',
-    label: 'Owner Name',
-    placeholder: 'Choose company name',
-    options: owners,
-});
+const filteredOwners = () => {
+    const query = state.ownerQuery.trim().toLowerCase();
+    return query ? owners.filter(({ label }) => label.toLowerCase().includes(query)) : owners;
+};
+
+const renderOwnerDropdown = () => {
+    const open = state.openDropdown === 'owner';
+    const selectedOwner = state.fields.owner
+        ? owners.find(({ value }) => value === state.fields.owner)
+        : null;
+    const matches = filteredOwners();
+
+    return `<div class="control-shell owner-control">
+        <input class="control" id="input_1_40" data-testid="owner-control" data-action="focus-owner" name="ownerQuery" type="search" autocomplete="off" placeholder="Choose company name" value="${escapeHtml(state.ownerQuery || selectedOwner?.label || '')}" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="${open}" aria-controls="owner-options" aria-describedby="owner-help">
+        <button class="control-icon${open ? ' is-open' : ''}" type="button" data-action="toggle-owner-menu" aria-label="${open ? 'Close' : 'Open'} complete Owner list" aria-expanded="${open}">${icon('chevron', `icon-small dropdown-chevron${open ? ' is-open' : ''}`)}</button>
+        ${open ? `<div class="dropdown-menu" id="owner-options" role="listbox" aria-label="Owner Name">
+            ${matches.length
+                ? matches.map(({ value, label }) => `<button class="dropdown-option${state.fields.owner === value ? ' is-selected' : ''}" type="button" role="option" aria-selected="${state.fields.owner === value}" data-action="select-dropdown-option" data-dropdown="owner" data-dropdown-value="${escapeHtml(value)}">${escapeHtml(label)}</button>`).join('')
+                : '<p class="site-no-results">No owners match this search.</p>'}
+        </div>` : ''}
+    </div>`;
+};
 
 const renderCalendarMenu = () => {
     if (state.calendarMenu === 'month') {
@@ -582,7 +599,7 @@ const renderStageOne = () => `
     <div class="field stage-one-owner">
         <label for="input_1_40">Owner Name <span class="field-optional">(optional filter)</span></label>
         ${renderOwnerDropdown()}
-
+        <span class="field-help" id="owner-help">Type to find an owner, then select it to filter Sites.</span>
     </div>
     <div class="field stage-one-site${errorClass('siteId')}">
         <label for="input_1_41">Site name <span class="required">*</span></label>
@@ -788,7 +805,7 @@ const renderApplication = () => {
     return embeddedInPortal ? formLayout : `<main class="portal-app">${renderSidebar()}<section class="portal-stage">${renderTopbar()}${formLayout}</section></main>`;
 };
 
-const render = ({ focusSite = false, focusError = false, scrollTop = false } = {}) => {
+const render = ({ focusSite = false, focusOwner = false, focusError = false, scrollTop = false } = {}) => {
     root.innerHTML = renderApplication();
     const inspector = root.querySelector('[data-state-json]');
 
@@ -803,6 +820,18 @@ const render = ({ focusSite = false, focusError = false, scrollTop = false } = {
             const input = root.querySelector('[data-testid="site-search"]');
             input?.focus();
             input?.setSelectionRange(input.value.length, input.value.length);
+        });
+    }
+
+    if (focusOwner) {
+        requestAnimationFrame(() => {
+            const input = root.querySelector('[data-testid="owner-control"]');
+            input?.focus();
+            if (state.fields.owner && !state.ownerQuery) {
+                input?.select();
+            } else {
+                input?.setSelectionRange(input.value.length, input.value.length);
+            }
         });
     }
 
@@ -1090,6 +1119,17 @@ root.addEventListener('input', (event) => {
         return;
     }
 
+    if (target.name === 'ownerQuery') {
+        state.ownerQuery = target.value;
+        state.fields.owner = '';
+        state.openDropdown = 'owner';
+        state.siteMenuOpen = false;
+        state.completionShown = false;
+        persistSession();
+        render({ focusOwner: true });
+        return;
+    }
+
     if (Object.hasOwn(state.fields, target.name) && target.type !== 'checkbox') {
         updateFieldWithoutRender(target.name, target.value);
     }
@@ -1140,6 +1180,15 @@ root.addEventListener('keydown', (event) => {
         return;
     }
 
+    if (event.target instanceof HTMLInputElement && event.target.name === 'ownerQuery' && event.key === 'Enter' && state.openDropdown === 'owner') {
+        event.preventDefault();
+        const firstOwner = filteredOwners()[0];
+        if (firstOwner) {
+            root.querySelector(`[data-dropdown="owner"][data-dropdown-value="${CSS.escape(firstOwner.value)}"]`)?.click();
+        }
+        return;
+    }
+
     if (!(event.target instanceof HTMLInputElement) || event.target.name !== 'siteQuery' || event.key !== 'Enter' || !state.siteMenuOpen) {
         return;
     }
@@ -1172,6 +1221,12 @@ root.addEventListener('click', (event) => {
 
     const action = control.dataset.action;
 
+    if (action === 'focus-owner' && state.openDropdown !== 'owner') {
+        state.openDropdown = 'owner';
+        state.siteMenuOpen = false;
+        render({ focusOwner: true });
+    }
+
     if (action === 'toggle-dropdown') {
         state.openDropdown = state.openDropdown === control.dataset.dropdown ? '' : control.dataset.dropdown;
         state.siteMenuOpen = false;
@@ -1180,11 +1235,24 @@ root.addEventListener('click', (event) => {
         render();
     }
 
+    if (action === 'toggle-owner-menu') {
+        state.openDropdown = state.openDropdown === 'owner' ? '' : 'owner';
+        state.ownerQuery = '';
+        state.siteMenuOpen = false;
+        state.calendarOpen = false;
+        state.calendarMenu = '';
+        persistSession();
+        render({ focusOwner: state.openDropdown === 'owner' });
+    }
+
     if (action === 'select-dropdown-option') {
         const name = control.dataset.dropdown;
         const previousActivity = state.fields.activity;
         const previousOwner = state.fields.owner;
         state.fields[name] = control.dataset.dropdownValue;
+        if (name === 'owner') {
+            state.ownerQuery = '';
+        }
         if (name === 'owner' && previousOwner !== state.fields.owner
             && (!state.fields.siteId || (state.fields.owner && !(ownerSites[state.fields.owner] ?? []).includes(state.fields.siteId)))) {
             state.fields.siteId = '';
