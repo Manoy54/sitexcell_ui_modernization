@@ -110,16 +110,24 @@ const selectedSite = () => siteRecords.find(({ id }) => id === state.fields.site
     && (!state.fields.owner || (ownerSites[state.fields.owner] ?? []).includes(id))) ?? null;
 
 if (!isNativeWordPress && prototypeSearchParams.get('step') === '2') {
-    const previewSite = selectedSite() ?? siteRecords[0] ?? null;
+    const ownerSiteIds = ownerSites[state.fields.owner] ?? [];
+    const previewSite = selectedSite()
+        ?? siteRecords.find(({ id }) => !state.fields.owner || ownerSiteIds.includes(id))
+        ?? siteRecords[0]
+        ?? null;
+    const previewOwner = state.fields.owner && !ownerSiteIds.includes(previewSite?.id)
+        ? ''
+        : state.fields.owner;
     state = {
         ...state,
         step: 2,
         fields: {
             ...state.fields,
+            owner: previewOwner,
             activity: state.fields.activity || 'Installation',
             commencementDate: state.fields.commencementDate || '30-09-2026',
-            siteId: state.fields.siteId || previewSite?.id || '',
-            siteQuery: state.fields.siteQuery || previewSite?.name || '',
+            siteId: previewSite?.id ?? '',
+            siteQuery: previewSite?.name ?? '',
             termsAccepted: true,
         },
     };

@@ -188,6 +188,16 @@ test('filters Sites by the selected owner and clears an incompatible Site', asyn
   await expect(page.getByText('No Sites are listed for this owner.')).toBeVisible();
 });
 
+test('direct Stage 2 preview chooses a Site within the selected owner', async ({ page }) => {
+  const owner = owners.find(({ label }) => label === 'Urban Utilities');
+  const firstSite = sites.find(({ id }) => ownerSites[owner.value].includes(id));
+  await page.getByTestId('owner-control').click();
+  await page.getByRole('option', { name: owner.label, exact: true }).click();
+  await page.goto('/?step=2');
+  await expect(page.getByTestId('stage-two')).toBeVisible();
+  await expect(page.locator('.workspace-context dd').nth(2)).toHaveText(firstSite.name);
+});
+
 test('searches and selects a canonical Site with keyboard input', async ({ page }) => {
   const site = page.getByTestId('site-search');
   await site.fill('1 Denison Street');
