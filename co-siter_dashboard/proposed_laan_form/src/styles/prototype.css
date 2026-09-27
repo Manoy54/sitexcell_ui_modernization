@@ -937,7 +937,7 @@ button:disabled {
     font-weight: 720;
 }
 
-.drawing-requirements a {
+.site-requirements .drawing-requirements a {
     color: #009cc6;
     font-weight: 680;
     text-decoration: none;
