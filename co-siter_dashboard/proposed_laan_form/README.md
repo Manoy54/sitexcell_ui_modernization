@@ -25,7 +25,7 @@ Open Page 2 directly at `http://127.0.0.1:4177/?step=2`. The selected layout use
 - Preserve the current two-stage LAAN form.
 - Preserve field order, labels, declarations, primary actions, and recognizable visual language.
 - Add only targeted improvements for validation, recovery, Site lookup, uploads, context, accessibility, and responsive behavior.
-- Use synthetic data and a simulated ready-to-submit state.
+- Use the captured LAAN owner and Site choices with a simulated ready-to-submit state. The captured list is a snapshot, not a live feed; no private Site notes are bundled.
 - Never submit to the production LAAN workflow.
 
 ## Directory map
@@ -33,7 +33,7 @@ Open Page 2 directly at `http://127.0.0.1:4177/?step=2`. The selected layout use
 | Directory | Responsibility |
 | --- | --- |
 | `docs/` | Approved planning, state, field, and acceptance documents |
-| `fixtures/` | Synthetic sites, contacts, dates, and upload metadata |
+| `fixtures/` | Captured LAAN choices and prototype-only metadata |
 | `src/` | Future isolated prototype implementation |
 | `src/components/` | Future form components that preserve the current structure |
 | `src/scripts/` | Future state and interaction logic |

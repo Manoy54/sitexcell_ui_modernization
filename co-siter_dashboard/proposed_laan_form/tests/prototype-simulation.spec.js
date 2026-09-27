@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
+import { owners, sites } from '../fixtures/laan-fixtures.js';
 
 const validFile = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 const stageTwoValues = {
@@ -17,7 +18,7 @@ async function chooseActivity(page, label = 'Installation') {
   await page.getByRole('option', { name: label, exact: true }).click();
 }
 
-async function chooseSite(page, query = 'CRM') {
+async function chooseSite(page, query = '1 Denison Street') {
   const site = page.getByTestId('site-search');
   await site.fill(query);
   await page.getByTestId('site-result').first().click();
@@ -124,12 +125,32 @@ test('keeps Inspection, Installation, and Maintenance selectable', async ({ page
   }
 });
 
+test('offers every captured LAAN owner and Site in the prototype', async ({ page }) => {
+  expect(owners).toHaveLength(53);
+  expect(sites).toHaveLength(297);
+
+  await page.getByTestId('owner-control').click();
+  const ownerOptions = page.getByRole('listbox', { name: 'Owner Name' }).getByRole('option');
+  await expect(ownerOptions).toHaveCount(owners.length);
+  await expect(ownerOptions.last()).toHaveText(owners.at(-1).label);
+  await page.getByRole('option', { name: 'Urban Utilities', exact: true }).click();
+  await expect(page.getByTestId('owner-control')).toContainText('Urban Utilities');
+
+  await page.getByRole('button', { name: 'Open complete Site list' }).click();
+  await expect(page.getByTestId('site-result')).toHaveCount(sites.length);
+  await expect(page.getByTestId('site-result').last()).toContainText(sites.at(-1).name);
+  await page.getByTestId('site-search').fill('Workplace6');
+  await expect(page.getByTestId('site-result')).toHaveCount(1);
+  await page.getByTestId('site-result').click();
+  await expect(page.getByTestId('site-search')).toHaveValue(sites.at(-1).name);
+});
+
 test('searches and selects a canonical Site with keyboard input', async ({ page }) => {
   const site = page.getByTestId('site-search');
-  await site.fill('CRM');
+  await site.fill('1 Denison Street');
   await expect(page.getByTestId('site-result')).not.toHaveCount(0);
   await site.press('Enter');
-  await expect(site).toHaveValue(/CRM/);
+  await expect(site).toHaveValue(/1 Denison Street/);
   await expect(page.getByTestId('site-result')).toHaveCount(0);
 });
 
@@ -142,7 +163,7 @@ test('supports keyboard activation through the Stage 1 gate', async ({ page }) =
   await installation.press('Enter');
   await page.getByTestId('commencement-date').fill('30-09-2026');
   const site = page.getByTestId('site-search');
-  await site.fill('CRM');
+  await site.fill('1 Denison Street');
   await site.press('Enter');
   const terms = page.getByTestId('terms-confirmation');
   await terms.focus();

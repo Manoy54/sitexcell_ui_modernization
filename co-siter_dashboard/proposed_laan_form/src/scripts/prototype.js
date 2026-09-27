@@ -1,5 +1,4 @@
-import { activities, owners, sites, uploadRules as prototypeUploadRules } from '../../fixtures/prototype-fixtures.js';
-import { siteContextById } from '../../fixtures/site-context.example.js';
+import { activities, owners, sites, uploadRules as prototypeUploadRules } from '../../fixtures/laan-fixtures.js';
 
 const root = document.querySelector('#prototype-root');
 const embeddedInPortal = root.dataset.portalEmbedded === 'true';
@@ -11,7 +10,7 @@ const draftKey = 'proposed-laan-form-explicit-draft-v1';
 const drawingRequirementsUrl = 'https://drive.google.com/file/d/1IrbzzKeussLKHe75Ef0k3-wiiokR2JW5/view?usp=sharing';
 const siteRecords = Array.isArray(nativeConfig.sites) && nativeConfig.sites.length
     ? nativeConfig.sites
-    : sites.map((site) => ({ ...site, ...siteContextById[site.id] }));
+    : sites;
 const uploadRules = nativeConfig.uploadRules ?? prototypeUploadRules;
 const pendingFiles = { required: null, additional: [] };
 const dateBoundaryInputs = {
@@ -584,7 +583,7 @@ const renderStageOne = () => `
             <button class="control-icon${state.siteMenuOpen ? ' is-open' : ''}" type="button" data-action="toggle-site-menu" aria-label="${state.siteMenuOpen ? 'Close' : 'Open'} complete Site list" aria-expanded="${state.siteMenuOpen}">${icon('chevron', `icon-small dropdown-chevron${state.siteMenuOpen ? ' is-open' : ''}`)}</button>
             ${renderSiteResults()}
         </div>
-        <span class="field-help" id="site-help">Search by Site name, address or identifier, or open the complete list.</span>
+        <span class="field-help" id="site-help">Search by Site name or identifier, or open the complete list.</span>
         ${errorFor('siteId')}
         ${renderSelectedSite()}
     </div>
