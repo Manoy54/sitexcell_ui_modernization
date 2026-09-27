@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import path from 'node:path';
-import { owners, sites } from '../fixtures/laan-fixtures.js';
+import { owners, ownerSites, sites } from '../fixtures/laan-fixtures.js';
 
 const validFile = path.resolve('tests/access-requests/fixtures/synthetic-access-document.pdf');
 const stageTwoValues = {
@@ -126,8 +126,8 @@ test('keeps Inspection, Installation, and Maintenance selectable', async ({ page
 });
 
 test('offers every captured LAAN owner and Site in the prototype', async ({ page }) => {
-  expect(owners).toHaveLength(53);
-  expect(sites).toHaveLength(297);
+  expect(owners).toHaveLength(54);
+  expect(sites).toHaveLength(301);
 
   await page.getByTestId('owner-control').click();
   const ownerOptions = page.getByRole('listbox', { name: 'Owner Name' }).getByRole('option');
@@ -136,6 +136,8 @@ test('offers every captured LAAN owner and Site in the prototype', async ({ page
   await page.getByRole('option', { name: 'Urban Utilities', exact: true }).click();
   await expect(page.getByTestId('owner-control')).toContainText('Urban Utilities');
 
+  await page.getByTestId('owner-control').click();
+  await page.getByRole('option', { name: 'Choose company name', exact: true }).click();
   await page.getByRole('button', { name: 'Open complete Site list' }).click();
   await expect(page.getByTestId('site-result')).toHaveCount(sites.length);
   await expect(page.getByTestId('site-result').last()).toContainText(sites.at(-1).name);
@@ -145,11 +147,12 @@ test('offers every captured LAAN owner and Site in the prototype', async ({ page
   await expect(page.getByTestId('site-search')).toHaveValue(sites.at(-1).name);
 });
 
-test('preserves the chosen label when captured owners share an ID', async ({ page }) => {
-  const duplicateOwners = owners.filter((owner, index) => owner.value && owners.findIndex(({ value }) => value === owner.value) !== index);
-  expect(duplicateOwners).toHaveLength(2);
+test('keeps current owner IDs distinct and retains the chosen label', async ({ page }) => {
+  expect(new Set(owners.map(({ value }) => value)).size).toBe(owners.length);
+  const formerlyDuplicatedOwners = owners.filter(({ label }) => label.includes('440 Collins Trust') || label === 'Wingecarribee Shire Council');
+  expect(formerlyDuplicatedOwners).toHaveLength(2);
 
-  for (const owner of duplicateOwners) {
+  for (const owner of formerlyDuplicatedOwners) {
     await page.getByTestId('owner-control').click();
     await page.getByRole('listbox', { name: 'Owner Name' }).getByRole('option', { name: owner.label, exact: true }).click();
     await expect(page.getByTestId('owner-control')).toContainText(owner.label);
@@ -159,7 +162,30 @@ test('preserves the chosen label when captured owners share an ID', async ({ pag
   }
 
   await page.reload();
-  await expect(page.getByTestId('owner-control')).toContainText(duplicateOwners.at(-1).label);
+  await expect(page.getByTestId('owner-control')).toContainText(formerlyDuplicatedOwners.at(-1).label);
+});
+
+test('filters Sites by the selected owner and clears an incompatible Site', async ({ page }) => {
+  const owner = owners.find(({ label }) => label === 'Urban Utilities');
+  expect(ownerSites[owner.value]).toHaveLength(42);
+  await page.getByTestId('owner-control').click();
+  await page.getByRole('option', { name: owner.label, exact: true }).click();
+  await page.getByRole('button', { name: 'Open complete Site list' }).click();
+  await expect(page.getByTestId('site-result')).toHaveCount(ownerSites[owner.value].length);
+  await page.getByTestId('site-result').first().click();
+  await expect(page.getByTestId('site-search')).not.toHaveValue('');
+
+  await page.getByTestId('owner-control').click();
+  await page.getByRole('option', { name: 'Goulburn-Murray Water', exact: true }).click();
+  await expect(page.getByTestId('site-search')).toHaveValue('');
+  await page.getByRole('button', { name: 'Open complete Site list' }).click();
+  await expect(page.getByTestId('site-result')).toHaveCount(ownerSites[owners.find(({ label }) => label === 'Goulburn-Murray Water').value].length);
+
+  await page.getByTestId('owner-control').click();
+  await page.getByRole('option', { name: 'AMP Capital Investors Ltd', exact: true }).click();
+  await page.getByRole('button', { name: 'Open complete Site list' }).click();
+  await expect(page.getByTestId('site-result')).toHaveCount(0);
+  await expect(page.getByText('No Sites are listed for this owner.')).toBeVisible();
 });
 
 test('searches and selects a canonical Site with keyboard input', async ({ page }) => {
