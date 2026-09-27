@@ -13,7 +13,7 @@ foreach ($requests as $candidate) {
 
 if ($selected_request === null) {
     status_header(404);
-    echo '<div class="demo-page-heading"><div><h1>Request not found</h1><p>This demo request does not exist.</p></div></div>';
+    echo '<div class="demo-page-heading"><div><h1>Request not found</h1><p>This request does not exist.</p></div></div>';
     echo '<a class="demo-text-link" href="' . esc_url(sitexcell_ui_cositer_demo_url()) . '">Back to Requests</a>';
     return;
 }
@@ -35,7 +35,7 @@ $related_documents = array_values(array_filter($documents, static fn (array $doc
         <?php if ($related_documents) : ?><ul class="demo-document-links">
             <?php foreach ($related_documents as $document) : ?><li><svg class="demo-icon" aria-hidden="true"><use href="#icon-file"></use></svg><?php echo esc_html($document['name']); ?></li><?php endforeach; ?>
         </ul><a class="demo-text-link" href="<?php echo esc_url(sitexcell_ui_cositer_demo_url('documents', ['request' => $selected_request['id']])); ?>">View in Documents</a>
-        <?php else : ?><p>No documents are linked to this fictional request.</p><?php endif; ?>
+        <?php else : ?><p>No documents are linked to this request.</p><?php endif; ?>
     </section>
 </div>
 <a class="demo-text-link" href="<?php echo esc_url(sitexcell_ui_cositer_demo_url()); ?>">← Back to Requests</a>

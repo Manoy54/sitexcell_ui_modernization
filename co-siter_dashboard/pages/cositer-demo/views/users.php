@@ -1,5 +1,5 @@
 <?php if (!defined('ABSPATH')) { exit; } ?>
-<div class="demo-page-heading"><div><p class="demo-eyebrow">People</p><h1>Users</h1><p>Fictional people associated with the sample requests.</p></div><span class="demo-pill">Demo data</span></div>
+<div class="demo-page-heading"><div><p class="demo-eyebrow">People</p><h1>Users</h1><p>People associated with requests.</p></div></div>
 <section class="demo-panel" aria-label="User list">
     <div class="demo-panel-toolbar"><label>Search by name or email<input type="search" placeholder="Find a user" data-demo-user-search></label></div>
     <div class="demo-table-scroll"><table class="demo-table"><thead><tr><th scope="col">First name</th><th scope="col">Last name</th><th scope="col">Email</th><th scope="col">Company</th><th scope="col">Role</th></tr></thead><tbody>

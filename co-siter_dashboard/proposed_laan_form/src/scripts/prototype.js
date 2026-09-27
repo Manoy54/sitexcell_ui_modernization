@@ -469,7 +469,7 @@ const filteredSites = () => {
             .some((value) => (value ?? '').toLowerCase().includes(query))));
 };
 
-const siteMeta = (site) => [site.address, site.id].filter(Boolean).join(' · ');
+const siteMeta = (site) => site.address || '';
 
 const renderSiteResults = () => {
     if (!state.siteMenuOpen) {
@@ -568,7 +568,7 @@ const renderTerms = () => `
     </div>`;
 
 const renderDraftActions = () => `
-    <div class="draft-actions" aria-label="Prototype draft actions">
+    <div class="draft-actions" aria-label="Draft actions">
         <button class="button-link" type="button" data-testid="save-draft" data-action="save-draft">Save draft</button>
         <button class="button-link" type="button" data-testid="restore-draft" data-action="restore-draft"${sessionStorage.getItem(draftKey) ? '' : ' disabled'}>Restore</button>
         <button class="button-link" type="button" data-testid="discard-draft" data-action="discard-draft"${sessionStorage.getItem(draftKey) ? '' : ' disabled'}>Discard</button>
@@ -708,7 +708,7 @@ const renderReadiness = () => {
 };
 
 const renderCompletion = () => state.completionShown
-    ? `<div class="completion-banner" role="status">${icon('check')}<div><strong>${isNativeWordPress ? 'LAAN request submitted' : 'Prototype ready for submission'}</strong><span>${isNativeWordPress ? `Request ID #${escapeHtml(state.submittedRequestId)}` : 'No record was created and no information was sent.'}</span></div></div>`
+    ? `<div class="completion-banner" role="status">${icon('check')}<div><strong>${isNativeWordPress ? 'LAAN request submitted' : 'Request details reviewed'}</strong>${isNativeWordPress ? `<span>Request ID #${escapeHtml(state.submittedRequestId)}</span>` : ''}</div></div>`
     : '';
 
 const renderPageTwoFields = () => `<div class="page-two-grid original-field-grid">
@@ -730,7 +730,7 @@ const renderPageTwoEvidence = () => `<div class="page-two-evidence">
         </div>
     </section>
     <section class="submission-confirmation" aria-labelledby="declarations-heading">
-        <h3 class="form-section-heading" id="declarations-heading">Please confirm your submission</h3>
+        <h3 class="form-section-heading" id="declarations-heading">${isNativeWordPress ? 'Please confirm your submission' : 'Review your details'}</h3>
         ${renderConfirmations()}
         ${renderReadiness()}
     </section>
@@ -739,7 +739,7 @@ const renderPageTwoEvidence = () => `<div class="page-two-evidence">
 const renderStageTwoActions = () => `<div class="form-actions stage-two-actions">
     <div class="form-actions-group">
         <button class="button-secondary" data-testid="stage-two-back" type="button" data-action="go-stage-one">Previous</button>
-        <button class="button-primary" data-testid="stage-two-submit" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting&hellip;' : (state.submittedRequestId ? 'Request submitted' : 'Submit')}</button>
+        <button class="button-primary" data-testid="stage-two-submit" type="submit"${formIsReady() && !state.submitting && !state.submittedRequestId ? '' : ' disabled'}>${state.submitting ? 'Submitting&hellip;' : (state.submittedRequestId ? 'Request submitted' : (isNativeWordPress ? 'Submit' : 'Review request'))}</button>
     </div>
     <span class="stage-two-status">${formIsReady() ? 'All required details are complete.' : 'Complete all required details to continue.'}</span>
 </div>`;
@@ -792,7 +792,7 @@ const renderWorkspace = () => {
         <p class="workspace-kicker">Required items</p>
         <ul class="workspace-checklist">${items.map(([complete, label]) => checklistItem(complete, label)).join('')}</ul>
         ${!isNativeWordPress ? `<details class="state-inspector">
-            <summary>Prototype state and edge controls</summary>
+            <summary>Request state and controls</summary>
             ${state.step === 2 ? `<div class="draft-actions"><button class="button-link" type="button" data-action="fixture-valid-upload">Valid file</button><button class="button-link" type="button" data-action="fixture-upload-failure">Failed upload</button><button class="button-link" type="button" data-action="fixture-oversize-upload">Over 20 MB</button></div>` : ''}
             <pre data-state-json></pre>
         </details>` : ''}
@@ -813,7 +813,7 @@ const render = ({ focusSite = false, focusOwner = false, focusError = false, scr
         inspector.textContent = JSON.stringify(serializableState(), null, 2);
     }
 
-    document.title = embeddedInPortal ? 'LAAN Request · Co-Siter demo' : isNativeWordPress ? 'LAAN Request' : 'Reference dashboard · LAAN Request Prototype';
+    document.title = isNativeWordPress ? 'LAAN Request' : 'LAAN Request · Co-Siter';
 
     if (focusSite) {
         requestAnimationFrame(() => {
@@ -1386,7 +1386,7 @@ root.addEventListener('click', (event) => {
 
     if (action === 'save-draft') {
         sessionStorage.setItem(draftKey, JSON.stringify(serializableState()));
-        setState({ draftMessage: 'Draft saved in this prototype session.' });
+        setState({ draftMessage: 'Draft saved in this tab.' });
     }
 
     if (action === 'restore-draft') {

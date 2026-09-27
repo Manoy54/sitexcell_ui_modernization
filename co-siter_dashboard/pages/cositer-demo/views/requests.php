@@ -1,7 +1,6 @@
 <?php if (!defined('ABSPATH')) { exit; } ?>
 <div class="demo-page-heading">
-    <div><p class="demo-eyebrow">Request register</p><h1>Requests</h1><p>Browse fictional requests used to review the Co-Siter experience.</p></div>
-    <span class="demo-pill">Demo data</span>
+    <div><p class="demo-eyebrow">Request register</p><h1>Requests</h1><p>Browse Access and LAAN requests.</p></div>
 </div>
 <section class="demo-panel" aria-label="Request list">
     <div class="demo-panel-toolbar">

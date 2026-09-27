@@ -44,7 +44,7 @@ const STAGES = [
     ['Works & permits', 'Describe the works and required authority.'],
     ['Technical details', 'Record applicable installation and access details.'],
     ['Safety & evidence', 'Review safety evidence and current certificates.'],
-    ['Review & declarations', 'Check active information before a future provider submission.'],
+    ['Review & declarations', 'Check the request details and declarations.'],
 ];
 
 let state = loadState();
@@ -52,6 +52,8 @@ let siteMenuOpen = false;
 let activeSiteIndex = -1;
 let ownerMenuOpen = false;
 let activeOwnerIndex = -1;
+let linkedLaanMenuOpen = false;
+let activeLinkedLaanIndex = -1;
 let pendingCopy = null;
 let resetPending = false;
 let summaryOpen = false;
@@ -61,7 +63,9 @@ function loadState() {
     const saved = sessionStorage.getItem(STORAGE_KEY);
     if (!saved) return createInitialState();
     try {
-        return restoreSession(saved);
+        const restored = restoreSession(saved);
+        if (restored.fields.linkedLaan === 'LAAN-DEMO-204') restored.fields.linkedLaan = LINKED_LAAN.id;
+        return restored;
     } catch (error) {
         return addNotice(createInitialState(), error.message);
     }
@@ -96,7 +100,7 @@ function textField(key, label, { type = 'text', required = false, originalId = '
 
 function textareaField(key, label, { required = false, originalId = '', hint = '' } = {}) {
     const error = state.errors[key];
-    return `<div class="field field-wide ${error ? 'field-invalid' : ''}">
+    return `<div class="field field-wide field-textarea ${error ? 'field-invalid' : ''}">
         <label for="field-${key}">${escapeHtml(label)}${required ? '<span aria-hidden="true">*</span>' : ''}</label>
         ${hint ? `<p class="field-hint" id="hint-${key}">${escapeHtml(hint)}</p>` : ''}
         <textarea id="field-${key}" data-field="${key}" data-original-id="${escapeHtml(originalId)}" rows="4" ${required ? 'required' : ''} ${error ? `aria-invalid="true" aria-describedby="${errorId(key)}"` : hint ? `aria-describedby="hint-${key}"` : ''}>${escapeHtml(state.fields[key])}</textarea>
@@ -106,7 +110,7 @@ function textareaField(key, label, { required = false, originalId = '', hint = '
 
 function selectField(key, label, options, { required = false, originalId = '' } = {}) {
     const error = state.errors[key];
-    return `<div class="field ${error ? 'field-invalid' : ''}">
+    return `<div class="field field-select ${error ? 'field-invalid' : ''}">
         <label for="field-${key}">${escapeHtml(label)}${required ? '<span aria-hidden="true">*</span>' : ''}</label>
         <select id="field-${key}" data-field="${key}" data-original-id="${escapeHtml(originalId)}" ${required ? 'required' : ''} ${error ? `aria-invalid="true" aria-describedby="${errorId(key)}"` : ''}>
             <option value="">Select an option</option>
@@ -117,7 +121,7 @@ function selectField(key, label, options, { required = false, originalId = '' } 
 
 function radios(key, legend, options, { required = false, originalId = '' } = {}) {
     const error = state.errors[key];
-    return `<fieldset class="field field-wide choice-group ${error ? 'field-invalid' : ''}" data-original-id="${escapeHtml(originalId)}" ${error ? `aria-describedby="${errorId(key)}"` : ''}>
+    return `<fieldset class="field field-wide field-choice choice-group ${error ? 'field-invalid' : ''}" data-original-id="${escapeHtml(originalId)}" ${error ? `aria-describedby="${errorId(key)}"` : ''}>
         <legend>${escapeHtml(legend)}${required ? '<span aria-hidden="true">*</span>' : ''}</legend>
         <div class="choice-row">${options.map(([value, label]) => `<label class="choice"><input type="radio" name="${key}" data-field="${key}" value="${escapeHtml(value)}"${checked(state.fields[key] === value)}> <span>${escapeHtml(label)}</span></label>`).join('')}</div>
         ${fieldError(key)}
@@ -126,14 +130,14 @@ function radios(key, legend, options, { required = false, originalId = '' } = {}
 
 function checkboxField(key, label, { required = false, originalId = '', hint = '' } = {}) {
     const error = state.errors[key];
-    return `<div class="field field-wide ${error ? 'field-invalid' : ''}">
+    return `<div class="field field-wide field-check ${error ? 'field-invalid' : ''}">
         <label class="check-line"><input type="checkbox" data-field="${key}" data-original-id="${escapeHtml(originalId)}"${checked(state.fields[key])}> <span>${escapeHtml(label)}${required ? '<span aria-hidden="true">*</span>' : ''}</span></label>
         ${hint ? `<p class="field-hint check-hint">${escapeHtml(hint)}</p>` : ''}${fieldError(key)}
     </div>`;
 }
 
-function section(title, description, body) {
-    return `<section class="form-section"><div class="section-copy"><h2>${escapeHtml(title)}</h2>${description ? `<p>${escapeHtml(description)}</p>` : ''}</div><div class="field-grid">${body}</div></section>`;
+function section(title, description, body, modifier = '') {
+    return `<section class="form-section ${escapeHtml(modifier)}"><div class="section-copy"><h2>${escapeHtml(title)}</h2>${description ? `<p>${escapeHtml(description)}</p>` : ''}</div><div class="field-grid">${body}</div></section>`;
 }
 
 function filteredSites() {
@@ -148,16 +152,31 @@ function filteredOwners() {
     return OWNER_OPTIONS.filter((owner) => owner.toLowerCase().includes(query));
 }
 
+function linkedLaanCombobox() {
+    const option = [LINKED_LAAN.id, `${LINKED_LAAN.id} · Southbank Exchange`];
+    const selectedLabel = state.fields.linkedLaan === option[0] ? option[1] : 'Select an option';
+    const error = state.errors.linkedLaan;
+    const options = linkedLaanMenuOpen ? `<div id="linkedLaan-options" class="combobox-options" role="listbox">
+        <button type="button" role="option" id="linkedLaan-option-0" data-select-linked-laan="${escapeHtml(option[0])}" aria-selected="${state.fields.linkedLaan === option[0]}" class="combobox-option ${activeLinkedLaanIndex === 0 ? 'active' : ''}"><strong>${escapeHtml(option[1])}</strong><span>Linked LAAN request</span></button>
+    </div>` : '';
+    return `<div class="field combobox linked-laan-combobox ${error ? 'field-invalid' : ''}">
+        <label for="field-linkedLaan">Linked LAAN request (optional)</label>
+        <p class="field-hint" id="hint-linkedLaan">Link an existing LAAN request when it applies.</p>
+        <div class="combobox-input-wrap"><button id="field-linkedLaan" data-field="linkedLaan" data-original-id="input_3_346" data-toggle-linked-laan type="button" class="combobox-select" role="combobox" aria-haspopup="listbox" aria-autocomplete="none" aria-controls="linkedLaan-options" aria-describedby="hint-linkedLaan" aria-expanded="${linkedLaanMenuOpen}" aria-activedescendant="${activeLinkedLaanIndex === 0 ? 'linkedLaan-option-0' : ''}"><span>${escapeHtml(selectedLabel)}</span>${icon('chevron')}</button></div>
+        ${options}${fieldError('linkedLaan')}
+    </div>`;
+}
+
 function ownerCombobox() {
     const matches = filteredOwners();
     const error = state.errors.ownerName;
     const options = ownerMenuOpen ? `<div id="owner-options" class="combobox-options" role="listbox">
-        ${matches.length ? matches.map((owner, index) => `<button type="button" role="option" id="owner-option-${index}" data-select-owner="${escapeHtml(owner)}" aria-selected="${index === activeOwnerIndex}" class="combobox-option ${index === activeOwnerIndex ? 'active' : ''}"><strong>${escapeHtml(owner)}</strong><span>Owner dropdown option</span></button>`).join('') : '<p class="combobox-empty">No captured or synthetic Owners match that search.</p>'}
+        ${matches.length ? matches.map((owner, index) => `<button type="button" role="option" id="owner-option-${index}" data-select-owner="${escapeHtml(owner)}" aria-selected="${index === activeOwnerIndex}" class="combobox-option ${index === activeOwnerIndex ? 'active' : ''}"><strong>${escapeHtml(owner)}</strong><span>Owner dropdown option</span></button>`).join('') : '<p class="combobox-empty">No Owners match that search.</p>'}
     </div>` : '';
     return `<div class="field combobox ${error ? 'field-invalid' : ''}">
         <label for="field-ownerName">Owner name (optional)</label>
-        <p class="field-hint" id="hint-ownerName">Search the captured Owner list or enter a fictional prototype value.</p>
-        <input id="field-ownerName" data-owner-query data-field="ownerName" data-original-id="input_3_406" role="combobox" autocomplete="off" aria-autocomplete="list" aria-controls="owner-options" aria-expanded="${ownerMenuOpen}" aria-activedescendant="${activeOwnerIndex >= 0 ? `owner-option-${activeOwnerIndex}` : ''}" value="${escapeHtml(state.fields.ownerName)}" ${error ? `aria-invalid="true" aria-describedby="hint-ownerName ${errorId('ownerName')}"` : 'aria-describedby="hint-ownerName"'}>
+        <p class="field-hint" id="hint-ownerName">Search the Owner list or enter a name.</p>
+        <div class="combobox-input-wrap"><input id="field-ownerName" data-owner-query data-field="ownerName" data-original-id="input_3_406" role="combobox" autocomplete="off" aria-autocomplete="list" aria-controls="owner-options" aria-expanded="${ownerMenuOpen}" aria-activedescendant="${activeOwnerIndex >= 0 ? `owner-option-${activeOwnerIndex}` : ''}" value="${escapeHtml(state.fields.ownerName)}" ${error ? `aria-invalid="true" aria-describedby="hint-ownerName ${errorId('ownerName')}"` : 'aria-describedby="hint-ownerName"'}><button type="button" class="combobox-toggle" data-toggle-owner aria-label="${ownerMenuOpen ? 'Hide' : 'Show'} Owner options" aria-controls="owner-options" aria-expanded="${ownerMenuOpen}">${icon('chevron')}</button></div>
         ${options}${fieldError('ownerName')}
     </div>`;
 }
@@ -166,12 +185,12 @@ function siteCombobox() {
     const matches = filteredSites();
     const error = state.errors.siteQuery;
     const options = siteMenuOpen ? `<div id="site-options" class="combobox-options" role="listbox">
-        ${matches.length ? matches.map((site, index) => `<button type="button" role="option" id="site-option-${index}" data-select-site="${site.id}" aria-selected="${index === activeSiteIndex}" class="combobox-option ${index === activeSiteIndex ? 'active' : ''}"><strong>${escapeHtml(site.name)}</strong><span>${escapeHtml(site.address)}</span><small>${escapeHtml(site.id)}</small></button>`).join('') : '<p class="combobox-empty">No fictional Sites match that search.</p>'}
+        ${matches.length ? matches.map((site, index) => `<button type="button" role="option" id="site-option-${index}" data-select-site="${site.id}" aria-selected="${index === activeSiteIndex}" class="combobox-option ${index === activeSiteIndex ? 'active' : ''}"><strong>${escapeHtml(site.name)}</strong><span>${escapeHtml(site.address)}</span><small>${escapeHtml(site.id)}</small></button>`).join('') : '<p class="combobox-empty">No Sites match that search.</p>'}
     </div>` : '';
     return `<div class="field field-wide combobox ${error ? 'field-invalid' : ''}">
         <label for="field-siteQuery">Search Site by name or address<span aria-hidden="true">*</span></label>
-        <p class="field-hint" id="hint-siteQuery">Search uses fictional records only. Free text is not a selected Site.</p>
-        <input id="field-siteQuery" data-site-query data-field="siteQuery" data-original-id="input_3_407" role="combobox" autocomplete="off" aria-autocomplete="list" aria-controls="site-options" aria-expanded="${siteMenuOpen}" aria-activedescendant="${activeSiteIndex >= 0 ? `site-option-${activeSiteIndex}` : ''}" value="${escapeHtml(state.fields.siteQuery)}" ${error ? `aria-invalid="true" aria-describedby="hint-siteQuery ${errorId('siteQuery')}"` : 'aria-describedby="hint-siteQuery"'}>
+        <p class="field-hint" id="hint-siteQuery">Choose a Site from the list. Free text alone does not select a Site.</p>
+        <div class="combobox-input-wrap"><input id="field-siteQuery" data-site-query data-field="siteQuery" data-original-id="input_3_407" role="combobox" autocomplete="off" aria-autocomplete="list" aria-controls="site-options" aria-expanded="${siteMenuOpen}" aria-activedescendant="${activeSiteIndex >= 0 ? `site-option-${activeSiteIndex}` : ''}" value="${escapeHtml(state.fields.siteQuery)}" ${error ? `aria-invalid="true" aria-describedby="hint-siteQuery ${errorId('siteQuery')}"` : 'aria-describedby="hint-siteQuery"'}><button type="button" class="combobox-toggle" data-toggle-site aria-label="${siteMenuOpen ? 'Hide' : 'Show'} Site options" aria-controls="site-options" aria-expanded="${siteMenuOpen}">${icon('chevron')}</button></div>
         ${options}${fieldError('siteQuery')}
         ${state.selectedSite ? `<div class="selected-site" data-testid="selected-site">${icon('check')}<div><strong>${escapeHtml(state.selectedSite.name)}</strong>${state.selectedSite.address ? `<span>${escapeHtml(state.selectedSite.address)} · ${escapeHtml(state.selectedSite.id)}</span>` : `<span>${escapeHtml(state.selectedSite.id)}</span>`}</div></div>` : ''}
     </div>`;
@@ -206,35 +225,39 @@ function documentCard(key) {
     const inputState = describedBy ? ` aria-invalid="true" aria-describedby="${escapeHtml(describedBy)}"` : '';
     return `<article class="document-card ${documentState.error && !files.length ? 'document-error' : ''}" data-testid="document-${key}" data-original-id="${rule.originalId}">
         <div class="document-heading"><span class="document-icon">${icon('document')}</span><div><h3>${escapeHtml(rule.label)}${rule.required ? '<span aria-hidden="true">*</span>' : ''}</h3><p>${escapeHtml(statusCopy)}</p></div></div>
-        ${documentState.file ? `<p class="document-provenance">Owner: ${escapeHtml(documentState.owner)} · Source: ${escapeHtml(documentState.source)}</p>` : ''}
+        ${documentState.file ? `<p class="document-provenance">Owner: ${escapeHtml(documentState.owner)}</p>` : ''}
         ${documentState.error && (!files.length || documentState.status === 'needs-reselection') && !invalidCount ? `<p class="field-error" role="status">${escapeHtml(documentState.error)}</p>` : ''}
         ${files.length ? `<ul class="document-file-list" aria-label="${escapeHtml(rule.label)} files">${fileRows}</ul>` : ''}
         <div class="document-actions">
             <label class="file-button">${icon('upload')}<span>${documentState.status === 'selected' ? (rule.multiple ? 'Add files' : 'Replace') : 'Choose file'}</span><input class="sr-only" type="file" data-document="${key}" ${rule.multiple ? 'multiple' : ''} aria-label="Choose ${escapeHtml(rule.label)} file" accept="${rule.acceptedTypes.join(',')}"${inputState}></label>
             ${documentState.status !== 'missing' && !files.length ? `<button type="button" class="button-link" data-remove-document="${key}">Remove</button>` : ''}
         </div>
-        <p class="document-contract">${rule.multiple ? 'Multiple files allowed · each file' : 'One file ·'} ${rule.maxBytes / 1_000_000} MB maximum · ${escapeHtml(rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(', '))}${rule.expiryField ? ' · current expiry required' : ''} · ${escapeHtml(rule.source)}</p>
+        <p class="document-contract">${rule.multiple ? 'Multiple files allowed · each file' : 'One file ·'} ${rule.maxBytes / 1_000_000} MB maximum · ${escapeHtml(rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(', '))}${rule.expiryField ? ' · current expiry required' : ''}</p>
         ${documentState.status === 'selected' ? `<label class="check-line document-confirm"><input type="checkbox" data-confirm-document="${key}"${checked(isConfirmed)}> <span>I reviewed this selected file</span></label>` : ''}
     </article>`;
 }
 
+function documentGroup(...keys) {
+    return `<div class="document-grid field-wide">${keys.map(documentCard).join('')}</div>`;
+}
+
 function renderStage1() {
     return section('Site and request link', 'Start with the telecommunications property this request concerns.',
-        `${selectField('linkedLaan', 'Linked LAAN request (optional)', [['LAAN-DEMO-204', 'LAAN-DEMO-204 · Southbank Exchange']], { originalId: 'input_3_346' })}
-        ${ownerCombobox()}${siteCombobox()}`)
+        `${linkedLaanCombobox()}
+        ${ownerCombobox()}${siteCombobox()}`, 'request-context-section')
         + section('Authority and terms', 'These declarations retain the observed Access Request wording.',
             `${radios('tenureConfirmed', 'I confirm tenure via a Licence or LAAN is in place.', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_528' })}
             ${radios('networkRequired', 'Is network access required?', [['yes', 'Yes'], ['no', 'No']], { originalId: 'input_3_532' })}
-            ${checkboxField('termsAccepted', 'I accept the Terms and Conditions of the Co-Siter Portal', { required: true, originalId: 'input_3_464' })}`);
+            ${checkboxField('termsAccepted', 'I accept the Terms and Conditions of the Co-Siter Portal', { required: true, originalId: 'input_3_464' })}`, 'authority-section');
 }
 
 function renderStage2() {
     const site = state.selectedSite;
-    return section('Application requirements', 'Review the requirements derived from the selected fictional Site.',
+    return section('Application requirements', 'Review the requirements for the selected Site.',
         `${radios('emergencyAccess', 'Access type', [['emergency', 'Emergency access'], ['not-required', 'Standard / not emergency']], { originalId: 'input_3_575' })}
         <div class="requirement-panel field-wide"><span class="document-icon">${icon('info')}</span><div><h3>${escapeHtml(site?.name ?? 'No Site selected')}</h3><p>${escapeHtml(site?.requirement ?? 'Return to Stage 1 and select a Site to view its requirements.')}</p></div></div>
         ${textField('buildingAddress', 'Building address', { originalId: 'input_3_9' })}
-        ${checkboxField('requirementsRead', 'I have read and understand the application requirements.', { required: true, originalId: 'input_3_430' })}`);
+        ${checkboxField('requirementsRead', 'I have read and understand the application requirements.', { required: true, originalId: 'input_3_430' })}`, 'requirements-section');
 }
 
 function renderStage3() {
@@ -248,20 +271,20 @@ function renderStage3() {
         ${textField('accessDate', 'Access date', { required: true, originalId: 'input_3_13', placeholder: 'DD-MM-YYYY' })}
         ${textField('accessStart', 'Access time start', { required: true, originalId: 'input_3_437', placeholder: '09:00' })}
         ${textField('accessFinish', 'Access time finish', { required: true, originalId: 'input_3_438', placeholder: '17:00' })}
-        ${textField('numberOfDays', 'Number of days', { originalId: 'input_3_495' })}`)
+        ${textField('numberOfDays', 'Number of days', { originalId: 'input_3_495' })}`, 'request-details-section')
         + section('Carrier', 'Keep the carrier contact distinct from the tenant and requester.',
             `${textField('carrierName', 'Registered carrier name', { required: true, originalId: 'input_3_440' })}
             ${textField('carrierContactName', 'Nominated contact person', { required: true, originalId: 'input_3_52' })}
             ${textField('carrierContactPhone', 'Contact number', { type: 'tel', required: true, originalId: 'input_3_53' })}
-            ${textField('carrierAddress', 'Carrier address', { required: true, originalId: 'input_3_441' })}`)
-        + section('Requester', 'Copy is explicit, limited to approved prototype mappings, and reversible.',
+            ${textField('carrierAddress', 'Carrier address', { required: true, originalId: 'input_3_441' })}`, 'request-details-section')
+        + section('Requester', 'Copy details between sections when they apply. You can undo a copy.',
             `<div class="inline-actions field-wide"><button type="button" class="button-secondary" data-copy="requester:tenant">Copy requester to tenant contact</button><button type="button" class="button-secondary" data-copy="requester:carrier">Copy requester to carrier</button>${state.copyHistory.length ? '<button type="button" class="button-link" data-undo-copy>Undo last copy</button>' : ''}</div>
             ${textField('requesterName', 'Your full name', { required: true, originalId: 'input_3_16' })}
             ${textField('requesterCompany', 'Your company', { required: true, originalId: 'input_3_17' })}
             ${textField('requesterJobTitle', 'Job title', { originalId: 'input_3_458' })}
             ${textField('requesterPhone', 'Your phone', { type: 'tel', required: true, originalId: 'input_3_19' })}
             ${textField('requesterEmail', 'Your email', { type: 'email', required: true, originalId: 'input_3_18' })}
-            ${textField('requesterAddress', 'Your address', { originalId: 'input_3_21' })}`);
+            ${textField('requesterAddress', 'Your address', { originalId: 'input_3_21' })}`, 'request-details-section');
 }
 
 function contractorFields(contractor, index) {
@@ -270,15 +293,15 @@ function contractorFields(contractor, index) {
         const error = state.errors[compound];
         return `<div class="field ${error ? 'field-invalid' : ''}"><label for="${compound}">${label}<span aria-hidden="true">*</span></label><input id="${compound}" type="${type}" data-contractor="${contractor.id}" data-contractor-field="${key}" value="${escapeHtml(contractor[key])}" ${error ? `aria-invalid="true" aria-describedby="${errorId(compound)}"` : ''}>${fieldError(compound)}</div>`;
     };
-    return `<article class="contractor"><div class="contractor-title"><span>${index + 1}</span><div><h3>Contractor ${index + 1}</h3><p>Stable prototype identity: ${contractor.id}</p></div></div><div class="field-grid">${item('name', 'Full name')}${item('company', 'Company')}${item('phone', 'Phone', 'tel')}${item('licence', 'Driver licence number')}${item('whiteCard', 'White Card induction number')}</div></article>`;
+    return `<article class="contractor"><div class="contractor-title"><span>${index + 1}</span><div><h3>Contractor ${index + 1}</h3></div></div><div class="field-grid">${item('name', 'Full name')}${item('company', 'Company')}${item('phone', 'Phone', 'tel')}${item('licence', 'Driver licence number')}${item('whiteCard', 'White Card induction number')}</div></article>`;
 }
 
 function renderStage4() {
     return section('Contractor group', 'Adjusting the count preserves stable records for contractors that remain active.',
         `${selectField('contractorCount', 'Number of contractors', Array.from({ length: 10 }, (_, index) => [String(index + 1), String(index + 1)]), { required: true, originalId: 'input_3_158' })}
-        <p class="field-hint field-wide">For more than ten contractors, the production rule remains unresolved; this prototype does not invent an eleventh repeated group.</p>`)
+        <p class="field-hint field-wide">You can add up to ten contractors.</p>`, 'contractor-group-section')
         + state.contractors.map(contractorFields).join('')
-        + section('Qualifications and training', 'Add each relevant qualification or training document. Failed files stay visible until removed; reload requires reselection.', documentCard('qualification'));
+        + section('Qualifications and training', 'Add each relevant qualification or training document. Failed files stay visible until removed; reload requires reselection.', documentGroup('qualification'), 'document-section');
 }
 
 function renderStage5() {
@@ -288,14 +311,14 @@ function renderStage5() {
         ${textareaField('worksDescription', 'Describe the works to be completed', { required: true, originalId: 'input_3_35' })}
         ${radios('noisyWorks', 'Will the works be noisy or disruptive?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_36' })}
         ${state.branches.noisyWorks ? textareaField('noisyDetails', 'Noisy or disruptive works details', { required: true, originalId: 'input_3_442' }) : ''}
-        ${checkboxField('specialAccessAcknowledged', 'I acknowledge that security, parking, goods lift and deliveries must be pre-arranged with the Site contact.', { required: true, originalId: 'input_3_435' })}`)
-        + section('Works declarations', 'Confirm the observed operational requirements for this fictional scenario.',
+        ${checkboxField('specialAccessAcknowledged', 'I acknowledge that security, parking, goods lift and deliveries must be pre-arranged with the Site contact.', { required: true, originalId: 'input_3_435' })}`, 'compact-choice-grid')
+        + section('Works declarations', 'Confirm the requirements for this request.',
             `${checkboxField('permitAgreed', 'I agree to obtain the required network access permit.', { required: true, originalId: 'input_3_447' })}
             ${checkboxField('ownerPermitAgreed', 'I agree to obtain applicable Owner permits and inductions.', { required: true, originalId: 'input_3_354' })}
             ${radios('worksAtHeight', 'Will the work involve working at heights?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_37' })}
             ${radios('asbestosRisk', 'Could the work disturb asbestos-containing material?', [['yes', 'Yes'], ['no', 'No'], ['na', 'Not applicable']], { required: true, originalId: 'input_3_38' })}
-            ${radios('fireIsolation', 'Is a fire-system isolation required?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_355' })}`)
-        + section('Authority documents', 'Replacing or removing a document affects only its mapped review confirmation.', documentCard('authority'));
+            ${radios('fireIsolation', 'Is a fire-system isolation required?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_355' })}`, 'compact-choice-grid')
+        + section('Authority documents', 'Replacing or removing a document affects only its mapped review confirmation.', documentGroup('authority'), 'document-section');
 }
 
 function renderStage6() {
@@ -303,7 +326,7 @@ function renderStage6() {
         `${selectField('technicalChange', 'Technical work type', [['not-applicable', 'Not applicable'], ['installation', 'Installation'], ['removal', 'Removal'], ['upgrade', 'Upgrade'], ['change', 'Change']], { required: true, originalId: 'input_3_56' })}
         ${state.branches.technicalWork ? `${textareaField('technicalDetails', 'Additional technical details', { required: true, originalId: 'input_3_57' })}${textField('cableStart', 'Cable run start', { required: true, originalId: 'input_3_552' })}${textField('cableEnd', 'Cable run end', { required: true, originalId: 'input_3_553' })}${textField('riser', 'Riser utilised', { required: true, originalId: 'input_3_554' })}${textField('cableCapacity', 'Cable capacity', { required: true, originalId: 'input_3_556' })}` : ''}
         ${radios('roofAccess', 'Will roof or structure areas be accessed?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_54' })}
-        ${state.branches.roofAccess ? textareaField('roofAreas', 'Areas of roof or structure to be accessed', { required: true, originalId: 'input_3_67' }) : ''}`)
+        ${state.branches.roofAccess ? textareaField('roofAreas', 'Areas of roof or structure to be accessed', { required: true, originalId: 'input_3_67' }) : ''}`, 'compact-choice-grid')
         + section('Power and building access', 'Only active follow-up fields are required and shown in the final review.',
             `${radios('powerRequired', 'Is a new or upgraded power source required?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_69' })}
             ${state.branches.powerRequired ? `${textareaField('powerDetails', 'New or upgraded power source details', { required: true, originalId: 'input_3_443' })}${textareaField('billingArrangement', 'Owner power billing arrangement', { required: true, originalId: 'input_3_272' })}` : ''}
@@ -311,13 +334,13 @@ function renderStage6() {
             ${radios('riserAccess', 'Will existing risers or pathways be used?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_75' })}
             ${radios('coreDrilling', 'Is core drilling or penetration work proposed?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_78' })}
             ${radios('certifierRequired', 'Is a building certifier required?', [['yes', 'Yes'], ['no', 'No']], { required: true, originalId: 'input_3_382' })}
-            ${state.branches.certifierRequired ? textField('certifierName', 'Proposed certifier name', { required: true, originalId: 'input_3_384' }) : ''}`)
+            ${state.branches.certifierRequired ? textField('certifierName', 'Proposed certifier name', { required: true, originalId: 'input_3_384' }) : ''}`, 'compact-choice-grid')
         + section('Technical acknowledgements', 'These confirmations retain the observed technical review boundary.',
             `${checkboxField('technicalRulesAgreed', 'I agree to comply with Site technical requirements.', { required: true, originalId: 'input_3_81' })}
             ${checkboxField('cablingAgreed', 'I agree that cabling and equipment will meet applicable standards.', { required: true, originalId: 'input_3_80' })}
             ${checkboxField('penetrationsAgreed', 'I agree that penetrations will be sealed and documented.', { required: true, originalId: 'input_3_83' })}
-            ${checkboxField('cleanupAgreed', 'I agree to leave work areas safe and clean.', { required: true, originalId: 'input_3_85' })}`)
-        + (state.branches.roofAccess ? section('Roof access evidence', 'This document is required only in the synthetic roof-access scenario.', documentCard('roofPermit')) : '');
+            ${checkboxField('cleanupAgreed', 'I agree to leave work areas safe and clean.', { required: true, originalId: 'input_3_85' })}`, 'compact-choice-grid')
+        + (state.branches.roofAccess ? section('Roof access evidence', 'Upload a roof access permit when roof access is required.', documentGroup('roofPermit'), 'document-section') : '');
 }
 
 function renderStage7() {
@@ -335,30 +358,30 @@ function renderStage7() {
         ['swms11', 'input_3_506', 'Required plant and equipment are listed.'],
         ['swms12', 'input_3_507', 'Competent contractor names, positions and signatures are included.'],
     ];
-    return section('Safety record', 'Dates and identifiers are synthetic. Production validity rules remain outside this prototype.',
+    return section('Safety record', 'Provide current certificates and expiry dates.',
         `${textField('sassiNumber', 'SASSI registration number', { required: true, originalId: 'input_3_522' })}
         ${textField('workersCompExpiry', 'Workers Compensation expiry date', { required: true, originalId: 'input_3_300', placeholder: 'DD-MM-YYYY' })}
-        ${textField('liabilityExpiry', 'Public Liability expiry date', { required: true, originalId: 'input_3_342', placeholder: 'DD-MM-YYYY' })}`)
-        + section('SWMS review', 'Confirm each observed Site-specific SWMS criterion.', swmsItems.map(([key, originalId, label]) => checkboxField(key, label, { required: true, originalId })).join(''))
-        + section('Required evidence', 'Each selected file has independent identity, validation and confirmation state.', `${documentCard('swms')}${documentCard('workersComp')}${documentCard('liability')}`)
-        + section('Documentation declaration', '', checkboxField('documentsConfirmed', 'I confirm that copies of the documentation above are selected and reviewed.', { required: true, originalId: 'input_3_402' }));
+        ${textField('liabilityExpiry', 'Public Liability expiry date', { required: true, originalId: 'input_3_342', placeholder: 'DD-MM-YYYY' })}`, 'safety-record-section')
+        + section('SWMS review', 'Confirm each observed Site-specific SWMS criterion.', swmsItems.map(([key, originalId, label]) => checkboxField(key, label, { required: true, originalId })).join(''), 'compact-choice-grid swms-section')
+        + section('Required evidence', 'Each selected file has independent identity, validation and confirmation state.', documentGroup('swms', 'workersComp', 'liability'), 'document-section')
+        + section('Documentation declaration', '', checkboxField('documentsConfirmed', 'I confirm that copies of the documentation above are selected and reviewed.', { required: true, originalId: 'input_3_402' }), 'documentation-declaration-section');
 }
 
 function renderReview() {
     const sections = reviewSections(state);
-    return `<div class="review-sections">${sections.map((item) => `<section class="review-section"><div class="review-heading"><h2>${escapeHtml(item.title)}</h2><button type="button" class="button-link" data-edit-stage="${item.stage}">Edit</button></div>${item.values.length ? `<dl>${item.values.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl>` : '<p class="empty-copy">No active values in this section.</p>'}</section>`).join('')}</div>`;
+    return `<div class="review-sections"><div class="review-list-heading"><h2>Request details</h2><p>Expand a section to verify its saved values.</p></div>${sections.map((item) => `<details class="review-section"><summary><span><strong>${escapeHtml(item.title)}</strong><small>${item.values.length} ${item.values.length === 1 ? 'item' : 'items'}</small></span>${icon('chevron')}</summary><div class="review-section-body"><div class="review-heading"><button type="button" class="button-link" data-edit-stage="${item.stage}">Edit stage ${item.stage}</button></div>${item.values.length ? `<dl>${item.values.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl>` : '<p class="empty-copy">No active values in this section.</p>'}</div></details>`).join('')}</div>`;
 }
 
 function renderStage8() {
     const ready = formIsReady(state);
-    return section('Final declarations', 'These declarations make the fictional scenario reviewable; they do not authorize submission.',
-        `${checkboxField('siteDeclaration', 'I confirm the Site and access details are accurate for this prototype scenario.', { required: true, originalId: 'input_3_547' })}
+    return section('Final declarations', 'Review these declarations before continuing.',
+        `${checkboxField('siteDeclaration', 'I confirm the Site and access details are accurate.', { required: true, originalId: 'input_3_547' })}
         ${checkboxField('safetyDeclaration', 'I confirm the safety evidence has been reviewed.', { required: true, originalId: 'input_3_357' })}
         ${textareaField('invoiceDetails', 'Invoice details', { required: true, originalId: 'input_3_359' })}
-        ${checkboxField('finalDeclaration', 'I agree this information is ready for prototype review.', { required: true, originalId: 'input_3_360' })}
+        ${checkboxField('finalDeclaration', 'I agree this information is ready for review.', { required: true, originalId: 'input_3_360' })}
         ${textareaField('additionalNotes', 'Additional relevant information', { originalId: 'input_3_309' })}
-        ${documentCard('supporting')}`)
-        + `<div class="readiness ${ready ? 'ready' : ''}">${icon(ready ? 'check' : 'info')}<div><strong>${ready ? 'Ready for prototype review' : 'Not ready for prototype review'}</strong><p>${ready ? 'All synthetic rules are satisfied. Final submission remains unavailable.' : 'Complete the highlighted prototype requirements before review.'}</p></div></div>`
+        ${documentGroup('supporting')}`, 'final-declarations-section')
+        + `<div class="readiness ${ready ? 'ready' : ''}">${icon(ready ? 'check' : 'info')}<div><strong>${ready ? 'Ready for review' : 'Not ready for review'}</strong><p>${ready ? 'All required details are complete.' : 'Complete the highlighted requirements before review.'}</p></div></div>`
         + renderReview();
 }
 
@@ -371,10 +394,11 @@ function errorSummary() {
 }
 
 function stageNavigation() {
+    const furthestReachableStage = Math.min(8, Math.max(state.currentStage, ...state.completedStages.map((stage) => stage + 1)));
     return `<ol class="stage-list">${STAGES.map(([title], index) => {
         const stage = index + 1;
         const complete = state.completedStages.includes(stage) || (stage < state.currentStage && !Object.keys(validateStage(state, stage).errors).length);
-        const enabled = stage === state.currentStage || complete;
+        const enabled = stage <= furthestReachableStage;
         return `<li><button type="button" data-stage="${stage}" ${enabled ? '' : 'disabled'} aria-current="${stage === state.currentStage ? 'step' : 'false'}"><span>${complete ? icon('check', 'icon-small') : stage}</span><span><strong>Stage ${stage}</strong>${escapeHtml(title)}</span></button></li>`;
     }).join('')}</ol>`;
 }
@@ -385,31 +409,95 @@ function workspace() {
     return `<aside class="workspace ${summaryOpen ? 'mobile-open' : ''}" aria-label="Request summary">
         <button type="button" class="summary-toggle" aria-expanded="${summaryOpen}" data-summary-toggle>${summaryOpen ? 'Hide' : 'Show'} request summary ${icon('chevron')}</button>
         <div class="workspace-inner">
-            <section class="workspace-context"><h2>Request summary</h2><div class="context-id">SAR · PROTOTYPE</div><dl><div><dt>Site</dt><dd>${escapeHtml(state.selectedSite?.name ?? 'Not selected')}</dd></div><div><dt>Project</dt><dd>${escapeHtml(state.fields.projectReference || 'Not entered')}</dd></div><div><dt>Documents</dt><dd>${selectedDocs} selected</dd></div></dl></section>
+            <section class="workspace-context"><h2>Request summary</h2><div class="context-id">SAR · DRAFT</div><dl><div><dt>Site</dt><dd>${escapeHtml(state.selectedSite?.name ?? 'Not selected')}</dd></div><div><dt>Project</dt><dd>${escapeHtml(state.fields.projectReference || 'Not entered')}</dd></div><div><dt>Documents</dt><dd>${selectedDocs} selected</dd></div></dl></section>
             <section class="workspace-progress"><div class="progress-copy"><h2>Progress</h2><span>${completed} of 8 ready</span></div><div class="progress-track progress-${completed}" aria-hidden="true"><span></span></div>${stageNavigation()}</section>
-            <details class="reviewer-tools"><summary>Reviewer demonstrations</summary><div class="reviewer-body"><p>All records are fictional. These tools demonstrate proposed behavior where live business rules remain unresolved.</p><div class="reviewer-actions"><button type="button" class="button-secondary full" data-load-demo>Load complete scenario</button><button type="button" class="button-secondary full" data-load-person>Use returning person</button><button type="button" class="button-secondary full" data-load-laan>Apply linked LAAN context</button><button type="button" class="button-secondary full" data-load-saved-current>Use current saved certificate</button><button type="button" class="button-secondary full" data-load-saved-expired>Use expired saved certificate</button><button type="button" class="button-secondary full" data-simulate-failure>Simulate authority failure</button><button type="button" class="button-link full" data-retry-authority>Retry authority demo</button></div><dl class="evidence-list"><div><dt>Live baseline</dt><dd>27 pass · 2 fail · 20 blocked · 1 N/A</dd></div><div><dt>Field inventory</dt><dd>264 rows · 392 controls mapped</dd></div><div><dt>Submission</dt><dd>Disabled by design</dd></div></dl><p class="source-note">Linked LAAN demo: ${LINKED_LAAN.id}<br>${escapeHtml(LINKED_LAAN.source)}</p></div></details>
+            <details class="reviewer-tools"><summary>Review tools</summary><div class="reviewer-body"><div class="reviewer-actions"><button type="button" class="button-secondary full" data-load-demo>Load complete scenario</button><button type="button" class="button-secondary full" data-load-person>Use returning person</button><button type="button" class="button-secondary full" data-load-laan>Apply linked LAAN context</button><button type="button" class="button-secondary full" data-load-saved-current>Use current saved certificate</button><button type="button" class="button-secondary full" data-load-saved-expired>Use expired saved certificate</button><button type="button" class="button-secondary full" data-simulate-failure>Simulate authority failure</button><button type="button" class="button-link full" data-retry-authority>Retry authority upload</button></div></div></details>
         </div>
     </aside>`;
 }
 
 function pendingAction() {
     if (pendingCopy) return `<div class="inline-confirm" role="alert"><div><strong>Replace populated target fields?</strong><p>Only the mapped fields will be copied. Unrelated values stay unchanged.</p></div><div><button type="button" class="button-primary" data-confirm-copy>Replace mapped fields</button><button type="button" class="button-secondary" data-cancel-copy>Cancel</button></div></div>`;
-    if (resetPending) return `<div class="inline-confirm" role="alert"><div><strong>Reset this prototype session?</strong><p>Text, selections, files, stashed branches and copy history will be cleared.</p></div><div><button type="button" class="button-danger" data-confirm-reset>Reset session</button><button type="button" class="button-secondary" data-cancel-reset>Keep working</button></div></div>`;
+    if (resetPending) return `<div class="inline-confirm" role="alert"><div><strong>Reset this request?</strong><p>Text, selections, files, stashed branches and copy history will be cleared.</p></div><div><button type="button" class="button-danger" data-confirm-reset>Reset request</button><button type="button" class="button-secondary" data-cancel-reset>Keep working</button></div></div>`;
     return '';
+}
+
+let comboboxPositionScheduled = false;
+
+function positionOpenComboboxMenus() {
+    if (comboboxPositionScheduled) return;
+    comboboxPositionScheduled = true;
+    requestAnimationFrame(() => {
+        comboboxPositionScheduled = false;
+        root.querySelectorAll('.combobox-options').forEach((menu) => {
+            const control = root.querySelector(`[aria-controls="${CSS.escape(menu.id)}"]`);
+            const anchor = control?.closest('.combobox-input-wrap');
+            if (!anchor) return;
+
+            const anchorRect = anchor.getBoundingClientRect();
+            const edge = 8;
+            const gap = 6;
+            const naturalHeight = Math.min(menu.scrollHeight, 270);
+            const spaceBelow = window.innerHeight - anchorRect.bottom - gap - edge;
+            const spaceAbove = anchorRect.top - gap - edge;
+            const opensAbove = spaceBelow < Math.min(naturalHeight, 160) && spaceAbove > spaceBelow;
+            const availableHeight = Math.max(96, opensAbove ? spaceAbove : spaceBelow);
+            const menuHeight = Math.min(naturalHeight, availableHeight);
+            const menuWidth = Math.min(anchorRect.width, window.innerWidth - edge * 2);
+            const menuLeft = Math.min(Math.max(edge, anchorRect.left), window.innerWidth - menuWidth - edge);
+            const menuTop = opensAbove
+                ? Math.max(edge, anchorRect.top - gap - menuHeight)
+                : Math.min(window.innerHeight - menuHeight - edge, anchorRect.bottom + gap);
+
+            menu.classList.toggle('opens-above', opensAbove);
+            Object.assign(menu.style, {
+                left: `${menuLeft}px`,
+                maxHeight: `${menuHeight}px`,
+                top: `${menuTop}px`,
+                width: `${menuWidth}px`,
+            });
+        });
+    });
+}
+
+function closeComboboxMenus() {
+    const wasOpen = ownerMenuOpen || siteMenuOpen || linkedLaanMenuOpen;
+    ownerMenuOpen = false;
+    activeOwnerIndex = -1;
+    siteMenuOpen = false;
+    activeSiteIndex = -1;
+    linkedLaanMenuOpen = false;
+    activeLinkedLaanIndex = -1;
+    return wasOpen;
+}
+
+function dismissComboboxMenus() {
+    if (!closeComboboxMenus()) return;
+    root.querySelectorAll('.combobox-options').forEach((menu) => menu.remove());
+    root.querySelectorAll('.combobox [aria-expanded="true"]').forEach((control) => control.setAttribute('aria-expanded', 'false'));
+}
+
+function renderStageAtTop() {
+    render();
+    requestAnimationFrame(() => {
+        root.querySelector('.form-column')?.scrollTo(0, 0);
+        window.scrollTo(0, 0);
+    });
 }
 
 function render() {
     const [stageTitle, stageIntro] = STAGES[state.currentStage - 1];
     const requestLayout = `<div class="request-layout"><div class="form-column"><div class="stage-header"><p>Stage ${state.currentStage} of 8</p><h1>${escapeHtml(stageTitle)}</h1><span>${escapeHtml(stageIntro)}</span></div>${pendingAction()}${errorSummary()}${state.notices.slice(-1).map((notice) => `<div class="notice" role="status">${icon('info')}<span>${escapeHtml(notice)}</span></div>`).join('')}<form novalidate>${stageRenderers[state.currentStage - 1]()}</form>
-                <footer class="form-actions"><button type="button" class="button-secondary" data-back ${state.currentStage === 1 ? 'disabled' : ''}>Back</button><span class="save-status">Saved in this tab</span>${state.currentStage < 8 ? `<button type="button" class="button-primary" data-continue>Continue to ${escapeHtml(STAGES[state.currentStage][0])}</button>` : '<button type="button" class="button-primary" disabled aria-describedby="submit-note">Submit access request</button><span id="submit-note" class="sr-only">Submission is disabled in this prototype.</span>'}</footer>
+                <footer class="form-actions"><button type="button" class="button-secondary" data-back ${state.currentStage === 1 ? 'disabled' : ''}>Back</button><span class="save-status">Saved in this tab</span>${state.currentStage < 8 ? `<button type="button" class="button-primary" data-continue>Continue to ${escapeHtml(STAGES[state.currentStage][0])}</button>` : '<button type="button" class="button-primary" disabled aria-describedby="submit-note">Submit access request</button><span id="submit-note" class="sr-only">Submission is unavailable.</span>'}</footer>
             </div>${workspace()}</div>`;
     root.innerHTML = embeddedInPortal
         ? `<div class="demo-access-toolbar"><button type="button" class="demo-button demo-button-subtle" data-reset>Reset Access form</button></div>${requestLayout}<div class="sr-only" aria-live="polite">${escapeHtml(statusMessage)}</div>`
         : `<div class="portal-app">
-            <aside class="portal-sidebar"><div class="portal-brand"><span class="cositer-wordmark"><span>co-</span>siter<sup>™</sup></span><small>Property access coordination</small></div><nav class="portal-nav" aria-label="Co-Siter"><button aria-current="page">${icon('request')} Access requests</button><button disabled>${icon('users')} Contacts</button><button disabled>${icon('document')} Documents</button></nav><div class="portal-user"><span class="portal-avatar">AM</span><div><strong>Alex Morgan</strong><span>Prototype reviewer</span></div></div></aside>
+            <aside class="portal-sidebar"><div class="portal-brand"><span class="cositer-wordmark"><span>co-</span>siter<sup>™</sup></span><small>Property access coordination</small></div><nav class="portal-nav" aria-label="Co-Siter"><button aria-current="page">${icon('request')} Access requests</button><button disabled>${icon('users')} Contacts</button><button disabled>${icon('document')} Documents</button></nav><div class="portal-user"><span class="portal-avatar">AM</span><div><strong>Alex Morgan</strong><span>Reviewer</span></div></div></aside>
             <main class="portal-stage"><header class="portal-topbar"><h1>${icon('request')} Access Request</h1><div class="topbar-actions"><button type="button" class="topbar-button" data-load-demo>Load complete scenario</button><button type="button" class="topbar-button" data-reset>Reset</button></div></header>${requestLayout}</main>
             <div class="sr-only" aria-live="polite">${escapeHtml(statusMessage)}</div>
         </div>`;
+    positionOpenComboboxMenus();
 }
 
 function updateFieldFromControl(control) {
@@ -439,6 +527,8 @@ root.addEventListener('input', (event) => {
         activeOwnerIndex = -1;
         siteMenuOpen = false;
         activeSiteIndex = -1;
+        linkedLaanMenuOpen = false;
+        activeLinkedLaanIndex = -1;
         saveState();
         render();
         const ownerQuery = root.querySelector('[data-owner-query]');
@@ -452,6 +542,8 @@ root.addEventListener('input', (event) => {
         activeSiteIndex = -1;
         ownerMenuOpen = false;
         activeOwnerIndex = -1;
+        linkedLaanMenuOpen = false;
+        activeLinkedLaanIndex = -1;
         saveState();
         render();
         const query = root.querySelector('[data-site-query]');
@@ -508,31 +600,65 @@ root.addEventListener('change', (event) => {
 root.addEventListener('keydown', (event) => {
     const isSite = event.target.hasAttribute('data-site-query');
     const isOwner = event.target.hasAttribute('data-owner-query');
-    if (!isSite && !isOwner) return;
-    const matches = isSite ? filteredSites() : filteredOwners();
-    const menuState = isSite ? { open: siteMenuOpen, index: activeSiteIndex } : { open: ownerMenuOpen, index: activeOwnerIndex };
+    const isLinkedLaan = event.target.hasAttribute('data-field') && event.target.dataset.field === 'linkedLaan';
+    if (!isSite && !isOwner && !isLinkedLaan) return;
+    const matches = isSite ? filteredSites() : isOwner ? filteredOwners() : [LINKED_LAAN];
+    const menuState = isSite ? { open: siteMenuOpen, index: activeSiteIndex } : isOwner ? { open: ownerMenuOpen, index: activeOwnerIndex } : { open: linkedLaanMenuOpen, index: activeLinkedLaanIndex };
     const setMenuState = (open, index) => {
-        if (isSite) { siteMenuOpen = open; activeSiteIndex = index; }
-        else { ownerMenuOpen = open; activeOwnerIndex = index; }
+        if (isSite) {
+            siteMenuOpen = open; activeSiteIndex = index;
+            if (open) { ownerMenuOpen = false; linkedLaanMenuOpen = false; }
+        } else if (isOwner) {
+            ownerMenuOpen = open; activeOwnerIndex = index;
+            if (open) { siteMenuOpen = false; linkedLaanMenuOpen = false; }
+        } else {
+            linkedLaanMenuOpen = open; activeLinkedLaanIndex = index;
+            if (open) { ownerMenuOpen = false; siteMenuOpen = false; }
+        }
     };
     if (event.key === 'ArrowDown') {
-        event.preventDefault(); setMenuState(true, Math.min(menuState.index + 1, matches.length - 1)); render(); root.querySelector(isSite ? '[data-site-query]' : '[data-owner-query]')?.focus();
+        event.preventDefault(); setMenuState(true, Math.min(menuState.index + 1, matches.length - 1)); render(); root.querySelector(isSite ? '[data-site-query]' : isOwner ? '[data-owner-query]' : '[data-field="linkedLaan"]')?.focus();
     } else if (event.key === 'ArrowUp') {
-        event.preventDefault(); setMenuState(true, Math.max(menuState.index - 1, 0)); render(); root.querySelector(isSite ? '[data-site-query]' : '[data-owner-query]')?.focus();
+        event.preventDefault(); setMenuState(true, Math.max(menuState.index - 1, 0)); render(); root.querySelector(isSite ? '[data-site-query]' : isOwner ? '[data-owner-query]' : '[data-field="linkedLaan"]')?.focus();
     } else if (event.key === 'Enter' && menuState.index >= 0 && matches[menuState.index]) {
         event.preventDefault();
         if (isSite) state = changeSite(state, matches[menuState.index]);
-        else state = setField(state, 'ownerName', matches[menuState.index]);
+        else if (isOwner) state = setField(state, 'ownerName', matches[menuState.index]);
+        else state = setField(state, 'linkedLaan', matches[menuState.index].id);
         setMenuState(false, -1);
-        saveState(); render(); root.querySelector(isSite ? '[data-site-query]' : '[data-owner-query]')?.focus();
+        saveState(); render(); root.querySelector(isSite ? '[data-site-query]' : isOwner ? '[data-owner-query]' : '[data-field="linkedLaan"]')?.focus();
     } else if (event.key === 'Escape') {
-        event.preventDefault(); setMenuState(false, -1); render(); root.querySelector(isSite ? '[data-site-query]' : '[data-owner-query]')?.focus();
+        event.preventDefault(); setMenuState(false, -1); render(); root.querySelector(isSite ? '[data-site-query]' : isOwner ? '[data-owner-query]' : '[data-field="linkedLaan"]')?.focus();
     }
 });
 
 root.addEventListener('click', (event) => {
     const target = event.target.closest('button, [data-select-site], [data-select-owner]');
     if (!target) return;
+    if (target.hasAttribute('data-toggle-owner')) {
+        const opens = !ownerMenuOpen;
+        closeComboboxMenus();
+        ownerMenuOpen = opens;
+        saveState(); render();
+        root.querySelector('[data-owner-query]')?.focus();
+        return;
+    }
+    if (target.hasAttribute('data-toggle-site')) {
+        const opens = !siteMenuOpen;
+        closeComboboxMenus();
+        siteMenuOpen = opens;
+        saveState(); render();
+        root.querySelector('[data-site-query]')?.focus();
+        return;
+    }
+    if (target.hasAttribute('data-toggle-linked-laan')) {
+        const opens = !linkedLaanMenuOpen;
+        closeComboboxMenus();
+        linkedLaanMenuOpen = opens;
+        saveState(); render();
+        root.querySelector('[data-field="linkedLaan"]')?.focus();
+        return;
+    }
     if (target.dataset.selectOwner) {
         state = setField(state, 'ownerName', target.dataset.selectOwner);
         ownerMenuOpen = false; activeOwnerIndex = -1; saveState(); render(); return;
@@ -540,6 +666,10 @@ root.addEventListener('click', (event) => {
     if (target.dataset.selectSite) {
         const site = SITES.find((candidate) => candidate.id === target.dataset.selectSite);
         state = changeSite(state, site); siteMenuOpen = false; activeSiteIndex = -1; saveState(); render(); return;
+    }
+    if (target.dataset.selectLinkedLaan) {
+        state = setField(state, 'linkedLaan', target.dataset.selectLinkedLaan);
+        linkedLaanMenuOpen = false; activeLinkedLaanIndex = -1; saveState(); render(); return;
     }
     if (target.hasAttribute('data-continue')) {
         const result = validateStage(state, state.currentStage);
@@ -552,23 +682,23 @@ root.addEventListener('click', (event) => {
             return;
         }
         state = advanceFromCurrentStage(state);
-        saveState(); render(); root.querySelector('.form-column')?.scrollTo(0, 0); return;
+        closeComboboxMenus(); saveState(); renderStageAtTop(); return;
     }
     if (target.hasAttribute('data-back')) {
-        state = goToStage(state, state.currentStage - 1).state; saveState(); render(); return;
+        state = goToStage(state, state.currentStage - 1).state; closeComboboxMenus(); saveState(); renderStageAtTop(); return;
     }
     if (target.dataset.stage) {
-        state = goToStage(state, Number(target.dataset.stage)).state; saveState(); render(); return;
+        state = goToStage(state, Number(target.dataset.stage)).state; closeComboboxMenus(); saveState(); renderStageAtTop(); return;
     }
     if (target.dataset.editStage) {
-        state = beginReviewEdit(state, Number(target.dataset.editStage)); saveState(); render(); return;
+        state = beginReviewEdit(state, Number(target.dataset.editStage)); closeComboboxMenus(); saveState(); renderStageAtTop(); return;
     }
     if (target.dataset.focusError) {
         const key = target.dataset.focusError;
         (root.querySelector(`[data-field="${CSS.escape(key)}"]`) || root.querySelector(`[data-testid="document-${CSS.escape(key)}"] input`) || root.querySelector(`[id="${CSS.escape(key)}"]`))?.focus(); return;
     }
     if (target.hasAttribute('data-load-demo')) {
-        state = createCompleteDemoState(); saveState(); statusMessage = 'Complete fictional scenario loaded.'; render(); return;
+        state = createCompleteDemoState(); closeComboboxMenus(); saveState(); statusMessage = 'Request details loaded.'; renderStageAtTop(); return;
     }
     if (target.hasAttribute('data-load-person')) {
         const person = RETURNING_PEOPLE[0];
@@ -590,31 +720,31 @@ root.addEventListener('click', (event) => {
         state = setField(state, 'linkedLaan', LINKED_LAAN.id);
         if (!state.fields.projectReference) state = setField(state, 'projectReference', LINKED_LAAN.projectReference);
         state = changeSite(state, linkedSite);
-        state = addNotice(state, state.fields.projectReference === LINKED_LAAN.projectReference ? 'Mapped fictional LAAN context applied.' : 'Linked LAAN recorded; the populated project reference was preserved for review.');
+        state = addNotice(state, state.fields.projectReference === LINKED_LAAN.projectReference ? 'Linked LAAN details applied.' : 'Linked LAAN recorded; the populated project reference was preserved for review.');
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-load-saved-current')) {
-        state = useSavedDocument(state, 'liability', { name: 'saved-liability-current.pdf', availability: 'available', expiresOn: '31-12-2026', owner: 'Example Billing Pty Ltd', source: 'Fictional Document Library' });
+        state = useSavedDocument(state, 'liability', { name: 'saved-liability-current.pdf', availability: 'available', expiresOn: '31-12-2026', owner: 'Southbank Billing Pty Ltd', source: 'Document Library' });
         state = addNotice(state, 'Current saved certificate selected. Review this version before it contributes to readiness.');
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-load-saved-expired')) {
-        state = useSavedDocument(state, 'liability', { name: 'saved-liability-expired.pdf', availability: 'expired', expiresOn: '01-01-2025', owner: 'Example Billing Pty Ltd', source: 'Fictional Document Library' });
+        state = useSavedDocument(state, 'liability', { name: 'saved-liability-expired.pdf', availability: 'expired', expiresOn: '01-01-2025', owner: 'Southbank Billing Pty Ltd', source: 'Document Library' });
         state = addNotice(state, 'Expired saved certificate shown for review; it cannot satisfy readiness.');
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-simulate-failure')) {
-        state = selectDocument(state, 'authority', { name: 'authority-retry-demo.pdf', size: 320_000, type: 'application/pdf' }, { simulateFailure: true });
+        state = selectDocument(state, 'authority', { name: 'authority-retry.pdf', size: 320_000, type: 'application/pdf' }, { simulateFailure: true });
         state = addNotice(state, 'Simulated authority upload failed; any previous valid selection was preserved.');
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-retry-authority')) {
-        state = selectDocument(state, 'authority', { name: 'authority-retry-demo.pdf', size: 320_000, type: 'application/pdf' });
+        state = selectDocument(state, 'authority', { name: 'authority-retry.pdf', size: 320_000, type: 'application/pdf' });
         state = addNotice(state, 'Simulated authority retry succeeded. Review its new version before readiness.');
         saveState(); render(); return;
     }
     if (target.hasAttribute('data-reset')) { resetPending = true; pendingCopy = null; render(); return; }
-    if (target.hasAttribute('data-confirm-reset')) { state = createInitialState(); sessionStorage.removeItem(STORAGE_KEY); resetPending = false; statusMessage = 'Prototype session reset.'; render(); return; }
+    if (target.hasAttribute('data-confirm-reset')) { state = createInitialState(); sessionStorage.removeItem(STORAGE_KEY); resetPending = false; statusMessage = 'Request form reset.'; render(); return; }
     if (target.hasAttribute('data-cancel-reset')) { resetPending = false; render(); return; }
     if (target.dataset.copy) {
         const [source, destination] = target.dataset.copy.split(':');
@@ -631,6 +761,16 @@ root.addEventListener('click', (event) => {
     if (target.dataset.removeDocumentFile) { state = removeDocumentFile(state, target.dataset.removeDocumentFile, target.dataset.fileId); saveState(); render(); return; }
     if (target.dataset.removeDocument) { state = removeDocument(state, target.dataset.removeDocument); saveState(); render(); return; }
     if (target.hasAttribute('data-summary-toggle')) { summaryOpen = !summaryOpen; render(); return; }
+});
+
+root.addEventListener('scroll', (event) => {
+    if (event.target instanceof Element && event.target.matches('.form-column')) positionOpenComboboxMenus();
+}, true);
+
+window.addEventListener('resize', positionOpenComboboxMenus);
+
+document.addEventListener('pointerdown', (event) => {
+    if (event.target instanceof Element && !event.target.closest('.combobox')) dismissComboboxMenus();
 });
 
 render();

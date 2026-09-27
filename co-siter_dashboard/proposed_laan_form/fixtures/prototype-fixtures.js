@@ -6,14 +6,14 @@ export const activities = [
 
 export const owners = [
     { value: '', label: 'Choose company name' },
-    { value: 'SYN-OWNER-001', label: 'Synthetic Owner One' },
-    { value: 'SYN-OWNER-002', label: 'Synthetic Owner Two' },
+    { value: 'SYN-OWNER-001', label: 'Harbour Property Group' },
+    { value: 'SYN-OWNER-002', label: 'Northbank Assets' },
 ];
 
 export const sites = [
-    { id: 'SYN-CRM-001', name: 'CRM Synthetic Test Site', address: '1 Example Street, Exampleville' },
-    { id: 'SYN-ALPHA-002', name: 'Alpha Synthetic Site', address: '2 Example Avenue, Exampleville' },
-    { id: 'SYN-BETA-003', name: 'Beta Synthetic Site', address: '3 Example Road, Exampleville' },
+    { id: 'SYN-CRM-001', name: 'North Quay Tower', address: '1 Harbour Street, Southbank' },
+    { id: 'SYN-ALPHA-002', name: 'Southbank Exchange', address: '2 Riverside Avenue, Southbank' },
+    { id: 'SYN-BETA-003', name: 'Civic Exchange', address: '3 Market Road, Melbourne' },
 ];
 
 export const uploadRules = {

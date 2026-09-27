@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('PA-001 opens the isolated eight-stage Access Request at Request context', async ({ page }) => {
-    await expect(page).toHaveTitle(/Access Request Prototype/);
+    await expect(page).toHaveTitle(/Access Request · Co-Siter/);
     await expect(page.getByRole('heading', { name: 'Request context' })).toBeVisible();
     await expect(page.locator('.prototype-banner')).toHaveCount(0);
     await expect(page.getByRole('button', { name: /Stage 8/ })).toBeVisible();
@@ -47,16 +47,77 @@ test('PA-S04 owner and Site comboboxes expose the complete captured option map',
     await expect(page.getByTestId('selected-site')).toContainText('Workplace6');
 });
 
+test('dropdown panels float above the form without shifting the field grid', async ({ page }) => {
+    const siteTopBefore = await page.locator('[data-site-query]').evaluate((site) => site.getBoundingClientRect().top + window.scrollY);
+    await page.getByRole('button', { name: 'Show Owner options' }).click();
+    await expect(page.locator('#owner-options')).toBeVisible();
+
+    const geometry = await page.evaluate(() => ({
+        anchorLeft: document.querySelector('[data-owner-query]')?.getBoundingClientRect().left ?? 0,
+        anchorWidth: document.querySelector('[data-owner-query]')?.getBoundingClientRect().width ?? 0,
+        optionsLeft: document.querySelector('#owner-options')?.getBoundingClientRect().left ?? 0,
+        optionsWidth: document.querySelector('#owner-options')?.getBoundingClientRect().width ?? 0,
+        position: getComputedStyle(document.querySelector('#owner-options')).position,
+        siteTop: (document.querySelector('[data-site-query]')?.getBoundingClientRect().top ?? 0) + window.scrollY,
+    }));
+
+    expect(geometry.position).toBe('fixed');
+    expect(Math.abs(geometry.siteTop - siteTopBefore)).toBeLessThanOrEqual(1);
+    expect(Math.abs(geometry.optionsLeft - geometry.anchorLeft)).toBeLessThanOrEqual(1);
+    expect(Math.abs(geometry.optionsWidth - geometry.anchorWidth)).toBeLessThanOrEqual(1);
+});
+
+test('linked LAAN uses the same animated combobox interaction', async ({ page }) => {
+    const linkedLaan = page.getByRole('combobox', { name: 'Linked LAAN request (optional)' });
+    await linkedLaan.click();
+
+    await expect(page.locator('#linkedLaan-options')).toBeVisible();
+    await expect(page.locator('#linkedLaan-options')).toHaveCSS('animation-name', 'combobox-options-enter');
+    await linkedLaan.press('ArrowDown');
+    await linkedLaan.press('Enter');
+
+    await expect(linkedLaan).toContainText('LAAN-204 · Southbank Exchange');
+    await expect(page.locator('#linkedLaan-options')).toHaveCount(0);
+});
+
+test('restores an existing linked LAAN selection with the current label', async ({ page }) => {
+    await page.getByRole('button', { name: 'Load complete scenario' }).click();
+    await page.evaluate(() => {
+        const key = 'sitexcell-access-request-prototype-v1';
+        const saved = JSON.parse(sessionStorage.getItem(key));
+        saved.fields.linkedLaan = 'LAAN-DEMO-204';
+        sessionStorage.setItem(key, JSON.stringify(saved));
+    });
+    await page.reload();
+    await page.getByRole('button', { name: /Stage 1/ }).click();
+    await expect(page.getByRole('combobox', { name: 'Linked LAAN request (optional)' })).toContainText('LAAN-204 · Southbank Exchange');
+});
+
 test('PA-005/006 complete scenario reaches review and cannot submit', async ({ page }) => {
     await page.getByRole('button', { name: 'Load complete scenario' }).click();
 
     await expect(page.getByRole('heading', { name: 'Review & declarations' })).toBeVisible();
-    await expect(page.getByText('Ready for prototype review', { exact: true })).toBeVisible();
+    await expect(page.getByText('Ready for review', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Submit access request' })).toBeDisabled();
+    await expect(page.locator('.review-section[open]')).toHaveCount(0);
+    await page.locator('.review-section').first().locator('summary').click();
     await expect(page.locator('.review-section').first().getByText('Southbank Exchange', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: /Stage 5/ }).click();
     await expect(page.getByLabel('Nature of works')).toHaveValue('maintenance');
     await expect(page.getByLabel('Network access permit type')).toHaveValue('standard');
+});
+
+test('completed navigation can return to review and resets the form scroll position', async ({ page }) => {
+    await page.getByRole('button', { name: 'Load complete scenario' }).click();
+    await page.getByRole('button', { name: /Stage 7/ }).click();
+    await page.locator('.form-column').evaluate((column) => column.scrollTo(0, 900));
+    await page.getByRole('button', { name: /Stage 3/ }).click();
+
+    await expect(page.locator('.form-column')).toHaveJSProperty('scrollTop', 0);
+    const reviewStage = page.getByRole('button', { name: /Stage 8/ });
+    await expect(reviewStage).toBeEnabled();
+    await reviewStage.click();
+    await expect(page.getByRole('heading', { name: 'Review & declarations' })).toBeVisible();
 });
 
 test('PA-X02 linked LAAN demonstration preserves a conflicting selected Site', async ({ page }) => {
@@ -64,7 +125,7 @@ test('PA-X02 linked LAAN demonstration preserves a conflicting selected Site', a
     await search.fill('collins');
     await search.press('ArrowDown');
     await search.press('Enter');
-    const reviewer = page.getByText('Reviewer demonstrations');
+    const reviewer = page.getByText('Review tools');
     await reviewer.click();
     await page.getByRole('button', { name: 'Apply linked LAAN context' }).click();
 
@@ -82,17 +143,17 @@ test('PA-U04 invalid replacement preserves the previous file and another documen
     await page.getByRole('button', { name: 'Load complete scenario' }).click();
     await page.getByRole('button', { name: /Stage 5/ }).click();
 
-    await expect(page.getByTestId('document-authority')).toContainText('authority-demo.pdf');
+    await expect(page.getByTestId('document-authority')).toContainText('authority.pdf');
     await page.getByLabel('Choose Letter of Authority file').setInputFiles({
         name: 'too-large.pdf',
         mimeType: 'application/pdf',
         buffer: Buffer.alloc(10_000_001),
     });
 
-    await expect(page.getByTestId('document-authority')).toContainText('authority-demo.pdf');
+    await expect(page.getByTestId('document-authority')).toContainText('authority.pdf');
     await expect(page.getByTestId('document-authority')).toContainText('10 MB or smaller');
     await page.getByRole('button', { name: /Stage 7/ }).click();
-    await expect(page.getByTestId('document-workersComp')).toContainText('workers-comp-demo.pdf');
+    await expect(page.getByTestId('document-workersComp')).toContainText('workers-comp.pdf');
 });
 
 test('PA-NOTES qualification upload list separates valid and invalid files', async ({ page }) => {
@@ -131,17 +192,16 @@ test('PA-NOTES reload keeps qualification filenames visible and asks for reselec
 test('PA-D01/D02 saved certificate demonstration blocks expired evidence', async ({ page }) => {
     await page.getByRole('button', { name: 'Load complete scenario' }).click();
     await page.getByRole('button', { name: /Stage 7/ }).click();
-    await page.getByText('Reviewer demonstrations').click();
+    await page.getByText('Review tools').click();
     await page.getByRole('button', { name: 'Use expired saved certificate' }).click();
 
     await expect(page.getByTestId('document-liability')).toContainText('saved-liability-expired.pdf');
-    await expect(page.getByTestId('document-liability')).toContainText('Example Billing Pty Ltd');
-    await expect(page.getByTestId('document-liability')).toContainText('Fictional Document Library');
+    await expect(page.getByTestId('document-liability')).toContainText('Southbank Billing Pty Ltd');
     await expect(page.getByTestId('document-liability')).toContainText('expired and cannot satisfy readiness');
     await page.getByRole('button', { name: 'Continue to Review & declarations' }).click();
     await expect(page.locator('.error-summary')).toContainText('Public Liability');
 
-    await page.getByText('Reviewer demonstrations').click();
+    await page.getByText('Review tools').click();
     await page.getByRole('button', { name: 'Use current saved certificate' }).click();
     await expect(page.getByTestId('document-liability')).toContainText('saved-liability-current.pdf');
     await expect(page.getByLabel('I reviewed this selected file').last()).toBeVisible();

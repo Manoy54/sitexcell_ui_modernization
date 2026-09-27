@@ -69,7 +69,7 @@ test('reaches the simulated ready state without an external submission', async (
   await completeStageTwo(page);
   await expect(page.getByTestId('readiness-panel')).toContainText('Request details are ready for review');
   await page.getByTestId('stage-two-submit').click();
-  await expect(page.getByText('Prototype ready for submission', { exact: true })).toBeVisible();
+  await expect(page.getByText('Request details reviewed', { exact: true })).toBeVisible();
   expect(requests.filter((request) => request.method() === 'POST')).toEqual([]);
 });
 
@@ -92,7 +92,7 @@ test('saves, restores, and discards an explicit draft', async ({ page }) => {
   await chooseActivity(page);
   await page.getByTestId('commencement-date').fill('30-09-2026');
   await page.getByTestId('save-draft').click();
-  await expect(page.getByText('Draft saved in this prototype session.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Draft saved in this tab.', { exact: true })).toBeVisible();
   await page.evaluate(() => sessionStorage.removeItem('proposed-laan-form-session-v1'));
   await page.reload();
   await page.getByTestId('restore-draft').click();

@@ -29,7 +29,7 @@ body.sx-cositer-demo [hidden] { display: none !important; }
 .demo-skip-link:focus { top: 8px; }
 .demo-icon { width: 18px; height: 18px; flex: 0 0 auto; }
 .demo-shell { display: grid; grid-template-columns: var(--demo-sidebar-width) minmax(0, 1fr); height: 100dvh; min-height: 0; }
-.demo-sidebar { display: flex; min-width: 0; min-height: 0; flex-direction: column; border-right: 1px solid var(--demo-border); background: #fff; }
+.demo-sidebar { position: relative; z-index: 10; display: flex; min-width: 0; min-height: 0; flex-direction: column; border-right: 1px solid var(--demo-border); background: #fff; }
 .demo-brand { display: flex; min-height: var(--demo-topbar-height); flex-direction: column; justify-content: center; padding: 10px 21px; text-decoration: none; }
 .demo-wordmark { display: block; margin: 0; color: #838a95; font-size: 24px; font-weight: 780; letter-spacing: -.075em; line-height: 1; }
 .demo-wordmark > span { color: var(--demo-red); }
@@ -39,13 +39,27 @@ body.sx-cositer-demo [hidden] { display: none !important; }
 .demo-nav a { display: flex; min-height: 40px; align-items: center; gap: 11px; padding: 8px 12px; border-radius: 6px; color: #536073; font-size: 12px; font-weight: 650; text-decoration: none; }
 .demo-nav a:hover { background: #f6f7f9; }
 .demo-nav a[aria-current="page"] { background: #f1f2f4; color: #242935; box-shadow: inset 3px 0 var(--demo-red); }
-.demo-account { display: flex; align-items: center; gap: 10px; margin-top: auto; padding: 15px 13px; border-top: 1px solid var(--demo-border); }
-.demo-avatar { display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--demo-navy); color: #fff; font-size: 10px; font-weight: 750; }
-.demo-account > span:nth-child(2) { min-width: 0; }
-.demo-account strong, .demo-account small { display: block; white-space: nowrap; }
-.demo-account strong { font-size: 11px; }
-.demo-account small { color: var(--demo-muted); font-size: 9px; }
-.demo-account a { margin-left: auto; color: #526075; font-size: 10px; white-space: nowrap; }
+.demo-account { position: relative; margin-top: auto; padding: 12px; border-top: 1px solid var(--demo-border); background: #fbfcfd; }
+.demo-account-trigger { display: flex; width: 100%; min-width: 0; min-height: 58px; align-items: center; gap: 10px; padding: 8px 9px; border: 0; border-radius: 8px; background: #eef1f4; color: var(--demo-text); font: inherit; text-align: left; cursor: pointer; transition: background-color 160ms ease, box-shadow 160ms ease; }
+.demo-account-trigger:hover { background: #e7ebef; }
+.demo-account-trigger[aria-expanded="true"] { background: #fff; box-shadow: inset 0 0 0 1px #d5dbe3; }
+.demo-avatar { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--demo-navy); color: #fff; font-size: 11px; font-weight: 760; letter-spacing: .02em; }
+.demo-account-copy { min-width: 0; flex: 1 1 auto; }
+.demo-account strong, .demo-account small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.demo-account strong { color: var(--demo-text); font-size: 12px; font-weight: 720; line-height: 1.35; }
+.demo-account small { margin-top: 2px; color: var(--demo-muted); font-size: 10px; line-height: 1.35; }
+.demo-account-chevron { width: 16px; height: 16px; color: #697384; transition: transform 160ms ease; }
+.demo-account-trigger[aria-expanded="true"] .demo-account-chevron { transform: rotate(180deg); }
+.demo-account-popover { position: absolute; z-index: 30; bottom: 12px; left: calc(100% + 10px); width: 244px; overflow: hidden; border-radius: 12px; background: #fff; box-shadow: 0 18px 48px rgba(24, 33, 52, .18); transform-origin: bottom left; animation: demo-account-popover-in 160ms cubic-bezier(.16, 1, .3, 1) both; }
+.demo-account-popover-header { display: flex; min-width: 0; align-items: center; gap: 10px; padding: 14px; border-bottom: 1px solid var(--demo-border); background: #fbfcfd; }
+.demo-account-popover-header .demo-avatar { width: 36px; height: 36px; }
+.demo-account-options { display: grid; padding: 5px; }
+.demo-account-option { display: flex; min-height: 42px; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px; color: #465164 !important; font-size: 11.5px; font-weight: 650; line-height: 1.25; text-decoration: none; }
+.demo-account-option:hover { background: #f1f3f5; color: var(--demo-text) !important; }
+.demo-account-option .demo-icon { width: 17px; height: 17px; }
+.demo-account-exit { margin-top: 5px; border-top: 1px solid var(--demo-border); border-radius: 0 0 7px 7px; }
+.demo-account-exit:hover { background: #fcecef; color: #a71939 !important; }
+@keyframes demo-account-popover-in { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .demo-stage { display: grid; min-width: 0; min-height: 0; grid-template-rows: var(--demo-topbar-height) minmax(0, 1fr); }
 .demo-topbar { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 16px; padding: 8px clamp(16px, 3vw, 38px); border-bottom: 3px solid var(--demo-red); background: var(--demo-navy); color: #fff; }
 .demo-topbar p { margin: 0; font-size: 17px; font-weight: 720; white-space: nowrap; }
@@ -131,7 +145,9 @@ body.admin-bar .demo-login { min-height: calc(100dvh - 32px); }
     .demo-nav { display: flex; gap: 4px; padding: 4px 10px 8px; overflow-x: auto; }
     .demo-nav a { flex: 0 0 auto; min-height: 38px; padding: 7px 10px; white-space: nowrap; }
     .demo-nav a[aria-current="page"] { box-shadow: inset 0 -3px var(--demo-red); }
-    .demo-account { margin: 0; padding: 7px 16px; }
+    .demo-account { margin: 0; padding: 8px 16px; }
+    .demo-account-trigger { min-height: 54px; }
+    .demo-account-popover { top: calc(100% + 8px); right: 16px; bottom: auto; left: 16px; width: auto; transform-origin: top center; }
     .demo-stage { display: block; }
     .demo-topbar { min-height: var(--demo-topbar-height); }
     .demo-main { overflow: visible; }
@@ -144,7 +160,7 @@ body.admin-bar .demo-login { min-height: calc(100dvh - 32px); }
 @media (max-width: 640px) {
     .demo-brand { padding-left: 15px; }
     .demo-brand small { display: none; }
-    .demo-account { padding: 7px 12px; }
+    .demo-account { padding: 8px 12px; }
     .demo-topbar { align-items: flex-start; flex-direction: column; gap: 7px; padding: 10px 14px; }
     .demo-topbar p { font-size: 15px; }
     .demo-topbar-actions { width: 100%; justify-content: flex-start; }

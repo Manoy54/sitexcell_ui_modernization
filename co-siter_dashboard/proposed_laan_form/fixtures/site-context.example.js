@@ -1,7 +1,7 @@
 export const siteContextById = {
     "SYN-CRM-001": {
-        "address": "Example address for local development",
-        "owner": "Example site owner",
-        "notesHtml": "<p><strong>Site Notes to Carriers:</strong></p><p>This is a synthetic example note used to verify paragraph formatting and safe link rendering. <a href=\"https://example.com/site-requirements\">View the example requirements</a>.</p>"
+        "address": "1 Harbour Street, Southbank",
+        "owner": "Harbour Property Group",
+        "notesHtml": "<p><strong>Site Notes to Carriers:</strong></p><p>Book goods lift access with the site representative at least two business days before arrival. <a href=\"https://example.com/site-requirements\">View site requirements</a>.</p>"
     }
 };

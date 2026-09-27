@@ -15,6 +15,34 @@ document.querySelector('[data-demo-exit]')?.addEventListener('click', () => {
     sessionStorage.setItem(exitFlag, '1');
 });
 
+const account = document.querySelector('[data-demo-account]');
+const accountToggle = document.querySelector('[data-demo-account-toggle]');
+const accountMenu = document.querySelector('[data-demo-account-menu]');
+
+if (account && accountToggle && accountMenu) {
+    const setAccountMenuOpen = (open) => {
+        accountMenu.hidden = !open;
+        accountToggle.setAttribute('aria-expanded', String(open));
+    };
+
+    accountToggle.addEventListener('click', () => {
+        setAccountMenuOpen(accountMenu.hidden);
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!accountMenu.hidden && !account.contains(event.target)) {
+            setAccountMenuOpen(false);
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !accountMenu.hidden) {
+            setAccountMenuOpen(false);
+            accountToggle.focus();
+        }
+    });
+}
+
 const requestRows = [...document.querySelectorAll('[data-demo-request]')];
 const requestSearch = document.querySelector('[data-demo-request-search]');
 const statusFilter = document.querySelector('[data-demo-status-filter]');
@@ -32,7 +60,7 @@ function filterRequests() {
         if (visible) visibleCount += 1;
     });
 
-    document.querySelector('[data-demo-request-count]').textContent = `Showing ${visibleCount} of ${requestRows.length} fictional requests`;
+    document.querySelector('[data-demo-request-count]').textContent = `Showing ${visibleCount} of ${requestRows.length} requests`;
     document.querySelector('[data-demo-request-empty]').hidden = visibleCount !== 0;
 }
 
@@ -55,7 +83,7 @@ if (userRows.length) {
             row.hidden = !row.dataset.search.includes(query);
             if (!row.hidden) visibleCount += 1;
         });
-        document.querySelector('[data-demo-user-count]').textContent = `Showing ${visibleCount} of ${userRows.length} fictional users`;
+        document.querySelector('[data-demo-user-count]').textContent = `Showing ${visibleCount} of ${userRows.length} users`;
         document.querySelector('[data-demo-user-empty]').hidden = visibleCount !== 0;
     };
     userSearch.addEventListener('input', filterUsers);
@@ -69,5 +97,5 @@ document.querySelector('[data-demo-contact-preview]')?.addEventListener('click',
         invalidControl.reportValidity();
         return;
     }
-    fields.querySelector('[data-demo-contact-status]').textContent = 'Preview complete. No message was sent or stored.';
+    fields.querySelector('[data-demo-contact-status]').textContent = 'Details reviewed.';
 });

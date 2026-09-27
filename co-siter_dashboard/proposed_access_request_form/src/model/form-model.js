@@ -232,7 +232,7 @@ export function selectDocument(state, documentKey, file, { simulateFailure = fal
         return addInvalidFile(rule.rejectedNameMessage);
     }
     if (file.type && !rule.acceptedTypes.includes(file.type)) {
-        return addInvalidFile(`Use ${rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(', ')} for this prototype scenario.`);
+        return addInvalidFile(`Use ${rule.acceptedTypes.map((type) => type.split('/')[1].toUpperCase()).join(', ')} files.`);
     }
     if (simulateFailure) {
         return addInvalidFile('The simulated upload failed. Retry this document.');
@@ -251,7 +251,7 @@ export function selectDocument(state, documentKey, file, { simulateFailure = fal
     current.origin = 'local-selection';
     current.availability = 'available';
     current.expiresOn = rule.expiryField ? next.fields[rule.expiryField] : '';
-    current.owner = 'Prototype requester';
+    current.owner = 'Request owner';
     current.source = 'Local file selection';
     next.confirmations[rule.confirmation] = 0;
     return next;
@@ -315,7 +315,7 @@ export function confirmDocument(state, documentKey, checked) {
     return next;
 }
 
-export function useSavedDocument(state, documentKey, { name, availability, expiresOn = '', owner = 'Unknown fictional owner', source = 'Fictional saved-document source' }) {
+export function useSavedDocument(state, documentKey, { name, availability, expiresOn = '', owner = 'Unknown owner', source = 'Document Library' }) {
     const rule = DOCUMENT_RULES[documentKey];
     if (!rule) throw new Error(`Unknown document field: ${documentKey}`);
     if (!['available', 'expired', 'unavailable'].includes(availability)) throw new Error('Unknown saved document availability.');
@@ -343,7 +343,7 @@ export function useSavedDocument(state, documentKey, { name, availability, expir
 
 export function applyCopy(state, source, target, { confirmOverwrite = false } = {}) {
     const pairs = COPY_MAPS[`${source}:${target}`];
-    if (!pairs) throw new Error('This source and target pair is not permitted by the prototype allowlist.');
+    if (!pairs) throw new Error('This source and target pair is not permitted.');
     const differingPopulatedTargets = pairs.filter(([sourceKey, targetKey]) => state.fields[targetKey] && state.fields[targetKey] !== state.fields[sourceKey]);
     if (differingPopulatedTargets.length && !confirmOverwrite) {
         return { state, requiresConfirmation: true, affectedFields: differingPopulatedTargets.map(([, targetKey]) => targetKey) };
@@ -453,8 +453,8 @@ export function validateStage(state, stage) {
         required(errors, fields, 'sassiNumber', 'Enter the SASSI registration number.');
         required(errors, fields, 'workersCompExpiry', 'Enter the Workers Compensation expiry date.');
         required(errors, fields, 'liabilityExpiry', 'Enter the Public Liability expiry date.');
-        if (fields.workersCompExpiry && !dateIsCurrent(fields.workersCompExpiry)) errors.workersCompExpiry = `Use a current date in DD-MM-YYYY format (prototype date ${PROTOTYPE_TODAY}).`;
-        if (fields.liabilityExpiry && !dateIsCurrent(fields.liabilityExpiry)) errors.liabilityExpiry = `Use a current date in DD-MM-YYYY format (prototype date ${PROTOTYPE_TODAY}).`;
+        if (fields.workersCompExpiry && !dateIsCurrent(fields.workersCompExpiry)) errors.workersCompExpiry = `Use a date on or after ${PROTOTYPE_TODAY.split('-').reverse().join('-')} in DD-MM-YYYY format.`;
+        if (fields.liabilityExpiry && !dateIsCurrent(fields.liabilityExpiry)) errors.liabilityExpiry = `Use a date on or after ${PROTOTYPE_TODAY.split('-').reverse().join('-')} in DD-MM-YYYY format.`;
         for (const key of ['swms', 'workersComp', 'liability']) if (!documentIsReady(next, key)) errors[key] = `Select and review ${DOCUMENT_RULES[key].label}.`;
         for (let index = 1; index <= 12; index += 1) required(errors, fields, `swms${index}`, 'Confirm this SWMS review item.');
         required(errors, fields, 'documentsConfirmed', 'Confirm the documentation has been provided.');
@@ -566,9 +566,9 @@ export function restoreSession(serialized) {
     try {
         parsed = JSON.parse(serialized);
     } catch {
-        throw new Error('The saved prototype session is unreadable. Reset it to continue.');
+        throw new Error('The saved request is unreadable. Reset it to continue.');
     }
-    if (parsed.version !== STATE_VERSION) throw new Error('The saved prototype session is from an incompatible version.');
+    if (parsed.version !== STATE_VERSION) throw new Error('The saved request is from an incompatible version.');
     const isRecord = (value) => value && typeof value === 'object' && !Array.isArray(value);
     const initial = createInitialState();
     const documentKeys = Object.keys(DOCUMENT_RULES);
@@ -632,7 +632,7 @@ export function restoreSession(serialized) {
         && Array.isArray(parsed.copyHistory) && parsed.copyHistory.every(validCopyTransaction)
         && samePrimitiveShape(parsed.metrics, initial.metrics)
         && (parsed.selectedSite === null || (isRecord(parsed.selectedSite) && typeof parsed.selectedSite.id === 'string' && typeof parsed.selectedSite.name === 'string'));
-    if (!validShape) throw new Error('The saved prototype session is unreadable. Reset it to continue.');
+    if (!validShape) throw new Error('The saved request is unreadable. Reset it to continue.');
     const restored = {
         ...initial,
         ...parsed,

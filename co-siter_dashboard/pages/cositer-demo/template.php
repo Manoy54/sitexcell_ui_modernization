@@ -14,7 +14,7 @@ $requests = sitexcell_ui_cositer_demo_requests();
 $users = sitexcell_ui_cositer_demo_users();
 $documents = sitexcell_ui_cositer_demo_documents();
 $page_titles = [
-    'login' => 'Demo entry',
+    'login' => 'Portal entry',
     'requests' => 'Requests',
     'request' => 'Request details',
     'users' => 'Users',
@@ -44,7 +44,7 @@ if ($view === 'not-found') {
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <title><?php echo esc_html($page_titles[$view] ?? 'Co-Siter demo'); ?> · Co-Siter demo</title>
+    <title><?php echo esc_html($page_titles[$view] ?? 'Co-Siter'); ?> · Co-Siter</title>
     <?php wp_head(); ?>
 </head>
 <body <?php body_class('sx-cositer-demo sx-cositer-' . $view); ?>>
@@ -54,17 +54,17 @@ if ($view === 'not-found') {
     <main id="main-content" class="demo-login">
         <div class="demo-login-card">
             <p class="demo-wordmark"><span>co-</span>siter<sup>™</sup></p>
-            <p class="demo-eyebrow">SiteXcell · Portal prototype</p>
-            <h1>Explore the Co-Siter demo</h1>
-            <p>This is a local preview with fictional request data. No account or password is needed, and the forms do not submit.</p>
-            <a class="demo-button demo-button-primary" href="<?php echo esc_url(sitexcell_ui_cositer_demo_url()); ?>">Enter demo dashboard</a>
+            <p class="demo-eyebrow">SiteXcell · Co-Siter portal</p>
+            <h1>Welcome to Co-Siter</h1>
+            <p>Access requests, land access notices, and related information in one place.</p>
+            <a class="demo-button demo-button-primary" href="<?php echo esc_url(sitexcell_ui_cositer_demo_url()); ?>">Enter dashboard</a>
             <a class="demo-login-back" href="<?php echo esc_url(home_url('/' . SITEXCELL_UI_HOME_SLUG . '/')); ?>">Back to SiteXcell</a>
         </div>
     </main>
 <?php else : ?>
     <div class="demo-shell">
         <aside class="demo-sidebar">
-            <a class="demo-brand" href="<?php echo esc_url(sitexcell_ui_cositer_demo_url()); ?>" aria-label="Co-Siter demo Requests">
+            <a class="demo-brand" href="<?php echo esc_url(sitexcell_ui_cositer_demo_url()); ?>" aria-label="Co-Siter Requests">
                 <span class="demo-wordmark"><span>co-</span>siter<sup>™</sup></span>
                 <small>Telco Site Access Portal<br>by SiteXcell</small>
             </a>
@@ -76,15 +76,37 @@ if ($view === 'not-found') {
                     </a>
                 <?php endforeach; ?>
             </nav>
-            <div class="demo-account">
-                <span class="demo-avatar" aria-hidden="true">DU</span>
-                <span><strong>Demo User</strong><small>Prototype only</small></span>
-                <a href="<?php echo esc_url(home_url('/' . SITEXCELL_UI_COSITER_LOGIN_SLUG . '/')); ?>" data-demo-exit>Exit demo</a>
+            <div class="demo-account" data-demo-account>
+                <button class="demo-account-trigger" type="button" aria-label="Account options" aria-expanded="false" aria-controls="demo-account-options" aria-haspopup="true" data-demo-account-toggle>
+                    <span class="demo-avatar" aria-hidden="true">GU</span>
+                    <span class="demo-account-copy"><strong>Guest User</strong><small>Guest access</small></span>
+                    <svg class="demo-icon demo-account-chevron" aria-hidden="true"><use href="#icon-chevron"></use></svg>
+                </button>
+                <div class="demo-account-popover" id="demo-account-options" data-demo-account-menu hidden>
+                    <div class="demo-account-popover-header">
+                        <span class="demo-avatar" aria-hidden="true">GU</span>
+                        <span class="demo-account-copy"><strong>Guest User</strong><small>Guest access</small></span>
+                    </div>
+                    <nav class="demo-account-options" aria-label="Account options">
+                        <a class="demo-account-option" href="<?php echo esc_url(sitexcell_ui_cositer_demo_url('settings')); ?>">
+                            <svg class="demo-icon" aria-hidden="true"><use href="#icon-settings"></use></svg>
+                            <span>Account settings</span>
+                        </a>
+                        <a class="demo-account-option" href="<?php echo esc_url(sitexcell_ui_cositer_demo_url('contact')); ?>">
+                            <svg class="demo-icon" aria-hidden="true"><use href="#icon-phone"></use></svg>
+                            <span>Contact support</span>
+                        </a>
+                        <a class="demo-account-option demo-account-exit" href="<?php echo esc_url(home_url('/' . SITEXCELL_UI_COSITER_LOGIN_SLUG . '/')); ?>" data-demo-exit>
+                            <svg class="demo-icon" aria-hidden="true"><use href="#icon-log-out"></use></svg>
+                            <span>Leave dashboard</span>
+                        </a>
+                    </nav>
+                </div>
             </div>
         </aside>
         <div class="demo-stage">
             <header class="demo-topbar">
-                <p><?php echo esc_html($page_titles[$view] ?? 'Co-Siter demo'); ?></p>
+                <p><?php echo esc_html($page_titles[$view] ?? 'Co-Siter'); ?></p>
                 <div class="demo-topbar-actions">
                     <?php if ($is_form) : ?>
                         <a href="<?php echo esc_url(sitexcell_ui_cositer_demo_url()); ?>" class="demo-button demo-button-secondary" data-demo-leave>Back to Requests</a>
@@ -96,7 +118,6 @@ if ($view === 'not-found') {
             </header>
             <main id="main-content" class="demo-main <?php echo $is_form ? 'demo-main-form' : ''; ?>">
                 <?php if ($is_form) : ?>
-                    <p class="demo-form-disclosure">Prototype form · No request will be submitted.</p>
                     <div id="prototype-root" data-portal-embedded="true"></div>
                 <?php else : ?>
                     <?php
